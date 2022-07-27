@@ -10,10 +10,9 @@ module.exports = {
       }
    },
    events: [
-      {
-         player: {
-            skillPoints: { $add: 500 }
-         }
+      (gameContext, ui) => {
+         gameContext.fn.updatePlayerAttributes('skillPoints', 500)
+         ui.fn.requestUpdate(ui, 'attributes')
       }
    ]
 }

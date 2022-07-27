@@ -107,6 +107,9 @@ const buildGameContext = () => ({
    fn: {
       scheduleEvent: (gameContext, eventId) => {
          // TODO
+      },
+      updatePlayerAttributes: (gameContext, attributes) => {
+         // TODO
       }
    }
 })

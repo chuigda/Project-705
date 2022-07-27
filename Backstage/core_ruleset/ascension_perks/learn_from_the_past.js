@@ -3,22 +3,30 @@ module.exports = {
    name: '$ap_learn_from_the_past',
    description: '$ap_learn_from_the_past_desc',
    potential: {
-      $or: [
+      op: 'or',
+      arguments: [
          {
-            turns: { $ge: 10 }
+            op: gameContext => {
+               return gameContext.turns >= 10
+            },
+            description: '$ap_learn_from_the_past_potential_desc1'
          },
          {
-            $function: gameContext => {
-                return gameContext.attributes.skills
+            op: gameContext => {
+               return gameContext.attributes.skills
                    .filter(skill => skill.category !== 'init_skills')
                    .length >= 15
             },
-            $description: '$ap_learn_from_the_past_potential_desc',
-            $hook: 'player.skills'
+            description: '$ap_learn_from_the_past_potential_desc2',
+            hook: 'player.skills'
          }
       ]
    },
    events: [
-      gameContext => gameContext.fn.scheduleEvent(gameContext, 'every_turn_start')
+      gameContext => gameContext.fn.scheduleEvent(
+         gameContext,
+         'turn_start',
+         'learn_from_the_past_gain'
+      )
    ]
 }

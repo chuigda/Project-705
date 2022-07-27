@@ -3,6 +3,7 @@ const activityCategories = require('./activity_categories')
 const skills = require('./skills')
 const activities = require('./activities')
 const ascensionPerks = require('./ascension_perks')
+const events = require('./events')
 
 module.exports = {
    ident: {
@@ -14,5 +15,6 @@ module.exports = {
    activityCategories,
    skills,
    activities,
-   ascensionPerks
+   ascensionPerks,
+   events
 }
