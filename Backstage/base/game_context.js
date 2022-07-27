@@ -74,7 +74,9 @@ const buildGameContext = () => ({
 
       timedEvents: [],
    },
-   modifiers: [],
+   modifiers: {
+      costReductions: []
+   },
 
    loadedRuleSets: {
       skillCategories: {},
@@ -83,10 +85,29 @@ const buildGameContext = () => ({
       modifiers: {},
       skills: {},
       activities: {},
-      ascensionPerks: {}
+      ascensionPerks: {},
+
+      installedHooks: {
+         player: {
+            attributes: {},
+            talent: {},
+            skills: {},
+            activities: {},
+            ascensionPerks: {},
+            pressure: {},
+            satisfactory: {},
+            money: {}
+         },
+         modifiers: {
+            costReductions: {}
+         }
+      }
    },
 
    fn: {
+      scheduleEvent: (gameContext, eventId) => {
+         // TODO
+      }
    }
 })
 
