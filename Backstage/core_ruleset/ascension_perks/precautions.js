@@ -6,7 +6,7 @@ module.exports = {
 
    modifier: {
       costReductions: {
-         initSkills: -0.5
+         'init_skills': -0.5
       }
    },
    events: [
