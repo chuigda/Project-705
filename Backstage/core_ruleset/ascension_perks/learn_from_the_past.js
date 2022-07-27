@@ -23,7 +23,7 @@ module.exports = {
       ]
    },
    events: [
-      gameContext => gameContext.fn.scheduleEvent(
+      gameContext => gameContext.scheduleEvent(
          gameContext,
          'turn_start',
          'learn_from_the_past_gain'

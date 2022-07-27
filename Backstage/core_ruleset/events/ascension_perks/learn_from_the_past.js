@@ -6,7 +6,7 @@ module.exports = [
       event: gameContext => {
          const { skills } = gameContext.player
          const skillCount = skills.length
-         gameContext.fn.updatePlayerAttributes('skillPoints', skillCount * 2)
+         gameContext.updatePlayerAttributes('skillPoints', skillCount * 2)
       }
    }
 ]
