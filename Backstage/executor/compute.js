@@ -1,4 +1,5 @@
 const { skillId } = require('../exports')
+
 const computePotential = (gameContext, potential) => {
    if (typeof potential.op === 'function') {
       return {

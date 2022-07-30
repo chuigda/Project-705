@@ -1,5 +1,3 @@
-const gameContextFunctions = require('./game_context_fn')
-
 const buildGameContext = ruleSet => ({
    ruleSet,
 
@@ -70,10 +68,6 @@ const buildGameContext = ruleSet => ({
    modifiers: {
       costReductions: []
    },
-
-   connect(signal, slot) {
-      gameContextFunctions.connect(this, signal, slot)
-   }
 })
 
 module.exports = {
