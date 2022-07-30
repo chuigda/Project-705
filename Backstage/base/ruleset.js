@@ -2,7 +2,7 @@ const { isTranslationKey } = require('./translation')
 const { activityId, eventId, skillId, translationKey } = require('./uid')
 
 const emptyRuleSet = () => ({
-   skillCategories: {},
+   skillCategories: [],
    activityCategories: [],
    events: {},
    modifiers: {},
@@ -12,16 +12,15 @@ const emptyRuleSet = () => ({
 })
 
 const compileSkillCategories = (ruleSet, ruleSetIdent, skillCategories) => {
-   for (const categoryId in Object.entries(skillCategories)) {
-      const category = skillCategories[categoryId]
-      if (isTranslationKey(category.name)) {
-         category.name = translationKey(ruleSetIdent, category.name)
+   for (const category of skillCategories) {
+      const { ident } = category
+      const maybeExistingCategory = ruleSet.skillCategories.findIndex(skillCategories => skillCategories.ident === ident)
+      if (maybeExistingCategory !== -1) {
+         console.warn(`[W] [compileSkillCategories] skill category '${category}' already exists, overwriting`)
+         ruleSetIdent.skillCategories[maybeExistingCategory] = category
+      } else {
+         console.info(`[I] [compileSkillCategories] compiled skill category '${ident}'`)
       }
-
-      if (ruleSet.skillCategories[categoryId]) {
-         console.warn(`[W] [compileSkillCategories] skill category '${categoryId}' already exists, overwriting`)
-      }
-      ruleSet.skillCategories[categoryId] = category[categoryId]
    }
 }
 
@@ -30,6 +29,7 @@ const compileActivityCategories = (ruleSet, activityCategories) => {
       if (ruleSet.activityCategories.indexOf(category) !== -1) {
          console.warn(`[W] [compileActivityCategories] activity category '${category}' already exists, skipping`)
       } else {
+         console.info(`[I] [compileActivityCategories] compiled activity category '${category}'`)
          ruleSet.activityCategories.push(category)
       }
    }

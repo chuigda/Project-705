@@ -122,7 +122,7 @@ const ruleSetAssertion = {
    },
    description: 'string?',
 
-   skillCategories: {}.orNull(),
+   skillCategories: [].orNull(),
    activityCategories: ['string'].orNull(),
    skills: [skillAssertion].orNull(),
    startups: [startupAssertion].orNull(),
