@@ -23,9 +23,9 @@ const signals = {
    })
 }
 
-const connect = (gameContext, ruleSet, signal, event) => {
+const connect = (gameContext, signal, event) => {
    const absoluteEventId = eventId(gameContext.scope, event)
-   const absoluteEvent = ruleSet.events[absoluteEventId]
+   const absoluteEvent = gameContext.ruleSet.events[absoluteEventId]
 
    if (!absoluteEvent) {
       console.warn(`[W] [connect] event '${eventId}(${absoluteEventId})' not found`)

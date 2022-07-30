@@ -1,3 +1,3 @@
-const computePotential = gameContext => {
+const computePotential = (gameContext, potential) => {
 
 }

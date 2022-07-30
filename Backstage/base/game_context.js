@@ -1,6 +1,8 @@
 const gameContextFunctions = require('./game_context_fn')
 
-const buildGameContext = () => ({
+const buildGameContext = ruleSet => ({
+   ruleSet,
+
    scope: {
       author: null,
       moduleName: null
