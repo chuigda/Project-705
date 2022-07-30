@@ -32,21 +32,34 @@ const buildGameContext = () => ({
       money: 0,
       moneyPerTurn: 0
    },
+
    events: {
       turnStart: [],
       turnOver: [],
       gain: {
          all: [],
-         strength: [],
-         intelligence: [],
-         emotionalIntelligence: [],
-         memorization: [],
-         imagination: [],
-         charisma: [],
+         attributes: {
+            all: [],
+            strength: [],
+            intelligence: [],
+            emotionalIntelligence: [],
+            memorization: [],
+            imagination: [],
+            charisma: []
+         },
+         talent: {
+            all: [],
+            strength: [],
+            intelligence: [],
+            emotionalIntelligence: [],
+            memorization: [],
+            imagination: [],
+            charisma: []
+         },
          skillPoints: []
       },
       skillLearnt: [],
-      performActivity: [],
+      activityPerformed: [],
 
       timedEvents: [],
    },
