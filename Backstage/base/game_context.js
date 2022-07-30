@@ -1,3 +1,5 @@
+const gameContextFunctions = require('./game_context_fn')
+
 const buildGameContext = () => ({
    scope: {
       author: null,
@@ -36,7 +38,7 @@ const buildGameContext = () => ({
    events: {
       turnStart: [],
       turnOver: [],
-      gain: {
+      playerPropertyUpdated: {
          all: [],
          attributes: {
             all: [],
@@ -60,15 +62,15 @@ const buildGameContext = () => ({
       },
       skillLearnt: [],
       activityPerformed: [],
-
       timedEvents: [],
+      eventsTriggered: {}
    },
    modifiers: {
       costReductions: []
    },
 
    connect(signal, slot) {
-
+      gameContextFunctions.connect(this, signal, slot)
    }
 })
 

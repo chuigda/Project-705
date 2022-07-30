@@ -16,6 +16,10 @@ const signals = {
    countDown: turns => ({
       signalType: 'count_down',
       turns
+   }),
+   event: eventId => ({
+      signalType: 'event',
+      eventId
    })
 }
 
@@ -42,6 +46,44 @@ const connect = (gameContext, ruleSet, signal, event) => {
       case 'activity':
          gameContext.events.activityPerformed.push(event)
          break
+      }
+   } else {
+      switch (signal.signalType) {
+      case 'player': {
+         const propertyPath = signal.property.split('.')
+         let container = gameContext.events.playerPropertyUpdated
+         for (const pathPart of propertyPath) {
+            container = container[pathPart]
+         }
+         if (container.constructor !== Array.prototype.constructor) {
+            console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${signal.property}'`)
+            return
+         }
+         container.push(absoluteEvent)
+         break
+      }
+      case 'turns': {
+         gameContext.events.timedEvents.push({
+            turn: signal.turns,
+            event: absoluteEvent
+         })
+         break
+      }
+      case 'count_down': {
+         gameContext.events.timedEvents.push({
+            turn: signal.turns + gameContext.turns,
+            event: absoluteEvent
+         })
+         break
+      }
+      case 'event': {
+         const sourceEventId = eventId(gameContext.scope, signal.eventId)
+         if (!gameContext.events.eventsTriggered[sourceEventId]) {
+            gameContext.events.eventsTriggered[sourceEventId] = []
+         }
+         gameContext.events.eventsTriggered[sourceEventId].push(absoluteEvent)
+         break
+      }
       }
    }
 }
