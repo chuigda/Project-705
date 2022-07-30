@@ -1,5 +1,3 @@
-const { uniqueId } = require('./uid')
-
 const buildGameContext = () => ({
    scope: {
       author: null,
@@ -53,32 +51,6 @@ const buildGameContext = () => ({
    },
    modifiers: {
       costReductions: []
-   },
-
-   loadedRuleSets: {
-      skillCategories: {},
-      activityCategories: [],
-      events: {},
-      modifiers: {},
-      skills: {},
-      activities: {},
-      ascensionPerks: {},
-
-      installedHooks: {
-         player: {
-            attributes: {},
-            talent: {},
-            skills: {},
-            activities: {},
-            ascensionPerks: {},
-            pressure: {},
-            satisfactory: {},
-            money: {}
-         },
-         modifiers: {
-            costReductions: {}
-         }
-      }
    },
 
    scheduleEvent: (gameContext, eventId) => {
