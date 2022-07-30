@@ -8,21 +8,7 @@ const emptyRuleSet = () => ({
    modifiers: {},
    skills: {},
    activities: {},
-   ascensionPerks: {},
-
-   installedHooks: {
-      player: {
-         attributes: {},
-         talent: {},
-         skills: {},
-         activities: {},
-         ascensionPerks: {},
-         pressure: {},
-         satisfactory: {},
-         money: {}
-      },
-      modifier: {}
-   }
+   ascensionPerks: {}
 })
 
 const compileSkillCategories = (ruleSet, ruleSetIdent, skillCategories) => {

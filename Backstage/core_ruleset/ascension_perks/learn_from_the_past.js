@@ -18,8 +18,7 @@ module.exports = {
                       .filter(skill => skill.category !== 'init_skills')
                       .length >= 15
                },
-               description: '$ap_learn_from_the_past_potential_desc2',
-               hook: ['player.skills']
+               description: '$ap_learn_from_the_past_potential_desc2'
             }
          ]
       }
