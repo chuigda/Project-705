@@ -4,7 +4,8 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "test_core_ruleset_assertion": "node test/test_assertions.js"
+      "test_core_ruleset_assertion": "node test/test_assertions.js",
+      "test_compile": "node test/test_compile.js"
    },
    "author": "",
    "license": "ISC",

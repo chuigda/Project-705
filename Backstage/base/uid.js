@@ -12,7 +12,7 @@ const buildIdResolver = idKind => (
       } else if (id.startsWith('@')) {
          return id
       } else {
-         return uniqueId(author, moduleName, id)
+         return uniqueId(author, moduleName, idKind, id)
       }
    }
 )

@@ -1,7 +1,7 @@
 const buildGameContext = () => ({
    scope: {
       author: null,
-      name: null
+      moduleName: null
    },
 
    turns: 0,
