@@ -25,12 +25,15 @@ const patchModeAssertion = {
 
 const eventSeriesAssertion = ['function'.sumWith(identAssertion)]
 
+const potentialExpressionArgumentsAssertion = [/* potentialExpressionAssertion */]
+
 let potentialExpressionAssertionPiece = {
-   op: 'string'.chainWith(x => x === 'and' || x === 'or' || x === 'not'),
-   arguments: [/* potentialExpressionAssertion */]
 }
 
-const potentialExpressionAssertion = potentialExpressionAssertionPiece.sumWith({
+const potentialExpressionAssertion = {
+   op: 'string'.chainWith(x => x === 'and' || x === 'or' || x === 'not'),
+   arguments: potentialExpressionArgumentsAssertion.chainWith(arr => arr.length >= 1)
+}.sumWith({
    op: 'function',
    description: 'string?'
 })
@@ -43,14 +46,14 @@ const activityAssertion = {
    category: 'string',
    level: 'number',
 
-   output: ({
+   output: {
       attributes: attributesAssertion.orNull(),
       talent: 'undefined',
       skillPoints: 'number?',
       pressure: 'number?',
       satisfactory: 'number?',
       money: 'number?'
-   }).orNull(),
+   }.orNull(),
    events: (eventSeriesAssertion).orNull(),
 
    ...patchModeAssertion
@@ -62,9 +65,9 @@ const ascensionPerkAssertion = {
    description: 'string?',
 
    potential: [potentialExpressionAssertion].orNull(),
-   modifier: ({
+   modifier: {
       costReductions: ('object').orNull()
-   }).orNull(),
+   }.orNull(),
    events: eventSeriesAssertion.orNull(),
 
    ...patchModeAssertion
@@ -94,14 +97,14 @@ const startupAssertion = {
    name: 'string',
    description: 'string?',
 
-   player: ({
+   player: {
       attributes: attributesAssertion.orNull(),
       talent: attributesAssertion.orNull(),
       skillPoints: 'number?',
       pressure: 'number?',
       satisfactory: 'number?',
       money: 'number?'
-   }).orNull(),
+   }.orNull(),
    events: eventSeriesAssertion.orNull(),
 
    ...patchModeAssertion
