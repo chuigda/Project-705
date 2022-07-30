@@ -54,9 +54,7 @@ const removeTail = (srcText) => {
 
 let globalPreventErr = false
 
-const preventErrTrace = prevent => {
-   globalPreventErr = prevent
-}
+const preventErrTrace = prevent => globalPreventErr = prevent
 
 const typeAssertError = (path, message, preventErr) => {
    const errMsg = `Type assertion failed: "${path}": ${message}`

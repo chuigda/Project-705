@@ -29,7 +29,8 @@ const buildGameContext = () => ({
 
       pressure: 0,
       satisfactory: 100,
-      money: 0
+      money: 0,
+      moneyPerTurn: 0
    },
    events: {
       turnStart: [],
@@ -53,11 +54,8 @@ const buildGameContext = () => ({
       costReductions: []
    },
 
-   scheduleEvent: (gameContext, eventId) => {
-      // TODO
-   },
-   updatePlayerAttributes: (gameContext, attributes) => {
-      // TODO
+   connect(signal, slot) {
+
    }
 })
 
