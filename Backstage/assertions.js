@@ -19,15 +19,18 @@ const attributesAssertion = {
    charisma: 'number?'
 }
 
-const eventSeriesAssertion = ['function'.sumWith('string')]
+const patchModeAssertion = {
+   patch: 'string'.chainWith(x => x === 'patch' || x === 'overwrite').orNull()
+}
+
+const eventSeriesAssertion = ['function'.sumWith(identAssertion)]
 
 let potentialExpressionAssertionPiece = {
-   op: 'string',
+   op: 'string'.chainWith(x => x === 'and' || x === 'or' || x === 'not'),
    arguments: [/* potentialExpressionAssertion */]
 }
 
-const potentialExpressionAssertion = potentialExpressionAssertionPiece
-.sumWith({
+const potentialExpressionAssertion = potentialExpressionAssertionPiece.sumWith({
    op: 'function',
    description: 'string?',
    hook: 'string?'
@@ -49,7 +52,9 @@ const activityAssertion = {
       satisfactory: 'number?',
       money: 'number?'
    }).orNull(),
-   events: (eventSeriesAssertion).orNull()
+   events: (eventSeriesAssertion).orNull(),
+
+   ...patchModeAssertion
 }
 
 const ascensionPerkAssertion = {
@@ -61,7 +66,9 @@ const ascensionPerkAssertion = {
    modifier: ({
       costReductions: ('object').orNull()
    }).orNull(),
-   events: (eventSeriesAssertion).orNull()
+   events: eventSeriesAssertion.orNull(),
+
+   ...patchModeAssertion
 }
 
 const skillAssertion = {
@@ -69,7 +76,7 @@ const skillAssertion = {
    name: 'string',
    description: 'string?',
    category: 'string',
-   requirements: (['string'.sumWith(potentialExpressionAssertion)]).orNull(),
+   requirements: ([identAssertion.sumWith(potentialExpressionAssertion)]).orNull(),
    cost: {
       base: 'number',
       attributes: attributesAssertion.orNull(),
@@ -77,8 +84,10 @@ const skillAssertion = {
    output: {
       attributes: attributesAssertion
    },
-   activities: (['string']).orNull(),
-   events: (eventSeriesAssertion).orNull()
+   activities: ([identAssertion]).orNull(),
+   events: eventSeriesAssertion.orNull(),
+
+   ...patchModeAssertion
 }
 
 const startupAssertion = {
@@ -94,7 +103,9 @@ const startupAssertion = {
       satisfactory: 'number?',
       money: 'number?'
    }).orNull(),
-   events: (eventSeriesAssertion).orNull()
+   events: (eventSeriesAssertion).orNull(),
+
+   ...patchModeAssertion
 }
 
 const eventAssertion = {
