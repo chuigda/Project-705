@@ -15,8 +15,9 @@ const loadMods = compiledRuleSet => {
    }
 
    for (const mod of mods) {
-      const modRuleSet = require(`./${mod}`)
+      let modRuleSet = null
       try {
+         modRuleSet = require(`./${mod}`)
          typeAssert(modRuleSet, ruleSetAssertion)
       } catch (e) {
          console.error(`[E] [loadMods] mod '${mod}' corrupted, skipping. reason: ${e}`)
@@ -26,7 +27,7 @@ const loadMods = compiledRuleSet => {
       try {
          compileRuleSet(compiledRuleSet, modRuleSet)
       } catch (e) {
-         console.error(`[E] [loadMods] error when loading mod '${mod}: ${e}'`)
+         console.error(`[E] [loadMods] error when loading mod '${mod}': ${e}`)
          abort()
       }
    }
