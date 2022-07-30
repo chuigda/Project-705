@@ -20,3 +20,8 @@ const giftedStartup = {
       skillPoints: 500,
    }
 }
+
+module.exports = [
+   normalStartup,
+   giftedStartup
+]

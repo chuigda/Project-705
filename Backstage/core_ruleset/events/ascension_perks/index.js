@@ -1,3 +1,3 @@
 module.exports = [
-   ...require('./learn_from_the_past')
+   require('./learn_from_the_past')
 ]

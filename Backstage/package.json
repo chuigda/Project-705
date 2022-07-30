@@ -4,7 +4,7 @@
    "description": "",
    "main": "index.js",
    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+      "test_core_ruleset_assertion": "node test/test_assertions.js"
    },
    "author": "",
    "license": "ISC",
