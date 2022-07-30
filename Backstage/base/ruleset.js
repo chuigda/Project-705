@@ -7,7 +7,7 @@ const emptyRuleSet = () => ({
    events: {},
    modifiers: {},
    skills: {},
-   starups: {},
+   startups: {},
    activities: {},
    ascensionPerks: {}
 })
@@ -47,7 +47,7 @@ const compilePotentialExpression = (ruleSetIdent, potential) => {
    }
 }
 
-const compileEvent = (event) => {
+const compileEvent = (ruleSetIdent, event) => {
    if (typeof event === 'function') {
       return event
    }
@@ -76,7 +76,7 @@ const compileSkills = (ruleSet, ruleSetIdent, skills) => {
          skill.activities = skill.activities.map(activity => activityId(ruleSetIdent, activity))
       }
       if (skill.events) {
-         skill.events = skill.events.map(compileEvent)
+         skill.events = skill.events.map(event => compileEvent(ruleSetIdent, event))
       }
 
       if (!ruleSet.skills[skill.ident]) {
@@ -93,7 +93,7 @@ const compileStartups = (ruleSet, ruleSetIdent, startups) => {
    for (const startup of startups) {
       startup.ident = startupId(ruleSetIdent, startup.ident)
       if (startup.events) {
-         startup.events = startup.events.map(compileEvent)
+         startup.events = startup.events.map(event => compileEvent(ruleSetIdent, event))
       }
       if (!ruleSet.startups[startup.ident]) {
          console.info(`[I] [compileStartups] compiled startup ${startup.ident}`)
@@ -108,7 +108,7 @@ const compileActivities = (ruleSet, ruleSetIdent, activities) => {
    for (const activity of activities) {
       activity.ident = activityId(ruleSetIdent, activity.ident)
       if (activity.events) {
-         activity.events = activity.events.map(compileEvent)
+         activity.events = activity.events.map(event => compileEvent(ruleSetIdent, event))
       }
       if (!ruleSet.activities[activity.ident]) {
          console.info(`[I] [compileActivities] compiled activity ${activity.ident}`)
@@ -123,7 +123,7 @@ const compileAscensionPerks = (ruleSet, ruleSetIdent, ascensionPerks) => {
    for (const ascensionPerk of ascensionPerks) {
       ascensionPerk.ident = ascensionPerkId(ruleSetIdent, ascensionPerk.ident)
       if (ascensionPerk.events) {
-         ascensionPerk.events = ascensionPerk.events.map(compileEvent)
+         ascensionPerk.events = ascensionPerk.events.map(event => compileEvent(ruleSetIdent, event))
       }
       if (!ruleSet.ascensionPerks[ascensionPerk.ident]) {
          console.info(`[I] [compileAscensionPerks] compiled ascension perk ${ascensionPerk.ident}`)
@@ -138,9 +138,9 @@ const compileEvents = (ruleSet, ruleSetIdent, events) => {
    for (const event of events) {
       event.ident = eventId(ruleSetIdent, event.ident)
       if (!ruleSet.events[event.ident]) {
-         console.info(`[I] [compileAscensionPerks] compiled ascension perk ${ascensionPerk.ident}`)
+         console.info(`[I] [compileEvents] compiled ascension perk ${event.ident}`)
       } else {
-         console.warn(`[W] [compileAscensionPerks] ascension perk '${ascensionPerk.ident}' already exists, overwriting`)
+         console.warn(`[W] [compileEvents] ascension perk '${event.ident}' already exists, overwriting`)
       }
       ruleSet.events[event.ident] = event
    }
