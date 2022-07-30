@@ -14,12 +14,12 @@ module.exports = {
             },
             {
                op: gameContext => {
-                  return gameContext.attributes.skills
+                  return gameContext.player.skills
                       .filter(skill => skill.category !== 'init_skills')
                       .length >= 15
                },
                description: '$ap_learn_from_the_past_potential_desc2',
-               hook: 'player.skills'
+               hook: ['player.skills']
             }
          ]
       }

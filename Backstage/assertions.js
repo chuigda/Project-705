@@ -33,7 +33,7 @@ let potentialExpressionAssertionPiece = {
 const potentialExpressionAssertion = potentialExpressionAssertionPiece.sumWith({
    op: 'function',
    description: 'string?',
-   hook: 'string?'
+   hook: ['string'].orNull()
 })
 
 potentialExpressionAssertionPiece.arguments.push(potentialExpressionAssertion)
