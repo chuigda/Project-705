@@ -27,9 +27,6 @@ const eventSeriesAssertion = ['function'.sumWith(identAssertion)]
 
 const potentialExpressionArgumentsAssertion = [/* potentialExpressionAssertion */]
 
-let potentialExpressionAssertionPiece = {
-}
-
 const potentialExpressionAssertion = {
    op: 'string'.chainWith(x => x === 'and' || x === 'or' || x === 'not'),
    arguments: potentialExpressionArgumentsAssertion.chainWith(arr => arr.length >= 1)
@@ -38,7 +35,7 @@ const potentialExpressionAssertion = {
    description: 'string?'
 })
 
-potentialExpressionAssertionPiece.arguments.push(potentialExpressionAssertion)
+potentialExpressionArgumentsAssertion.push(potentialExpressionAssertion)
 
 const activityAssertion = {
    ident: identAssertion,
