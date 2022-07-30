@@ -89,7 +89,7 @@ const connect = (gameContext, signal, event) => {
    }
 }
 
-const updatePlayerProperty = (gameContext, property, operator, value) => {
+const updatePlayerProperty = (gameContext, property, operator, value, source) => {
    // TODO 暂时只计算 events，但如何计算 modifiers?
    const opRef = { operator, value }
    const propertyPath = property.split['.']
@@ -101,7 +101,7 @@ const updatePlayerProperty = (gameContext, property, operator, value) => {
       if (container.all) {
          for (const event of container.all) {
             for (const eventFunction of event.event) {
-               eventFunction(gameContext, opRef)
+               eventFunction(gameContext, opRef, source)
             }
          }
       }
@@ -119,7 +119,7 @@ const updatePlayerProperty = (gameContext, property, operator, value) => {
 
    for (const event of container) {
       for (const eventFunction of event.event) {
-         eventFunction(gameContext, opRef)
+         eventFunction(gameContext, opRef, source)
       }
    }
 
