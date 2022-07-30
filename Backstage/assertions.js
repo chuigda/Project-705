@@ -37,9 +37,15 @@ const potentialExpressionAssertion = {
 
 potentialExpressionArgumentsAssertion.push(potentialExpressionAssertion)
 
-const activityAssertion = {
+const baseAssertion = {
    ident: identAssertion,
    name: 'string',
+   description: 'string?',
+}
+
+const activityAssertion = {
+   ...baseAssertion,
+
    category: 'string',
    level: 'number',
 
@@ -57,9 +63,7 @@ const activityAssertion = {
 }
 
 const ascensionPerkAssertion = {
-   ident: identAssertion,
-   name: 'string',
-   description: 'string?',
+   ...baseAssertion,
 
    potential: [potentialExpressionAssertion].orNull(),
    modifier: {
@@ -71,9 +75,8 @@ const ascensionPerkAssertion = {
 }
 
 const skillAssertion = {
-   ident: identAssertion,
-   name: 'string',
-   description: 'string?',
+   ...baseAssertion,
+
    category: 'string',
    potential: [identAssertion.sumWith(potentialExpressionAssertion)].orNull(),
    cost: {
@@ -90,9 +93,7 @@ const skillAssertion = {
 }
 
 const startupAssertion = {
-   ident: identAssertion,
-   name: 'string',
-   description: 'string?',
+   ...baseAssertion,
 
    player: {
       attributes: attributesAssertion.orNull(),
@@ -108,8 +109,8 @@ const startupAssertion = {
 }
 
 const eventAssertion = {
-   ident: identAssertion,
-   name: 'string?',
+   ...baseAssertion,
+
    event: ['function'],
 
    ...patchModeAssertion

@@ -1,5 +1,5 @@
 const { isTranslationKey } = require('./translation')
-const { activityId, eventId, skillId, translationKey } = require('./uid')
+const { activityId, eventId, skillId, translationKey, startupId, ascensionPerkId } = require('./uid')
 
 const emptyRuleSet = () => ({
    skillCategories: [],
@@ -7,6 +7,7 @@ const emptyRuleSet = () => ({
    events: {},
    modifiers: {},
    skills: {},
+   starups: {},
    activities: {},
    ascensionPerks: {}
 })
@@ -46,6 +47,13 @@ const compilePotentialExpression = (ruleSetIdent, potential) => {
    }
 }
 
+const compileEvent = (event) => {
+   if (typeof event === 'function') {
+      return event
+   }
+   return eventId(ruleSetIdent, event)
+}
+
 const compileSkills = (ruleSet, ruleSetIdent, skills) => {
    for (const skill of skills) {
       skill.ident = skillId(ruleSetIdent, skill.ident)
@@ -68,7 +76,7 @@ const compileSkills = (ruleSet, ruleSetIdent, skills) => {
          skill.activities = skill.activities.map(activity => activityId(ruleSetIdent, activity))
       }
       if (skill.events) {
-         skill.events = skill.events.map(event => eventId(ruleSetIdent, event))
+         skill.events = skill.events.map(compileEvent)
       }
 
       if (!ruleSet.skills[skill.ident]) {
@@ -78,6 +86,63 @@ const compileSkills = (ruleSet, ruleSetIdent, skills) => {
          console.warn(`[W] [compileSkills] skill '${skill.ident}' already exists, overwriting`)
       }
       ruleSet.skills[skill.ident] = skill
+   }
+}
+
+const compileStartups = (ruleSet, ruleSetIdent, startups) => {
+   for (const startup of startups) {
+      startup.ident = startupId(ruleSetIdent, startup.ident)
+      if (startup.events) {
+         startup.events = startup.events.map(compileEvent)
+      }
+      if (!ruleSet.startups[startup.ident]) {
+         console.info(`[I] [compileStartups] compiled startup ${startup.ident}`)
+      } else {
+         console.warn(`[W] [compileStartups] startup '${startup.ident}' already exists, overwriting`)
+      }
+      ruleSet.startups[startup.ident] = startup
+   }
+}
+
+const compileActivities = (ruleSet, ruleSetIdent, activities) => {
+   for (const activity of activities) {
+      activity.ident = activityId(ruleSetIdent, activity.ident)
+      if (activity.events) {
+         activity.events = activity.events.map(compileEvent)
+      }
+      if (!ruleSet.activities[activity.ident]) {
+         console.info(`[I] [compileActivities] compiled activity ${activity.ident}`)
+      } else {
+         console.warn(`[W] [compileActivities] activity '${activity.ident}' already exists, overwriting`)
+      }
+      ruleSet.activities[activity.ident] = activity
+   }
+}
+
+const compileAscensionPerks = (ruleSet, ruleSetIdent, ascensionPerks) => {
+   for (const ascensionPerk of ascensionPerks) {
+      ascensionPerk.ident = ascensionPerkId(ruleSetIdent, ascensionPerk.ident)
+      if (ascensionPerk.events) {
+         ascensionPerk.events = ascensionPerk.events.map(compileEvent)
+      }
+      if (!ruleSet.ascensionPerks[ascensionPerk.ident]) {
+         console.info(`[I] [compileAscensionPerks] compiled ascension perk ${ascensionPerk.ident}`)
+      } else {
+         console.warn(`[W] [compileAscensionPerks] ascension perk '${ascensionPerk.ident}' already exists, overwriting`)
+      }
+      ruleSet.ascensionPerks[ascensionPerk.ident] = ascensionPerk
+   }
+}
+
+const compileEvents = (ruleSet, ruleSetIdent, events) => {
+   for (const event of events) {
+      event.ident = eventId(ruleSetIdent, event.ident)
+      if (!ruleSet.events[event.ident]) {
+         console.info(`[I] [compileAscensionPerks] compiled ascension perk ${ascensionPerk.ident}`)
+      } else {
+         console.warn(`[W] [compileAscensionPerks] ascension perk '${ascensionPerk.ident}' already exists, overwriting`)
+      }
+      ruleSet.events[event.ident] = event
    }
 }
 
@@ -105,6 +170,22 @@ const compileRuleSet = (ruleSet, newRuleSet) => {
 
    if (skills) {
       compileSkills(ruleSet, ruleSetIdent, skills)
+   }
+
+   if (startups) {
+      compileStartups(ruleSet, ruleSetIdent, startups)
+   }
+
+   if (activities) {
+      compileActivities(ruleSet, ruleSetIdent, activities)
+   }
+
+   if (ascensionPerks) {
+      compileAscensionPerks(ruleSet, ruleSetIdent, ascensionPerks)
+   }
+
+   if (events) {
+      compileEvents(ruleSet, ruleSetIdent, events)
    }
 }
 
