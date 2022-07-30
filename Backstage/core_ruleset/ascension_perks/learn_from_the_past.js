@@ -1,3 +1,6 @@
+const { connect,
+   signals
+} = require('../../base/game_context_fn')
 module.exports = {
    ident: 'learn_from_the_past',
    name: '$ap_learn_from_the_past',
@@ -24,10 +27,8 @@ module.exports = {
       }
    ],
    events: [
-      gameContext => gameContext.scheduleEvent(
-         gameContext,
-         'turn_start',
-         'learn_from_the_past_gain'
-      )
+      gameContext => {
+         connect(gameContext, signals.turnStart(), 'learn_from_the_past_gain')
+      }
    ]
 }
