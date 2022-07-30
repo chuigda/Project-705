@@ -62,7 +62,7 @@ const ascensionPerkAssertion = {
    name: 'string',
    description: 'string?',
 
-   potential: potentialExpressionAssertion.orNull(),
+   potential: [potentialExpressionAssertion].orNull(),
    modifier: ({
       costReductions: ('object').orNull()
    }).orNull(),
@@ -76,7 +76,7 @@ const skillAssertion = {
    name: 'string',
    description: 'string?',
    category: 'string',
-   requirements: ([identAssertion.sumWith(potentialExpressionAssertion)]).orNull(),
+   potential: [identAssertion.sumWith(potentialExpressionAssertion)].orNull(),
    cost: {
       base: 'number',
       attributes: attributesAssertion.orNull(),
@@ -84,7 +84,7 @@ const skillAssertion = {
    output: {
       attributes: attributesAssertion
    },
-   activities: ([identAssertion]).orNull(),
+   activities: [identAssertion].orNull(),
    events: eventSeriesAssertion.orNull(),
 
    ...patchModeAssertion
@@ -103,7 +103,7 @@ const startupAssertion = {
       satisfactory: 'number?',
       money: 'number?'
    }).orNull(),
-   events: (eventSeriesAssertion).orNull(),
+   events: eventSeriesAssertion.orNull(),
 
    ...patchModeAssertion
 }
@@ -111,7 +111,9 @@ const startupAssertion = {
 const eventAssertion = {
    ident: identAssertion,
    name: 'string?',
-   event: 'function'
+   event: ['function'],
+
+   ...patchModeAssertion
 }
 
 const ruleSetAssertion = {
@@ -121,13 +123,13 @@ const ruleSetAssertion = {
    },
    description: 'string?',
 
-   skillCategories: ({}).orNull(),
-   activityCategories: (['string']).orNull(),
-   skills: ([skillAssertion]).orNull(),
-   startups: ([startupAssertion]).orNull(),
-   activities: ([activityAssertion]).orNull(),
-   ascensionPerks: ([ascensionPerkAssertion]).orNull(),
-   events: ([eventAssertion]).orNull()
+   skillCategories: {}.orNull(),
+   activityCategories: ['string'].orNull(),
+   skills: [skillAssertion].orNull(),
+   startups: [startupAssertion].orNull(),
+   activities: [activityAssertion].orNull(),
+   ascensionPerks: [ascensionPerkAssertion].orNull(),
+   events: [eventAssertion].orNull()
 }
 
 module.exports = {

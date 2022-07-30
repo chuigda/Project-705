@@ -20,7 +20,7 @@ const run = {
    name: '$skill_run',
    description: '$skill_run_desc',
    category: 'init_skills',
-   requirements: ['walk'],
+   potential: ['walk'],
    cost: {
       base: 40,
       attributes: {
@@ -40,7 +40,7 @@ const speak = {
 
    name: '$skill_speak',
    category: 'init_skills',
-   requirements: ['walk'],
+   potential: ['walk'],
    cost: {
       base: 20,
       attributes: {
@@ -61,7 +61,7 @@ const tolerance = {
    name: '$skill_tolerance',
    description: '$skill_tolerance_desc',
    category: 'init_skills',
-   requirements: ['speak'],
+   potential: ['speak'],
    cost: {
       base: 40,
       attributes: {
