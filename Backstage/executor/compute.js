@@ -1,6 +1,8 @@
+const { skillId } = require('../exports')
 const computePotential = (gameContext, potential) => {
    if (typeof potential.op === 'function') {
       return {
+         type: 'custom',
          result: potential.op(gameContext),
          description: potential.description
       }
@@ -25,6 +27,7 @@ const computePotential = (gameContext, potential) => {
       }
 
       return {
+         type: 'logic_op',
          op: potential.op,
          result: finalResult,
          resultPieces
@@ -32,6 +35,21 @@ const computePotential = (gameContext, potential) => {
    }
 }
 
+const computeSkillPotential = (gameContext, skillPotential) => {
+   if (typeof skillPotential === 'string' || typeof skillPotential.id === 'string') {
+      const absoluteSkillId = skillId(gameContext.scope, skillPotential)
+      return {
+         type: 'skill',
+         result: !!gameContext.player.skills[absoluteSkillId],
+         skillId: absoluteSkillId,
+         skillName: gameContext.ruleSet.skills[absoluteSkillId].name
+      }
+   } else {
+      return computePotential(gameContext, skillPotential)
+   }
+}
+
 module.exports = {
-   computePotential
+   computePotential,
+   computeSkillPotential
 }

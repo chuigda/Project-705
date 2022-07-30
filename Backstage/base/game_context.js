@@ -27,9 +27,9 @@ const buildGameContext = ruleSet => ({
          charisma: 0
       },
       skillPoints: 0,
-      skills: [],
-      activities: [],
-      ascensionPerks: [],
+      skills: {},
+      activities: {},
+      ascensionPerks: {},
 
       pressure: 0,
       satisfactory: 100,
