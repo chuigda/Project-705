@@ -6,7 +6,7 @@ const walk = {
    cost: {
       base: 100
    },
-   gain: {
+   output: {
       attributes: {
          strength: 50
       }
@@ -27,7 +27,7 @@ const run = {
          strength: 200
       }
    },
-   gain: {
+   output: {
       attributes: {
          strength: 100
       }
@@ -47,7 +47,7 @@ const speak = {
          emotionalIntelligence: 0
       }
    },
-   gain: {
+   output: {
       attributes: {
          emotionalIntelligence: 50
       }
@@ -68,7 +68,7 @@ const tolerance = {
          emotionalIntelligence: 100
       }
    },
-   gain: {
+   output: {
       attributes: {
          emotionalIntelligence: 50,
          charisma: 40

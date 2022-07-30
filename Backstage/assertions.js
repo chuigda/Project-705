@@ -39,7 +39,7 @@ const activityAssertion = {
    category: 'string',
    level: 'number',
 
-   gain: ({
+   output: ({
       attributes: attributesAssertion.orNull(),
       talent: 'undefined',
       skillPoints: 'number?',
@@ -71,7 +71,7 @@ const skillAssertion = {
       base: 'number',
       attributes: attributesAssertion.orNull(),
    },
-   gain: {
+   output: {
       attributes: attributesAssertion
    },
    activities: (['string']).orNull(),
@@ -79,14 +79,6 @@ const skillAssertion = {
 }
 
 const eventAssertion = {
-   kind: 'string'.chainWith(x => {
-      return x === 'passive'
-             || x === 'game_start'
-             || x === 'turn_start'
-             || x === 'turn_over'
-             || x.startsWith('gain:')
-             || x.startsWith('cascade:')
-   }),
    ident: identAssertion,
    name: 'string?',
    event: 'function'

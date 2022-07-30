@@ -4,7 +4,7 @@ const crawl = {
    name: '$activity_crawl',
    category: 'sports',
    level: 0,
-   gain: {
+   output: {
       attributes: {
          strength: 4
       }
@@ -18,7 +18,7 @@ const walk = {
    category: 'sports',
    level: 1,
 
-   gain: {
+   output: {
       attributes: {
          strength: 6
       }
@@ -32,7 +32,7 @@ const run = {
    category: 'sports',
    level: 2,
 
-   gain: {
+   output: {
       attributes: {
          strength: 8
       }
@@ -46,7 +46,7 @@ const speak = {
    category: 'personality',
    level: 1,
 
-   gain: {
+   output: {
       attributes: {
          emotionalIntelligence: 4
       }
@@ -60,7 +60,7 @@ const tolerance = {
    category: 'personality',
    level: 2,
 
-   gain: {
+   output: {
       attributes: {
          emotionalIntelligence: 8,
          charisma: 4,
