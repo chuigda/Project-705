@@ -5,11 +5,12 @@ const startups = require('./startups')
 const activities = require('./activities')
 const ascensionPerks = require('./ascension_perks')
 const events = require('./events')
+const translations = require('./translations')
 
 module.exports = {
    ident: {
-      author: 'cnpr_spoof_team',
-      moduleName: 'core_ruleset',
+      author: 'cnpr',
+      moduleName: 'core',
    },
    description: '$core_ruleset_desc',
    skillCategories,
@@ -18,5 +19,6 @@ module.exports = {
    startups,
    activities,
    ascensionPerks,
-   events
+   events,
+   translations
 }

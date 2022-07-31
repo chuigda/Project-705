@@ -54,30 +54,43 @@ const compileEvent = (ruleSetIdent, event) => {
    return eventId(ruleSetIdent, event)
 }
 
+const compileName = (ruleSetIdent, item) => {
+   if (isTranslationKey(item.name)) {
+      item.name = translationKey(ruleSetIdent, item.name)
+   }
+}
+
+const compileDesc = (ruleSetIdent, item) => {
+   if (item.description && isTranslationKey(item.description)) {
+      item.description = translationKey(ruleSetIdent, item.description)
+   }
+}
+
+const compileBase = (ruleSetIdent, item, idMangler) => {
+   item.ident = idMangler(ruleSetIdent, item.ident)
+   compileName(ruleSetIdent, item)
+   compileDesc(ruleSetIdent, item)
+}
+
+const compileList = (object, field, compilation) => {
+   if (object[field]) {
+      object[field] = object[field].map(compilation)
+   }
+}
+
 const compileSkills = (ruleSet, ruleSetIdent, skills) => {
    for (const skill of skills) {
-      skill.ident = skillId(ruleSetIdent, skill.ident)
-      if (isTranslationKey(skill.name)) {
-         skill.name = translationKey(ruleSetIdent, skill.name)
-      }
-      if (skill.description && isTranslationKey(skill.description)) {
-         skill.description = translationKey(ruleSetIdent, skill.description)
-      }
-      if (skill.requirements) {
-         skill.requirements = skill.requirements.map(requirement => {
-            if (typeof requirement === 'string' || typeof requirement === 'object') {
-               return skillId(ruleSetIdent, requirement)
-            } else {
-               return compilePotentialExpression(ruleSetIdent, requirement)
-            }
-         })
-      }
-      if (skill.activities) {
-         skill.activities = skill.activities.map(activity => activityId(ruleSetIdent, activity))
-      }
-      if (skill.events) {
-         skill.events = skill.events.map(event => compileEvent(ruleSetIdent, event))
-      }
+      compileBase(ruleSetIdent, skill, skillId)
+
+      compileList(skill, 'potential', potential => {
+         if (typeof potential === 'string' || typeof potential === 'object') {
+            return skillId(ruleSetIdent, potential)
+         } else {
+            return compilePotentialExpression(ruleSetIdent, potential)
+         }
+      })
+      compileList(skill, 'activities', activity => activityId(ruleSetIdent, activity))
+      compileList(skill, 'events', event => compileEvent(ruleSetIdent, event))
 
       if (!ruleSet.skills[skill.ident]) {
          console.info(`[I] [compileSkills] compiled skill ${skill.ident}`)
@@ -91,10 +104,10 @@ const compileSkills = (ruleSet, ruleSetIdent, skills) => {
 
 const compileStartups = (ruleSet, ruleSetIdent, startups) => {
    for (const startup of startups) {
-      startup.ident = startupId(ruleSetIdent, startup.ident)
-      if (startup.events) {
-         startup.events = startup.events.map(event => compileEvent(ruleSetIdent, event))
-      }
+      compileBase(ruleSetIdent, startup, startupId)
+
+      compileList(startup, 'events', event => compileEvent(ruleSetIdent, event))
+
       if (!ruleSet.startups[startup.ident]) {
          console.info(`[I] [compileStartups] compiled startup ${startup.ident}`)
       } else {
@@ -106,10 +119,10 @@ const compileStartups = (ruleSet, ruleSetIdent, startups) => {
 
 const compileActivities = (ruleSet, ruleSetIdent, activities) => {
    for (const activity of activities) {
-      activity.ident = activityId(ruleSetIdent, activity.ident)
-      if (activity.events) {
-         activity.events = activity.events.map(event => compileEvent(ruleSetIdent, event))
-      }
+      compileBase(ruleSetIdent, activity, activityId)
+
+      compileList(activity, 'events', event => compileEvent(ruleSetIdent, event))
+
       if (!ruleSet.activities[activity.ident]) {
          console.info(`[I] [compileActivities] compiled activity ${activity.ident}`)
       } else {
@@ -121,10 +134,11 @@ const compileActivities = (ruleSet, ruleSetIdent, activities) => {
 
 const compileAscensionPerks = (ruleSet, ruleSetIdent, ascensionPerks) => {
    for (const ascensionPerk of ascensionPerks) {
-      ascensionPerk.ident = ascensionPerkId(ruleSetIdent, ascensionPerk.ident)
-      if (ascensionPerk.events) {
-         ascensionPerk.events = ascensionPerk.events.map(event => compileEvent(ruleSetIdent, event))
-      }
+      compileBase(ruleSetIdent, ascensionPerk, ascensionPerkId)
+
+      compileList(ascensionPerk, 'potential', potential => compilePotentialExpression(ruleSetIdent, potential))
+      compileList(ascensionPerk, 'events', event => compileEvent(ruleSetIdent, event))
+
       if (!ruleSet.ascensionPerks[ascensionPerk.ident]) {
          console.info(`[I] [compileAscensionPerks] compiled ascension perk ${ascensionPerk.ident}`)
       } else {
@@ -137,6 +151,7 @@ const compileAscensionPerks = (ruleSet, ruleSetIdent, ascensionPerks) => {
 const compileEvents = (ruleSet, ruleSetIdent, events) => {
    for (const event of events) {
       event.ident = eventId(ruleSetIdent, event.ident)
+
       if (!ruleSet.events[event.ident]) {
          console.info(`[I] [compileEvents] compiled ascension perk ${event.ident}`)
       } else {

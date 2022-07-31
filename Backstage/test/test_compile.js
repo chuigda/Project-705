@@ -5,3 +5,5 @@ const ruleSet = emptyRuleSet()
 compileRuleSet(ruleSet, coreRuleSet)
 
 console.log(ruleSet)
+
+for (;;) {}

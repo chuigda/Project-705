@@ -109,8 +109,7 @@ const startupAssertion = {
 }
 
 const eventAssertion = {
-   ...baseAssertion,
-
+   ident: identAssertion,
    event: ['function'],
 
    ...patchModeAssertion
