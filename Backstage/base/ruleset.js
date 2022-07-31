@@ -153,9 +153,9 @@ const compileEvents = (ruleSet, ruleSetIdent, events) => {
       event.ident = eventId(ruleSetIdent, event.ident)
 
       if (!ruleSet.events[event.ident]) {
-         console.info(`[I] [compileEvents] compiled ascension perk ${event.ident}`)
+         console.info(`[I] [compileEvents] compiled event ${event.ident}`)
       } else {
-         console.warn(`[W] [compileEvents] ascension perk '${event.ident}' already exists, overwriting`)
+         console.warn(`[W] [compileEvents] event '${event.ident}' already exists, overwriting`)
       }
       ruleSet.events[event.ident] = event
    }
