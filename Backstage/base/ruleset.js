@@ -9,7 +9,8 @@ const emptyRuleSet = () => ({
    skills: {},
    startups: {},
    activities: {},
-   ascensionPerks: {}
+   ascensionPerks: {},
+   translations: {}
 })
 
 const compileSkillCategories = (ruleSet, ruleSetIdent, skillCategories) => {
@@ -164,6 +165,25 @@ const compileEvents = (ruleSet, ruleSetIdent, events) => {
    }
 }
 
+const compileTranslations = (ruleSet, ruleSetIdent, translations) => {
+   for (const languageId in translations) {
+      const language = translations[languageId]
+      if (!ruleSet.translations[languageId]) {
+         ruleSet.translations[languageId] = {}
+      }
+
+      for (const sentenceKey in language) {
+         const key = translationKey(ruleSetIdent, sentenceKey)
+         if (ruleSet.translations[key]) {
+            console.warn(`[W] [compileTranslation] translation '${key}' already exists, overwriting`)
+         } else {
+            console.info(`[I] [compileTranslation] compiled translation '${key}'`)
+         }
+         ruleSet.translations[languageId][key] = language[sentenceKey]
+      }
+   }
+}
+
 const compileRuleSet = (ruleSet, newRuleSet) => {
    const {
       ident: ruleSetIdent,
@@ -173,7 +193,8 @@ const compileRuleSet = (ruleSet, newRuleSet) => {
       startups,
       activities,
       ascensionPerks,
-      events
+      events,
+      translations
    } = newRuleSet
    const { author, moduleName } = ruleSetIdent
    console.info(`[I] [compileRuleSet] Compiling rule set ${author}:${moduleName}`)
@@ -204,6 +225,10 @@ const compileRuleSet = (ruleSet, newRuleSet) => {
 
    if (events) {
       compileEvents(ruleSet, ruleSetIdent, events)
+   }
+
+   if (translations) {
+      compileTranslations(ruleSet, ruleSetIdent, translations)
    }
 }
 

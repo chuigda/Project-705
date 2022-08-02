@@ -6,6 +6,7 @@ const {
    computePotentialAscensionPerks
 } = require('../executor/compute')
 const { perfectStringify } = require('../util/stringify')
+const { translatePotentialResult } = require('../repr')
 
 const ruleSet = setupRuleSet()
 const gameContext = buildGameContext(ruleSet)
@@ -18,6 +19,14 @@ try {
    console.log('modifiers:', perfectStringify(gameContext.computedModifiers))
    console.log('potential skills:', perfectStringify(gameContext.computedSkills))
    console.log('potential ascension perks:', perfectStringify(gameContext.computedAscensionPerks))
+
+   for (const ap of Object.values(gameContext.computedAscensionPerks.unavailable)) {
+      console.log(perfectStringify(translatePotentialResult(
+         'zh_cn',
+         ruleSet.translations,
+         ap.resultPieces
+      )))
+   }
 } catch (e) {
    console.error(e)
 } finally {

@@ -128,7 +128,8 @@ const ruleSetAssertion = {
    startups: [startupAssertion].orNull(),
    activities: [activityAssertion].orNull(),
    ascensionPerks: [ascensionPerkAssertion].orNull(),
-   events: [eventAssertion].orNull()
+   events: [eventAssertion].orNull(),
+   translations: {}
 }
 
 module.exports = {
