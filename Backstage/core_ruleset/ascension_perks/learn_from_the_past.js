@@ -17,7 +17,7 @@ module.exports = {
             },
             {
                op: gameContext => (
-                  gameContext.player.skills
+                  Object.values(gameContext.player.skills)
                      .filter(skill => skill.category !== 'init_skills')
                      .length >= 15
                ),

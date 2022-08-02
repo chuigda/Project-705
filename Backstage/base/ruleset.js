@@ -46,6 +46,7 @@ const compilePotentialExpression = (ruleSetIdent, potential) => {
    } else {
       potential.arguments = potential.arguments.map(argument => compilePotentialExpression(ruleSetIdent, argument))
    }
+   return potential
 }
 
 const compileEvent = (ruleSetIdent, event) => {

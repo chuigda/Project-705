@@ -6,7 +6,8 @@
    "scripts": {
       "test_core_ruleset_assertion": "node test/test_assertions.js",
       "test_compile": "node test/test_compile.js",
-      "test_setup": "node test/test_setup.js"
+      "test_setup": "node test/test_setup.js",
+      "test_compute": "node test/test_compute.js"
    },
    "author": "",
    "license": "ISC",

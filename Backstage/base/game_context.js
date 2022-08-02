@@ -92,14 +92,8 @@ const buildGameContext = ruleSet => ({
    },
 
    computedModifiers: null,
-   computedSkills: {
-      available: {},
-      unavailable: {}
-   },
-   computedAscensionPerks: {
-      available: {},
-      unavailable: {}
-   }
+   computedSkills: null,
+   computedAscensionPerks: null
 })
 
 module.exports = {

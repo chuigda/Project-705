@@ -57,7 +57,11 @@ const computeSkillPotential = (gameContext, skillPotential) => {
 const computeSingleModifier = modifierSet => {
    let increase = 1.0
    let decrease = 1.0
-   for (const { value: { increase: inc, decrease: dec } } of modifierSet) {
+   if (!modifierSet) {
+      return
+   }
+
+   for (const { value: { increase: inc, decrease: dec } } of Object.values(modifierSet)) {
       if (inc) {
          increase += inc
       }
@@ -70,7 +74,7 @@ const computeSingleModifier = modifierSet => {
    if (increase <= 0) {
       increase = 0
    }
-   if (decrease >= 0) {
+   if (decrease <= 0) {
       decrease = 0
    }
 
@@ -107,16 +111,23 @@ const computeModifiers = gameContext => {
 }
 
 const computeSkillCost = (gameContext, skillCost) => {
-   if (!skillCost) {
+   if (!skillCost || !skillCost.base) {
       return 0
    }
 
    const { base, attributes } = skillCost
+   console.debug(`[D] [computeSkillCost] base cost = ${base}, attributes = ${attributes}`)
    let totalDiffRatio = 0.0
-   for (const attrName in attributes) {
-      const diff = gameContext.player.attributes[attrName] - attributes[attrName]
-      if (diff < 0) {
-         totalDiffRatio += -(diff / attributes[attrName])
+   if (attributes) {
+      for (const attrName in attributes) {
+         const diff = gameContext.player.attributes[attrName] - attributes[attrName]
+         console.debug(`[D] [computeSkillCost] gameContext.player.attributes[${attrName}] = ${gameContext.player.attributes[attrName]}`
+                       + `, attributes[${attrName}] = ${attributes[attrName]}`
+                       + `, diff = ${diff}`)
+         if (diff < 0) {
+            totalDiffRatio += -(diff / attributes[attrName])
+            console.debug(`[D] [computeSkillCost] diff contribution = ${ -(diff / attributes[attrName]) }`)
+         }
       }
    }
    totalDiffRatio *= 3.0
@@ -132,27 +143,39 @@ const computeSkillCost = (gameContext, skillCost) => {
 }
 
 const computePotentialSkills = gameContext => {
+   gameContext.computedSkills = {
+      available: {},
+      unavailable: {}
+   }
+
    const { skills: allSkills } = gameContext.ruleSet
    const { skills } = gameContext.player
 
-   for (const skill of allSkills) {
+   for (const skill of Object.values(allSkills)) {
       const { ident, potential } = skill
       if (skills[ident]) {
+         console.info(`[I] [computePotentialSkills] skipping already learned skill: '${ident}'`)
          continue
       }
 
-      const resultPieces = []
-      for (const potentialPart of potential) {
-         resultPieces.push(computeSkillPotential(gameContext, potentialPart))
+      let result = true
+      let resultPieces = []
+      if (potential) {
+         for (const potentialPart of potential) {
+            resultPieces.push(computeSkillPotential(gameContext, potentialPart))
+         }
+         result = !resultPieces.find(({ result }) => !result)
       }
-      const result = !resultPieces.find(({ result }) => !result)
 
       if (result) {
+         const cost = computeSkillCost(gameContext, skill.cost)
+         console.info(`[I] [computePotentialSkills] skill '${ident}' available, it costs: ${cost}`)
          gameContext.computedSkills.available[ident] = {
             skill,
-            cost: computeSkillCost(gameContext, skill)
+            cost
          }
       } else {
+         console.info(`[I] [computePotentialSkills] skill '${ident}' not available`)
          gameContext.computedSkills.unavailable[ident] = {
             ident,
             skill,
@@ -163,18 +186,29 @@ const computePotentialSkills = gameContext => {
 }
 
 const computePotentialAscensionPerks = gameContext => {
+   gameContext.computedAscensionPerks = {
+      available: {},
+      unavailable: {}
+   }
+
    const { ascensionPerks: allAscensionPerks } = gameContext.ruleSet
    const { ascensionPerks } = gameContext.player
 
-   for (const ascensionPerk of allAscensionPerks) {
+   for (const ascensionPerk of Object.values(allAscensionPerks)) {
       const { ident, potential } = ascensionPerk
       if (ascensionPerks[ident]) {
+         console.info(`[I] [computePotentialAscensionPerks] skipping already activated ascension perk: '${ident}'`)
          continue
       }
 
-      const resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
-      const result = !resultPieces.find(({ result }) => !result)
+      let result = true
+      let resultPieces = []
+      if (potential) {
+         resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
+         result = !resultPieces.find(({ result }) => !result)
+      }
 
+      console.info(`[I] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
       if (result) {
          gameContext.computedAscensionPerks.available[ident] = {
              ascensionPerk,
