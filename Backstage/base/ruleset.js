@@ -15,7 +15,8 @@ const emptyRuleSet = () => ({
 const compileSkillCategories = (ruleSet, ruleSetIdent, skillCategories) => {
    for (const category of skillCategories) {
       const { ident } = category
-      const maybeExistingCategory = ruleSet.skillCategories.findIndex(skillCategories => skillCategories.ident === ident)
+      const maybeExistingCategory =
+      ruleSet.skillCategories.findIndex(categories => categories.ident === ident)
       if (maybeExistingCategory !== -1) {
          console.warn(`[W] [compileSkillCategories] skill category '${category}' already exists, overwriting`)
          ruleSet.skillCategories[maybeExistingCategory] = category

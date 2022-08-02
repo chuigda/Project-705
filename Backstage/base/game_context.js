@@ -66,8 +66,30 @@ const buildGameContext = ruleSet => ({
       eventsTriggered: {}
    },
    modifiers: {
-      costReductions: []
+      player: {
+         attributes: {
+            strength: {},
+            intelligence: {},
+            emotionalIntelligence: {},
+            memorization: {},
+            imagination: {},
+            charisma: {}
+         },
+         talent: {
+            strength: {},
+            intelligence: {},
+            emotionalIntelligence: {},
+            memorization: {},
+            imagination: {},
+            charisma: {}
+         }
+      },
+      skillPoints: {},
+      pressure: {},
+      satisfactory: {},
+      money: {}
    },
+   computedModifiers: null
 })
 
 module.exports = {

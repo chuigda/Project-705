@@ -14,7 +14,7 @@ const computePotential = (gameContext, potential) => {
          resultPieces.push(piece)
       }
 
-      let finalResult = undefined
+      let finalResult
       switch (potential.op) {
       case 'and':
          finalResult = resultPieces.find(({ result }) => !result) === undefined
@@ -24,6 +24,10 @@ const computePotential = (gameContext, potential) => {
          break
       case 'not':
          finalResult = resultPieces.find(({ result }) => result) === undefined
+         break
+      default:
+         console.warn(`[W] [computePotential] invalid op: ${potential.op}`)
+         finalResult = false
          break
       }
 
@@ -50,7 +54,65 @@ const computeSkillPotential = (gameContext, skillPotential) => {
    }
 }
 
+const computeSingleModifier = modifierSet => {
+   let increase = 1.0
+   let decrease = 1.0
+   for (const { value: { increase: inc, decrease: dec } } of modifierSet) {
+      if (inc) {
+         increase += inc
+      }
+
+      if (dec) {
+         decrease += dec
+      }
+   }
+
+   if (increase <= 0) {
+      increase = 0
+   }
+   if (decrease >= 0) {
+      decrease = 0
+   }
+
+   return { increase, decrease }
+}
+
+const computeModifiers = gameContext => {
+   const { modifiers } = gameContext
+
+   const dimensions = [
+      'strength',
+      'intelligence',
+      'emotionalIntelligence',
+      'memorization',
+      'imagination',
+      'charisma'
+   ]
+   const computeDimensions = object => {
+      const ret = {}
+      for (const dimension of dimensions) {
+         ret[dimension] = computeSingleModifier(object[dimension])
+      }
+      return ret
+   }
+
+   gameContext.computedModifiers = {
+      player: {
+         attributes: computeDimensions(modifiers.player.attributes),
+         talent: computeDimensions(modifiers.player.talent),
+         
+         ...computeDimensions(['skillPoints', 'pressure', 'satisfactory', 'money'])
+      }
+   }
+}
+
+const computePotentialSkills = gameContext => {}
+const computePotentialAscensionPerks = gameContext => {}
+
 module.exports = {
    computePotential,
-   computeSkillPotential
+   computeSkillPotential,
+   computeModifiers,
+   computePotentialSkills,
+   computePotentialAscensionPerks
 }

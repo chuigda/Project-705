@@ -18,9 +18,9 @@ const signals = {
       signalType: 'count_down',
       turns
    }),
-   event: eventId => ({
+   event: sourceEventId => ({
       signalType: 'event',
-      eventId
+      eventId: sourceEventId
    })
 }
 
@@ -47,6 +47,8 @@ const connect = (gameContext, signal, event) => {
       case 'activity':
          gameContext.events.activityPerformed.push(event)
          break
+      default:
+         console.warn(`[W] [connect] invalid signal '${signal}'`)
       }
    } else {
       switch (signal.signalType) {
@@ -85,6 +87,8 @@ const connect = (gameContext, signal, event) => {
          gameContext.events.eventsTriggered[sourceEventId].push(absoluteEvent)
          break
       }
+      default:
+         console.warn(`[W] [connect] invalid signal '${signal.signalType}'`)
       }
    }
 }
@@ -136,6 +140,8 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
    case 'mul':
       propertyContainer[lastPropertyPath] *= opRef.value
       break
+   default:
+      console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
    }
 }
 

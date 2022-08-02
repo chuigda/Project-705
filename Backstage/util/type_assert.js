@@ -1,3 +1,6 @@
+/* eslint-disable strict */
+/* eslint-disable no-extend-native, no-use-before-define, func-names, no-shadow, no-throw-literal */
+
 /**
  *
  * This is free and unencumbered software released into the public domain.
@@ -29,9 +32,9 @@
 
 'use strict'
 
-/* eslint-disable no-extend-native, no-use-before-define, func-names, no-shadow, no-throw-literal */
 const TypeStrings = {
    String: typeof '',
+   // eslint-disable-next-line no-undef
    Symbol: typeof Symbol(''),
    Number: typeof 0,
    Object: typeof {},
@@ -54,7 +57,9 @@ const removeTail = (srcText) => {
 
 let globalPreventErr = false
 
-const preventErrTrace = prevent => globalPreventErr = prevent
+const preventErrTrace = prevent => {
+   globalPreventErr = prevent
+}
 
 const typeAssertError = (path, message, preventErr) => {
    const errMsg = `Type assertion failed: "${path}": ${message}`
@@ -211,7 +216,7 @@ const ChainType = (function () {
    return ChainType
 }())
 
-const ValueAssertion = (function() {
+const ValueAssertion = (function () {
    function ValueAssertion(value) {
       this.value = value
    }
@@ -227,10 +232,10 @@ const enableChainAPI = methodNames => {
 
    if (methodNames !== null && methodNames !== undefined) {
       const { orNull, sumWith, chainWith, assertValue } = methodNames
-      orNullName = orNull ? orNull : orNullName
-      sumWithName = sumWith ? sumWith : sumWithName
-      chainWithName = chainWith ? chainWith : chainWithName
-      assertValueName = assertValue ? assertValue : assertValueName
+      orNullName = orNull || orNullName
+      sumWithName = sumWith || sumWithName
+      chainWithName = chainWith || chainWithName
+      assertValueName = assertValue || assertValueName
    }
 
    const checkChainNotEndedByValueAssertion = types => {

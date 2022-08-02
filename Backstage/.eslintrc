@@ -22,8 +22,12 @@
       "quote-props": "off",
       "global-require": "off",
       "import/extensions": "off",
+      "import/no-dynamic-require": "off",
       "object-curly-newline": "off",
       "no-underscore-dangle": "off",
+      "no-param-reassign": "off",
+      "guard-for-in": "off",
+      "operator-linebreak": "off",
       "max-len": ["error", { "code": 120 }]
    }
 }
