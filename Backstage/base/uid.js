@@ -17,12 +17,12 @@ const buildIdResolver = idKind => (
    }
 )
 
-const ascensionPerkId = buildIdResolver('ascension_perk')
-const skillId = buildIdResolver('skill')
-const startupId = buildIdResolver('startup')
-const activityId = buildIdResolver('activity')
-const eventId = buildIdResolver('event')
-const modifierId = buildIdResolver('modifier')
+const ascensionPerkId = buildIdResolver('ap')
+const skillId = buildIdResolver('sk')
+const startupId = buildIdResolver('st')
+const activityId = buildIdResolver('ac')
+const eventId = buildIdResolver('ev')
+const modifierId = buildIdResolver('md')
 const translationKey = buildIdResolver('tr')
 
 module.exports = {

@@ -51,8 +51,9 @@ const compilePotentialExpression = (ruleSetIdent, potential) => {
 const compileEvent = (ruleSetIdent, event) => {
    if (typeof event === 'function') {
       return event
+   } else {
+      return eventId(ruleSetIdent, event)
    }
-   return eventId(ruleSetIdent, event)
 }
 
 const compileName = (ruleSetIdent, item) => {

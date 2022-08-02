@@ -17,7 +17,7 @@ const giftedStartup = {
          memorization: 100,
          imagination: 100
       },
-      skillPoints: 500,
+      skillPoints: 500
    }
 }
 
