@@ -5,6 +5,7 @@ const buildGameContext = ruleSet => ({
       author: null,
       moduleName: null
    },
+   scopeChain: [],
 
    turns: 0,
    player: {
@@ -89,7 +90,16 @@ const buildGameContext = ruleSet => ({
       satisfactory: {},
       money: {}
    },
-   computedModifiers: null
+
+   computedModifiers: null,
+   computedSkills: {
+      available: {},
+      unavailable: {}
+   },
+   computedAscensionPerks: {
+      available: {},
+      unavailable: {}
+   }
 })
 
 module.exports = {

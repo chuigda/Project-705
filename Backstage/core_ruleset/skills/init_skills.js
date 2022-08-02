@@ -42,10 +42,7 @@ const speak = {
    category: 'init_skills',
    potential: ['walk'],
    cost: {
-      base: 20,
-      attributes: {
-         emotionalIntelligence: 0
-      }
+      base: 20
    },
    output: {
       attributes: {
