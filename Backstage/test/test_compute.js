@@ -33,7 +33,7 @@ try {
 } catch (e) {
    console.error(e)
 } finally {
-   // noinspection InfiniteLoopJS
    // eslint-disable-next-line no-empty, no-constant-condition
+   // noinspection InfiniteLoopJS
    while (true) {}
 }

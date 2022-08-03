@@ -1,9 +1,13 @@
 const { activityId, skillId } = require('../base/uid')
 const { recomputeSkillCosts } = require('./compute')
 const { updatePlayerProperty } = require('./properties')
+const { pushScope,
+   popScope,
+   triggerEvent
+} = require('./events')
 
 const learnSkill = (gameContext, skill) => {
-   const absoluteSkillId = skillId(skill)
+   const absoluteSkillId = skillId(gameContext.scope, skill)
    if (!gameContext.computedSkills[absoluteSkillId]) {
       console.error(`[E] [learnSkill] skill '${absoluteSkillId}' is not available`)
       return
@@ -33,19 +37,17 @@ const learnSkill = (gameContext, skill) => {
 
    if (skillContent.activities) {
       for (const activity of skillContent.activities) {
-         const absoluteAcitvityId = activityId(activity)
-         gameContext.player.activities[absoluteAcitvityId] = gameContext.ruleSet.activities[absoluteAcitvityId]
+         const absoluteActivityId = activityId(gameContext.scope, activity)
+         gameContext.player.activities[absoluteActivityId] = gameContext.ruleSet.activities[absoluteActivityId]
       }
    }
 
    if (skillContent.events) {
+      pushScope(gameContext, skillContent.scope)
       for (const event of skillContent.events) {
-         if (typeof event === 'function') {
-            event(gameContext)
-         } else {
-            // TODO(chuigda)
-         }
+         triggerEvent(gameContext, event)
       }
+      popScope(gameContext)
    }
 
    recomputeSkillCosts(skillContent)

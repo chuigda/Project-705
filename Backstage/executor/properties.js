@@ -1,5 +1,8 @@
 const updatePlayerProperty = (gameContext, property, operator, value, source) => {
-   // TODO(rebuild): 暂时只计算 events，但如何计算 modifiers?
+   // TODO(rebuild): 增加 modifiers 相关的计算
+   // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算
+   // 技能点消耗的计算是在 computeSkillCost 里进行的
+
    const opRef = { operator, value }
    const propertyPath = property.split['.']
    let container = gameContext.events.playerPropertyUpdated
@@ -48,6 +51,8 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
    default:
       console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
    }
+
+   // TODO(chuigda): 记录 UI 更新以备使用
 }
 
 module.exports = {

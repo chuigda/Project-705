@@ -79,6 +79,7 @@ const compileDesc = (ruleSetIdent, item) => {
 
 const compileBase = (ruleSetIdent, item, idMangler) => {
    item.ident = idMangler(ruleSetIdent, item.ident)
+   item.scope = ruleSetIdent
    compileName(ruleSetIdent, item)
    compileDesc(ruleSetIdent, item)
 }
@@ -162,6 +163,7 @@ const compileAscensionPerks = (ruleSet, ruleSetIdent, ascensionPerks) => {
 const compileEvents = (ruleSet, ruleSetIdent, events) => {
    for (const event of events) {
       event.ident = eventId(ruleSetIdent, event.ident)
+      event.scope = ruleSetIdent
 
       if (!ruleSet.events[event.ident]) {
          console.info(`[I] [compileEvents] compiled event ${event.ident}`)

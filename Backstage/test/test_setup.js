@@ -1,7 +1,6 @@
-const JSON5 = require('json5')
-
 const { setupRuleSet } = require('../setup')
+const { perfectStringify } = require('../util/stringify')
 
 const ruleSet = setupRuleSet()
 
-console.log(JSON5.stringify(ruleSet, { space: 3 }))
+console.log(perfectStringify(ruleSet))

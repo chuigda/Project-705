@@ -1,3 +1,5 @@
+const { updatePlayerProperty } = require('../../executor/properties')
+
 module.exports = {
    ident: 'precautions',
 
@@ -10,6 +12,6 @@ module.exports = {
       }
    },
    events: [
-      gameContext => gameContext.updatePlayerAttributes('skillPoints', 500)
+      gameContext => updatePlayerProperty(gameContext, 'skillPoints', 'add', 500)
    ]
 }
