@@ -7,6 +7,7 @@ const { loadMods } = require('./mods')
 const setupRuleSet = () => {
    const ruleSet = emptyRuleSet()
 
+   const startTime = new Date()
    try {
       const coreRuleSet = require('./core_ruleset')
       typeAssert(coreRuleSet, ruleSetAssertion)
@@ -17,7 +18,11 @@ const setupRuleSet = () => {
    }
    loadMods(ruleSet)
 
-   return Object.freeze(ruleSet)
+   const ret = Object.freeze(ruleSet)
+   const endTime = new Date()
+   console.info(`[I] [setupRuleSet] loading all rule sets took ${endTime - startTime}ms`)
+
+   return ret
 }
 
 module.exports = {

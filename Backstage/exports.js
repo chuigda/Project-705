@@ -1,7 +1,9 @@
 const uidFunctions = require('./base/uid')
-const gameContextFunctions = require('./executor/connect')
+const connectThings = require('./executor/connect')
+const computeFunctions = require('./executor/compute')
 
 module.exports = {
    ...uidFunctions,
-   ...gameContextFunctions
+   ...connectThings,
+   ...computeFunctions
 }
