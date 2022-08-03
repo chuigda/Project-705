@@ -52,6 +52,10 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
       console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
    }
 
+   if (propertyContainer[lastPropertyPath] < 0) {
+      propertyContainer[lastPropertyPath] = 0
+   }
+
    // TODO(chuigda): 记录 UI 更新以备使用
 }
 

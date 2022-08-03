@@ -2,7 +2,34 @@ const { emptyRuleSet, compileRuleSet } = require('./executor/ruleset')
 const { typeAssert } = require('./util/type_assert')
 const { ruleSetAssertion } = require('./assertions')
 const { abort } = require('./util/emergency')
-const { loadMods } = require('./mods')
+
+const loadMods = compiledRuleSet => {
+   const mods = require('./mods/mods.json')
+   try {
+      typeAssert(mods, ['string'])
+   } catch (e) {
+      console.error(`[E] [loadMods] 'mods.json' corrupted, skipping mod loading. reason: ${e}`)
+      return
+   }
+
+   for (const mod of mods) {
+      let modRuleSet = null
+      try {
+         modRuleSet = require(`./${mod}`)
+         typeAssert(modRuleSet, ruleSetAssertion)
+      } catch (e) {
+         console.error(`[E] [loadMods] mod '${mod}' corrupted, skipping. reason: ${e}`)
+         continue
+      }
+
+      try {
+         compileRuleSet(compiledRuleSet, modRuleSet)
+      } catch (e) {
+         console.error(`[E] [loadMods] error when loading mod '${mod}': ${e}`)
+         abort()
+      }
+   }
+}
 
 const setupRuleSet = () => {
    const ruleSet = emptyRuleSet()
