@@ -1,6 +1,6 @@
 const { ruleSetAssertion } = require('../assertions')
 const { typeAssert, preventErrTrace } = require('../util/type_assert')
-const { compileRuleSet } = require('../base/ruleset')
+const { compileRuleSet } = require('../executor/ruleset')
 const { abort } = require('../util/emergency')
 
 const loadMods = compiledRuleSet => {

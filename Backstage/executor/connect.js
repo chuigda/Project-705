@@ -1,4 +1,4 @@
-const { eventId } = require('./uid')
+const { eventId } = require('../base/uid')
 
 const signals = {
    turnStart: () => 'turn_start',

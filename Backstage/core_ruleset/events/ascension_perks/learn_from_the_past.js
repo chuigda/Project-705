@@ -1,4 +1,4 @@
-const { updatePlayerProperty } = require('../../../base/game_context_fn')
+const { updatePlayerProperty } = require('../../../executor/connect')
 
 module.exports = {
    ident: 'learn_from_the_past_gain',

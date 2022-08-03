@@ -1,7 +1,7 @@
 const {
    connect,
    signals
-} = require('../../base/game_context_fn')
+} = require('../../executor/connect')
 
 module.exports = {
    ident: 'learn_from_the_past',

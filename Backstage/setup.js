@@ -1,4 +1,4 @@
-const { emptyRuleSet, compileRuleSet } = require('./base/ruleset')
+const { emptyRuleSet, compileRuleSet } = require('./executor/ruleset')
 const { typeAssert } = require('./util/type_assert')
 const { ruleSetAssertion } = require('./assertions')
 const { abort } = require('./util/emergency')

@@ -1,5 +1,12 @@
-const { isTranslationKey } = require('./translation')
-const { activityId, eventId, skillId, translationKey, startupId, ascensionPerkId } = require('./uid')
+const {
+   activityId,
+   eventId,
+   skillId,
+   translationKey,
+   startupId,
+   ascensionPerkId,
+   isTranslationKey
+} = require('../base/uid')
 
 const emptyRuleSet = () => ({
    skillCategories: [],

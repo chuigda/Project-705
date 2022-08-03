@@ -1,5 +1,5 @@
 const { setupRuleSet } = require('../setup')
-const { buildGameContext } = require('../base/game_context')
+const { buildGameContext } = require('../executor/game_context')
 const {
    computeModifiers,
    computePotentialSkills,

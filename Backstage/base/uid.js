@@ -25,6 +25,9 @@ const eventId = buildIdResolver('ev')
 const modifierId = buildIdResolver('md')
 const translationKey = buildIdResolver('tr')
 
+const isTranslationKey = key => key.startsWith('$')
+const isAbsoluteTranslationKey = key => key.startsWith('@') && key.indexOf('$') !== -1
+
 module.exports = {
    uniqueId,
    ascensionPerkId,
@@ -33,5 +36,8 @@ module.exports = {
    activityId,
    eventId,
    modifierId,
-   translationKey
+   translationKey,
+
+   isTranslationKey,
+   isAbsoluteTranslationKey
 }
