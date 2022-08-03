@@ -3,7 +3,8 @@ const { buildGameContext } = require('../base/game_context')
 const {
    computeModifiers,
    computePotentialSkills,
-   computePotentialAscensionPerks
+   computePotentialAscensionPerks,
+   recomputeSkillCosts
 } = require('../executor/compute')
 const { perfectStringify } = require('../util/stringify')
 const { translatePotentialResult } = require('../repr')
@@ -15,6 +16,8 @@ try {
    computeModifiers(gameContext)
    computePotentialSkills(gameContext)
    computePotentialAscensionPerks(gameContext)
+
+   recomputeSkillCosts(gameContext)
 
    console.log('modifiers:', perfectStringify(gameContext.computedModifiers))
    console.log('potential skills:', perfectStringify(gameContext.computedSkills))

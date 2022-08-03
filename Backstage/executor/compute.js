@@ -186,6 +186,16 @@ const computePotentialSkills = gameContext => {
    }
 }
 
+const recomputeSkillCosts = gameContext => {
+   for (const skillCostObject of Object.values(gameContext.computedSkills.available)) {
+      const { skill } = skillCostObject
+      const { ident } = skill
+      const cost = computeSkillCost(gameContext, skill.cost)
+      console.info(`[I] [recomputeSkillCosts] skill '${ident}' costs ${cost}`)
+      skillCostObject.cost = cost
+   }
+}
+
 const computePotentialAscensionPerks = gameContext => {
    gameContext.computedAscensionPerks = {
       available: {},
@@ -231,5 +241,6 @@ module.exports = {
    computeModifiers,
    computeSkillCost,
    computePotentialSkills,
+   recomputeSkillCosts,
    computePotentialAscensionPerks
 }
