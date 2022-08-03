@@ -58,7 +58,7 @@ const computeSingleModifier = modifierSet => {
    let increase = 1.0
    let decrease = 1.0
    if (!modifierSet) {
-      return
+      return { increase, decrease }
    }
 
    for (const { value: { increase: inc, decrease: dec } } of Object.values(modifierSet)) {
@@ -121,12 +121,13 @@ const computeSkillCost = (gameContext, skillCost) => {
    if (attributes) {
       for (const attrName in attributes) {
          const diff = gameContext.player.attributes[attrName] - attributes[attrName]
-         console.debug(`[D] [computeSkillCost] gameContext.player.attributes[${attrName}] = ${gameContext.player.attributes[attrName]}`
+         console.debug(`[D] [computeSkillCost] gameContext.player.attributes[${attrName}]`
+                       + `= ${gameContext.player.attributes[attrName]}`
                        + `, attributes[${attrName}] = ${attributes[attrName]}`
                        + `, diff = ${diff}`)
          if (diff < 0) {
             totalDiffRatio += -(diff / attributes[attrName])
-            console.debug(`[D] [computeSkillCost] diff contribution = ${ -(diff / attributes[attrName]) }`)
+            console.debug(`[D] [computeSkillCost] diff contribution = ${-(diff / attributes[attrName])}`)
          }
       }
    }
@@ -159,12 +160,12 @@ const computePotentialSkills = gameContext => {
       }
 
       let result = true
-      let resultPieces = []
+      const resultPieces = []
       if (potential) {
          for (const potentialPart of potential) {
             resultPieces.push(computeSkillPotential(gameContext, potentialPart))
          }
-         result = !resultPieces.find(({ result }) => !result)
+         result = !resultPieces.find(({ result: r }) => !r)
       }
 
       if (result) {
@@ -205,20 +206,20 @@ const computePotentialAscensionPerks = gameContext => {
       let resultPieces = []
       if (potential) {
          resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
-         result = !resultPieces.find(({ result }) => !result)
+         result = !resultPieces.find(({ result: r }) => !r)
       }
 
       console.info(`[I] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
       if (result) {
          gameContext.computedAscensionPerks.available[ident] = {
-             ascensionPerk,
-             cost: computeSkillCost(gameContext, ascensionPerk)
+            ascensionPerk,
+            cost: computeSkillCost(gameContext, ascensionPerk)
          }
       } else {
          gameContext.computedAscensionPerks.unavailable[ident] = {
-             ident,
-             ascensionPerk,
-             resultPieces
+            ident,
+            ascensionPerk,
+            resultPieces
          }
       }
    }
