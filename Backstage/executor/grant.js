@@ -1,28 +1,9 @@
 const { activityId, skillId } = require('../base/uid')
 const { recomputeSkillCosts } = require('./compute')
 const { updatePlayerProperty } = require('./properties')
-const { pushScope,
-   popScope,
-   triggerEvent
-} = require('./events')
+const { pushScope, popScope, triggerEvent } = require('./events')
 
-const learnSkill = (gameContext, skill) => {
-   const absoluteSkillId = skillId(gameContext.scope, skill)
-   if (!gameContext.computedSkills[absoluteSkillId]) {
-      console.error(`[E] [learnSkill] skill '${absoluteSkillId}' is not available`)
-      return
-   }
-
-   if (gameContext.player.skills[absoluteSkillId]) {
-      console.warn(`[W] [learnSkill] skill '${absoluteSkillId}' has already been learnt, re-learning`)
-   }
-
-   const { skill: skillContent, cost } = gameContext.computedSkills[absoluteSkillId]
-   gameContext.computedSkills[absoluteSkillId] = undefined
-
-   gameContext.player.skills[absoluteSkillId] = skillContent
-   gameContext.player.skillPoints -= cost
-
+const executeSkillEffects = (gameContext, skillContent) => {
    if (skillContent.output) {
       for (const dimension in skillContent.output.attributes) {
          updatePlayerProperty(
@@ -50,9 +31,47 @@ const learnSkill = (gameContext, skill) => {
       popScope(gameContext)
    }
 
-   recomputeSkillCosts(skillContent)
+   recomputeSkillCosts(gameContext)
+}
+
+const learnSkill = (gameContext, skill) => {
+   const absoluteSkillId = skillId(gameContext.scope, skill)
+   if (!gameContext.computedSkills[absoluteSkillId]) {
+      console.error(`[E] [learnSkill] skill '${absoluteSkillId}' is not available`)
+      return
+   }
+
+   if (gameContext.player.skills[absoluteSkillId]) {
+      console.warn(`[W] [learnSkill] skill '${absoluteSkillId}' has already been learnt, re-learning`)
+   }
+
+   const { skill: skillContent, cost } = gameContext.computedSkills[absoluteSkillId]
+   gameContext.computedSkills[absoluteSkillId] = undefined
+
+   gameContext.player.skills[absoluteSkillId] = skillContent
+   gameContext.player.skillPoints -= cost
+
+   executeSkillEffects(gameContext, skillContent)
+}
+
+const grantSkill = (gameContext, skill) => {
+   const absoluteSkillId = skillId(gameContext.scope, skill)
+   const skillContent = gameContext.ruleSet.skills[absoluteSkillId]
+
+   if (!skillContent) {
+      console.error(`[E] [grantSkill] skill '${absoluteSkillId}' does not exist`)
+      return
+   }
+
+   if (gameContext.player.skills[absoluteSkillId]) {
+      console.warn(`[W] [grantSkill] skill '${absoluteSkillId}' has already been learnt, re-granting`)
+   }
+   gameContext.player.skills[absoluteSkillId] = skillContent
+
+   executeSkillEffects(gameContext, skillContent)
 }
 
 module.exports = {
-   learnSkill
+   learnSkill,
+   grantSkill
 }
