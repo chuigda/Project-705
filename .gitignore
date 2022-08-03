@@ -4,3 +4,5 @@
 */node_modules/
 
 .vimrc
+
+Backstage/test/test_quick.js

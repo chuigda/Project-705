@@ -67,7 +67,7 @@ const ascensionPerkAssertion = {
 
    potential: [potentialExpressionAssertion].orNull(),
    modifier: {
-      costReductions: ('object').orNull()
+      // TODO(rebuild): rework with modifier assertion
    }.orNull(),
    events: eventSeriesAssertion.orNull(),
 
@@ -104,6 +104,9 @@ const startupAssertion = {
       money: 'number?'
    }.orNull(),
    events: eventSeriesAssertion.orNull(),
+   modifier: {
+      // TODO(rebuild): rework with modifier assertion
+   }.orNull(),
 
    ...patchModeAssertion
 }

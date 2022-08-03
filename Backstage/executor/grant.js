@@ -36,7 +36,7 @@ const executeSkillEffects = (gameContext, skillContent) => {
 
 const learnSkill = (gameContext, skill) => {
    const absoluteSkillId = skillId(gameContext.scope, skill)
-   if (!gameContext.computedSkills[absoluteSkillId]) {
+   if (!gameContext.computedSkills.available[absoluteSkillId]) {
       console.error(`[E] [learnSkill] skill '${absoluteSkillId}' is not available`)
       return
    }
@@ -45,8 +45,8 @@ const learnSkill = (gameContext, skill) => {
       console.warn(`[W] [learnSkill] skill '${absoluteSkillId}' has already been learnt, re-learning`)
    }
 
-   const { skill: skillContent, cost } = gameContext.computedSkills[absoluteSkillId]
-   gameContext.computedSkills[absoluteSkillId] = undefined
+   const { skill: skillContent, cost } = gameContext.computedSkills.available[absoluteSkillId]
+   delete gameContext.computedSkills.available[absoluteSkillId]
 
    gameContext.player.skills[absoluteSkillId] = skillContent
    gameContext.player.skillPoints -= cost

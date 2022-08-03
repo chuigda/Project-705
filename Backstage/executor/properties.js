@@ -4,10 +4,9 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
    // 技能点消耗的计算是在 computeSkillCost 里进行的
 
    const opRef = { operator, value }
-   const propertyPath = property.split['.']
+   const propertyPath = property.split('.')
    let container = gameContext.events.playerPropertyUpdated
    let propertyContainer = gameContext.player
-   let lastPropertyPath = null
    for (const pathPartIdx in propertyPath) {
       const pathPart = propertyPath[pathPartIdx]
       if (container.all) {
@@ -18,14 +17,15 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
          }
       }
       container = container[pathPart]
-      if (pathPartIdx !== propertyPath.length - 1) {
+      if (typeof propertyContainer[pathPart] === 'object') {
          propertyContainer = propertyContainer[pathPart]
-         lastPropertyPath = pathPart
+         console.log('pathPart:', pathPart, ', propertyContainer:', propertyContainer)
       }
    }
+   const lastPropertyPath = propertyPath[propertyPath.length - 1]
 
-   if (!Array.isArray(container)) {
-      console.warn(`[W] [updatePlayerProperty] invalid property path: '${property}'`)
+   if (!container) {
+      console.warn(`[E] [updatePlayerProperty] invalid property path: '${property}'`)
       return
    }
 
