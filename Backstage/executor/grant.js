@@ -1,6 +1,6 @@
 const { activityId, skillId } = require('../base/uid')
 const { recomputeSkillCosts } = require('./compute')
-const { updatePlayerProperty } = require('./connect')
+const { updatePlayerProperty } = require('./properties')
 
 const learnSkill = (gameContext, skill) => {
    const absoluteSkillId = skillId(skill)
@@ -38,7 +38,15 @@ const learnSkill = (gameContext, skill) => {
       }
    }
 
-   // execute event scripts
+   if (skillContent.events) {
+      for (const event of skillContent.events) {
+         if (typeof event === 'function') {
+            event(gameContext)
+         } else {
+            // TODO(chuigda)
+         }
+      }
+   }
 
    recomputeSkillCosts(skillContent)
 }

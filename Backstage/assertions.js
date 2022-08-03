@@ -85,7 +85,7 @@ const skillAssertion = {
    },
    output: {
       attributes: attributesAssertion
-   },
+   }.orNull(),
    activities: [identAssertion].orNull(),
    events: eventSeriesAssertion.orNull(),
 
