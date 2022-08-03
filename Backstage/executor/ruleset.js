@@ -106,7 +106,7 @@ const compileSkills = (ruleSet, ruleSetIdent, skills) => {
       if (!ruleSet.skills[skill.ident]) {
          console.info(`[I] [compileSkills] compiled skill ${skill.ident}`)
       } else {
-         // TODO 增加对 patch 模式和 overwrite 模式的支持
+         // TODO(chuigda): 增加对 patch 模式和 overwrite 模式的支持
          console.warn(`[W] [compileSkills] skill '${skill.ident}' already exists, overwriting`)
       }
       ruleSet.skills[skill.ident] = skill

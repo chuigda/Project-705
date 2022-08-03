@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 const triggerEvent = (gameContext, event) => {
-   // TODO
+   // TODO(chuigda):
 }
 
 // eslint-disable-next-line no-unused-vars
 const flushEvents = gameContext => {
-   // TODO
+   // TODO(chuigda):
 }
 
 module.exports = {

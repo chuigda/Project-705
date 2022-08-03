@@ -94,7 +94,7 @@ const connect = (gameContext, signal, event) => {
 }
 
 const updatePlayerProperty = (gameContext, property, operator, value, source) => {
-   // TODO 暂时只计算 events，但如何计算 modifiers?
+   // TODO(rebuild): 暂时只计算 events，但如何计算 modifiers?
    const opRef = { operator, value }
    const propertyPath = property.split['.']
    let container = gameContext.events.playerPropertyUpdated

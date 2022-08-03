@@ -111,7 +111,7 @@ const computeModifiers = gameContext => {
 }
 
 const computeSkillCost = (gameContext, skillCost) => {
-   // TODO compute skill cost modifiers here
+   // TODO(rebuild): compute skill cost modifiers here
 
    if (!skillCost || !skillCost.base) {
       return 0
