@@ -1,3 +1,4 @@
+import { Scope } from "../base/uid"
 import { CompiledRuleSet } from "./ruleset"
 
 export class PlayerAttributes {
@@ -25,8 +26,15 @@ export class PlayerAttributes {
    }
 }
 
+export class PlayerStatus {}
+
 export class GameContext {
    readonly ruleSet: CompiledRuleSet
+
+   scope?: Scope = undefined
+   scopeChain: Scope[] = []
+
+   turns: number = 0
 }
 
 const buildGameContext = ruleSet => ({
