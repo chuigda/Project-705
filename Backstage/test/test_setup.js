@@ -1,5 +1,5 @@
-const { setupRuleSet } = require('../setup')
-const { perfectStringify } = require('../util/stringify')
+const { setupRuleSet } = require('../src/setup')
+const { perfectStringify } = require('../src/util/stringify')
 
 const ruleSet = setupRuleSet()
 

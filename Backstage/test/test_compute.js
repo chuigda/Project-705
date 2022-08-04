@@ -1,13 +1,13 @@
-const { setupRuleSet } = require('../setup')
-const { buildGameContext } = require('../executor/game_context')
+const { setupRuleSet } = require('../src/setup')
+const { buildGameContext } = require('../src/executor/game_context')
 const {
    computeModifiers,
    computePotentialSkills,
    computePotentialAscensionPerks,
    recomputeSkillCosts
-} = require('../executor/compute')
-const { perfectStringify } = require('../util/stringify')
-const { translatePotentialResult } = require('../repr')
+} = require('../src/executor/compute')
+const { perfectStringify } = require('../src/util/stringify')
+const { translatePotentialResult } = require('../src/repr')
 
 const ruleSet = setupRuleSet()
 const gameContext = buildGameContext(ruleSet)
