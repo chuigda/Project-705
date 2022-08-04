@@ -1,5 +1,8 @@
 // noinspection JSUnresolvedFunction
 
+// Don't build assertions with TypeScript
+// because I don't know how to make these defineProperty magic work with TypeScript
+
 const { enableChainAPI } = require('../util/type_assert_cjs')
 
 enableChainAPI()
