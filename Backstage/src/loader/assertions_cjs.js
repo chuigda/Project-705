@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedFunction
 
-const { enableChainAPI } = require('./util/type_assert')
+const { enableChainAPI } = require('../util/type_assert_cjs')
 
 enableChainAPI()
 

@@ -1,32 +1,52 @@
 import { Scope } from '../base/uid'
-import { CompiledRuleSet } from '../ruleset'
+import { Skill } from '../ruleset/items/skill'
+import { Activity } from '../ruleset/items/activity'
+import { AscensionPerk } from '../ruleset/items/ascension_perk'
+import { CompiledRuleSet } from '../loader'
 
 export class PlayerAttributes {
-   strength: number
-   intelligence: number
-   emotionalIntelligence: number
-   memorization: number
-   imagination: number
-   charisma: number
+   strength: number = 0
+   intelligence: number = 0
+   emotionalIntelligence: number = 0
+   memorization: number = 0
+   imagination: number = 0
+   charisma: number = 0
 
    constructor(
-      strength: number,
-      intelligence: number,
-      emotionalIntelligence: number,
-      memorization: number,
-      imagination: number,
-      charisma: number
+      optionalArgs?: {
+         strength?: number,
+         intelligence?: number,
+         emotionalIntelligence?: number,
+         memorization?: number,
+         imagination?: number
+         charisma?: number
+      }
    ) {
-      this.strength = strength
-      this.intelligence = intelligence
-      this.emotionalIntelligence = emotionalIntelligence
-      this.memorization = memorization
-      this.imagination = imagination
-      this.charisma = charisma
+      if (optionalArgs) {
+         this.strength = optionalArgs.strength || this.strength
+         this.intelligence = optionalArgs.intelligence || this.intelligence
+         this.emotionalIntelligence = optionalArgs.emotionalIntelligence || this.emotionalIntelligence
+         this.memorization = optionalArgs.memorization || this.memorization
+         this.imagination = optionalArgs.imagination || this.imagination
+         this.charisma = optionalArgs.charisma || this.charisma
+      }
    }
 }
 
-export class PlayerStatus {}
+export class PlayerStatus {
+   attributes: PlayerAttributes = new PlayerAttributes()
+   talent: PlayerAttributes = new PlayerAttributes()
+
+   skillPoints: number = 0
+   skills: { [key: string]: Skill } = {}
+   activities: { [key: string]: Activity } = {}
+   ascensionPerks: { [key: string]: AscensionPerk } = {}
+
+   pressure: number = 0
+   satisfactory: number = 50
+   money: number = 0
+   moneyPerTurn: number = 0
+}
 
 export class GameContext {
    readonly ruleSet: CompiledRuleSet
@@ -35,46 +55,14 @@ export class GameContext {
    scopeChain: Scope[] = []
 
    turns: number = 0
+   player: PlayerStatus = new PlayerStatus()
+
+   constructor(ruleSet: CompiledRuleSet) {
+      this.ruleSet = ruleSet
+   }
 }
 
 const buildGameContext = ruleSet => ({
-   ruleSet,
-
-   scope: {
-      author: null,
-      moduleName: null
-   },
-   scopeChain: [],
-
-   turns: 0,
-   player: {
-      attributes: {
-         strength: 0,
-         intelligence: 0,
-         emotionalIntelligence: 0,
-         memorization: 0,
-         imagination: 0,
-         charisma: 0
-      },
-      talent: {
-         strength: 0,
-         intelligence: 0,
-         emotionalIntelligence: 0,
-         memorization: 0,
-         imagination: 0,
-         charisma: 0
-      },
-      skillPoints: 0,
-      skills: {},
-      activities: {},
-      ascensionPerks: {},
-
-      pressure: 0,
-      satisfactory: 100,
-      money: 0,
-      moneyPerTurn: 0
-   },
-
    events: {
       turnStart: {},
       turnOver: {},

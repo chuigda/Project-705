@@ -1,6 +1,6 @@
-import { GameContext } from '../executor/game_context'
-import { MaybeTranslationKey } from '../base/uid'
-import { LogicOp } from './ops'
+import { GameContext } from '../../executor/game_context'
+import { MaybeTranslationKey } from '../../base/uid'
+import { LogicOp } from '../ops'
 
 export class PotentialExpressionLogicOp {
    readonly op: LogicOp

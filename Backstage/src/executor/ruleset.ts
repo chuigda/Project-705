@@ -1,25 +1,3 @@
-import { PotentialExpression } from '../ruleset/potential'
-import { Ident, MaybeTranslationKey } from '../base/uid'
-import { PlayerAttributes } from './game_context'
-import { EventFunction } from '../ruleset/event'
-import { ItemBase } from '../ruleset/item_base'
-
-
-
-
-
-const emptyRuleSet = () => ({
-   skillCategories: [],
-   activityCategories: [],
-   events: {},
-   modifiers: {},
-   skills: {},
-   startups: {},
-   activities: {},
-   ascensionPerks: {},
-   translations: {}
-})
-
 const compileSkillCategories = (ruleSet, ruleSetIdent, skillCategories) => {
    for (const category of skillCategories) {
       const { ident } = category

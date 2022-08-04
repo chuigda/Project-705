@@ -1,4 +1,4 @@
-import { Ident, MaybeTranslationKey } from '../base/uid'
+import { Ident, MaybeTranslationKey } from '../../base/uid'
 
 export class ItemBase {
    readonly ident: Ident
@@ -10,4 +10,8 @@ export class ItemBase {
       this.name = name
       this.description = description
    }
+}
+
+export interface IPatchable {
+   readonly patchMode?: 'overwrite' | 'and' | 'or'
 }

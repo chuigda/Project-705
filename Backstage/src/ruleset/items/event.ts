@@ -1,5 +1,5 @@
-import { Ident } from '../base/uid'
-import { GameContext } from '../executor/game_context'
+import { Ident } from '../../base/uid'
+import { GameContext } from '../../executor/game_context'
 
 export type EventFunction = (gameContext: GameContext, ...args: any[]) => void
 

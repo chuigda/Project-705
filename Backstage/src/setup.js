@@ -1,6 +1,6 @@
 const { emptyRuleSet, compileRuleSet } = require('./executor/ruleset')
-const { typeAssert } = require('./util/type_assert')
-const { ruleSetAssertion } = require('./assertions')
+const { typeAssert } = require('./util/type_assert_cjs')
+const { ruleSetAssertion } = require('./loader/assertions')
 const { abort } = require('./util/emergency')
 
 const loadMods = compiledRuleSet => {
@@ -36,7 +36,7 @@ const setupRuleSet = () => {
 
    const startTime = new Date()
    try {
-      const coreRuleSet = require('./core_ruleset')
+      const coreRuleSet = require('../core_ruleset')
       typeAssert(coreRuleSet, ruleSetAssertion)
       compileRuleSet(ruleSet, coreRuleSet)
    } catch (e) {
