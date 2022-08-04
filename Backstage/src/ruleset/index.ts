@@ -1,4 +1,4 @@
-import { Skill } from '../executor/ruleset'
+import { Skill } from './skill'
 
 export class CompiledRuleSet {
    skillCategories: string[]

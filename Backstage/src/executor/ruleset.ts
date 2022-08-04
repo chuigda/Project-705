@@ -4,62 +4,7 @@ import { PlayerAttributes } from './game_context'
 import { EventFunction } from '../ruleset/event'
 import { ItemBase } from '../ruleset/item_base'
 
-export type SkillPotentialExpression = PotentialExpression | Ident
 
-export class SkillCost {
-   readonly base: number
-   readonly attributes?: PlayerAttributes
-
-   constructor(base: number, attributes?: PlayerAttributes) {
-      this.base = base
-      this.attributes = attributes
-   }
-}
-
-export class SkillOutput {
-   readonly attributes?: PlayerAttributes
-
-   constructor(attributes?: PlayerAttributes) {
-      this.attributes = attributes
-   }
-}
-
-export type MaybeInlineEvent = Ident | EventFunction
-
-export class Skill extends ItemBase {
-   readonly category?: string
-   readonly potential?: SkillPotentialExpression[]
-   readonly cost: SkillCost
-   readonly output?: SkillOutput
-   readonly activities?: Ident[]
-   readonly events?: MaybeInlineEvent[]
-
-   constructor(
-      ident: Ident,
-      name: MaybeTranslationKey,
-      description: MaybeTranslationKey,
-
-      cost: SkillCost,
-
-      optionalArgs: {
-         category?: string,
-         potential?: SkillPotentialExpression[],
-         output?: SkillOutput,
-         activities?: Ident[],
-         events?: MaybeInlineEvent[]
-      }
-   ) {
-      super(ident, name, description),
-
-      this.cost = cost
-
-      this.category = optionalArgs.category
-      this.potential = optionalArgs.potential
-      this.output = optionalArgs.output
-      this.activities = optionalArgs.activities
-      this.events = optionalArgs.events
-   }
-}
 
 
 

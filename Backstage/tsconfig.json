@@ -4,7 +4,10 @@
      "noImplicitAny": true,
      "removeComments": true,
      "preserveConstEnums": true,
-     "sourceMap": true
+     "sourceMap": true,
+
+     "baseUrl": "src",
+     "outDir": "dist"
    },
    "include": [
       "src/**/*"
