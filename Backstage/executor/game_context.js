@@ -37,8 +37,8 @@ const buildGameContext = ruleSet => ({
    },
 
    events: {
-      turnStart: [],
-      turnOver: [],
+      turnStart: {},
+      turnOver: {},
       playerPropertyUpdated: {
          all: [],
          attributes: {
@@ -61,8 +61,8 @@ const buildGameContext = ruleSet => ({
          },
          skillPoints: []
       },
-      skillLearnt: [],
-      activityPerformed: [],
+      skillLearnt: {},
+      activityPerformed: {},
       timedEvents: [],
       eventsTriggered: {}
    },

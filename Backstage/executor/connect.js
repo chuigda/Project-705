@@ -36,16 +36,16 @@ const connect = (gameContext, signal, event) => {
    if (typeof signal === 'string') {
       switch (signal) {
       case 'turn_start':
-         gameContext.events.turnStart.push(event)
+         gameContext.events.turnStart[absoluteEventId] = absoluteEvent
          break
       case 'turn_over':
-         gameContext.events.turnOver.push(event)
+         gameContext.events.turnOver[absoluteEventId] = absoluteEvent
          break
       case 'skill':
-         gameContext.events.skillLearnt.push(event)
+         gameContext.events.skillLearnt[absoluteEventId] = absoluteEvent
          break
       case 'activity':
-         gameContext.events.activityPerformed.push(event)
+         gameContext.events.activityPerformed[absoluteEventId] = absoluteEvent
          break
       default:
          console.warn(`[W] [connect] invalid signal '${signal}'`)
@@ -58,11 +58,11 @@ const connect = (gameContext, signal, event) => {
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
-         if (!Array.isArray(container)) {
+         if (typeof container !== 'object') {
             console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${signal.property}'`)
             return
          }
-         container.push(absoluteEvent)
+         container[absoluteEventId] = absoluteEvent
          break
       }
       case 'turns': {
@@ -80,11 +80,12 @@ const connect = (gameContext, signal, event) => {
          break
       }
       case 'event': {
+         // TODO(chuigda): consider sourceEventId when playing with triggerEvent
          const sourceEventId = eventId(gameContext.scope, signal.eventId)
          if (!gameContext.events.eventsTriggered[sourceEventId]) {
-            gameContext.events.eventsTriggered[sourceEventId] = []
+            gameContext.events.eventsTriggered[sourceEventId] = {}
          }
-         gameContext.events.eventsTriggered[sourceEventId].push(absoluteEvent)
+         gameContext.events.eventsTriggered[sourceEventId][absoluteEventId] = absoluteEvent
          break
       }
       default:
@@ -93,7 +94,17 @@ const connect = (gameContext, signal, event) => {
    }
 }
 
+// TODO(chuigda): implement disconnect and disconnectAll
+
+// eslint-disable-next-line no-unused-vars
+const disconnect = (gameContext, signal, event) => {}
+
+// eslint-disable-next-line no-unused-vars
+const disconnectAll = (gameContext, event) => {}
+
 module.exports = {
    signals,
-   connect
+   connect,
+   disconnect,
+   disconnectAll
 }
