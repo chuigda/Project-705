@@ -1,3 +1,34 @@
+import { CompiledRuleSet } from "./ruleset"
+
+export class PlayerAttributes {
+   strength: number
+   intelligence: number
+   emotionalIntelligence: number
+   memorization: number
+   imagination: number
+   charisma: number
+
+   constructor(
+      strength: number,
+      intelligence: number,
+      emotionalIntelligence: number,
+      memorization: number,
+      imagination: number,
+      charisma: number
+   ) {
+      this.strength = strength
+      this.intelligence = intelligence
+      this.emotionalIntelligence = emotionalIntelligence
+      this.memorization = memorization
+      this.imagination = imagination
+      this.charisma = charisma
+   }
+}
+
+export class GameContext {
+   readonly ruleSet: CompiledRuleSet
+}
+
 const buildGameContext = ruleSet => ({
    ruleSet,
 
