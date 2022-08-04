@@ -1,7 +1,8 @@
 import { PotentialExpression } from './potential'
-import { Ident } from '../base/uid'
-import { PlayerAttributes } from '../executor/game_context'
+import { Ident, MaybeTranslationKey } from '../../base/uid'
+import { PlayerAttributes } from '../../executor/game_context'
 import { ItemBase } from './item_base'
+import { MaybeInlineEvent } from './event'
 
 export type SkillPotentialExpression = PotentialExpression | Ident
 
@@ -38,7 +39,7 @@ export class Skill extends ItemBase {
 
       cost: SkillCost,
 
-      optionalArgs: {
+      optionalArgs?: {
          category?: string,
          potential?: SkillPotentialExpression[],
          output?: SkillOutput,
@@ -46,14 +47,16 @@ export class Skill extends ItemBase {
          events?: MaybeInlineEvent[]
       }
    ) {
-      super(ident, name, description),
+      super(ident, name, description)
 
-         this.cost = cost
+      this.cost = cost
 
-      this.category = optionalArgs.category
-      this.potential = optionalArgs.potential
-      this.output = optionalArgs.output
-      this.activities = optionalArgs.activities
-      this.events = optionalArgs.events
+      if (optionalArgs) {
+         this.category = optionalArgs.category
+         this.potential = optionalArgs.potential
+         this.output = optionalArgs.output
+         this.activities = optionalArgs.activities
+         this.events = optionalArgs.events
+      }
    }
 }

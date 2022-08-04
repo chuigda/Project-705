@@ -19,7 +19,8 @@
       "browser": false
    },
    "rules": {
-      "indent": ["error", 3],
+      "indent": "off",
+      "@typescript-eslint/indent": ["error", 3],
       "no-console": "off",
       "semi": ["error", "never"],
       "no-restricted-syntax": "off",
@@ -31,8 +32,6 @@
       "no-return-await": "off",
       "quote-props": "off",
       "global-require": "off",
-      "import/extensions": "off",
-      "import/no-dynamic-require": "off",
       "object-curly-newline": "off",
       "no-underscore-dangle": "off",
       "no-param-reassign": "off",
@@ -41,7 +40,17 @@
       "max-len": ["error", { "code": 120 }],
       "lines-between-class-members": "off",
       "max-classes-per-file": "off",
-      "import/prefer-default-export": "off"
+
+      "import/extensions": "off",
+      "import/no-dynamic-require": "off",
+      "import/prefer-default-export": "off",
+      "import/no-cycle": "off",
+
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-explicit-any": "off"
    },
    "settings": {
       "import/parsers": {
