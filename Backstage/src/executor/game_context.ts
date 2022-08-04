@@ -1,5 +1,5 @@
-import { Scope } from "../base/uid"
-import { CompiledRuleSet } from "./ruleset"
+import { Scope } from '../base/uid'
+import { CompiledRuleSet } from '../ruleset'
 
 export class PlayerAttributes {
    strength: number

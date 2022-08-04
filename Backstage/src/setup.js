@@ -4,7 +4,7 @@ const { ruleSetAssertion } = require('./assertions')
 const { abort } = require('./util/emergency')
 
 const loadMods = compiledRuleSet => {
-   const mods = require('./mods/mods.json')
+   const mods = require('../mods/mods.json')
    try {
       typeAssert(mods, ['string'])
    } catch (e) {

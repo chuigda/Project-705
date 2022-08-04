@@ -1,54 +1,8 @@
-import { LogicOps as LogicOp } from '../base/ops'
-import { activityId, eventId, skillId, translationKey, startupId, ascensionPerkId, isTranslationKey, Ident, MaybeTranslationKey } from '../base/uid'
-import { GameContext, PlayerAttributes } from './game_context'
-
-export type EventFunction = (gameContext: GameContext, ...args: any[]) => void
-
-export class Event {
-   readonly ident: Ident
-   readonly event: EventFunction[]
-
-   constructor(ident: Ident, event: EventFunction[]) {
-      this.ident = ident
-      this.event = event
-   }
-}
-
-export class PotentialExpressionLogicOp {
-   readonly op: LogicOp
-   readonly arguments: PotentialExpression[]
-
-   constructor(op: LogicOp, args: PotentialExpression[]) {
-      this.op = op
-      this.arguments = args
-   }
-}
-
-export type PotentialExpressionFunction = (gameContext: GameContext) => boolean
-
-export class PotentialExpressionFunctionOp {
-   readonly op: PotentialExpressionFunction
-   readonly description: MaybeTranslationKey
-
-   constructor(op: PotentialExpressionFunction, description: MaybeTranslationKey) {
-      this.op = op
-      this.description = description
-   }
-}
-
-export type PotentialExpression = PotentialExpressionLogicOp | PotentialExpressionFunctionOp
-
-export class ItemBase {
-   readonly ident: Ident
-   readonly name: MaybeTranslationKey
-   readonly description: MaybeTranslationKey
-
-   constructor(ident: Ident, name: MaybeTranslationKey, description: MaybeTranslationKey) {
-      this.ident = ident
-      this.name = name
-      this.description = description
-   }
-}
+import { PotentialExpression } from '../ruleset/potential'
+import { Ident, MaybeTranslationKey } from '../base/uid'
+import { PlayerAttributes } from './game_context'
+import { EventFunction } from '../ruleset/event'
+import { ItemBase } from '../ruleset/item_base'
 
 export type SkillPotentialExpression = PotentialExpression | Ident
 
@@ -107,14 +61,7 @@ export class Skill extends ItemBase {
    }
 }
 
-export class CompiledRuleSet {
-   skillCategories: string[]
-   activityCategories: string[]
 
-   events: { [key: string]: Event }
-   modifiers: { [key: string]: any } // TODO(chuigda): modifier system rework
-   skills: { [key: string]: Skill }
-}
 
 const emptyRuleSet = () => ({
    skillCategories: [],

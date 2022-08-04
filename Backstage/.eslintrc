@@ -1,12 +1,19 @@
 {
+   "parser": "@typescript-eslint/parser",
+   "plugins": [
+      "import",
+      "@typescript-eslint"
+   ],
    "extends": [
       "eslint:recommended",
-      "airbnb-base"
+      "airbnb-base",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
    ],
    "env": {
       "node": true,
-      "es6": false,
-      "browser": true
+      "es6": true,
+      "browser": false
    },
    "rules": {
       "indent": ["error", 3],
@@ -28,6 +35,20 @@
       "no-param-reassign": "off",
       "guard-for-in": "off",
       "operator-linebreak": "off",
-      "max-len": ["error", { "code": 120 }]
+      "max-len": ["error", { "code": 120 }],
+      "lines-between-class-members": "off",
+      "max-classes-per-file": "off",
+      "import/prefer-default-export": "off"
+   },
+   "settings": {
+      "import/parsers": {
+         "@typescript-eslint/parser": [".ts", ".tsx"]
+      },
+      "import/resolver": {
+         "typescript": {
+            "alwaysTryTypes": true,
+            "project": "/"
+         }
+      }
    }
 }

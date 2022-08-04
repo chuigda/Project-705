@@ -7,7 +7,7 @@ export class Scope {
       this.author = author
       this.moduleName = moduleName
    }
-   
+
    readonly author: string
    readonly moduleName: string
 }
@@ -29,7 +29,7 @@ export type Ident = string | ComposedId
 export type IdResolver = (scope: Scope, id: Ident) => string
 
 export function buildIdResolver(idKind: string): IdResolver {
-   return function (scope: Scope, id: string | ComposedId): string {
+   return (scope: Scope, id: string | ComposedId): string => {
       if (id instanceof ComposedId) {
          const { author, moduleName, id: id1 } = id
          return uniqueId(author, moduleName, idKind, id1)
