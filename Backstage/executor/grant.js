@@ -31,6 +31,12 @@ const executeSkillEffects = (gameContext, skillContent) => {
       popScope(gameContext)
    }
 
+   for (const hook of Object.values(gameContext.events.skillLearnt)) {
+      pushScope(gameContext, hook.scope)
+      triggerEvent(gameContext, hook, skillContent.ident)
+      popScope(gameContext)
+   }
+
    recomputeSkillCosts(gameContext)
 }
 
