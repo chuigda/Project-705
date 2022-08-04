@@ -15,19 +15,23 @@ const popScope = gameContext => {
 }
 
 const triggerEvent = (gameContext, event, ...args) => {
-   for (const hook of Object.values(gameContext.events.eventsTriggered)) {
-      pushScope(gameContext, hook.scope)
-      for (const eventFunction of hook.event) {
-         eventFunction(gameContext, event)
-      }
-      popScope(gameContext)
-   }
-
    if (typeof event === 'function') {
       event(gameContext, ...args)
    } else {
       const absoluteEventId = eventId(gameContext.scope, event)
       const eventContent = gameContext.ruleSet.events[absoluteEventId]
+
+      const hooks = gameContext.events.eventsTriggered[absoluteEventId]
+      if (hooks) {
+         for (const hook of Object.values(hooks)) {
+            pushScope(gameContext, hook.scope)
+            for (const eventFunction of hook.event) {
+               eventFunction(gameContext, absoluteEventId, eventContent)
+            }
+            popScope(gameContext)
+         }
+      }
+
       pushScope(gameContext, eventContent.scope)
       for (const eventFunction of eventContent.event) {
          eventFunction(gameContext, ...args)

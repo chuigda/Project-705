@@ -80,7 +80,6 @@ const connect = (gameContext, signal, event) => {
          break
       }
       case 'event': {
-         // TODO(chuigda): consider sourceEventId when playing with triggerEvent
          const sourceEventId = eventId(gameContext.scope, signal.eventId)
          if (!gameContext.events.eventsTriggered[sourceEventId]) {
             gameContext.events.eventsTriggered[sourceEventId] = {}
