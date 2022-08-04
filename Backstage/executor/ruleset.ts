@@ -110,7 +110,7 @@ export class Skill extends ItemBase {
 export class CompiledRuleSet {
    skillCategories: string[]
    activityCategories: string[]
-   
+
    events: { [key: string]: Event }
    modifiers: { [key: string]: any } // TODO(chuigda): modifier system rework
    skills: { [key: string]: Skill }
@@ -347,9 +347,4 @@ const compileRuleSet = (ruleSet, newRuleSet) => {
    if (translations) {
       compileTranslations(ruleSet, ruleSetIdent, translations)
    }
-}
-
-module.exports = {
-   emptyRuleSet,
-   compileRuleSet
 }
