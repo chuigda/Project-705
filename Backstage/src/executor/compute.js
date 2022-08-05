@@ -16,19 +16,19 @@ const computePotential = (gameContext, potential) => {
 
       let finalResult
       switch (potential.op) {
-      case 'and':
-         finalResult = resultPieces.find(({ result }) => !result) === undefined
-         break
-      case 'or':
-         finalResult = resultPieces.find(({ result }) => result) !== undefined
-         break
-      case 'not':
-         finalResult = resultPieces.find(({ result }) => result) === undefined
-         break
-      default:
-         console.warn(`[W] [computePotential] invalid op: ${potential.op}`)
-         finalResult = false
-         break
+         case 'and':
+            finalResult = resultPieces.find(({ result }) => !result) === undefined
+            break
+         case 'or':
+            finalResult = resultPieces.find(({ result }) => result) !== undefined
+            break
+         case 'not':
+            finalResult = resultPieces.find(({ result }) => result) === undefined
+            break
+         default:
+            console.warn(`[W] [computePotential] invalid op: ${potential.op}`)
+            finalResult = false
+            break
       }
 
       return {

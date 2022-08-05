@@ -1,7 +1,7 @@
-import { ItemBase } from './item_base'
+import { ItemBase, PatchMode } from './item_base'
 import { PlayerAttributes } from '../../executor/game_context'
 import { MaybeInlineEvent } from './event'
-import { Ident, MaybeTranslationKey } from '../../base/uid'
+import { Ident, MaybeTranslationKey, Scope } from '../../base/uid'
 
 export class ActivityOutput {
    readonly attributes?: PlayerAttributes
@@ -11,7 +11,7 @@ export class ActivityOutput {
    readonly money?: number
 
    constructor(
-      optionalArgs: {
+      opt: {
          attributes?: PlayerAttributes,
          skillPoints?: number,
          pressure?: number,
@@ -19,11 +19,11 @@ export class ActivityOutput {
          money?: number
       }
    ) {
-      this.attributes = optionalArgs.attributes
-      this.skillPoints = optionalArgs.skillPoints
-      this.pressure = optionalArgs.pressure
-      this.satisfactory = optionalArgs.satisfactory
-      this.money = optionalArgs.money
+      this.attributes = opt.attributes
+      this.skillPoints = opt.skillPoints
+      this.pressure = opt.pressure
+      this.satisfactory = opt.satisfactory
+      this.money = opt.money
    }
 }
 
@@ -41,19 +41,22 @@ export class Activity extends ItemBase {
       category: string,
       level: number,
 
-      optionalArgs?: {
+      opt?: {
          output?: ActivityOutput,
-         events?: MaybeInlineEvent[]
+         events?: MaybeInlineEvent[],
+
+         scope?: Scope,
+         patch?: PatchMode
       }
    ) {
-      super(ident, name, description)
+      super(ident, name, description, opt.scope, opt.patch)
 
       this.category = category
       this.level = level
 
-      if (optionalArgs) {
-         this.output = optionalArgs.output
-         this.events = optionalArgs.events
+      if (opt) {
+         this.output = opt.output
+         this.events = opt.events
       }
    }
 }

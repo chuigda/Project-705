@@ -17,7 +17,7 @@ export class RuleSet {
    readonly activities?: Activity[]
    readonly ascensionPerks?: AscensionPerk[]
    readonly events: Event[]
-   readonly translations: { [key: string]: string }
+   readonly translations: Record<string, string>
 
    readonly onRuleSetLoaded?: MaybeInlineEvent[]
 }

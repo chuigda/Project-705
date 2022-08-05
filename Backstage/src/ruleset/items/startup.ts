@@ -1,7 +1,7 @@
 import { PlayerAttributes } from '../../executor/game_context'
-import { ItemBase } from './item_base'
+import { ItemBase, PatchMode } from './item_base'
 import { MaybeInlineEvent } from './event'
-import { Ident, MaybeTranslationKey } from '../../base/uid'
+import { Ident, MaybeTranslationKey, Scope } from '../../base/uid'
 
 export class StartupPlayerProperties {
    readonly attributes?: PlayerAttributes
@@ -39,18 +39,21 @@ export class Startup extends ItemBase {
       name: MaybeTranslationKey,
       description: MaybeTranslationKey,
 
-      optionalArgs?: {
+      opt?: {
          player?: StartupPlayerProperties,
          events?: MaybeInlineEvent[],
-         modifier?: object
+         modifier?: object,
+
+         scope?: Scope,
+         patch?: PatchMode
       }
    ) {
-      super(ident, name, description)
+      super(ident, name, description, opt.scope, opt.patch)
 
-      if (optionalArgs) {
-         this.player = optionalArgs.player
-         this.events = optionalArgs.events
-         this.modifier = optionalArgs.modifier
+      if (opt) {
+         this.player = opt.player
+         this.events = opt.events
+         this.modifier = opt.modifier
       }
    }
 }

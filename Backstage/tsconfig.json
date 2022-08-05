@@ -5,6 +5,7 @@
      "removeComments": true,
      "preserveConstEnums": true,
      "sourceMap": true,
+     "lib": ["es2015"],
 
      "baseUrl": "src",
      "outDir": "dist"
