@@ -38,9 +38,9 @@ export class PlayerStatus {
    talent: PlayerAttributes = new PlayerAttributes()
 
    skillPoints: number = 0
-   skills: { [key: string]: Skill } = {}
-   activities: { [key: string]: Activity } = {}
-   ascensionPerks: { [key: string]: AscensionPerk } = {}
+   skills: Record<string, Skill> = {}
+   activities: Record<string, Activity> = {}
+   ascensionPerks: Record<string, AscensionPerk> = {}
 
    pressure: number = 0
    satisfactory: number = 50

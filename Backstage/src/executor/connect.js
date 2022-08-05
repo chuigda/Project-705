@@ -35,60 +35,60 @@ const connect = (gameContext, signal, event) => {
 
    if (typeof signal === 'string') {
       switch (signal) {
-      case 'turn_start':
-         gameContext.events.turnStart[absoluteEventId] = absoluteEvent
-         break
-      case 'turn_over':
-         gameContext.events.turnOver[absoluteEventId] = absoluteEvent
-         break
-      case 'skill':
-         gameContext.events.skillLearnt[absoluteEventId] = absoluteEvent
-         break
-      case 'activity':
-         gameContext.events.activityPerformed[absoluteEventId] = absoluteEvent
-         break
-      default:
-         console.warn(`[W] [connect] invalid signal '${signal}'`)
+         case 'turn_start':
+            gameContext.events.turnStart[absoluteEventId] = absoluteEvent
+            break
+         case 'turn_over':
+            gameContext.events.turnOver[absoluteEventId] = absoluteEvent
+            break
+         case 'skill':
+            gameContext.events.skillLearnt[absoluteEventId] = absoluteEvent
+            break
+         case 'activity':
+            gameContext.events.activityPerformed[absoluteEventId] = absoluteEvent
+            break
+         default:
+            console.warn(`[W] [connect] invalid signal '${signal}'`)
       }
    } else {
       switch (signal.signalType) {
-      case 'player': {
-         const propertyPath = signal.property.split('.')
-         let container = gameContext.events.playerPropertyUpdated
-         for (const pathPart of propertyPath) {
-            container = container[pathPart]
+         case 'player': {
+            const propertyPath = signal.property.split('.')
+            let container = gameContext.events.playerPropertyUpdated
+            for (const pathPart of propertyPath) {
+               container = container[pathPart]
+            }
+            if (typeof container !== 'object') {
+               console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${signal.property}'`)
+               return
+            }
+            container[absoluteEventId] = absoluteEvent
+            break
          }
-         if (typeof container !== 'object') {
-            console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${signal.property}'`)
-            return
+         case 'turns': {
+            gameContext.events.timedEvents.push({
+               turn: signal.turns,
+               event: absoluteEvent
+            })
+            break
          }
-         container[absoluteEventId] = absoluteEvent
-         break
-      }
-      case 'turns': {
-         gameContext.events.timedEvents.push({
-            turn: signal.turns,
-            event: absoluteEvent
-         })
-         break
-      }
-      case 'count_down': {
-         gameContext.events.timedEvents.push({
-            turn: signal.turns + gameContext.turns,
-            event: absoluteEvent
-         })
-         break
-      }
-      case 'event': {
-         const sourceEventId = eventId(gameContext.scope, signal.eventId)
-         if (!gameContext.events.eventsTriggered[sourceEventId]) {
-            gameContext.events.eventsTriggered[sourceEventId] = {}
+         case 'count_down': {
+            gameContext.events.timedEvents.push({
+               turn: signal.turns + gameContext.turns,
+               event: absoluteEvent
+            })
+            break
          }
-         gameContext.events.eventsTriggered[sourceEventId][absoluteEventId] = absoluteEvent
-         break
-      }
-      default:
-         console.warn(`[W] [connect] invalid signal '${signal.signalType}'`)
+         case 'event': {
+            const sourceEventId = eventId(gameContext.scope, signal.eventId)
+            if (!gameContext.events.eventsTriggered[sourceEventId]) {
+               gameContext.events.eventsTriggered[sourceEventId] = {}
+            }
+            gameContext.events.eventsTriggered[sourceEventId][absoluteEventId] = absoluteEvent
+            break
+         }
+         default:
+            console.warn(`[W] [connect] invalid signal '${signal.signalType}'`)
       }
    }
 }

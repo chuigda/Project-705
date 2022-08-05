@@ -3,6 +3,7 @@ import { typeAssert } from '../util/type_assert'
 import { ruleSetAssertion } from './assertions'
 import { Event } from '../ruleset/items/event'
 import { Skill } from '../ruleset/items/skill'
+import { SkillCategory } from 'ruleset/items/skill_category'
 
 export function loadDynamicMod(modName: string): [RuleSet, any] {
    try {
@@ -15,10 +16,10 @@ export function loadDynamicMod(modName: string): [RuleSet, any] {
 }
 
 export class CompiledRuleSet {
-   skillCategories: string[]
+   skillCategories: SkillCategory[]
    activityCategories: string[]
 
-   events: { [key: string]: Event }
+   events: Record<string, Event>
    modifiers: object // TODO(chuigda): modifier system rework
-   skills: { [key: string]: Skill }
+   skills: Record<string, Skill>
 }

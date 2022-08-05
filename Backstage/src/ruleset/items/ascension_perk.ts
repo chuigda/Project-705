@@ -1,7 +1,7 @@
-import { ItemBase } from './item_base'
+import { ItemBase, PatchMode } from './item_base'
 import { PotentialExpression } from './potential'
 import { MaybeInlineEvent } from './event'
-import { Ident, MaybeTranslationKey } from '../../base/uid'
+import { Ident, MaybeTranslationKey, Scope } from '../../base/uid'
 
 export class AscensionPerk extends ItemBase {
    readonly potential?: PotentialExpression[]
@@ -13,18 +13,21 @@ export class AscensionPerk extends ItemBase {
       name: MaybeTranslationKey,
       description: MaybeTranslationKey,
 
-      optionalArgs?: {
+      opt?: {
          potential?: PotentialExpression[],
          modifier?: object,
-         events?: MaybeInlineEvent[]
+         events?: MaybeInlineEvent[],
+
+         scope?: Scope,
+         patch?: PatchMode
       }
    ) {
-      super(ident, name, description)
+      super(ident, name, description, opt.scope, opt.patch)
 
-      if (optionalArgs) {
-         this.potential = optionalArgs.potential
-         this.modifier = optionalArgs.modifier
-         this.events = optionalArgs.events
+      if (opt) {
+         this.potential = opt.potential
+         this.modifier = opt.modifier
+         this.events = opt.events
       }
    }
 }

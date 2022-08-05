@@ -26,9 +26,9 @@ export class ComposedId {
 
 export type Ident = string | ComposedId
 
-export type IdResolver = (scope: Scope, id: Ident) => string
+export type IdMangler = (scope: Scope, id: Ident) => string
 
-export function buildIdResolver(idKind: string): IdResolver {
+export function buildMangler(idKind: string): IdMangler {
    return (scope: Scope, id: string | ComposedId): string => {
       if (id instanceof ComposedId) {
          const { author, moduleName, id: id1 } = id
@@ -44,13 +44,13 @@ export function buildIdResolver(idKind: string): IdResolver {
    }
 }
 
-export const ascensionPerkId = buildIdResolver('ap')
-export const skillId = buildIdResolver('sk')
-export const startupId = buildIdResolver('st')
-export const activityId = buildIdResolver('ac')
-export const eventId = buildIdResolver('ev')
-export const modifierId = buildIdResolver('md')
-export const translationKey = buildIdResolver('tr')
+export const mAscensionPerkId = buildMangler('ap')
+export const mSkillId = buildMangler('sk')
+export const mStartupId = buildMangler('st')
+export const mActivityId = buildMangler('ac')
+export const mEventId = buildMangler('ev')
+export const mModifierId = buildMangler('md')
+export const mTranslationKey = buildMangler('tr')
 
 export function isTranslationKey(key: string): boolean {
    return key.startsWith('$')
