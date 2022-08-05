@@ -3,6 +3,8 @@ import { Skill } from '../ruleset/items/skill'
 import { Activity } from '../ruleset/items/activity'
 import { AscensionPerk } from '../ruleset/items/ascension_perk'
 import { CompiledRuleSet } from '../loader'
+import { Event } from 'ruleset/items/event'
+import { ComputedAscensionPerks, ComputedSkills } from './compute'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -48,6 +50,39 @@ export class PlayerStatus {
    moneyPerTurn: number = 0
 }
 
+export class AttributeEvents {
+   all: Record<string, Event> = {}
+   strength: Record<string, Event> = {}
+   intelligence: Record<string, Event> = {}
+   emotionalIntelligence: Record<string, Event> = {}
+   memorization: Record<string, Event> = {}
+   imagination: Record<string, Event> = {}
+   charisma: Record<string, Event> = {}
+}
+
+export class PlayerPropertyUpdatedEvents {
+   all: Record<string, Event> = {}
+   skillPoints: Record<string, Event> = {}
+   attributes: AttributeEvents = new AttributeEvents
+   talent: AttributeEvents = new AttributeEvents
+}
+
+export class TimedEvent {
+   turn: number
+   event: Event
+}
+
+export class GameContextEvents {
+   turnStart: Record<string, Event> = {}
+   turnOver: Record<string, Event> = {}
+   playerPropertyUpdated: PlayerPropertyUpdatedEvents = new PlayerPropertyUpdatedEvents
+   skillLearnt: Record<string, Record<string, Event>> = {}
+   activityPerformed: Record<string, Record<string, Event>> = {}
+   eventsTriggered: Record<string, Record<string, Event>> = {}
+
+   timedEvents: TimedEvent[]
+}
+
 export class GameContext {
    readonly ruleSet: CompiledRuleSet
 
@@ -55,70 +90,17 @@ export class GameContext {
    scopeChain: Scope[] = []
 
    turns: number = 0
-   player: PlayerStatus = new PlayerStatus()
+   player: PlayerStatus = new PlayerStatus
+
+   events: GameContextEvents = new GameContextEvents
+   modifiers: object = {}
 
    constructor(ruleSet: CompiledRuleSet) {
       this.ruleSet = ruleSet
    }
+
+   computedModifier?: object = undefined
+   computedSkills?: ComputedSkills = undefined
+   computedAscensionPerks?: ComputedAscensionPerks = undefined
+
 }
-
-const buildGameContext = ruleSet => ({
-   events: {
-      turnStart: {},
-      turnOver: {},
-      playerPropertyUpdated: {
-         all: [],
-         attributes: {
-            all: [],
-            strength: [],
-            intelligence: [],
-            emotionalIntelligence: [],
-            memorization: [],
-            imagination: [],
-            charisma: []
-         },
-         talent: {
-            all: [],
-            strength: [],
-            intelligence: [],
-            emotionalIntelligence: [],
-            memorization: [],
-            imagination: [],
-            charisma: []
-         },
-         skillPoints: []
-      },
-      skillLearnt: {},
-      activityPerformed: {},
-      timedEvents: [],
-      eventsTriggered: {}
-   },
-   modifiers: {
-      player: {
-         attributes: {
-            strength: {},
-            intelligence: {},
-            emotionalIntelligence: {},
-            memorization: {},
-            imagination: {},
-            charisma: {}
-         },
-         talent: {
-            strength: {},
-            intelligence: {},
-            emotionalIntelligence: {},
-            memorization: {},
-            imagination: {},
-            charisma: {}
-         }
-      },
-      skillPoints: {},
-      pressure: {},
-      satisfactory: {},
-      money: {}
-   },
-
-   computedModifiers: null,
-   computedSkills: null,
-   computedAscensionPerks: null
-})

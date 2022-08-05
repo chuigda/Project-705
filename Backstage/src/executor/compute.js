@@ -1,5 +1,3 @@
-const { skillId } = require('../exports')
-
 const computePotential = (gameContext, potential) => {
    if (typeof potential.op === 'function') {
       return {
@@ -224,8 +222,7 @@ const computePotentialAscensionPerks = gameContext => {
       console.info(`[I] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
       if (result) {
          gameContext.computedAscensionPerks.available[ident] = {
-            ascensionPerk,
-            cost: computeSkillCost(gameContext, ascensionPerk)
+            ascensionPerk
          }
       } else {
          gameContext.computedAscensionPerks.unavailable[ident] = {
