@@ -95,12 +95,11 @@ export class GameContext {
    events: GameContextEvents = new GameContextEvents
    modifiers: object = {}
 
-   constructor(ruleSet: CompiledRuleSet) {
-      this.ruleSet = ruleSet
-   }
-
    computedModifier?: object = undefined
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
 
+   constructor(ruleSet: CompiledRuleSet) {
+      this.ruleSet = ruleSet
+   }
 }
