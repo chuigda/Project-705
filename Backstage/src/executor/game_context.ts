@@ -1,4 +1,3 @@
-import { Event } from '../ruleset/items/event'
 import { Scope } from '../base/uid'
 import { Skill } from '../ruleset/items/skill'
 import { Activity } from '../ruleset/items/activity'
