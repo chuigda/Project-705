@@ -24,7 +24,7 @@ function triggerEventImpl(
    chainEventCounter: { count: number },
    args: any[]
 ) {
-   const scope = gameContext.scope
+   const scope = gameContext.scope!
    chainEventCounter.count += 1
    if (chainEventCounter.count > 512) {
       console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 events, killing')
