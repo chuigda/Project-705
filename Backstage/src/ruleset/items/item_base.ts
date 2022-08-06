@@ -5,7 +5,7 @@ export type PatchMode = 'overwrite' | 'and' | 'or'
 export class ItemBase {
    readonly ident: Ident
    readonly name: MaybeTranslationKey
-   readonly description: MaybeTranslationKey
+   readonly description?: MaybeTranslationKey
    readonly patch?: PatchMode
    readonly scope?: Scope
 

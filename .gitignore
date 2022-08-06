@@ -5,6 +5,7 @@
 
 .vimrc
 
-Backstage/test/test_quick.js
+Backstage/test/test_quick*.js
+Backstage/test/test_quick*.ts
 
 */dist/
