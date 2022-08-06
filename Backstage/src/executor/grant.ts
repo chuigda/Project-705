@@ -36,10 +36,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
 
    for (const eventIds of Object.values(gameContext.events.skillLearnt)) {
       for (const eventId of eventIds) {
-         const event = gameContext.ruleSet.events[eventId]
-         pushScope(gameContext, event.scope)
-         event.event.forEach((e) => triggerEvent(gameContext, e, skillContent.ident))
-         popScope(gameContext)
+         triggerEvent(gameContext, eventId, skillContent.ident)
       }
    }
 
@@ -48,7 +45,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
 
 export function learnSkill(gameContext: GameContext, skill: Ident) {
    const absoluteSkillId = mSkillId(gameContext.scope, skill)
-   if (!gameContext.computedSkills.available[absoluteSkillId]) {
+   if (!gameContext.computedSkills!.available[absoluteSkillId]) {
       console.error(`[E] [learnSkill] skill '${absoluteSkillId}' is not available`)
       return
    }
@@ -57,8 +54,8 @@ export function learnSkill(gameContext: GameContext, skill: Ident) {
       console.warn(`[W] [learnSkill] skill '${absoluteSkillId}' has already been learnt, re-learning`)
    }
 
-   const { skill: skillContent, cost } = gameContext.computedSkills.available[absoluteSkillId]
-   delete gameContext.computedSkills.available[absoluteSkillId]
+   const { skill: skillContent, cost } = gameContext.computedSkills!.available[absoluteSkillId]
+   delete gameContext.computedSkills!.available[absoluteSkillId]
 
    gameContext.player.skills[absoluteSkillId] = skillContent
    gameContext.player.skillPoints -= cost
