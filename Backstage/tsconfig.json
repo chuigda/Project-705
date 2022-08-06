@@ -6,6 +6,7 @@
      "preserveConstEnums": true,
      "sourceMap": true,
      "lib": ["es2021"],
+     "target": "es2021",
 
      "baseUrl": "src",
      "outDir": "dist"
@@ -16,5 +17,5 @@
    "exclude": [
       "node_modules",
       "**/*.spec.ts"
-   ]
+   ],
 }

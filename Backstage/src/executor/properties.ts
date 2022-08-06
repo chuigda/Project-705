@@ -1,13 +1,15 @@
-import { GameContext } from './game_context'
-import { PropertyOp } from '../ruleset/ops'
+import { Ident } from 'base/uid'
 import { triggerEvent } from './events'
 
-function updatePlayerProperty(
+import { GameContext } from './game_context'
+import { PropertyOp } from '../ruleset/ops'
+
+export function updatePlayerProperty(
    gameContext: GameContext,
    property: string,
    operator: PropertyOp,
    value: number,
-   source: string
+   source: Ident
 ) {
    // TODO(rebuild): 增加 modifiers 相关的计算
    // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算
@@ -24,7 +26,6 @@ function updatePlayerProperty(
             triggerEvent(gameContext, event, opRef, source)
          }
       }
-
       container = container[pathPart]
       if (typeof propertyContainer[pathPart] === 'object') {
          propertyContainer = propertyContainer[pathPart]
