@@ -1,22 +1,3 @@
-const compileTranslations = (ruleSet, ruleSetIdent, translations) => {
-   for (const languageId in translations) {
-      const language = translations[languageId]
-      if (!ruleSet.translations[languageId]) {
-         ruleSet.translations[languageId] = {}
-      }
-
-      for (const sentenceKey in language) {
-         const key = translationKey(ruleSetIdent, sentenceKey)
-         if (ruleSet.translations[key]) {
-            console.warn(`[W] [compileTranslation] translation '${key}' already exists, overwriting`)
-         } else {
-            console.info(`[I] [compileTranslation] compiled translation '${key}'`)
-         }
-         ruleSet.translations[languageId][key] = language[sentenceKey]
-      }
-   }
-}
-
 const compileRuleSet = (ruleSet, newRuleSet) => {
    const {
       ident: ruleSetIdent,

@@ -1,9 +1,10 @@
+import { SkillCategory } from '../ruleset/items/skill_category'
 import { RuleSet } from '../ruleset'
 import { typeAssert } from '../util/type_assert'
 import { ruleSetAssertion } from './assertions'
 import { Event } from '../ruleset/items/event'
 import { Skill } from '../ruleset/items/skill'
-import { SkillCategory } from 'ruleset/items/skill_category'
+import { AscensionPerk } from '../ruleset/items/ascension_perk'
 
 export function loadDynamicMod(modName: string): [RuleSet, any] {
    try {
@@ -22,4 +23,5 @@ export class CompiledRuleSet {
    events: Record<string, Event>
    modifiers: object // TODO(chuigda): modifier system rework
    skills: Record<string, Skill>
+   ascensionPerks: Record<string, AscensionPerk>
 }

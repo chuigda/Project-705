@@ -1,9 +1,9 @@
+import { Event } from 'ruleset/items/event'
 import { Scope } from '../base/uid'
 import { Skill } from '../ruleset/items/skill'
 import { Activity } from '../ruleset/items/activity'
 import { AscensionPerk } from '../ruleset/items/ascension_perk'
 import { CompiledRuleSet } from '../loader'
-import { Event } from 'ruleset/items/event'
 import { ComputedAscensionPerks, ComputedSkills } from './compute'
 
 export class PlayerAttributes {

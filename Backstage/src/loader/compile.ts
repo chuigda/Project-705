@@ -1,4 +1,7 @@
-import { mEventId, Ident, IdMangler, Scope, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId } from 'base/uid'
+import {
+   IdMangler, Scope,
+   mEventId, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId
+} from 'base/uid'
 import { CompiledRuleSet } from 'loader'
 import { Activity } from 'ruleset/items/activity'
 import { AscensionPerk } from 'ruleset/items/ascension_perk'
@@ -64,11 +67,12 @@ export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): [
 
 export function compileSkill(scope: Scope, skill: Skill): Skill {
    const [ident, name, description] = compileBase(scope, skill, mSkillId)
-   const potential = skill.potential?.map(potential => {
-      if (potential instanceof PotentialExpressionFunctionOp || potential instanceof PotentialExpressionLogicOp) {
-         return compilePotentialExpression(scope, potential)
+   const potential = skill.potential?.map(skillPotential => {
+      if (skillPotential instanceof PotentialExpressionFunctionOp
+          || skillPotential instanceof PotentialExpressionLogicOp) {
+         return compilePotentialExpression(scope, skillPotential)
       } else {
-         return mSkillId(scope, potential)
+         return mSkillId(scope, skillPotential)
       }
    })
    const activities = skill.activities?.map(activity => mActivityId(scope, activity))
@@ -86,7 +90,7 @@ export function compileSkill(scope: Scope, skill: Skill): Skill {
 
 export function compileStartup(scope: Scope, startup: Startup): Startup {
    const [ident, name, description] = compileBase(scope, startup, mStartupId)
-   
+
    const events = startup.events?.map(event => compileMaybeInlineEvent(scope, event))
 
    const { patch, player, modifier } = startup
@@ -107,7 +111,7 @@ export function compileStartup(scope: Scope, startup: Startup): Startup {
 
 export function compileActivity(scope: Scope, activity: Activity): Activity {
    const [ident, name, description] = compileBase(scope, activity, mActivityId)
-   
+
    const events = activity.events?.map(event => compileMaybeInlineEvent(scope, event))
 
    const { category, level, output, patch } = activity
@@ -118,7 +122,7 @@ export function compileActivity(scope: Scope, activity: Activity): Activity {
 
       category,
       level,
-   
+
       {
          events,
          output,
@@ -132,7 +136,9 @@ export function compileActivity(scope: Scope, activity: Activity): Activity {
 export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk): AscensionPerk {
    const [ident, name, description] = compileBase(scope, ascensionPerk, mAscensionPerkId)
 
-   const potential = ascensionPerk.potential?.map(potential => compilePotentialExpression(scope, potential))
+   const potential = ascensionPerk.potential?.map(
+      ascensionPerkPotential => compilePotentialExpression(scope, ascensionPerkPotential)
+   )
    const events = ascensionPerk.events?.map(event => compileMaybeInlineEvent(scope, event))
 
    const { modifier, patch } = ascensionPerk
