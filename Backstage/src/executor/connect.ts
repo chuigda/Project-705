@@ -1,16 +1,11 @@
-import { Ident, mEventId } from "base/uid";
-import { GameContext } from "./game_context";
+import { Ident, mEventId } from 'base/uid'
+import { GameContext } from './game_context'
 
 export type Signal = { signalType: string }
-
 export type SkillSignal = Signal & { skillId: string }
-
 export type ActivitySignal = Signal & { activityId: string }
-
 export type PlayerPropertyUpdatedSignal = Signal & { property: string }
-
 export type TurnsSignal = Signal & { turns: number }
-
 export type EventSignal = Signal & { eventId: string }
 
 export const signals = {
@@ -81,7 +76,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
-         if (typeof container !== 'object' || !(container instanceof Set<string>)) {
+         if (!(container instanceof Set<string>)) {
             console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${sig.property}'`)
             return
          }
