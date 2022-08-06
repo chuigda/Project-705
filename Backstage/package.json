@@ -5,7 +5,8 @@
    "main": "src/index.ts",
    "scripts": {
       "test_quick": "node test/test_quick.js",
-      "test_quick_ts": "ts-node test/test_quick.ts"
+      "test_quick_ts": "ts-node test/test_quick.ts",
+      "lint": "eslint --fix --ext .ts src"
    },
    "author": "",
    "license": "ISC",
