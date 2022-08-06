@@ -36,20 +36,20 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
    }
 
    switch (opRef.operator) {
-   case 'add':
-      propertyContainer[lastPropertyPath] += opRef.value
-      break
-   case 'sub':
-      propertyContainer[lastPropertyPath] -= opRef.value
-      break
-   case 'set':
-      propertyContainer[lastPropertyPath] = opRef.value
-      break
-   case 'mul':
-      propertyContainer[lastPropertyPath] *= opRef.value
-      break
-   default:
-      console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
+      case 'add':
+         propertyContainer[lastPropertyPath] += opRef.value
+         break
+      case 'sub':
+         propertyContainer[lastPropertyPath] -= opRef.value
+         break
+      case 'set':
+         propertyContainer[lastPropertyPath] = opRef.value
+         break
+      case 'mul':
+         propertyContainer[lastPropertyPath] *= opRef.value
+         break
+      default:
+         console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
    }
 
    if (propertyContainer[lastPropertyPath] < 0) {
