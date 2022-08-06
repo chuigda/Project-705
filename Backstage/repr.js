@@ -1,20 +1,16 @@
-import InternalTranslations from './representation/internal_translations'
-import {
-   HasSkillOrNot,
-   PotentialFunctionResult,
-   PotentialLogicOpResult,
-   PotentialResult,
-   SkillPotentialResult
-} from './executor/compute'
+const internalTranslations = {
+   'zh_cn': {
+      '@op_and': '以下条件全部为真',
+      '@op_or': '以下任意条件为真',
+      '@op_not': '以下条件全部为假',
+      '@has_skill': '已习得技能'
+   }
+}
 
-export function translateInternalItem(
-   lang: string,
-   translations: Record<string, Record<string, string>>,
-   key: string
-) {
-   if (InternalTranslations[lang]) {
-      if (InternalTranslations[lang][key]) {
-         return InternalTranslations[lang][key]
+const translateInternalItem = (lang, translations, key) => {
+   if (internalTranslations[lang]) {
+      if (internalTranslations[lang][key]) {
+         return internalTranslations[lang][key]
       }
    }
 
@@ -28,11 +24,7 @@ export function translateInternalItem(
    return key
 }
 
-export function translateItem(
-   lang: string,
-   translations: Record<string, Record<string, string>>,
-   key: string
-) {
+const translateItem = (lang, translations, key) => {
    if (!key.startsWith('@')) {
       return key
    }
@@ -47,30 +39,28 @@ export function translateItem(
    return key
 }
 
-export function translatePotentialResult(
-   lang: string,
-   translations: Record<string, Record<string, string>>,
-   potentialResult: SkillPotentialResult[]
-) {
-   function impl(result: SkillPotentialResult): object {
-      if (result instanceof PotentialFunctionResult) {
+const translatePotentialResult = (lang, translations, potentialResult) => {
+   const impl = result => {
+      switch (result.type) {
+      case 'custom':
          return {
             text: translateItem(lang, translations, result.description),
             result: result.result
          }
-      } else if (result instanceof PotentialLogicOpResult) {
+      case 'logic_op':
          return {
             text: translateInternalItem(lang, translations, `@op_${result.op}`),
             result: result.result,
             arguments: result.resultPieces.map(impl)
          }
-      } else if (result instanceof HasSkillOrNot) {
+      case 'skill':
          return {
-            text: translateInternalItem(lang, translations, '@broken_potential_result')
+            text: translateInternalItem(lang, translations, '@has_skill'),
+            arguments: [
+               translateItem(lang, translations, result.skillName)
+            ]
          }
       }
-
-      return null
    }
 
    if (potentialResult.length === 1) {
@@ -81,4 +71,9 @@ export function translatePotentialResult(
          arguments: potentialResult.map(impl)
       }
    }
+}
+
+module.exports = {
+   translateInternalItem,
+   translatePotentialResult
 }
