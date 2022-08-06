@@ -43,7 +43,7 @@ potentialExpressionArgumentsAssertion.push(potentialExpressionAssertion)
 const baseAssertion = {
    ident: identAssertion,
    name: 'string',
-   description: 'string?',
+   description: 'string',
 }
 
 const activityAssertion = {

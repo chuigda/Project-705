@@ -49,7 +49,7 @@ export class Activity extends ItemBase {
          patch?: PatchMode
       }
    ) {
-      super(ident, name, description, opt.scope, opt.patch)
+      super(ident, name, description, opt?.scope, opt?.patch)
 
       this.category = category
       this.level = level

@@ -1,4 +1,4 @@
-import { Ident, mEventId } from 'base/uid'
+import { Scope, Ident, mEventId } from '../base/uid'
 import { GameContext } from './game_context'
 
 export type Signal = { signalType: string }
@@ -38,26 +38,26 @@ export const signals = {
 }
 
 export function connect(gameContext: GameContext, signal: Signal, event: Ident) {
-   const absoluteEventId = mEventId(gameContext.scope, event)
+   const eventId = mEventId(<Scope>(gameContext.scope), event)
 
-   if (!(absoluteEventId in gameContext.ruleSet.events)) {
-      console.warn(`[W] [connect] event '${event}(${absoluteEventId})' not found`)
+   if (!(eventId in gameContext.ruleSet.events)) {
+      console.warn(`[W] [connect] event '${event}(${eventId})' not found`)
       return
    }
 
    switch (signal.signalType) {
       case 'turn_start':
-         gameContext.events.turnStart.add(absoluteEventId)
+         gameContext.events.turnStart.add(eventId)
          break
       case 'turn_over':
-         gameContext.events.turnOver.add(absoluteEventId)
+         gameContext.events.turnOver.add(eventId)
          break
       case 'skill': {
          const sig = <SkillSignal>signal
          if (!(sig.skillId in gameContext.events.skillLearnt)) {
             gameContext.events.skillLearnt[sig.skillId] = new Set()
          }
-         gameContext.events.skillLearnt[sig.skillId].add(absoluteEventId)
+         gameContext.events.skillLearnt[sig.skillId].add(eventId)
          break
       }
       case 'activity': {
@@ -65,7 +65,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          if (!(sig.activityId in gameContext.events.activityPerformed)) {
             gameContext.events.activityPerformed[sig.activityId] = new Set()
          }
-         gameContext.events.activityPerformed[sig.activityId].add(absoluteEventId)
+         gameContext.events.activityPerformed[sig.activityId].add(eventId)
          break
       }
       case 'player': {
@@ -79,14 +79,14 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
             console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${sig.property}'`)
             return
          }
-         (<Set<string>>container).add(absoluteEventId)
+         (<Set<string>>container).add(eventId)
          break
       }
       case 'turns': {
          const sig = <TurnsSignal>signal
          gameContext.events.timedEvents.push({
             turn: sig.turns,
-            eventId: absoluteEventId
+            eventId: eventId
          })
          break
       }
@@ -94,17 +94,17 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const sig = <TurnsSignal>signal
          gameContext.events.timedEvents.push({
             turn: sig.turns + gameContext.turns,
-            eventId: absoluteEventId
+            eventId: eventId
          })
          break
       }
       case 'event': {
          const sig = <EventSignal>signal
-         const sourceEventId = mEventId(gameContext.scope, sig.eventId)
+         const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
          if (!gameContext.events.eventsTriggered[sourceEventId]) {
             gameContext.events.eventsTriggered[sourceEventId] = new Set()
          }
-         gameContext.events.eventsTriggered[sourceEventId].add(absoluteEventId)
+         gameContext.events.eventsTriggered[sourceEventId].add(eventId)
          break
       }
       default:

@@ -41,7 +41,7 @@ export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): [
    return [
       mangler(scope, ident),
       mTranslationKey(scope, name),
-      description ? mTranslationKey(scope, description) : null
+      mTranslationKey(scope, description)
    ]
 }
 

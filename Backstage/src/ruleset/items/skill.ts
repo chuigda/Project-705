@@ -50,7 +50,7 @@ export class Skill extends ItemBase {
          patch?: PatchMode
       }
    ) {
-      super(ident, name, description, opt.scope, opt.patch)
+      super(ident, name, description, opt?.scope, opt?.patch)
 
       this.cost = cost
 

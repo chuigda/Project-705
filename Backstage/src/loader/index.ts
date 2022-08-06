@@ -8,7 +8,7 @@ import { AscensionPerk } from '../ruleset/items/ascension_perk'
 import { Activity } from '../ruleset/items/activity'
 import { Startup } from '../ruleset/items/startup'
 
-export function loadDynamicMod(modName: string): [RuleSet, any] {
+export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {
       const mod = require(`./mods/${modName}`)
       typeAssert(mod, ruleSetAssertion)

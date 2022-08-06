@@ -22,7 +22,7 @@ export class AscensionPerk extends ItemBase {
          patch?: PatchMode
       }
    ) {
-      super(ident, name, description, opt.scope, opt.patch)
+      super(ident, name, description, opt?.scope, opt?.patch)
 
       if (opt) {
          this.potential = opt.potential

@@ -24,6 +24,7 @@ function triggerEventImpl(
    chainEventCounter: { count: number },
    args: any[]
 ) {
+   const scope = gameContext.scope
    chainEventCounter.count += 1
    if (chainEventCounter.count > 512) {
       console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 events, killing')
@@ -37,7 +38,7 @@ function triggerEventImpl(
          console.error(`[E] [triggerEvent] error when executing inline event script: ${e}`)
       }
    } else {
-      const eventId = mEventId(gameContext.scope, event)
+      const eventId = mEventId(scope, event)
       const eventContent = gameContext.ruleSet.events[eventId]
 
       if (!eventContent) {
@@ -49,7 +50,7 @@ function triggerEventImpl(
          triggerEvent(gameContext, hook, event, [event, args])
       }
 
-      pushScope(gameContext, eventContent.scope)
+      pushScope(gameContext, scope)
       for (const idx in eventContent.event) {
          const eventFunction = eventContent.event[idx]
          try {

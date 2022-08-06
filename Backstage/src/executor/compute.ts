@@ -180,7 +180,7 @@ export function computePotentialSkills(gameContext: GameContext) {
       }
 
       let result = true
-      const resultPieces = []
+      const resultPieces: SkillPotentialResult[] = []
       if (potential) {
          for (const potentialPart of potential) {
             resultPieces.push(computeSkillPotential(gameContext, potentialPart))
@@ -191,10 +191,10 @@ export function computePotentialSkills(gameContext: GameContext) {
       if (result) {
          const cost = computeSkillCost(gameContext, skill.cost)
          console.debug(`[D] [computePotentialSkills] skill '${ident}' available, it costs: ${cost}`)
-         gameContext.computedSkills.available[identStr] = new AvailableSkill(skill, cost)
+         gameContext.computedSkills!.available[identStr] = new AvailableSkill(skill, cost)
       } else {
          console.debug(`[D] [computePotentialSkills] skill '${ident}' not available`)
-         gameContext.computedSkills.unavailable[identStr] = new UnavailableSkill(skill, resultPieces)
+         gameContext.computedSkills!.unavailable[identStr] = new UnavailableSkill(skill, resultPieces)
       }
    }
 
@@ -208,14 +208,14 @@ export function computePotentialSkills(gameContext: GameContext) {
 
 export function recomputeSkillCosts(gameContext: GameContext) {
    const available: Record<string, AvailableSkill> = {}
-   for (const { skill } of Object.values(gameContext.computedSkills.available)) {
+   for (const { skill } of Object.values(gameContext.computedSkills!.available)) {
       const { ident, cost } = skill
       const newCost = computeSkillCost(gameContext, cost)
       console.debug(`[D] [recomputeSkillCosts] skill '${ident}' costs ${newCost}`)
 
       available[<string>ident] = new AvailableSkill(skill, newCost)
    }
-   gameContext.computedSkills.available = available
+   gameContext.computedSkills!.available = available
 }
 
 export class UnavailableAscensionPerk {

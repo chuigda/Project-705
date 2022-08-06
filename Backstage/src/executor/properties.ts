@@ -1,4 +1,4 @@
-import { Ident } from 'base/uid'
+import { Ident } from '../base/uid'
 import { triggerEvent } from './events'
 import { GameContext } from './game_context'
 import { PropertyOp } from '../ruleset/ops'

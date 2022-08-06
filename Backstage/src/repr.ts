@@ -51,7 +51,7 @@ export function translatePotentialResult(
    lang: string,
    translations: Record<string, Record<string, string>>,
    potentialResult: SkillPotentialResult[]
-) {
+): object {
    function impl(result: SkillPotentialResult): object {
       if (result instanceof PotentialFunctionResult) {
          return {
@@ -70,7 +70,7 @@ export function translatePotentialResult(
          }
       }
 
-      return null
+      return {}
    }
 
    if (potentialResult.length === 1) {
