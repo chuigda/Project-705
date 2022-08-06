@@ -51,20 +51,20 @@ export class PlayerStatus {
 }
 
 export class AttributeEvents {
-   all: Record<string, Event> = {}
-   strength: Record<string, Event> = {}
-   intelligence: Record<string, Event> = {}
-   emotionalIntelligence: Record<string, Event> = {}
-   memorization: Record<string, Event> = {}
-   imagination: Record<string, Event> = {}
-   charisma: Record<string, Event> = {}
+   all: Set<string> = new Set()
+   strength: Set<string> = new Set()
+   intelligence: Set<string> = new Set()
+   emotionalIntelligence: Set<string> = new Set()
+   memorization: Set<string> = new Set()
+   imagination: Set<string> = new Set()
+   charisma: Set<string> = new Set()
 }
 
 export class PlayerPropertyUpdatedEvents {
-   all: Record<string, Event> = {}
-   skillPoints: Record<string, Event> = {}
-   attributes: AttributeEvents = new AttributeEvents
-   talent: AttributeEvents = new AttributeEvents
+   all: Set<string> = new Set()
+   skillPoints: Set<string> = new Set()
+   attributes: AttributeEvents = new AttributeEvents()
+   talent: AttributeEvents = new AttributeEvents()
 }
 
 export class TimedEvent {
@@ -73,12 +73,12 @@ export class TimedEvent {
 }
 
 export class GameContextEvents {
-   turnStart: Record<string, Event> = {}
-   turnOver: Record<string, Event> = {}
-   playerPropertyUpdated: PlayerPropertyUpdatedEvents = new PlayerPropertyUpdatedEvents
-   skillLearnt: Record<string, Record<string, Event>> = {}
-   activityPerformed: Record<string, Record<string, Event>> = {}
-   eventsTriggered: Record<string, Record<string, Event>> = {}
+   turnStart: Set<string> = new Set()
+   turnOver: Set<string> = new Set()
+   playerPropertyUpdated: PlayerPropertyUpdatedEvents = new PlayerPropertyUpdatedEvents()
+   skillLearnt: Record<string, Set<string>> = {}
+   activityPerformed: Record<string, Set<string>> = {}
+   eventsTriggered: Record<string, Set<string>> = {}
 
    timedEvents: TimedEvent[]
 }
@@ -90,9 +90,9 @@ export class GameContext {
    scopeChain: Scope[] = []
 
    turns: number = 0
-   player: PlayerStatus = new PlayerStatus
+   player: PlayerStatus = new PlayerStatus()
 
-   events: GameContextEvents = new GameContextEvents
+   events: GameContextEvents = new GameContextEvents()
    modifiers: object = {}
 
    computedModifier?: object = undefined
