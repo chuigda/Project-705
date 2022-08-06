@@ -1,0 +1,21 @@
+{
+   "compilerOptions": {
+     "module": "commonjs",
+     "noImplicitAny": true,
+     "removeComments": true,
+     "preserveConstEnums": true,
+     "sourceMap": true,
+     "lib": ["es2021"],
+     "target": "es2021",
+
+     "baseUrl": "src",
+     "outDir": "dist"
+   },
+   "include": [
+      "src/**/*"
+   ],
+   "exclude": [
+      "node_modules",
+      "**/*.spec.ts"
+   ],
+}

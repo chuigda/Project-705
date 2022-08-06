@@ -1,4 +1,4 @@
-const { updatePlayerProperty } = require('../../executor/properties')
+const { updatePlayerProperty } = require('../../src/executor/properties')
 
 module.exports = {
    ident: 'precautions',
