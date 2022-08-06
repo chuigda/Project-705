@@ -9,8 +9,6 @@ import { MaybeTranslationKey } from '../base/uid'
 import { Skill, SkillCost, SkillPotential } from '../ruleset/items/skill'
 import { AscensionPerk } from '../ruleset/items/ascension_perk'
 
-export type PotentialResultType = 'custom' | 'logic_op' | 'skill'
-
 export class PotentialResultBase {
    readonly result: boolean
 
