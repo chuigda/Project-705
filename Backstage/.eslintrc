@@ -20,7 +20,6 @@
    },
    "rules": {
       "indent": "off",
-      "@typescript-eslint/indent": ["error", 3],
       "no-console": "off",
       "semi": ["error", "never"],
       "no-restricted-syntax": "off",
@@ -37,15 +36,18 @@
       "no-param-reassign": "off",
       "guard-for-in": "off",
       "operator-linebreak": "off",
-      "max-len": ["error", { "code": 120 }],
       "lines-between-class-members": "off",
       "max-classes-per-file": "off",
+      "no-use-before-define": "off",
+      "max-len": ["error", { "code": 120 }],
+      "default-case": "off", // since we have TypeScript, this could be non-necessary
 
       "import/extensions": "off",
       "import/no-dynamic-require": "off",
       "import/prefer-default-export": "off",
       "import/no-cycle": "off",
 
+      "@typescript-eslint/indent": ["error", 3],
       "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/no-inferrable-types": "off",
       "@typescript-eslint/ban-ts-comment": "off",
