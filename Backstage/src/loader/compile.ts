@@ -12,31 +12,6 @@ import { Skill } from 'ruleset/items/skill'
 import { SkillCategory } from 'ruleset/items/skill_category'
 import { Startup } from 'ruleset/items/startup'
 
-export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
-   for (const category of skillCategories) {
-      const { ident } = category
-      const maybeExistingCategory = compilation.skillCategories.findIndex(category1 => category1.ident === ident)
-      if (maybeExistingCategory !== -1) {
-         console.warn(`[W] [compileSkillCategories] skill category '${category}' already exists, overwriting`)
-         compilation.skillCategories[maybeExistingCategory] = category
-      } else {
-         console.info(`[I] [compileSkillCategories] compiled skill category '${ident}'`)
-         compilation.skillCategories.push(category)
-      }
-   }
-}
-
-export function compileActivityCategories(compilation: CompiledRuleSet, activityCategories: string[]) {
-   for (const category of activityCategories) {
-      if (compilation.activityCategories.indexOf(category) !== -1) {
-         console.warn(`[W] [compileActivityCategories] activity category '${category}' already exists, skipping`)
-      } else {
-         console.info(`[I] [compileActivityCategories] compiled activity category '${category}'`)
-         compilation.activityCategories.push(category)
-      }
-   }
-}
-
 export function compilePotentialExpression(scope: Scope, potential: PotentialExpression): PotentialExpression {
    if (potential instanceof PotentialExpressionFunctionOp) {
       return new PotentialExpressionFunctionOp(potential.op, mTranslationKey(scope, potential.description))
@@ -161,10 +136,10 @@ export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk)
 export function compileEvent(scope: Scope, event: Event): Event {
    const ident = mEventId(scope, event.ident)
 
-   return new Event(ident, event.event)
+   return new Event(ident, event.event, scope)
 }
 
-export function compileTranslations(scope: Scope, translations: Record<string, string>): Record<string, string> {
+export function compileTranslation(scope: Scope, translations: Record<string, string>): Record<string, string> {
    const ret: Record<string, string> = {}
    for (const key in translations) {
       const compiledKey = mTranslationKey(scope, key)
