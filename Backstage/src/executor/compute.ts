@@ -12,11 +12,9 @@ import { AscensionPerk } from '../ruleset/items/ascension_perk'
 export type PotentialResultType = 'custom' | 'logic_op' | 'skill'
 
 export class PotentialResultBase {
-   readonly type: PotentialResultType
    readonly result: boolean
 
-   constructor(type: PotentialResultType, result: boolean) {
-      this.type = type
+   constructor(result: boolean) {
       this.result = result
    }
 }
@@ -25,7 +23,7 @@ export class PotentialFunctionResult extends PotentialResultBase {
    readonly description: string
 
    constructor(result: boolean, description: string) {
-      super('custom', result)
+      super(result)
       this.description = description
    }
 }
@@ -35,7 +33,7 @@ export class PotentialLogicOpResult extends PotentialResultBase {
    readonly resultPieces: PotentialResult[]
 
    constructor(result: boolean, op: LogicOp, resultPieces: PotentialResult[]) {
-      super('logic_op', result)
+      super(result)
       this.op = op
       this.resultPieces = resultPieces
    }
@@ -76,7 +74,7 @@ export class HasSkillOrNot extends PotentialResultBase {
    readonly skillName: MaybeTranslationKey
 
    constructor(result: boolean, skillId: string, skillName: MaybeTranslationKey) {
-      super('skill', result)
+      super(result)
       this.skillId = skillId
       this.skillName = skillName
    }

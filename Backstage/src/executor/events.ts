@@ -18,7 +18,7 @@ export function popScope(gameContext: GameContext) {
    gameContext.scope = gameContext.scopeChain.pop()
 }
 
-export function triggerEventImpl(
+function triggerEventImpl(
    gameContext: GameContext,
    event: MaybeInlineEvent,
    chainEventCounter: { count: number },

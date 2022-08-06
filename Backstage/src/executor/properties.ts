@@ -1,21 +1,30 @@
-const updatePlayerProperty = (gameContext, property, operator, value, source) => {
+import { GameContext } from './game_context'
+import { PropertyOp } from '../ruleset/ops'
+import { triggerEvent } from './events'
+
+function updatePlayerProperty(
+   gameContext: GameContext,
+   property: string,
+   operator: PropertyOp,
+   value: number,
+   source: string
+) {
    // TODO(rebuild): 增加 modifiers 相关的计算
    // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算
    // 技能点消耗的计算是在 computeSkillCost 里进行的
 
    const opRef = { operator, value }
    const propertyPath = property.split('.')
-   let container = gameContext.events.playerPropertyUpdated
-   let propertyContainer = gameContext.player
+   let container: Record<string, any> = gameContext.events.playerPropertyUpdated
+   let propertyContainer: Record<string, any> = gameContext.player
    for (const pathPartIdx in propertyPath) {
       const pathPart = propertyPath[pathPartIdx]
       if (container.all) {
-         for (const event of container.all) {
-            for (const eventFunction of event.event) {
-               eventFunction(gameContext, opRef, source)
-            }
+         for (const event in container.all) {
+            triggerEvent(gameContext, event, opRef, source)
          }
       }
+
       container = container[pathPart]
       if (typeof propertyContainer[pathPart] === 'object') {
          propertyContainer = propertyContainer[pathPart]
@@ -29,10 +38,8 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
       return
    }
 
-   for (const event of container) {
-      for (const eventFunction of event.event) {
-         eventFunction(gameContext, opRef, source)
-      }
+   for (const event of Object.values(container)) {
+      triggerEvent(gameContext, event, opRef, source)
    }
 
    switch (opRef.operator) {
@@ -57,8 +64,4 @@ const updatePlayerProperty = (gameContext, property, operator, value, source) =>
    }
 
    // TODO(chuigda): 记录 UI 更新以备使用
-}
-
-module.exports = {
-   updatePlayerProperty
 }
