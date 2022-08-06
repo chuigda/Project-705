@@ -121,16 +121,16 @@ const typeAssertImpl = (path, object, assertion, preventErr) => {
 
       if (object !== undefined) {
          switch (type) {
-            case TypeStrings.Array:
-               assertTypeEqImpl2(path, Array.prototype.constructor, object.constructor, type, preventErr)
-               return
-            case TypeStrings.Date:
-               assertTypeEqImpl2(path, Date.prototype.constructor, object.constructor, type, preventErr)
-               return
-            case TypeStrings.RegExp:
-               assertTypeEqImpl2(path, RegExp.prototype.constructor, object.constructor, type, preventErr)
-               return
-            default:
+         case TypeStrings.Array:
+            assertTypeEqImpl2(path, Array.prototype.constructor, object.constructor, type, preventErr)
+            return
+         case TypeStrings.Date:
+            assertTypeEqImpl2(path, Date.prototype.constructor, object.constructor, type, preventErr)
+            return
+         case TypeStrings.RegExp:
+            assertTypeEqImpl2(path, RegExp.prototype.constructor, object.constructor, type, preventErr)
+            return
+         default:
             // fall through
          }
       }

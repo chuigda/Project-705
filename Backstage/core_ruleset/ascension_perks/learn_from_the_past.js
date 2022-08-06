@@ -1,7 +1,7 @@
 const {
    connect,
    signals
-} = require('../../src/executor/connect')
+} = require('../../executor/connect')
 
 module.exports = {
    ident: 'learn_from_the_past',

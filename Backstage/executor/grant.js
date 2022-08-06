@@ -1,19 +1,16 @@
-import { Ident, mActivityId, mSkillId } from 'base/uid'
-import { Skill } from 'ruleset/items/skill'
-import { pushScope, triggerEvent, popScope } from './events'
-import { recomputeSkillCosts } from './compute'
-import { GameContext, PlayerAttributes } from './game_context'
-import { updatePlayerProperty } from './properties'
+const { activityId, skillId } = require('../base/uid')
+const { recomputeSkillCosts } = require('./compute')
+const { updatePlayerProperty } = require('./properties')
+const { pushScope, popScope, triggerEvent } = require('./events')
 
-function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
+const executeSkillEffects = (gameContext, skillContent) => {
    if (skillContent.output) {
-      let dimension: keyof PlayerAttributes
-      for (dimension in skillContent.output.attributes) {
+      for (const dimension in skillContent.output.attributes) {
          updatePlayerProperty(
             gameContext,
             `attributes.${dimension}`,
             'add',
-            skillContent.output.attributes[dimension] as number,
+            skillContent.output.attributes[dimension],
             '@learn_skill'
          )
       }
@@ -21,7 +18,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
 
    if (skillContent.activities) {
       for (const activity of skillContent.activities) {
-         const absoluteActivityId = mActivityId(gameContext.scope, activity)
+         const absoluteActivityId = activityId(gameContext.scope, activity)
          gameContext.player.activities[absoluteActivityId] = gameContext.ruleSet.activities[absoluteActivityId]
       }
    }
@@ -34,20 +31,17 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
       popScope(gameContext)
    }
 
-   for (const eventIds of Object.values(gameContext.events.skillLearnt)) {
-      for (const eventId of eventIds) {
-         const event = gameContext.ruleSet.events[eventId]
-         pushScope(gameContext, event.scope)
-         event.event.forEach((e) => triggerEvent(gameContext, e, skillContent.ident))
-         popScope(gameContext)
-      }
+   for (const hook of Object.values(gameContext.events.skillLearnt)) {
+      pushScope(gameContext, hook.scope)
+      triggerEvent(gameContext, hook, skillContent.ident)
+      popScope(gameContext)
    }
 
    recomputeSkillCosts(gameContext)
 }
 
-export function learnSkill(gameContext: GameContext, skill: Ident) {
-   const absoluteSkillId = mSkillId(gameContext.scope, skill)
+const learnSkill = (gameContext, skill) => {
+   const absoluteSkillId = skillId(gameContext.scope, skill)
    if (!gameContext.computedSkills.available[absoluteSkillId]) {
       console.error(`[E] [learnSkill] skill '${absoluteSkillId}' is not available`)
       return
@@ -66,8 +60,8 @@ export function learnSkill(gameContext: GameContext, skill: Ident) {
    executeSkillEffects(gameContext, skillContent)
 }
 
-export function grantSkill(gameContext: GameContext, skill: Ident) {
-   const absoluteSkillId = mSkillId(gameContext.scope, skill)
+const grantSkill = (gameContext, skill) => {
+   const absoluteSkillId = skillId(gameContext.scope, skill)
    const skillContent = gameContext.ruleSet.skills[absoluteSkillId]
 
    if (!skillContent) {
@@ -81,4 +75,9 @@ export function grantSkill(gameContext: GameContext, skill: Ident) {
    gameContext.player.skills[absoluteSkillId] = skillContent
 
    executeSkillEffects(gameContext, skillContent)
+}
+
+module.exports = {
+   learnSkill,
+   grantSkill
 }
