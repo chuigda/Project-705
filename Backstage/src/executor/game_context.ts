@@ -69,7 +69,7 @@ export class PlayerPropertyUpdatedEvents {
 
 export class TimedEvent {
    turn: number
-   event: Event
+   eventId: string
 }
 
 export class GameContextEvents {
