@@ -1,24 +1,29 @@
 import {
    IdMangler, Scope,
    mEventId, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId
-} from 'base/uid'
-import { CompiledRuleSet } from 'loader'
-import { Activity } from 'ruleset/items/activity'
-import { AscensionPerk } from 'ruleset/items/ascension_perk'
-import { Event, MaybeInlineEvent } from 'ruleset/items/event'
-import { ItemBase } from 'ruleset/items/item_base'
-import { PotentialExpression, PotentialExpressionFunctionOp, PotentialExpressionLogicOp } from 'ruleset/items/potential'
-import { Skill } from 'ruleset/items/skill'
-import { SkillCategory } from 'ruleset/items/skill_category'
-import { Startup } from 'ruleset/items/startup'
+} from '../base/uid'
+import { AscensionPerk } from '../ruleset/items/ascension_perk'
+import { Event, MaybeInlineEvent } from '../ruleset/items/event'
+import { ItemBase } from '../ruleset/items/item_base'
+import {
+   PotentialExpression,
+   PotentialExpressionFunctionOp,
+   PotentialExpressionLogicOp
+} from '../ruleset/items/potential'
+import { Skill } from '../ruleset/items/skill'
+import { Startup } from '../ruleset/items/startup'
+import { Activity } from '../ruleset/items/activity'
 
 export function compilePotentialExpression(scope: Scope, potential: PotentialExpression): PotentialExpression {
-   if (potential instanceof PotentialExpressionFunctionOp) {
-      return new PotentialExpressionFunctionOp(potential.op, mTranslationKey(scope, potential.description))
+   if (potential.op instanceof Function) {
+      return new PotentialExpressionFunctionOp(
+         potential.op,
+         mTranslationKey(scope, (<PotentialExpressionFunctionOp>potential).description)
+      )
    } else {
       return new PotentialExpressionLogicOp(
          potential.op,
-         potential.arguments.map(argument => compilePotentialExpression(scope, potential))
+         (<PotentialExpressionLogicOp>potential).arguments.map(argument => compilePotentialExpression(scope, argument))
       )
    }
 }
@@ -36,7 +41,7 @@ export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): [
    return [
       mangler(scope, ident),
       mTranslationKey(scope, name),
-      mTranslationKey(scope, description)
+      description ? mTranslationKey(scope, description) : null
    ]
 }
 
