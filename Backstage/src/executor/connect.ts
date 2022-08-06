@@ -39,7 +39,6 @@ export const signals = {
 
 export function connect(gameContext: GameContext, signal: Signal, event: Ident) {
    const absoluteEventId = mEventId(gameContext.scope, event)
-   // const absoluteEvent = gameContext.ruleSet.events[absoluteEventId]
 
    if (!(absoluteEventId in gameContext.ruleSet.events)) {
       console.warn(`[W] [connect] event '${event}(${absoluteEventId})' not found`)
@@ -72,7 +71,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       case 'player': {
          const sig = <PlayerPropertyUpdatedSignal>signal
          const propertyPath = sig.property.split('.')
-         let container: any = gameContext.events.playerPropertyUpdated // any here for dynamic path
+         let container: any = gameContext.events.playerPropertyUpdated
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
