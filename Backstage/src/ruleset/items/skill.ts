@@ -4,7 +4,7 @@ import { PlayerAttributes } from '../../executor/game_context'
 import { ItemBase, PatchMode } from './item_base'
 import { MaybeInlineEvent } from './event'
 
-export type SkillPotentialExpression = PotentialExpression | Ident
+export type SkillPotential = PotentialExpression | Ident
 
 export class SkillCost {
    readonly base: number
@@ -26,7 +26,7 @@ export class SkillOutput {
 
 export class Skill extends ItemBase {
    readonly category?: string
-   readonly potential?: SkillPotentialExpression[]
+   readonly potential?: SkillPotential[]
    readonly cost: SkillCost
    readonly output?: SkillOutput
    readonly activities?: Ident[]
@@ -41,11 +41,11 @@ export class Skill extends ItemBase {
 
       opt?: {
          category?: string,
-         potential?: SkillPotentialExpression[],
+         potential?: SkillPotential[],
          output?: SkillOutput,
          activities?: Ident[],
          events?: MaybeInlineEvent[],
-      
+
          scope?: Scope,
          patch?: PatchMode
       }
