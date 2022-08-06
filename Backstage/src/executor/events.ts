@@ -1,4 +1,4 @@
-import { Ident, mEventId, Scope } from '../base/uid'
+import { mEventId, Scope } from '../base/uid'
 import { GameContext } from './game_context'
 import { MaybeInlineEvent } from '../ruleset/items/event'
 
@@ -18,7 +18,18 @@ export function popScope(gameContext: GameContext) {
    gameContext.scope = gameContext.scopeChain.pop()
 }
 
-export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]) {
+export function triggerEventImpl(
+   gameContext: GameContext,
+   event: MaybeInlineEvent,
+   chainEventCounter: { count: number },
+   args: any[]
+) {
+   chainEventCounter.count += 1
+   if (chainEventCounter.count > 512) {
+      console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 events, killing')
+      return
+   }
+
    if (event instanceof Function) {
       try {
          event(gameContext, ...args)
@@ -49,4 +60,9 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       }
       popScope(gameContext)
    }
+}
+
+export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]) {
+   const counter = { count: 0 }
+   triggerEventImpl(gameContext, event, counter, args)
 }
