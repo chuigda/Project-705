@@ -98,6 +98,8 @@ export class GameContext {
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
 
+   eventChainCounter?: number = undefined
+
    constructor(ruleSet: CompiledRuleSet) {
       this.ruleSet = ruleSet
    }

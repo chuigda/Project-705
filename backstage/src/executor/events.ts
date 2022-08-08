@@ -18,16 +18,24 @@ export function popScope(gameContext: GameContext) {
    gameContext.scope = gameContext.scopeChain.pop()
 }
 
-function triggerEventImpl(
-   gameContext: GameContext,
-   event: MaybeInlineEvent,
-   chainEventCounter: { count: number },
-   args: any[]
-) {
+export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]) {
    const scope = gameContext.scope!
-   chainEventCounter.count += 1
-   if (chainEventCounter.count > 512) {
+   
+   let unsetCounter = false
+   if (gameContext.eventChainCounter === undefined) {
+      unsetCounter = true
+      gameContext.eventChainCounter = 1
+   } else {
+      gameContext.eventChainCounter += 1
+   }
+
+   if (gameContext.eventChainCounter > 512) {
       console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 events, killing')
+      if (unsetCounter) {
+         gameContext.eventChainCounter = undefined
+      } else {
+         gameContext.eventChainCounter -= 1
+      }
       return
    }
 
@@ -61,9 +69,10 @@ function triggerEventImpl(
       }
       popScope(gameContext)
    }
-}
 
-export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]) {
-   const counter = { count: 0 }
-   triggerEventImpl(gameContext, event, counter, args)
+   if (unsetCounter) {
+      gameContext.eventChainCounter = undefined
+   } else {
+      gameContext.eventChainCounter -= 1
+   }
 }

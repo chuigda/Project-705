@@ -4,13 +4,12 @@ import { Ident, mEventId, Scope } from '../base/uid'
 import {
    compileActivity,
    compileAscensionPerk,
-   compileEvent, compileMaybeInlineEvent,
+   compileEvent,
    compileSkill,
    compileStartup,
    compileTranslation
 } from './compile'
 import { RuleSet } from '../ruleset'
-import { MaybeInlineEvent } from '../ruleset/items/event'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
