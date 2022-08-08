@@ -1,10 +1,10 @@
 import { Skill } from '@app/ruleset/items/skill'
-import { MaybeTranslationKey, Scope } from '../base/uid'
-import { SkillCategory } from './items/skill_category'
-import { Startup } from './items/startup'
-import { Activity } from './items/activity'
-import { AscensionPerk } from './items/ascension_perk'
-import { Event, MaybeInlineEvent } from './items/event'
+import { MaybeTranslationKey, Scope } from '@app/base/uid'
+import { SkillCategory } from '@app/ruleset/items/skill_category'
+import { Startup } from '@app/ruleset/items/startup'
+import { Activity } from '@app/ruleset/items/activity'
+import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
+import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export interface RuleSet {
    readonly ident: Scope

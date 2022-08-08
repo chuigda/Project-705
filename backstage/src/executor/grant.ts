@@ -1,9 +1,9 @@
-import { Ident, mActivityId, mSkillId } from '../base/uid'
-import { Skill } from '../ruleset/items/skill'
-import { pushScope, triggerEvent, popScope } from './events'
-import { recomputeSkillCosts } from './compute'
-import { GameContext, PlayerAttributes } from './game_context'
-import { updatePlayerProperty } from './properties'
+import { Ident, mActivityId, mSkillId } from '@app/base/uid'
+import { Skill } from '@app/ruleset/items/skill'
+import { pushScope, triggerEvent, popScope } from '@app/executor/events'
+import { recomputeSkillCosts } from '@app/executor/compute'
+import { GameContext, PlayerAttributes } from '@app/executor/game_context'
+import { updatePlayerProperty } from '@app/executor/properties'
 
 function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
    const scope = gameContext.scope!

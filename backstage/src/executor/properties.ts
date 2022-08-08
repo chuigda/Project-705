@@ -1,7 +1,7 @@
-import { Ident } from '../base/uid'
+import { Ident } from '@app/base/uid'
 import { triggerEvent } from './events'
-import { GameContext } from './game_context'
-import { PropertyOp } from '../ruleset/ops'
+import { GameContext } from '@app/executor/game_context'
+import { PropertyOp } from '@app/ruleset/ops'
 
 export function updatePlayerProperty(
    gameContext: GameContext,

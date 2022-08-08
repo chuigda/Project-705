@@ -1,11 +1,10 @@
-import InternalTranslations from './representation/internal_translations'
+import InternalTranslations from '@app/representation/internal_translations'
 import {
    HasSkillOrNot,
    PotentialFunctionResult,
    PotentialLogicOpResult,
-   PotentialResult,
    SkillPotentialResult
-} from './executor/compute'
+} from '@app/executor/compute'
 
 export function translateInternalItem(
    lang: string,

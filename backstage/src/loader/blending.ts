@@ -1,6 +1,6 @@
-import { CompiledRuleSet } from './index'
-import { SkillCategory } from '../ruleset/items/skill_category'
-import { Ident, mEventId, Scope } from '../base/uid'
+import { CompiledRuleSet } from '@app/loader'
+import { SkillCategory } from '@app/ruleset/items/skill_category'
+import { Ident, mEventId, Scope } from '@app/base/uid'
 import {
    compileActivity,
    compileAscensionPerk,
@@ -8,8 +8,8 @@ import {
    compileSkill,
    compileStartup,
    compileTranslation
-} from './compile'
-import { RuleSet } from '../ruleset'
+} from '@app/loader/compile'
+import { RuleSet } from '@app/ruleset'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {

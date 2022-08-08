@@ -1,18 +1,18 @@
 import {
    IdMangler, Scope,
    mEventId, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId
-} from '../base/uid'
-import { AscensionPerk } from '../ruleset/items/ascension_perk'
-import { Event, MaybeInlineEvent } from '../ruleset/items/event'
-import { ItemBase } from '../ruleset/items/item_base'
+} from '@app/base/uid'
+import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
+import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
+import { ItemBase } from '@app/ruleset/items/item_base'
 import {
    PotentialExpression,
    PotentialExpressionFunctionOp,
    PotentialExpressionLogicOp
-} from '../ruleset/items/potential'
-import { Skill } from '../ruleset/items/skill'
-import { Startup } from '../ruleset/items/startup'
-import { Activity } from '../ruleset/items/activity'
+} from '@app/ruleset/items/potential'
+import { Skill } from '@app/ruleset/items/skill'
+import { Startup } from '@app/ruleset/items/startup'
+import { Activity } from '@app/ruleset/items/activity'
 
 export function compilePotentialExpression(scope: Scope, potential: PotentialExpression): PotentialExpression {
    if (potential.op instanceof Function) {

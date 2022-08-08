@@ -1,9 +1,9 @@
-import { Scope } from '../base/uid'
-import { Skill } from '../ruleset/items/skill'
-import { Activity } from '../ruleset/items/activity'
-import { AscensionPerk } from '../ruleset/items/ascension_perk'
-import { CompiledRuleSet } from '../loader'
-import { ComputedAscensionPerks, ComputedSkills } from './compute'
+import { Scope } from '@app/base/uid'
+import { Skill } from '@app/ruleset/items/skill'
+import { Activity } from '@app/ruleset/items/activity'
+import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
+import { CompiledRuleSet } from '@app/loader'
+import { ComputedAscensionPerks, ComputedSkills } from '@app/executor/compute'
 
 export class PlayerAttributes {
    strength: number = 0

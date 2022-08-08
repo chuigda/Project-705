@@ -1,4 +1,4 @@
-import { Ident, MaybeTranslationKey, Scope } from '../../base/uid'
+import { Ident, MaybeTranslationKey, Scope } from '@app/base/uid'
 
 export type PatchMode = 'overwrite' | 'and' | 'or'
 

@@ -1,13 +1,13 @@
-import { LogicOp } from '../ruleset/ops'
-import { GameContext, PlayerAttributes } from './game_context'
+import { LogicOp } from '@app/ruleset/ops'
+import { GameContext, PlayerAttributes } from '@app/executor/game_context'
 import {
    PotentialExpression,
    PotentialExpressionFunctionOp,
    PotentialExpressionLogicOp
-} from '../ruleset/items/potential'
-import { MaybeTranslationKey } from '../base/uid'
-import { Skill, SkillCost, SkillPotential } from '../ruleset/items/skill'
-import { AscensionPerk } from '../ruleset/items/ascension_perk'
+} from '@app/ruleset/items/potential'
+import { MaybeTranslationKey } from '@app/base/uid'
+import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
+import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 
 export class PotentialResultBase {
    readonly result: boolean

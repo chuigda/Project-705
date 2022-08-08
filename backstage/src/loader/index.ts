@@ -1,12 +1,12 @@
-import { SkillCategory } from '../ruleset/items/skill_category'
-import { RuleSet } from '../ruleset'
-import { typeAssert } from '../util/type_assert'
-import { ruleSetAssertion } from './assertions'
-import { Event, MaybeInlineEvent } from '../ruleset/items/event'
-import { Skill } from '../ruleset/items/skill'
-import { AscensionPerk } from '../ruleset/items/ascension_perk'
-import { Activity } from '../ruleset/items/activity'
-import { Startup } from '../ruleset/items/startup'
+import { SkillCategory } from '@app/ruleset/items/skill_category'
+import { RuleSet } from '@app/ruleset'
+import { typeAssert } from '@app/util/type_assert'
+import { ruleSetAssertion } from '@app/loader/assertions'
+import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
+import { Skill } from '@app/ruleset/items/skill'
+import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
+import { Activity } from '@app/ruleset/items/activity'
+import { Startup } from '@app/ruleset/items/startup'
 
 export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {

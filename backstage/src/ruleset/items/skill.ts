@@ -1,8 +1,8 @@
-import { PotentialExpression } from './potential'
-import { Ident, MaybeTranslationKey, Scope } from '../../base/uid'
-import { PlayerAttributes } from '../../executor/game_context'
-import { ItemBase, PatchMode } from './item_base'
-import { MaybeInlineEvent } from './event'
+import { PotentialExpression } from '@app/ruleset/items/potential'
+import { Ident, MaybeTranslationKey, Scope } from '@app/base/uid'
+import { PlayerAttributes } from '@app/executor/game_context'
+import { ItemBase, PatchMode } from '@app/ruleset/items/item_base'
+import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export type SkillPotential = PotentialExpression | Ident
 

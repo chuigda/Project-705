@@ -1,6 +1,6 @@
-import { mEventId, Scope } from '../base/uid'
-import { GameContext } from './game_context'
-import { MaybeInlineEvent } from '../ruleset/items/event'
+import { mEventId, Scope } from '@app/base/uid'
+import { GameContext } from '@app/executor/game_context'
+import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export function pushScope(gameContext: GameContext, scope: Scope) {
    if (gameContext.scope) {

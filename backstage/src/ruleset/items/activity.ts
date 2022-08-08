@@ -1,7 +1,7 @@
-import { ItemBase, PatchMode } from './item_base'
-import { PlayerAttributes } from '../../executor/game_context'
-import { MaybeInlineEvent } from './event'
-import { Ident, MaybeTranslationKey, Scope } from '../../base/uid'
+import { ItemBase, PatchMode } from '@app/ruleset/items/item_base'
+import { MaybeInlineEvent } from '@app/ruleset/items/event'
+import { PlayerAttributes } from '@app/executor/game_context'
+import { Ident, MaybeTranslationKey, Scope } from '@app/base/uid'
 
 export class ActivityOutput {
    readonly attributes?: PlayerAttributes

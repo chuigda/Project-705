@@ -1,5 +1,5 @@
-import { Scope, Ident, mEventId } from '../base/uid'
-import { GameContext } from './game_context'
+import { Scope, Ident, mEventId } from '@app/base/uid'
+import { GameContext } from '@app/executor/game_context'
 
 export type Signal = { signalType: string }
 export type SkillSignal = Signal & { skillId: string }
