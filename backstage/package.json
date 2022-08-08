@@ -5,8 +5,7 @@
    "main": "src/index.ts",
    "scripts": {
       "test_quick": "node test/test_quick.js",
-      "test_quick_ts": "ts-node test/test_quick.ts",
-      "lint": "eslint --fix --ext .ts src"
+      "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts"
    },
    "author": "",
    "license": "ISC",
@@ -19,7 +18,9 @@
       "eslint-import-resolver-typescript": "^3.4.0",
       "eslint-plugin-import": "^2.26.0",
       "json5": "^2.2.1",
+      "resolve-tspaths": "^0.7.4",
       "ts-node": "^10.9.1",
+      "tsconfig-paths": "^4.1.0",
       "typescript": "^4.7.4"
    }
 }
