@@ -9,11 +9,17 @@
      "lib": ["es2021"],
      "target": "es2021",
 
-     "baseUrl": "src",
-     "outDir": "dist"
+     "baseUrl": ".",
+     "outDir": "dist",
+
+     "paths": {
+         "@app*": ["src/*"],
+         "@test*": ["test/*"]
+      }
    },
    "include": [
-      "src/**/*"
+      "src",
+      "test"
    ],
    "exclude": [
       "node_modules",
