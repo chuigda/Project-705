@@ -13,8 +13,8 @@
      "outDir": "dist",
 
      "paths": {
-         "@app*": ["src/*"],
-         "@test*": ["test/*"]
+         "@app/*": ["src/*"],
+         "@test/*": ["test/*"]
       }
    },
    "include": [

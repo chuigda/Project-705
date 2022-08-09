@@ -86,7 +86,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const sig = <TurnsSignal>signal
          gameContext.events.timedEvents.push({
             turn: sig.turns,
-            eventId: eventId
+            eventId
          })
          break
       }
@@ -94,7 +94,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const sig = <TurnsSignal>signal
          gameContext.events.timedEvents.push({
             turn: sig.turns + gameContext.turns,
-            eventId: eventId
+            eventId
          })
          break
       }

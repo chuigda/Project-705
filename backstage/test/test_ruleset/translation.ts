@@ -7,11 +7,7 @@ const translations: Record<string, Record<string, string>> = {
       '$skill2_desc': '奶奶滴，给我玩阴滴是吧，直接来吧！',
 
       '$skill3_name': '九天雷霆双脚蹬',
-      '$skill3_desc': '似乎没有什么实际用途的技能，不知为什么会出现在技能池里。',
-
-      '$skill4_name': 'Vive La France!',
-      '$skill4_desc': '学习这个技能之后，本局游戏中除你以外的所有人获胜',
-      '$skill4_potential': '回合数 >= 5' // 现在投降太早了吧？
+      '$skill3_desc': '来风火轮给他整个活！艹，走，忽略！'
    }
 }
 

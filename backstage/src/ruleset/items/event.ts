@@ -6,13 +6,7 @@ export type EventFunction = (gameContext: GameContext, ...args: any[]) => void
 export class Event {
    readonly ident: Ident
    readonly scope?: Scope
-   readonly event: EventFunction[] // TODO: rename to events
-
-   constructor(ident: Ident, event: EventFunction[], scope?: Scope) {
-      this.ident = ident
-      this.event = event
-      this.scope = scope
-   }
+   readonly event: EventFunction[]
 }
 
 export type MaybeInlineEvent = Ident | EventFunction

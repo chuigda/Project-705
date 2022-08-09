@@ -20,7 +20,7 @@ export function popScope(gameContext: GameContext) {
 
 export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]) {
    const scope = gameContext.scope!
-   
+
    let unsetCounter = false
    if (gameContext.eventChainCounter === undefined) {
       unsetCounter = true

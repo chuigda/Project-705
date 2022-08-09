@@ -8,19 +8,13 @@ export class ItemBase {
    readonly description: MaybeTranslationKey
    readonly patch?: PatchMode
    readonly scope?: Scope
+}
 
-   constructor(
-      ident: Ident,
-      name: MaybeTranslationKey,
-      description: MaybeTranslationKey,
-      scope?: Scope,
-      patch?: PatchMode,
-   ) {
-      this.ident = ident
-      this.name = name
-      this.description = description
-
-      this.patch = patch
-      this.scope = scope
-   }
+export class PlayerAttributesUpdate {
+   strength?: number
+   intelligence?: number
+   emotionalIntelligence?: number
+   memorization?: number
+   imagination?: number
+   charisma?: number
 }

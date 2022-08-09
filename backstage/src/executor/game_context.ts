@@ -12,26 +12,6 @@ export class PlayerAttributes {
    memorization: number = 0
    imagination: number = 0
    charisma: number = 0
-
-   constructor(
-      optionalArgs?: {
-         strength?: number,
-         intelligence?: number,
-         emotionalIntelligence?: number,
-         memorization?: number,
-         imagination?: number
-         charisma?: number
-      }
-   ) {
-      if (optionalArgs) {
-         this.strength = optionalArgs.strength || this.strength
-         this.intelligence = optionalArgs.intelligence || this.intelligence
-         this.emotionalIntelligence = optionalArgs.emotionalIntelligence || this.emotionalIntelligence
-         this.memorization = optionalArgs.memorization || this.memorization
-         this.imagination = optionalArgs.imagination || this.imagination
-         this.charisma = optionalArgs.charisma || this.charisma
-      }
-   }
 }
 
 export class PlayerStatus {
