@@ -1,26 +1,30 @@
 {
-   "name": "cnpr",
-   "version": "1.0.0",
-   "description": "",
-   "main": "src/index.ts",
-   "scripts": {
-      "test_quick": "node test/test_quick.js",
-      "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts"
-   },
-   "author": "",
-   "license": "ISC",
-   "devDependencies": {
-      "@types/node": "^16",
-      "@typescript-eslint/eslint-plugin": "^5.32.0",
-      "@typescript-eslint/parser": "^5.32.0",
-      "eslint": "^8.21.0",
-      "eslint-config-airbnb-base": "^15.0.0",
-      "eslint-import-resolver-typescript": "^3.4.0",
-      "eslint-plugin-import": "^2.26.0",
-      "json5": "^2.2.1",
-      "resolve-tspaths": "^0.7.4",
-      "ts-node": "^10.9.1",
-      "tsconfig-paths": "^4.1.0",
-      "typescript": "^4.7.4"
-   }
+  "name": "cnpr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test_quick": "node test/test_quick.js",
+    "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^16",
+    "@typescript-eslint/eslint-plugin": "^5.32.0",
+    "@typescript-eslint/parser": "^5.32.0",
+    "eslint": "^8.21.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-import-resolver-typescript": "^3.4.0",
+    "eslint-plugin-import": "^2.26.0",
+    "json5": "^2.2.1",
+    "resolve-tspaths": "^0.7.4",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
 }
