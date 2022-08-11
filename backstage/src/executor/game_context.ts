@@ -73,6 +73,7 @@ export class GameContext {
 
    events: GameContextEvents = new GameContextEvents()
    modifiers: object = {}
+   variables: Record<string, Record<string, any>> = {}
 
    computedModifier?: object = undefined
    computedSkills?: ComputedSkills = undefined

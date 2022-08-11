@@ -7,10 +7,13 @@ import { Skill } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Activity } from '@app/ruleset/items/activity'
 import { Startup } from '@app/ruleset/items/startup'
+import { compileRuleSet } from '@app/loader/blending'
+import { abort } from '@app/util/emergency'
 
 export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {
-      const mod = require(`./mods/${modName}`)
+      const mod = require(`${process.cwd()}/mods/${modName}`)
+
       typeAssert(mod, ruleSetAssertion)
       return [mod as RuleSet, null]
    } catch (e) {
@@ -32,4 +35,26 @@ export class CompiledRuleSet {
    translations: Record<string, Record<string, string>> = {}
 
    onRuleSetLoaded: MaybeInlineEvent[] = []
+}
+
+export function load(): CompiledRuleSet {
+   const ret = new CompiledRuleSet()
+
+   const modList = require(`${process.cwd()}/mods/mods.json`)
+   for (const modName of modList) {
+      const [mod, err] = loadDynamicMod(modName)
+      if (err) {
+         console.error(`[E] [load] error loading mod '${modName}': ${err}`)
+         continue
+      }
+
+      try {
+         compileRuleSet(ret, mod!)
+      } catch (e) {
+         console.error(`[E] [load] error compiling mod '${modName}': ${e}`)
+         abort()
+      }
+   }
+
+   return ret
 }

@@ -51,6 +51,8 @@ export const mActivityId = buildMangler('ac')
 export const mEventId = buildMangler('ev')
 export const mModifierId = buildMangler('md')
 export const mTranslationKey = buildMangler('tr')
+export const mVarName = buildMangler('va')
+export const mDisplayItemId = buildMangler('ui')
 
 export function isTranslationKey(key: string): boolean {
    return key.startsWith('$')
