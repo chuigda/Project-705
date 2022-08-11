@@ -85,3 +85,8 @@ export function grantSkill(gameContext: GameContext, skill: Ident) {
 
    executeSkillEffects(gameContext, skillContent)
 }
+
+export default {
+   learnSkill,
+   grantSkill
+}

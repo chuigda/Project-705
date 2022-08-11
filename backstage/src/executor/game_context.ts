@@ -1,9 +1,22 @@
-import { Scope } from '@app/base/uid'
-import { Skill } from '@app/ruleset/items/skill'
+/* eslint-disable import/no-named-as-default-member */
+
+import { Ident, Scope } from '@app/base/uid'
+import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
 import { Activity } from '@app/ruleset/items/activity'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { CompiledRuleSet } from '@app/loader'
-import { ComputedAscensionPerks, ComputedSkills } from '@app/executor/compute'
+import { PotentialExpression } from '@app/ruleset/items/potential'
+import { MaybeInlineEvent } from '@app/ruleset/items/event'
+import { PropertyOp } from '@app/ruleset/ops'
+
+import computeFunctions, {
+   ComputedAscensionPerks, ComputedSkills, PotentialResult, SkillPotentialResult
+} from '@app/executor/compute'
+import connectFunctions, { Signal } from '@app/executor/connect'
+import eventFunctions from '@app/executor/events'
+import grantFunctions from '@app/executor/grant'
+import propertyFunctions from '@app/executor/properties'
+import variableFunctions from '@app/executor/variables'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -73,7 +86,7 @@ export class GameContext {
 
    events: GameContextEvents = new GameContextEvents()
    modifiers: object = {}
-   variables: Record<string, Record<string, any>> = {}
+   variables: Record<string, any> = {}
 
    computedModifier?: object = undefined
    computedSkills?: ComputedSkills = undefined
@@ -83,5 +96,61 @@ export class GameContext {
 
    constructor(ruleSet: CompiledRuleSet) {
       this.ruleSet = ruleSet
+   }
+
+   // ----------------------------------------------------------------------------------------------
+   // functions exported for ruleset uses
+   // ----------------------------------------------------------------------------------------------
+
+   computePotential(potential: PotentialExpression): PotentialResult {
+      return computeFunctions.computePotential(this, potential)
+   }
+
+   computeSkillPotential(skillPotential: SkillPotential): SkillPotentialResult {
+      return computeFunctions.computeSkillPotential(this, skillPotential)
+   }
+
+   computeSkillCost(skillCost: SkillCost): number {
+      return computeFunctions.computeSkillCost(this, skillCost)
+   }
+
+   recomputeSkillCosts(): void {
+      computeFunctions.recomputeSkillCosts(this)
+   }
+
+   get signals(): Record<string, (arg?: any) => object> {
+      return connectFunctions.signals
+   }
+
+   connect(gameContext: GameContext, signal: Signal, event: Ident) {
+      connectFunctions.connect(gameContext, signal, event)
+   }
+
+   disconnect(gameContext: GameContext, signal: Signal, event: Ident) {
+      connectFunctions.disconnect(gameContext, signal, event)
+   }
+
+   triggerEvent(event: MaybeInlineEvent, ...args: any[]) {
+      eventFunctions.triggerEvent(this, event, ...args)
+   }
+
+   learnSkill(skill: Ident) {
+      grantFunctions.learnSkill(this, skill)
+   }
+
+   grantSkill(skill: Ident) {
+      grantFunctions.grantSkill(this, skill)
+   }
+
+   updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: Ident) {
+      propertyFunctions.updatePlayerProperty(this, property, operator, value, source)
+   }
+
+   getV(varName: Ident): any {
+      return variableFunctions.getVar(this, varName)
+   }
+
+   setV(varName: Ident, value: any) {
+      variableFunctions.setVar(this, varName, value)
    }
 }

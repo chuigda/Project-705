@@ -239,3 +239,10 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
       }
    }
 }
+
+export default {
+   computePotential,
+   computeSkillPotential,
+   computeSkillCost,
+   recomputeSkillCosts
+}

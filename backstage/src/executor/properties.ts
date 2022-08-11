@@ -8,7 +8,7 @@ export function updatePlayerProperty(
    property: string,
    operator: PropertyOp,
    value: number,
-   source: Ident
+   source?: Ident
 ) {
    // TODO(rebuild): 增加 modifiers 相关的计算
    // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算
@@ -64,4 +64,8 @@ export function updatePlayerProperty(
    }
 
    // TODO(chuigda): 记录 UI 更新以备使用
+}
+
+export default {
+   updatePlayerProperty
 }

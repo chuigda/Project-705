@@ -76,3 +76,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       gameContext.eventChainCounter -= 1
    }
 }
+
+export default {
+   triggerEvent
+}
