@@ -9,12 +9,14 @@
       "lib": ["es2021"],
       "target": "es2021",
 
-      "baseUrl": ".",
+      "baseUrl": "./",
       "outDir": "dist-core-ruleset",
 
       "paths": {
          "@ruleset/*": ["./*"]
       }
    },
-   "include": ["."]
+   "include": [
+      "./"
+   ]
 }

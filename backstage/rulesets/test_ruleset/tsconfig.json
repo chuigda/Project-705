@@ -1,0 +1,22 @@
+{
+   "compilerOptions": {
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "removeComments": false,
+      "preserveConstEnums": true,
+      "strictNullChecks": true,
+      "sourceMap": false,
+      "lib": ["es2021"],
+      "target": "es2021",
+
+      "baseUrl": "./",
+      "outDir": "dist-core-ruleset",
+
+      "paths": {
+         "@ruleset/*": ["./*"]
+      }
+   },
+   "include": [
+      "./"
+   ]
+}

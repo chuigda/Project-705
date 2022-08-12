@@ -1,5 +1,5 @@
-import { GameContext } from '../game_context'
-import { RuleSet } from '../ruleset'
+import { GameContext } from '../../game_context'
+import { RuleSet } from '../../ruleset'
 
 const ruleSet: RuleSet = {
    ident: {

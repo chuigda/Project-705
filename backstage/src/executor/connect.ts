@@ -117,10 +117,6 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
 // eslint-disable-next-line no-unused-vars
 export function disconnect(gameContext: GameContext, signal: Signal, event: Ident) { }
 
-function foo() {}
-
-function bar() {}
-
 export default {
    signals,
    connect,
