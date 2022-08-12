@@ -4,12 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "launch": "ts-node -r tsconfig-paths/register src/index.ts",
-    "test_quick": "node test/test_quick.js",
-    "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
-    "make_dts": "npm-run-all make_dts:*",
-    "make_dts:game_context": "dts-bundle-generator src/executor/game_context.ts -o game_context.d.ts",
-    "make_dts:ruleset": "dts-bundle-generator src/ruleset/index.ts -o ruleset.d.ts"
+    "launch": "make launch"
   },
   "author": "",
   "license": "ISC",
