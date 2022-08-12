@@ -10,7 +10,7 @@
       "target": "es2021",
 
       "baseUrl": "./",
-      "outDir": "dist-core-ruleset",
+      "outDir": "dist-test-ruleset",
 
       "paths": {
          "@ruleset/*": ["./*"]

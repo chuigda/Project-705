@@ -1,6 +1,5 @@
-import InternalTranslations from '@app/representation/internal_translations'
+import InternalTranslations from '@app/repr/internal_translations'
 import {
-   HasSkillOrNot,
    PotentialFunctionResult,
    PotentialLogicOpResult,
    SkillPotentialResult
@@ -63,13 +62,11 @@ export function translatePotentialResult(
             result: result.result,
             arguments: result.resultPieces.map(impl)
          }
-      } else if (result instanceof HasSkillOrNot) {
+      } else {
          return {
             text: translateInternalItem(lang, translations, '@broken_potential_result')
          }
       }
-
-      return {}
    }
 
    if (potentialResult.length === 1) {

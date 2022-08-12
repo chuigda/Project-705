@@ -1,9 +1,8 @@
-import { GameContext } from '@app/executor/game_context'
 import { v4 as uuid } from 'uuid'
-import { CompiledRuleSet, load } from '@app/loader'
-import { triggerEvent } from '@app/executor/events'
 
-const ruleSet: CompiledRuleSet = load()
+import { GameContext } from '@app/executor/game_context'
+import { triggerEvent } from '@app/executor/events'
+import ruleSet from '@app/server/ruleset'
 
 class ServerStore {
    gameContexts: Record<string, GameContext> = {}
