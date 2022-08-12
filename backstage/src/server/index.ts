@@ -5,7 +5,7 @@ function applicationStart() {
    const app = express()
 
    app.post('/init', (req, res) => {
-      const accessToken = req.header('accessToken')
+      const accessToken = req.header('X-Fe-Access-Token')
       const context = serverStore.initGame(accessToken)
       res.json(context)
    })

@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "backendUrl": "http://127.0.0.1:3080/"
+  },
+  "pro": {
+    "backendUrl": ""
+  },
+  "creds": [
+    {
+      "storageName": "accessToken",
+      "key": "accessToken",
+      "header": "X-Fe-Access-Token"
+    }
+  ]
+}
