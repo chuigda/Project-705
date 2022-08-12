@@ -1,4 +1,4 @@
-import { Skill } from '../../ruleset'
+import { Skill } from '@app/ruleset'
 
 const skills: Skill[] = [
    {

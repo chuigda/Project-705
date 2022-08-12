@@ -8,7 +8,6 @@
 backstage/test/test_quick*.js
 backstage/test/test_quick*.ts
 backstage/*/dist*
-backstage/mods/*
 
 */dist/
 

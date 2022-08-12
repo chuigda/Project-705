@@ -1,28 +1,31 @@
 {
    "compilerOptions": {
-     "module": "commonjs",
-     "noImplicitAny": true,
-     "removeComments": false,
-     "preserveConstEnums": true,
-     "strictNullChecks": true,
-     "sourceMap": true,
-     "lib": ["es2021"],
-     "target": "es2021",
-
-     "baseUrl": ".",
-     "outDir": "dist",
-
-     "paths": {
+      "module": "commonjs",
+      "noImplicitAny": true,
+      "removeComments": false,
+      "preserveConstEnums": true,
+      "strictNullChecks": true,
+      "sourceMap": true,
+      "lib": [
+         "es2021"
+      ],
+      "target": "es2021",
+      "baseUrl": ".",
+      "outDir": "dist",
+      "paths": {
          "@app/*": ["src/*"],
-         "@test/*": ["test/*"]
+         "@test/*": ["test/*"],
+         "@rulesets/*": ["rulesets/*"]
       }
    },
    "include": [
       "src",
-      "test"
+      "test",
+      "rulesets"
    ],
    "exclude": [
       "node_modules",
-      "**/*.spec.ts"
-   ],
+      "**/*.spec.ts",
+      "*.d.ts"
+   ]
 }

@@ -10,6 +10,9 @@ import { Startup } from '@app/ruleset/items/startup'
 import { compileRuleSet } from '@app/loader/blending'
 import { abort } from '@app/util/emergency'
 
+import coreRuleSet from '@rulesets/core_ruleset'
+import debugRuleSet from '@rulesets/debug_ruleset'
+
 export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {
       const mod = require(`${process.cwd()}/mods/${modName}`)
@@ -26,7 +29,7 @@ export class CompiledRuleSet {
    activityCategories: string[] = []
 
    events: Record<string, Event> = {}
-   modifiers: object // TODO(chuigda): modifier system rework = {}
+   modifiers: object = {} // TODO(chuigda): modifier system rework
    skills: Record<string, Skill> = {}
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
@@ -39,6 +42,19 @@ export class CompiledRuleSet {
 
 export function load(): CompiledRuleSet {
    const ret = new CompiledRuleSet()
+
+   if (process.env.SKIP_CORE_RULESET !== '1') {
+      try {
+         compileRuleSet(ret, coreRuleSet)
+         if (process.env.DEBUG === '1') {
+            console.info('[I] [load] debug mode enabled, also loading debug ruleset')
+            compileRuleSet(ret, debugRuleSet)
+         }
+      } catch (e) {
+         console.error(`[E] [load] error compiling core ruleset: ${e}`)
+         abort()
+      }
+   }
 
    const modList = require(`${process.cwd()}/mods/mods.json`)
    for (const modName of modList) {
@@ -56,5 +72,5 @@ export function load(): CompiledRuleSet {
       }
    }
 
-   return ret
+   return Object.freeze(ret)
 }

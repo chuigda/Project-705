@@ -1,4 +1,4 @@
-import { SkillCategory } from '../../ruleset'
+import { SkillCategory } from '@app/ruleset'
 
 const skillCategories: SkillCategory[] = [
    {

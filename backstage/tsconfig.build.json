@@ -1,16 +1,13 @@
 {
    "extends": "./tsconfig.json",
    "compilerOptions": {
-     "outDir": "dist",
-     "paths": {
-         "@app/*": ["src/*"]
+      "paths": {
+         "@app/*": ["src/*"],
+         "@rulesets/*": ["rulesets/*"]
       }
    },
    "include": [
-      "src/**/*"
-   ],
-   "exclude": [
-      "node_modules",
-      "**/*.spec.ts"
-   ],
+      "src",
+      "rulesets"
+   ]
 }

@@ -1,5 +1,4 @@
-import { GameContext } from '../../game_context'
-import { RuleSet } from '../../ruleset'
+import { RuleSet } from '@app/ruleset'
 
 const ruleSet: RuleSet = {
    ident: {
