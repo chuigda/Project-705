@@ -1,15 +1,25 @@
 import { CompiledRuleSet } from '@app/loader'
 import { SkillCategory } from '@app/ruleset/items/skill_category'
-import { Ident, mEventId, Scope } from '@app/base/uid'
+import { Ident, mDisplayItemId, mEventId, mTranslationKey, Scope } from '@app/base/uid'
 import {
    compileActivity,
    compileAscensionPerk,
-   compileEvent,
+   compileEvent, compileMaybeInlineEvent,
    compileSkill,
    compileStartup,
    compileTranslation
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
+import {
+   BubbleMessage, Button,
+   CustomScoreBoard,
+   CustomUI,
+   DialogBase,
+   Divider, Label,
+   Menu,
+   MenuItem,
+   UIItem
+} from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
@@ -102,6 +112,40 @@ export const compileEvents = buildCompileSeries(
    'compileEvents',
    compileEvent
 )
+
+export class CompiledCustomUI {
+   menus: Record<string, Menu>
+   dialogs: Record<string, DialogBase>
+   bubbles: Record<string, BubbleMessage>
+   scoreBoards: Record<string, CustomScoreBoard>
+}
+
+export function compileUIItem(scope: Scope, item: MenuItem | UIItem): MenuItem | UIItem {
+   if (item instanceof Divider) {
+      return item
+   } else if (item instanceof Label) {
+      return {
+         text: mTranslationKey(scope, item.text)
+      }
+   } else if (item instanceof Button) {
+      return {
+         ident: mDisplayItemId(scope, item.ident),
+         text: mTranslationKey(scope, item.text),
+         tooltip: mTranslationKey(scope, item.tooltip),
+         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
+      }
+   } else /* if (item instanceof Menu) */ {
+      return {
+         ident: mDisplayItemId(scope, item.ident),
+         text: mTranslationKey(scope, item.text),
+         tooltip: mTranslationKey(scope, item.tooltip),
+
+         children: item.children.map(child => compileUIItem(scope, child))
+      }
+   }
+}
+
+export function compileUI(compilation: CompiledRuleSet, scope: Scope, ui: CustomUI) {}
 
 export function compileTranslations(
    compilation: CompiledRuleSet,

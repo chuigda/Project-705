@@ -1,5 +1,5 @@
 import { Ident, MaybeTranslationKey } from '@app/base/uid'
-import { Event } from '@app/ruleset/items/event'
+import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export class Label {
    readonly text: MaybeTranslationKey
@@ -7,10 +7,10 @@ export class Label {
 
 export class Button {
    readonly ident: Ident
-   readonly text: string
-   readonly tooltip: string
+   readonly text: MaybeTranslationKey
+   readonly tooltip: MaybeTranslationKey
 
-   readonly events: Event[]
+   readonly events: MaybeInlineEvent[]
 }
 
 export class Divider {}
@@ -20,19 +20,18 @@ export type MenuItem = Button | Menu | Divider
 export class Menu {
    readonly ident: Ident
    readonly text: MaybeTranslationKey
-   readonly tooltip: string
+   readonly tooltip: MaybeTranslationKey
 
    readonly children: MenuItem[]
 }
 
 export class DialogBase {
    readonly ident: Ident
-   readonly uid: string
 
    readonly title: MaybeTranslationKey
    readonly text: MaybeTranslationKey
    readonly closable: boolean
-   readonly onCloseEvents?: Event[]
+   readonly onCloseEvents?: MaybeInlineEvent[]
 }
 
 export class SimpleDialog extends DialogBase {
@@ -79,4 +78,11 @@ export class CustomScoreBoard {
 
    readonly value?: MaybeTranslationKey
    readonly bind?: Ident
+}
+
+export class CustomUI {
+   menus?: Menu[]
+   dialogs?: DialogBase[]
+   bubbles?: BubbleMessage[]
+   scoreBoards?: CustomScoreBoard[]
 }

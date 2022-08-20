@@ -5,6 +5,7 @@ import { Startup } from '@app/ruleset/items/startup'
 import { Activity } from '@app/ruleset/items/activity'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
+import { CustomUI } from '@app/ruleset/items/ui'
 
 export * from '@app/base/uid'
 export * from '@app/ruleset/items/skill_category'
@@ -26,6 +27,7 @@ export interface RuleSet {
    readonly ascensionPerks?: AscensionPerk[]
    readonly events?: Event[]
    readonly translations?: Record<string, Record<string, string>>
+   readonly ui?: CustomUI
 
    readonly onRuleSetLoaded?: MaybeInlineEvent[]
 }
