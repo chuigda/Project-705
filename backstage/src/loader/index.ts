@@ -7,7 +7,7 @@ import { Skill } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Activity } from '@app/ruleset/items/activity'
 import { Startup } from '@app/ruleset/items/startup'
-import { compileRuleSet } from '@app/loader/blending'
+import { CompiledCustomUI, compileRuleSet } from '@app/loader/blending'
 import { abort } from '@app/util/emergency'
 
 import coreRuleSet from '@rulesets/core_ruleset'
@@ -34,6 +34,7 @@ export class CompiledRuleSet {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    startups: Record<string, Startup> = {}
+   ui: CompiledCustomUI = new CompiledCustomUI()
 
    translations: Record<string, Record<string, string>> = {}
 

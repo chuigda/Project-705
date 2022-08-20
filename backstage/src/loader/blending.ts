@@ -11,13 +11,13 @@ import {
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
 import {
-   BubbleMessage, Button,
+   BubbleMessage, Button, CustomDialog,
    CustomScoreBoard,
    CustomUI,
-   DialogBase,
+   DialogBase, DialogItem,
    Divider, Label,
    Menu,
-   MenuItem,
+   MenuItem, SimpleDialog,
    UIItem
 } from '@app/ruleset/items/ui'
 
@@ -114,10 +114,10 @@ export const compileEvents = buildCompileSeries(
 )
 
 export class CompiledCustomUI {
-   menus: Record<string, Menu>
-   dialogs: Record<string, DialogBase>
-   bubbles: Record<string, BubbleMessage>
-   scoreBoards: Record<string, CustomScoreBoard>
+   menus: Record<string, Menu> = {}
+   dialogs: Record<string, DialogBase> = {}
+   bubbles: Record<string, BubbleMessage> = {}
+   scoreBoards: Record<string, CustomScoreBoard> = {}
 }
 
 export function compileUIItem(scope: Scope, item: MenuItem | UIItem): MenuItem | UIItem {
@@ -145,7 +145,65 @@ export function compileUIItem(scope: Scope, item: MenuItem | UIItem): MenuItem |
    }
 }
 
-export function compileUI(compilation: CompiledRuleSet, scope: Scope, ui: CustomUI) {}
+export function compileDialog(scope: Scope, dialog: DialogBase): DialogBase {
+   function compileDialogBase(dialogBase: DialogBase): DialogBase {
+      return {
+         ident: mDisplayItemId(scope, dialogBase.ident),
+         title: mTranslationKey(scope, dialogBase.title),
+         text: mTranslationKey(scope, dialogBase.text),
+         closable: dialogBase.closable,
+         onCloseEvents: dialogBase.onCloseEvents?.map(event => compileMaybeInlineEvent(scope, event))
+      }
+   }
+
+   function compileDialogItem(dialogItem: DialogItem): DialogItem {
+      return {
+         ...dialogItem,
+         item: <UIItem>compileUIItem(scope, dialogItem.item)
+      }
+   }
+
+   if (dialog instanceof SimpleDialog) {
+      const ret: SimpleDialog = {
+         ...compileDialogBase(dialog),
+         options: dialog.options.map(option => <Button>compileUIItem(scope, option))
+      }
+      return ret
+   } else /* if (dialog instanceof CustomDialog) */ {
+      const ret: CustomDialog = {
+         ...compileDialogBase(dialog),
+         ...(<CustomDialog>dialog),
+         items: (<CustomDialog>dialog).items.map(compileDialogItem)
+      }
+      return ret
+   }
+}
+
+export function compileUI(compilation: CompiledRuleSet, scope: Scope, ui: CustomUI) {
+   if (ui.menus) {
+      for (const menu of ui.menus) {
+         const compiledMenu = <Menu>compileUIItem(scope, menu)
+         const ident = <string>compiledMenu.ident
+
+         if (compilation.ui.menus[ident]) {
+            console.warn(`[W] [compileUI] overwriting existing menu '${ident}'`)
+         }
+         compilation.ui.menus[ident] = compiledMenu
+      }
+   }
+
+   if (ui.dialogs) {
+      for (const dialog of ui.dialogs) {
+         const compiledDialog = compileDialog(scope, dialog)
+         const ident = <string>compiledDialog.ident
+
+         if (compilation.ui.dialogs[ident]) {
+            console.warn(`[W] [compileUI] overwriting existing dialog '${ident}'`)
+         }
+         compilation.ui.dialogs[ident] = dialog
+      }
+   }
+}
 
 export function compileTranslations(
    compilation: CompiledRuleSet,
