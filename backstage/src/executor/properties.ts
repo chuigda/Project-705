@@ -16,8 +16,8 @@ export function updatePlayerProperty(
 
    const opRef = { operator, value }
    const propertyPath = property.split('.')
-   let container: Record<string, any> = gameContext.events.playerPropertyUpdated
-   let propertyContainer: Record<string, any> = gameContext.player
+   let container: Record<string, any> = gameContext.state.events.playerPropertyUpdated
+   let propertyContainer: Record<string, any> = gameContext.state.player
    for (const pathPartIdx in propertyPath) {
       const pathPart = propertyPath[pathPartIdx]
       if (container.all) {

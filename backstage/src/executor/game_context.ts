@@ -75,12 +75,7 @@ export class GameContextEvents {
    timedEvents: TimedEvent[]
 }
 
-export class GameContext {
-   readonly ruleSet: CompiledRuleSet
-
-   scope?: Scope = undefined
-   scopeChain: Scope[] = []
-
+export class GameState {
    turns: number = 0
    player: PlayerStatus = new PlayerStatus()
 
@@ -91,7 +86,14 @@ export class GameContext {
    computedModifier?: object = undefined
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
+}
 
+export class GameContext {
+   readonly ruleSet: CompiledRuleSet
+   state: GameState
+
+   scope?: Scope = undefined
+   scopeChain: Scope[] = []
    eventChainCounter?: number = undefined
 
    constructor(ruleSet: CompiledRuleSet) {

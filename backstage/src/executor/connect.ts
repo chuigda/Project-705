@@ -47,31 +47,31 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
 
    switch (signal.signalType) {
       case 'turn_start':
-         gameContext.events.turnStart.add(eventId)
+         gameContext.state.events.turnStart.add(eventId)
          break
       case 'turn_over':
-         gameContext.events.turnOver.add(eventId)
+         gameContext.state.events.turnOver.add(eventId)
          break
       case 'skill': {
          const sig = <SkillSignal>signal
-         if (!(sig.skillId in gameContext.events.skillLearnt)) {
-            gameContext.events.skillLearnt[sig.skillId] = new Set()
+         if (!(sig.skillId in gameContext.state.events.skillLearnt)) {
+            gameContext.state.events.skillLearnt[sig.skillId] = new Set()
          }
-         gameContext.events.skillLearnt[sig.skillId].add(eventId)
+         gameContext.state.events.skillLearnt[sig.skillId].add(eventId)
          break
       }
       case 'activity': {
          const sig = <ActivitySignal>signal
-         if (!(sig.activityId in gameContext.events.activityPerformed)) {
-            gameContext.events.activityPerformed[sig.activityId] = new Set()
+         if (!(sig.activityId in gameContext.state.events.activityPerformed)) {
+            gameContext.state.events.activityPerformed[sig.activityId] = new Set()
          }
-         gameContext.events.activityPerformed[sig.activityId].add(eventId)
+         gameContext.state.events.activityPerformed[sig.activityId].add(eventId)
          break
       }
       case 'player': {
          const sig = <PlayerPropertyUpdatedSignal>signal
          const propertyPath = sig.property.split('.')
-         let container: any = gameContext.events.playerPropertyUpdated
+         let container: any = gameContext.state.events.playerPropertyUpdated
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
@@ -84,7 +84,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'turns': {
          const sig = <TurnsSignal>signal
-         gameContext.events.timedEvents.push({
+         gameContext.state.events.timedEvents.push({
             turn: sig.turns,
             eventId
          })
@@ -92,8 +92,8 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'count_down': {
          const sig = <TurnsSignal>signal
-         gameContext.events.timedEvents.push({
-            turn: sig.turns + gameContext.turns,
+         gameContext.state.events.timedEvents.push({
+            turn: sig.turns + gameContext.state.turns,
             eventId
          })
          break
@@ -101,10 +101,10 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       case 'event': {
          const sig = <EventSignal>signal
          const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
-         if (!gameContext.events.eventsTriggered[sourceEventId]) {
-            gameContext.events.eventsTriggered[sourceEventId] = new Set()
+         if (!gameContext.state.events.eventsTriggered[sourceEventId]) {
+            gameContext.state.events.eventsTriggered[sourceEventId] = new Set()
          }
-         gameContext.events.eventsTriggered[sourceEventId].add(eventId)
+         gameContext.state.events.eventsTriggered[sourceEventId].add(eventId)
          break
       }
       default:

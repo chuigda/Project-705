@@ -84,7 +84,7 @@ export function computeSkillPotential(gameContext: GameContext, skillPotential: 
       }
 
       return {
-         result: !!gameContext.player.skills[skillId],
+         result: !!gameContext.state.player.skills[skillId],
          skillId,
          skillName: skill.name
       }
@@ -103,7 +103,7 @@ export function computeSkillCost(gameContext: GameContext, skillCost: SkillCost)
    let totalDiffRatio = 0.0
    if (attributes) {
       for (const attrName in attributes) {
-         const attribute = gameContext.player.attributes[<keyof PlayerAttributes>attrName]
+         const attribute = gameContext.state.player.attributes[<keyof PlayerAttributes>attrName]
          const requiredAttribute = attributes[<keyof PlayerAttributesUpdate>(attrName)]
 
          if (requiredAttribute) {
@@ -152,7 +152,7 @@ export function computePotentialSkills(gameContext: GameContext) {
 
    const { skills } = gameContext.ruleSet
 
-   const { skills: learntSkills } = gameContext.player
+   const { skills: learntSkills } = gameContext.state.player
    for (const skill of Object.values(skills)) {
       const { ident, potential } = skill
       const identStr = <string>ident
@@ -174,14 +174,14 @@ export function computePotentialSkills(gameContext: GameContext) {
       if (result) {
          const cost = computeSkillCost(gameContext, skill.cost)
          console.debug(`[D] [computePotentialSkills] skill '${ident}' available, it costs: ${cost}`)
-         gameContext.computedSkills!.available[identStr] = { skill, cost }
+         gameContext.state.computedSkills!.available[identStr] = { skill, cost }
       } else {
          console.debug(`[D] [computePotentialSkills] skill '${ident}' not available`)
-         gameContext.computedSkills!.unavailable[identStr] = { skill, resultPieces }
+         gameContext.state.computedSkills!.unavailable[identStr] = { skill, resultPieces }
       }
    }
 
-   gameContext.computedSkills = {
+   gameContext.state.computedSkills = {
       available,
       unavailable
    }
@@ -189,14 +189,14 @@ export function computePotentialSkills(gameContext: GameContext) {
 
 export function recomputeSkillCosts(gameContext: GameContext) {
    const available: Record<string, AvailableSkill> = {}
-   for (const { skill } of Object.values(gameContext.computedSkills!.available)) {
+   for (const { skill } of Object.values(gameContext.state.computedSkills!.available)) {
       const { ident, cost } = skill
       const newCost = computeSkillCost(gameContext, cost)
       console.debug(`[D] [recomputeSkillCosts] skill '${ident}' costs ${newCost}`)
 
       available[<string>ident] = { skill, cost: newCost }
    }
-   gameContext.computedSkills!.available = available
+   gameContext.state.computedSkills!.available = available
 }
 
 export class UnavailableAscensionPerk {
@@ -214,7 +214,7 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
    const unavailable: Record<string, UnavailableAscensionPerk> = {}
 
    const { ascensionPerks } = gameContext.ruleSet
-   const { ascensionPerks: activatedAscensionPerks } = gameContext.player
+   const { ascensionPerks: activatedAscensionPerks } = gameContext.state.player
 
    for (const ascensionPerk of Object.values(ascensionPerks)) {
       const { ident, potential } = ascensionPerk

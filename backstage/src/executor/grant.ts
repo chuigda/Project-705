@@ -26,7 +26,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
    if (skillContent.activities) {
       for (const activity of skillContent.activities) {
          const absoluteActivityId = mActivityId(scope, activity)
-         gameContext.player.activities[absoluteActivityId] = gameContext.ruleSet.activities[absoluteActivityId]
+         gameContext.state.player.activities[absoluteActivityId] = gameContext.ruleSet.activities[absoluteActivityId]
       }
    }
 
@@ -38,7 +38,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
       popScope(gameContext)
    }
 
-   for (const eventIds of Object.values(gameContext.events.skillLearnt)) {
+   for (const eventIds of Object.values(gameContext.state.events.skillLearnt)) {
       for (const eventId of eventIds) {
          triggerEvent(gameContext, eventId, skillContent.ident)
       }
@@ -50,20 +50,20 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
 export function learnSkill(gameContext: GameContext, skill: Ident) {
    const scope = gameContext.scope!
    const skillId = mSkillId(scope, skill)
-   if (!gameContext.computedSkills!.available[skillId]) {
+   if (!gameContext.state.computedSkills!.available[skillId]) {
       console.error(`[E] [learnSkill] skill '${skillId}' is not available`)
       return
    }
 
-   if (gameContext.player.skills[skillId]) {
+   if (gameContext.state.player.skills[skillId]) {
       console.warn(`[W] [learnSkill] skill '${skillId}' has already been learnt, re-learning`)
    }
 
-   const { skill: skillContent, cost } = gameContext.computedSkills!.available[skillId]
-   delete gameContext.computedSkills!.available[skillId]
+   const { skill: skillContent, cost } = gameContext.state.computedSkills!.available[skillId]
+   delete gameContext.state.computedSkills!.available[skillId]
 
-   gameContext.player.skills[skillId] = skillContent
-   gameContext.player.skillPoints -= cost
+   gameContext.state.player.skills[skillId] = skillContent
+   gameContext.state.player.skillPoints -= cost
 
    executeSkillEffects(gameContext, skillContent)
 }
@@ -78,10 +78,10 @@ export function grantSkill(gameContext: GameContext, skill: Ident) {
       return
    }
 
-   if (gameContext.player.skills[skillId]) {
+   if (gameContext.state.player.skills[skillId]) {
       console.warn(`[W] [grantSkill] skill '${skillId}' has already been learnt, re-granting`)
    }
-   gameContext.player.skills[skillId] = skillContent
+   gameContext.state.player.skills[skillId] = skillContent
 
    executeSkillEffects(gameContext, skillContent)
 }

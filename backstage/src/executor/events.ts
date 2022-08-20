@@ -53,7 +53,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
          console.error(`[E] [triggerEvent] event '${eventId}' not found`)
       }
 
-      const hooks = gameContext.events.eventsTriggered[eventId]
+      const hooks = gameContext.state.events.eventsTriggered[eventId]
       for (const hook in hooks) {
          triggerEvent(gameContext, hook, event, [event, args])
       }
