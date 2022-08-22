@@ -1,4 +1,3 @@
-
 import { RuleSet } from '@app/ruleset'
 import skillCategories from './skill_categories'
 import activityCategories from './activity_categories'

@@ -17,6 +17,8 @@ import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/grant'
 import propertyFunctions from '@app/executor/properties'
 import variableFunctions from '@app/executor/variables'
+import { Button, CustomScoreBoard, Menu } from '@app/ruleset/items/ui'
+import { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -86,6 +88,17 @@ export class GameState {
    computedModifier?: object = undefined
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
+
+   customButtons: Button[]
+   customMenus: Menu[]
+   customScoreBoards: CustomScoreBoard[]
+
+   dialogs: SimpleDialog[]
+   bubbleMessages: BubbleMessage[]
+}
+
+export class UpdateTracker {
+   reset(): void {}
 }
 
 export class GameContext {
@@ -95,6 +108,7 @@ export class GameContext {
    scope?: Scope = undefined
    scopeChain: Scope[] = []
    eventChainCounter?: number = undefined
+   uiItemCounter: number = 0
 
    constructor(ruleSet: CompiledRuleSet) {
       this.ruleSet = ruleSet

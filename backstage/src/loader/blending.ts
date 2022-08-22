@@ -1,6 +1,6 @@
 import { CompiledRuleSet } from '@app/loader'
 import { SkillCategory } from '@app/ruleset/items/skill_category'
-import { Ident, mDisplayItemId, mEventId, mTranslationKey, Scope } from '@app/base/uid'
+import { Ident, mDisplayItemId, mEventId, mTranslationKey, mVarName, Scope } from '@app/base/uid'
 import {
    compileActivity,
    compileAscensionPerk,
@@ -11,14 +11,15 @@ import {
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
 import {
-   BubbleMessage, Button, CustomDialog,
+   BubbleMessage,
+   BubbleMessageTemplate,
+   Button,
    CustomScoreBoard,
-   CustomUI,
-   DialogBase, DialogItem,
+   CustomUI, DialogOption,
    Divider, Label,
    Menu,
-   MenuItem, SimpleDialog,
-   UIItem
+   MenuItem,
+   SimpleDialogTemplate
 } from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
@@ -115,12 +116,14 @@ export const compileEvents = buildCompileSeries(
 
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}
-   dialogs: Record<string, DialogBase> = {}
-   bubbles: Record<string, BubbleMessage> = {}
+   buttons: Record<string, Button> = {}
    scoreBoards: Record<string, CustomScoreBoard> = {}
+
+   dialogTemplates: Record<string, SimpleDialogTemplate> = {}
+   bubbleMessageTemplates: Record<string, BubbleMessageTemplate> = {}
 }
 
-export function compileUIItem(scope: Scope, item: MenuItem | UIItem): MenuItem | UIItem {
+export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
    if (item instanceof Divider) {
       return item
    } else if (item instanceof Label) {
@@ -140,68 +143,132 @@ export function compileUIItem(scope: Scope, item: MenuItem | UIItem): MenuItem |
          text: mTranslationKey(scope, item.text),
          tooltip: mTranslationKey(scope, item.tooltip),
 
-         children: item.children.map(child => compileUIItem(scope, child))
+         children: item.children.map(child => compileMenuItem(scope, child))
       }
    }
 }
 
-export function compileDialog(scope: Scope, dialog: DialogBase): DialogBase {
-   function compileDialogBase(dialogBase: DialogBase): DialogBase {
-      return {
-         ident: mDisplayItemId(scope, dialogBase.ident),
-         title: mTranslationKey(scope, dialogBase.title),
-         text: mTranslationKey(scope, dialogBase.text),
-         closable: dialogBase.closable,
-         onCloseEvents: dialogBase.onCloseEvents?.map(event => compileMaybeInlineEvent(scope, event))
-      }
-   }
-
-   function compileDialogItem(dialogItem: DialogItem): DialogItem {
-      return {
-         ...dialogItem,
-         item: <UIItem>compileUIItem(scope, dialogItem.item)
-      }
-   }
-
-   if (dialog instanceof SimpleDialog) {
-      const ret: SimpleDialog = {
-         ...compileDialogBase(dialog),
-         options: dialog.options.map(option => <Button>compileUIItem(scope, option))
-      }
-      return ret
-   } else /* if (dialog instanceof CustomDialog) */ {
-      const ret: CustomDialog = {
-         ...compileDialogBase(dialog),
-         ...(<CustomDialog>dialog),
-         items: (<CustomDialog>dialog).items.map(compileDialogItem)
-      }
-      return ret
+export function compileScoreBoard(scope: Scope, scoreboard: CustomScoreBoard): CustomScoreBoard {
+   return {
+      ident: mDisplayItemId(scope, scoreboard.ident),
+      tooltip: mTranslationKey(scope, scoreboard.tooltip),
+      color: scoreboard.color,
+      value: scoreboard.value ? mTranslationKey(scope, scoreboard.value) : undefined,
+      bind: scoreboard.bind ? mVarName(scope, scoreboard.bind) : undefined
    }
 }
+
+export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialogTemplate): SimpleDialogTemplate {
+   function compileDialogOption(option: DialogOption): DialogOption {
+      return {
+         ...option,
+
+         text: mTranslationKey(scope, option.text),
+         tooltip: mTranslationKey(scope, option.tooltip),
+      }
+   }
+
+   return {
+      ident: mDisplayItemId(scope, template.ident),
+      title: mTranslationKey(scope, template.title),
+      text: mTranslationKey(scope, template.text),
+      options: template.options.map(compileDialogOption)
+   }
+}
+
+export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessage) : BubbleMessageTemplate {
+   return {
+      ident: mDisplayItemId(scope, template.ident),
+      icon: template.icon,
+      tooltip: mTranslationKey(scope, template.tooltip),
+      linkedDialog: mDisplayItemId(scope, template.tooltip)
+   }
+}
+
+function buildCompileUISeries<T extends HasIdent>(
+   itemName: string,
+   seriesName: 'scoreBoards' | 'dialogTemplates' | 'bubbleMessageTemplates',
+   fnName: string,
+   compileSingleFn: CompileSingleFunction<T>
+) : CompileFunction<T> {
+   return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
+      for (const item of series) {
+         const compiledItem = compileSingleFn(scope, item)
+         const ident = <string>compiledItem.ident
+
+         const dest = <Record<string, T>><unknown>(compilation.ui[seriesName])
+         if (dest[ident]) {
+            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
+         } else {
+            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
+         }
+
+         // TODO(chuigda): implement "blending"
+         dest[ident] = item
+      }
+   }
+}
+
+export const compileScoreBoards = buildCompileUISeries(
+   'score board',
+   'scoreBoards',
+   'compileScoreBoard',
+   compileScoreBoard
+)
+
+export const compileDialogTemplates = buildCompileUISeries(
+   'dialog template',
+   'dialogTemplates',
+   'compileSimpleDialogTemplate',
+   compileSimpleDialogTemplate
+)
+
+export const compileBubbleMessageTemplates = buildCompileUISeries(
+   'bubble message template',
+   'bubbleMessageTemplates',
+   'compileBubbleMessageTemplate',
+   compileBubbleMessageTemplate
+)
 
 export function compileUI(compilation: CompiledRuleSet, scope: Scope, ui: CustomUI) {
    if (ui.menus) {
       for (const menu of ui.menus) {
-         const compiledMenu = <Menu>compileUIItem(scope, menu)
+         const compiledMenu = <Menu>compileMenuItem(scope, menu)
          const ident = <string>compiledMenu.ident
 
          if (compilation.ui.menus[ident]) {
             console.warn(`[W] [compileUI] overwriting existing menu '${ident}'`)
+         } else {
+            console.warn(`[I] [compileUI] compiled '${ident}'`)
          }
          compilation.ui.menus[ident] = compiledMenu
       }
    }
 
-   if (ui.dialogs) {
-      for (const dialog of ui.dialogs) {
-         const compiledDialog = compileDialog(scope, dialog)
-         const ident = <string>compiledDialog.ident
+   if (ui.buttons) {
+      for (const button of ui.buttons) {
+         const compiledButton = <Button>compileMenuItem(scope, button)
+         const ident = <string>compiledButton.ident
 
-         if (compilation.ui.dialogs[ident]) {
-            console.warn(`[W] [compileUI] overwriting existing dialog '${ident}'`)
+         if (compilation.ui.buttons[ident]) {
+            console.warn(`[W] [compileUI] overwriting existing button '${ident}'`)
+         } else {
+            console.warn(`[I] [compileUI] compiled '${ident}'`)
          }
-         compilation.ui.dialogs[ident] = dialog
+         compilation.ui.buttons[ident] = compiledButton
       }
+   }
+
+   if (ui.scoreBoards) {
+      compileScoreBoards(compilation, scope, ui.scoreBoards)
+   }
+
+   if (ui.dialogTemplates) {
+      compileDialogTemplates(compilation, scope, ui.dialogTemplates)
+   }
+
+   if (ui.bubbleMessageTemplates) {
+      compileBubbleMessageTemplates(compilation, scope, ui.bubbleMessageTemplates)
    }
 }
 
@@ -238,6 +305,7 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
       ascensionPerks,
       events,
       translations,
+      ui,
       onRuleSetLoaded
    } = ruleSet
 
@@ -271,6 +339,10 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
 
    if (translations) {
       compileTranslations(compilation, scope, translations)
+   }
+
+   if (ui) {
+      compileUI(compilation, scope, ui)
    }
 
    if (onRuleSetLoaded) {

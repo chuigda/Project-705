@@ -25,56 +25,38 @@ export class Menu {
    readonly children: MenuItem[]
 }
 
-export class DialogBase {
+export class DialogOption {
+   readonly optionKey: string
+
+   readonly text: MaybeTranslationKey
+   readonly tooltip: MaybeTranslationKey
+   readonly danger: boolean
+   readonly onClickEvents: MaybeInlineEvent[]
+}
+
+export class SimpleDialogTemplate {
    readonly ident: Ident
 
    readonly title: MaybeTranslationKey
    readonly text: MaybeTranslationKey
-   readonly closable: boolean
-   readonly onCloseEvents?: MaybeInlineEvent[]
-}
-
-export class SimpleDialog extends DialogBase {
-   readonly options: Button[]
-}
-
-export type UIItem = Button | Menu | Label
-
-export class DialogItem {
-   readonly item: UIItem
-
-   readonly row: number
-   readonly col: number
-   readonly width: number
-   readonly height: number
-}
-
-export class CustomDialog extends DialogBase {
-   readonly width: number
-   readonly height: number
-   readonly rows: number
-   readonly columns: number
-
-   readonly items: DialogItem[]
+   readonly options: DialogOption[]
 }
 
 // TODO(chuigda): add more when we have gfx features
-type BubbleMessageIcon = 'normal' | 'important'
+export type BubbleMessageIcon = 'normal' | 'important'
 
-export class BubbleMessage {
+export class BubbleMessageTemplate {
    readonly ident: Ident
-   readonly uid: string
 
    readonly icon: BubbleMessageIcon
    readonly tooltip: MaybeTranslationKey
-
-   readonly dialog?: Ident
+   readonly linkedDialog: Ident
 }
 
 export class CustomScoreBoard {
    readonly ident: Ident
    readonly tooltip: MaybeTranslationKey
-   readonly color: MaybeTranslationKey
+   readonly color: string
 
    readonly value?: MaybeTranslationKey
    readonly bind?: Ident
@@ -82,7 +64,9 @@ export class CustomScoreBoard {
 
 export class CustomUI {
    menus?: Menu[]
-   dialogs?: DialogBase[]
-   bubbles?: BubbleMessage[]
+   buttons?: Button[]
    scoreBoards?: CustomScoreBoard[]
+
+   dialogTemplates?: SimpleDialogTemplate[]
+   bubbleMessageTemplates?: BubbleMessageTemplate[]
 }

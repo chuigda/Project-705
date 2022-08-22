@@ -46,6 +46,7 @@ export function load(): CompiledRuleSet {
 
    if (process.env.SKIP_CORE_RULESET !== '1') {
       try {
+         console.info('[I] [load] loading core ruleset')
          compileRuleSet(ret, coreRuleSet)
          if (process.env.DEBUG === '1') {
             console.info('[I] [load] debug mode enabled, also loading debug ruleset')

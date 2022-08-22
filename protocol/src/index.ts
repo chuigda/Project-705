@@ -8,7 +8,7 @@ export interface Button {
 }
 
 export interface SimpleDialog {
-   ident: string
+   uid: string
 
    title: MaybeTranslationKey
    text: MaybeTranslationKey
