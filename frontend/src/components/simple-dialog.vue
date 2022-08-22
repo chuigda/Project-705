@@ -1,43 +1,44 @@
 <template>
    <n-modal
-      close-on-esc="false"
-      mask-closable="false"
-      :closable="dialogInfo?.closable || true"
+      preset="dialog"
+      :title="dialogInfo.title"
+      :closable="dialogInfo.closable"
+      :close-on-esc="false"
+      :mask-closable="false"
+      :show="display"
+      :auto-focus="false"
       @close="onClose"
    >
-      <n-card
-         style="width: 600px"
-         :title="translate(dialogInfo?.title)"
-         :bordered="false"
-         size="huge"
-         role="dialog"
-         aria-modal="true"
-      >
          <n-text type="primary">
             {{ translate(dialogInfo?.text) }}
          </n-text>
 
-         <div style="display: flex; flex-direction: column; column-gap: 1em">
+         <div style="display: flex; flex-direction: column; row-gap: 1em; margin-top: 1em">
             <n-button
                v-for="button in dialogInfo?.options"
+               type="primary"
+               strong
                :key="button.ident"
-               :text="translate(button.text)"
                :title="translate(button.tooltip)"
+               :bordered="true"
                @click="onClick(button.ident)"
-            />
+            >
+               {{ translate(button.text) }}
+            </n-button>
          </div>
-      </n-card>
    </n-modal>
 </template>
 
 <script setup lang="ts">
 
-import { defineExpose } from 'vue'
-import { SimpleDialog } from '@protocol/index'
+import { ref } from 'vue'
+import { NModal, NText, NButton } from 'naive-ui'
 
+import { SimpleDialog } from '@protocol/index'
 import { translate } from '@app/util/translation'
 
 const { dialogInfo } = defineProps<{ dialogInfo: SimpleDialog }>()
+const display = ref(true)
 
 const emit = defineEmits<{
    (event: 'click', dialogId: string, buttonId: string): void,
@@ -46,11 +47,13 @@ const emit = defineEmits<{
 
 function onClick(buttonId: string) {
    const dialogId = dialogInfo.ident || ''
+   display.value = false
    emit('click', dialogId, buttonId)
 }
 
 function onClose() {
    const dialogId = dialogInfo.ident || ''
+   display.value = false
    emit('closed', dialogId)
 }
 
