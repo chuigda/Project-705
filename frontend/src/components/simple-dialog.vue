@@ -33,10 +33,10 @@
 
 <script setup lang="ts">
 
-import { Ref, ref } from 'vue'
-import { SimpleDialog } from '../api/items'
+import { defineExpose, Ref, ref } from 'vue'
+import { SimpleDialog } from '@protocol/index'
 
-import { translate } from '../util/translation'
+import { translate } from '@app/util/translation'
 
 const dialogInfo: Ref<SimpleDialog | null> = ref(null as SimpleDialog | null)
 const display = ref(false)
@@ -50,6 +50,10 @@ const emit = defineEmits<{
 function open(dialog: SimpleDialog) {
    dialogInfo.value = dialog
    display.value = true
+}
+
+function changeState(dialog: SimpleDialog) {
+   dialogInfo.value = dialog
 }
 
 function onClick(buttonId: string) {
@@ -67,6 +71,8 @@ function onClose() {
 }
 
 defineExpose(open)
+defineExpose(changeState)
+
 </script>
 
 <style>
