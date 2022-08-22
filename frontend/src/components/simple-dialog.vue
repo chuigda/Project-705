@@ -9,23 +9,23 @@
       :auto-focus="false"
       @close="onClose"
    >
-         <n-text type="primary">
-            {{ translate(dialogInfo?.text) }}
-         </n-text>
+      <n-text type="primary">
+         {{ translate(dialogInfo?.text) }}
+      </n-text>
 
-         <div style="display: flex; flex-direction: column; row-gap: 1em; margin-top: 1em">
-            <n-button
-               v-for="button in dialogInfo?.options"
-               type="primary"
-               strong
-               :key="button.ident"
-               :title="translate(button.tooltip)"
-               :bordered="true"
-               @click="onClick(button.ident)"
-            >
-               {{ translate(button.text) }}
-            </n-button>
-         </div>
+      <div style="display: flex; flex-direction: column; row-gap: 1em; margin-top: 1em">
+         <n-button
+            v-for="button in dialogInfo?.options"
+            :key="button.ident"
+            type="primary"
+            strong
+            :title="translate(button.tooltip)"
+            :bordered="true"
+            @click="onClick(button.ident)"
+         >
+            {{ translate(button.text) }}
+         </n-button>
+      </div>
    </n-modal>
 </template>
 

@@ -1,0 +1,47 @@
+{
+   "extends": [
+      "eslint:recommended",
+      "plugin:vue/vue3-recommended",
+      "@vue/eslint-config-typescript",
+      "@vue/eslint-config-typescript/recommended"
+   ],
+   "rules": {
+      "indent": "off",
+      "no-console": "off",
+      "semi": ["error", "never"],
+      "no-restricted-syntax": "off",
+      "comma-dangle": "off",
+      "class-methods-use-this": "off",
+      "arrow-parens": "off",
+      "no-continue": "off",
+      "no-else-return": "off",
+      "no-return-await": "off",
+      "quote-props": "off",
+      "global-require": "off",
+      "object-curly-newline": "off",
+      "no-underscore-dangle": "off",
+      "no-param-reassign": "off",
+      "guard-for-in": "off",
+      "operator-linebreak": "off",
+      "lines-between-class-members": "off",
+      "max-classes-per-file": "off",
+      "no-use-before-define": "off",
+      "max-len": ["error", { "code": 120 }],
+      "default-case": "off", // since we have TypeScript, this could be non-necessary
+
+      "import/extensions": "off",
+      "import/no-dynamic-require": "off",
+      "import/prefer-default-export": "off",
+      "import/no-cycle": "off",
+
+      "@typescript-eslint/indent": ["error", 3],
+      "vue/html-indent": ["error", 3],
+      "vue/multi-word-component-names": "off",
+      "@typescript-eslint/no-var-requires": "off",
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/no-empty-function": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-non-null-assertion": "off"
+   }
+}

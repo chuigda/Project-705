@@ -1,3 +1,4 @@
+
 let translation: Record<string, string> | null = null
 
 export async function initTranslation(lang: string) {
