@@ -98,6 +98,12 @@ export class GameState {
 }
 
 export class UpdateTracker {
+   playerStatus: boolean = false
+   modifiers: boolean = false
+   variables: boolean = false
+   skills: boolean = false
+   ascensionPerks: boolean = false
+
    reset(): void {}
 }
 

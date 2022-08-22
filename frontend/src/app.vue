@@ -20,11 +20,10 @@ const dialogInfo = {
       {
          ident: '@cnpr:core:ap:example_button2',
          text: '理塘丁真',
-         tooltip: '到达世界最高城，理塘！太美丽啦理塘！\n哎呀这不是丁真吗？还是看看远处的雪山吧家人们。'
+         tooltip: '小镇做题家们怎么可能拥有丁真那样野性而纯真的眼神呢？'
       }
    ]
 }
-
 </script>
 
 <style scoped>

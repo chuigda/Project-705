@@ -11,7 +11,6 @@ import {
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
 import {
-   BubbleMessage,
    BubbleMessageTemplate,
    Button,
    CustomScoreBoard,
@@ -176,7 +175,7 @@ export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialog
    }
 }
 
-export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessage) : BubbleMessageTemplate {
+export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessageTemplate) : BubbleMessageTemplate {
    return {
       ident: mDisplayItemId(scope, template.ident),
       icon: template.icon,

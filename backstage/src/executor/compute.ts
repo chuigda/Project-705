@@ -219,7 +219,7 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
    for (const ascensionPerk of Object.values(ascensionPerks)) {
       const { ident, potential } = ascensionPerk
       const identStr = <string>ident
-      if (ascensionPerks[identStr]) {
+      if (activatedAscensionPerks[identStr]) {
          console.info(`[I] [computePotentialAscensionPerks] skipping already activated ascension perk: '${ident}'`)
          continue
       }
