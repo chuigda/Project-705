@@ -1,5 +1,8 @@
 import { createApp } from 'vue'
 import './style.css'
-import App from './App.vue'
+import App from './app.vue'
+import {initTranslation} from "./util/translation";
 
-createApp(App).mount('#app')
+initTranslation('zh_cn').then(() => {
+   createApp(App).mount('#app')
+})
