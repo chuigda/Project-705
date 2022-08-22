@@ -2,7 +2,6 @@
    <n-modal
       close-on-esc="false"
       mask-closable="false"
-      :show="display"
       :closable="dialogInfo?.closable || true"
       @close="onClose"
    >
@@ -33,45 +32,29 @@
 
 <script setup lang="ts">
 
-import { defineExpose, Ref, ref } from 'vue'
+import { defineExpose } from 'vue'
 import { SimpleDialog } from '@protocol/index'
 
 import { translate } from '@app/util/translation'
 
-const dialogInfo: Ref<SimpleDialog | null> = ref(null as SimpleDialog | null)
-const display = ref(false)
+const { dialogInfo } = defineProps<{ dialogInfo: SimpleDialog }>()
 
 const emit = defineEmits<{
    (event: 'click', dialogId: string, buttonId: string): void,
    (event: 'closed', dialogId: string): void
 }>()
 
-
-function open(dialog: SimpleDialog) {
-   dialogInfo.value = dialog
-   display.value = true
-}
-
-function changeState(dialog: SimpleDialog) {
-   dialogInfo.value = dialog
-}
-
 function onClick(buttonId: string) {
-   const dialogId = dialogInfo.value?.ident || ''
+   const dialogId = dialogInfo.ident || ''
    emit('click', dialogId, buttonId)
 }
 
 function onClose() {
-   const dialogId = dialogInfo.value?.ident || ''
-
-   dialogInfo.value = null
-   display.value = false
-
+   const dialogId = dialogInfo.ident || ''
    emit('closed', dialogId)
 }
 
 defineExpose(open)
-defineExpose(changeState)
 
 </script>
 

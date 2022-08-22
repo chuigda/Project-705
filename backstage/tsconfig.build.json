@@ -3,7 +3,8 @@
    "compilerOptions": {
       "paths": {
          "@app/*": ["src/*"],
-         "@rulesets/*": ["rulesets/*"]
+         "@rulesets/*": ["rulesets/*"],
+         "@protocol/*": ["../protocol/*"]
       }
    },
    "include": [
