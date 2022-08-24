@@ -1,28 +1,41 @@
 import express = require('express')
-import serverStore from '@app/server/store'
-import ruleSet from '@app/server/ruleset'
+import epInit from './endpoints/init'
+import epNextTurn from './endpoints/next_turn'
+import epGetSnapshot from './endpoints/snapshot'
+import epGetTranslation from './endpoints/translation'
+
+const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
+
+function respondOrErr<T>(resp: any, thing: T | undefined, code: number = 200, msg: string = '') {
+   resp.status(code).json({
+      success: !!thing,
+      msg: msg || '',
+      result: thing || null
+   })
+}
 
 function applicationStart() {
    const app = express()
 
-   app.post('/api/init', (req, res) => {
-      const accessToken = req.header('X-Fe-Access-Token')
-      const context = serverStore.initGame(accessToken)
-      res.json(context)
+   app.post('/api/newGame', (req, res) => {
+      // const accessToken = req.header(ACCESS_TOKEN_HEADER)
+      respondOrErr(res, epInit())
+   })
+
+   app.get('/api/snapshot', (req, res) => {
+      const accessToken = req.header(ACCESS_TOKEN_HEADER)
+      const ctx = epGetSnapshot(accessToken)
+      respondOrErr(res, ctx, 404, 'game not found')
+   })
+
+   app.post('/api/nextTurn', (req, res) => {
+      const accessToken = req.header(ACCESS_TOKEN_HEADER)
+      const ctx = epNextTurn(accessToken)
+      respondOrErr(res, ctx, 404, 'game not found')
    })
 
    app.get('/api/translation', (req, res) => {
-      const { query } = req
-      const { lang } = query
-
-      if (lang && typeof lang === 'string') {
-         res.json({
-            success: true,
-            result: ruleSet.translations[lang] || {}
-         })
-      } else {
-         res.sendStatus(400)
-      }
+      respondOrErr(res, epGetTranslation(req.query.lang), 400, 'no such lang')
    })
 
    app.listen(3000, () => console.log('application started'))
