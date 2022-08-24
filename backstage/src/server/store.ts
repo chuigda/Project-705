@@ -7,12 +7,8 @@ import ruleSet from '@app/server/ruleset'
 class ServerStore {
    gameContexts: Record<string, GameContext> = {}
 
-   initGame(accessToken?: string): GameContext {
-      if (!accessToken) {
-         accessToken = uuid()
-      }
-
-      let context = this.gameContexts[accessToken]
+   initGame(accessToken: string): GameContext {
+      let context = this.getGame(accessToken)
       if (context) {
          return context
       }
@@ -23,6 +19,10 @@ class ServerStore {
       }
 
       return context
+   }
+
+   getGame(accessToken: string): GameContext | undefined {
+      return this.gameContexts[accessToken]
    }
 }
 
