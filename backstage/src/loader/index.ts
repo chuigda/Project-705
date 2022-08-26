@@ -24,6 +24,8 @@ export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    }
 }
 
+export type Translation = Record<string, string>
+
 export class CompiledRuleSet {
    skillCategories: SkillCategory[] = []
    activityCategories: string[] = []
@@ -36,7 +38,7 @@ export class CompiledRuleSet {
    startups: Record<string, Startup> = {}
    ui: CompiledCustomUI = new CompiledCustomUI()
 
-   translations: Record<string, Record<string, string>> = {}
+   translations: Record<string, Translation> = {}
 
    onRuleSetLoaded: MaybeInlineEvent[] = []
 }

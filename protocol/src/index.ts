@@ -1,5 +1,7 @@
 export type ITranslationKey = string
 
+export type ITranslation = Record<string, string>
+
 export interface IPlayerAttributes {
    strength: number
    intelligence: number
