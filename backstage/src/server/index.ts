@@ -1,8 +1,10 @@
 import express = require('express')
-import epInit from './endpoints/init'
-import epNextTurn from './endpoints/next_turn'
-import epGetSnapshot from './endpoints/snapshot'
-import epGetTranslation from './endpoints/translation'
+import { NextFunction, Request, Response } from 'express'
+
+import serverStore from '@app/server/store'
+import epGetTranslation from '@app/server/endpoints/translation'
+import { GameContext } from '@app/executor/game_context'
+import { IResponse } from '@protocol/src'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 
@@ -14,29 +16,50 @@ function respondOrErr<T>(resp: any, thing: T | undefined, code: number = 200, ms
    })
 }
 
+function verifyGameContext<R>(
+   req: Request,
+   res: Response<IResponse<R>, { gameContext: GameContext }>,
+   next: NextFunction
+) {
+   const accessToken = req.header(ACCESS_TOKEN_HEADER)
+   if (!accessToken) {
+      res.status(401).json({
+         success: false,
+         message: 'not logged in', // TODO(chuigda): use translation keys
+      })
+      return
+   }
+
+   const gameContext = serverStore.getGame(accessToken)
+   if (!gameContext) {
+      res.status(401).json({
+         success: false,
+         message: 'game not found' // TODO(chuigda): use translation keys
+      })
+      return
+   }
+
+   res.locals.gameContext = gameContext
+   next()
+}
+
 function applicationStart() {
    const app = express()
 
    app.post('/api/newGame', (req, res) => {
       // const accessToken = req.header(ACCESS_TOKEN_HEADER)
-      respondOrErr(res, epInit())
+      // respondOrErr(res, epInit())
    })
 
-   app.get('/api/snapshot', (req, res) => {
-      const accessToken = req.header(ACCESS_TOKEN_HEADER)
-      const ctx = epGetSnapshot(accessToken)
-      respondOrErr(res, ctx, 404, 'game not found')
+   app.get('/api/snapshot', verifyGameContext, (req, res) => {
+      // TODO
    })
 
    app.post('/api/nextTurn', (req, res) => {
-      const accessToken = req.header(ACCESS_TOKEN_HEADER)
-      const ctx = epNextTurn(accessToken)
-      respondOrErr(res, ctx, 404, 'game not found')
+      // TODO
    })
 
-   app.get('/api/translation', (req, res) => {
-      respondOrErr(res, epGetTranslation(req.query.lang), 400, 'no such lang')
-   })
+   app.get('/api/translation', epGetTranslation)
 
    app.listen(3000, () => console.log('application started'))
 }

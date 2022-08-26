@@ -46,6 +46,7 @@
       "import/no-dynamic-require": "off",
       "import/prefer-default-export": "off",
       "import/no-cycle": "off",
+      "import/no-extraneous-dependencies": "off",
 
       "@typescript-eslint/indent": ["error", 3],
       "@typescript-eslint/no-var-requires": "off",

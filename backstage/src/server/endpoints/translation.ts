@@ -1,8 +1,18 @@
 import ruleSet from '@app/server/ruleset'
+import { Request, Response } from 'express'
 
-export default function epGetTranslation(lang: any): Record<string, string> | undefined {
+export default function epGetTranslation(req: Request, res: Response) {
+   const { lang } = req.query
    if (lang && typeof lang === 'string') {
-      return ruleSet.translations[lang] || {}
+      res.json({
+         success: true,
+         message: 'success', // TODO(chuigda): use translation keys
+         result: ruleSet.translations[lang] || {}
+      })
+   } else {
+      res.status(400).json({
+         success: false,
+         message: 'invalid language'
+      })
    }
-   return undefined
 }

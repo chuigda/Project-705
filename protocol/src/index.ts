@@ -152,3 +152,16 @@ export interface IGameState {
    computedSkills?: IComputedSkills
    computedAscensionPerks?: IComputedAscensionPerks
 }
+
+export interface IResponseSuccess<R> {
+   success: true
+   message: ITranslationKey
+   result: R
+}
+
+export interface IResponseFail<R> {
+   success: false
+   message: ITranslationKey
+}
+
+export type IResponse<R> = IResponseSuccess<R> | IResponseFail<R>
