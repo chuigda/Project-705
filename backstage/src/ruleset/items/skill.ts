@@ -11,7 +11,7 @@ export class SkillCost {
 }
 
 export class SkillOutput {
-   readonly attributes?: PlayerAttributesUpdate
+   readonly attributes: PlayerAttributesUpdate
 }
 
 export class Skill extends ItemBase {

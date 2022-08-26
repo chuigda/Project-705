@@ -33,6 +33,7 @@ export function updatePlayerProperty(
    }
    const lastPropertyPath = propertyPath[propertyPath.length - 1]
 
+   // TODO(chuigda): 激活 AttributeEvents::all 和 PlayerPropertyUpdatedEvents::all 中的事件
    if (!container) {
       console.warn(`[E] [updatePlayerProperty] invalid property path: '${property}'`)
       return
@@ -63,7 +64,7 @@ export function updatePlayerProperty(
       propertyContainer[lastPropertyPath] = 0
    }
 
-   gameContext.updateTracker.player.basicAttributes = true
+   gameContext.updateTracker.player.properties = true
 }
 
 export default {

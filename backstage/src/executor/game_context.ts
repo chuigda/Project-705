@@ -98,7 +98,7 @@ export class GameState {
 }
 
 export class PlayerStatusUpdateTracker {
-   basicAttributes: boolean = false
+   properties: boolean = false
 
    skills: boolean = false
    activities: boolean = false
