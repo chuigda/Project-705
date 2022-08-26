@@ -63,7 +63,7 @@ export function updatePlayerProperty(
       propertyContainer[lastPropertyPath] = 0
    }
 
-   // TODO(chuigda): 记录 UI 更新以备使用
+   gameContext.updateTracker.player.basicAttributes = true
 }
 
 export default {

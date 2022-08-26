@@ -97,20 +97,55 @@ export class GameState {
    bubbleMessages: BubbleMessage[]
 }
 
+export class PlayerStatusUpdateTracker {
+   basicAttributes: boolean = false
+
+   skills: boolean = false
+   activities: boolean = false
+   ascensionPerks: boolean = false
+}
+
 export class UpdateTracker {
-   playerStatus: boolean = false
+   player: PlayerStatusUpdateTracker = new PlayerStatusUpdateTracker()
+
    modifiers: boolean = false
    variables: boolean = false
-   skills: boolean = false
-   ascensionPerks: boolean = false
 
-   reset(): void {}
+   computedModifiers: boolean = false
+   computedSkills: boolean = false
+   computedAscensionPerks: boolean = false
+
+   customButtons: boolean
+   customMenus: boolean
+   customScoreBoards: boolean
+
+   dialogs: boolean
+   bubbleMessages: boolean
+
+   reset(): void {
+      this.player = new PlayerStatusUpdateTracker()
+
+      this.modifiers = false
+      this.variables = false
+
+      this.computedModifiers = false
+      this.computedSkills = false
+      this.computedAscensionPerks = false
+
+      this.customButtons = false
+      this.customMenus = false
+      this.customScoreBoards = false
+
+      this.dialogs = false
+      this.bubbleMessages = false
+   }
 }
 
 export class GameContext {
    readonly ruleSet: CompiledRuleSet
    state: GameState
 
+   updateTracker: UpdateTracker = new UpdateTracker()
    scope?: Scope = undefined
    scopeChain: Scope[] = []
    eventChainCounter?: number = undefined

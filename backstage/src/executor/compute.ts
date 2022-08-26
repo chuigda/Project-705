@@ -185,6 +185,7 @@ export function computePotentialSkills(gameContext: GameContext) {
       available,
       unavailable
    }
+   gameContext.updateTracker.computedSkills = true
 }
 
 export function recomputeSkillCosts(gameContext: GameContext) {
@@ -197,6 +198,7 @@ export function recomputeSkillCosts(gameContext: GameContext) {
       available[<string>ident] = { skill, cost: newCost }
    }
    gameContext.state.computedSkills!.available = available
+   gameContext.updateTracker.computedSkills = true
 }
 
 export class UnavailableAscensionPerk {
@@ -238,6 +240,8 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
          unavailable[identStr] = { ascensionPerk, resultPieces }
       }
    }
+
+   gameContext.updateTracker.computedAscensionPerks = true
 }
 
 export default {

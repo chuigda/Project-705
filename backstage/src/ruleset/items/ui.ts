@@ -50,7 +50,7 @@ export class BubbleMessageTemplate {
 
    readonly icon: BubbleMessageIcon
    readonly tooltip: MaybeTranslationKey
-   readonly linkedDialog: Ident
+   readonly linkedDialog: Ident | SimpleDialogTemplate
 }
 
 export class CustomScoreBoard {

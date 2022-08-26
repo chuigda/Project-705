@@ -8,6 +8,8 @@ import { updatePlayerProperty } from '@app/executor/properties'
 function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
    const scope = gameContext.scope!
 
+   gameContext.updateTracker.player.skills = true
+
    if (skillContent.output) {
       let dimension: keyof PlayerAttributes
       if (skillContent.output && skillContent.output.attributes) {
@@ -24,6 +26,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
    }
 
    if (skillContent.activities) {
+      gameContext.updateTracker.player.skills = true
       for (const activity of skillContent.activities) {
          const absoluteActivityId = mActivityId(scope, activity)
          gameContext.state.player.activities[absoluteActivityId] = gameContext.ruleSet.activities[absoluteActivityId]
