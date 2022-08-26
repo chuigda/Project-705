@@ -6,6 +6,4 @@ import { getLocalStorage } from "./util/localStorage"
 
 const preferredLang = getLocalStorage('lang') || 'zh_cn'
 
-initTranslation(preferredLang).then(() => {
-   createApp(App).mount('#app')
-})
+initTranslation(preferredLang).then(() => createApp(App).mount('#app'))
