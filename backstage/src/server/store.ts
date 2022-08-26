@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid'
-
 import { GameContext } from '@app/executor/game_context'
 import { triggerEvent } from '@app/executor/events'
 import ruleSet from '@app/server/ruleset'
