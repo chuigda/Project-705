@@ -1,4 +1,4 @@
-export type MaybeTranslationKey = string
+export type ITranslationKey = string
 
 export interface IPlayerAttributes {
    strength: number
@@ -29,8 +29,8 @@ export interface ISkillOutput {
 
 export interface ISkill {
    ident: string
-   name: MaybeTranslationKey
-   description: MaybeTranslationKey
+   name: ITranslationKey
+   description: ITranslationKey
 
    category?: string
    cost: ISkillCost
@@ -48,8 +48,8 @@ export interface IActivityOutput {
 
 export interface IActivity {
    ident: string
-   name: MaybeTranslationKey
-   description: MaybeTranslationKey
+   name: ITranslationKey
+   description: ITranslationKey
 
    category: string
    level: number
@@ -58,8 +58,8 @@ export interface IActivity {
 
 export interface IAscensionPerk {
    ident: string
-   name: MaybeTranslationKey
-   description: MaybeTranslationKey
+   name: ITranslationKey
+   description: ITranslationKey
 }
 
 export interface IPlayerStatus {
@@ -77,18 +77,78 @@ export interface IPlayerStatus {
    moneyPerTurn?: number
 }
 
+export interface IPotentialFunctionResult {
+   type: 'fn'
+   result: boolean
+   description: string
+}
+
+export interface IPotentialLogicOpResult {
+   type: 'logicOp'
+   result: boolean
+   resultPieces: IPotentialResult[]
+}
+
+export interface IHasSkillOrNot {
+   type: 'skill'
+   result: boolean
+   skillId: string
+   skillName: ITranslationKey
+}
+
+export type IPotentialResult = IPotentialFunctionResult | IPotentialLogicOpResult
+
+export type ISkillPotentialResult = IPotentialResult | IHasSkillOrNot
+
+export interface IAvailableSkill {
+   skill: ISkill
+   cost: number
+}
+
+export interface IUnavailableSkill {
+   skill: ISkill
+   resultPieces: ISkillPotentialResult
+}
+
+export interface IComputedSkills {
+   available: IAvailableSkill[]
+   unavailable: IUnavailableSkill[]
+}
+
+export interface IUnavailableAscensionPerk {
+   ascensionPerk: IAscensionPerk
+   resultPieces: IPotentialResult[]
+}
+
+export interface IComputedAscensionPerks {
+   available: IAscensionPerk[]
+   unavailable: IUnavailableAscensionPerk[]
+}
+
 export interface IButton {
    ident: string
 
-   text: MaybeTranslationKey
-   tooltip: MaybeTranslationKey
+   text: ITranslationKey
+   tooltip: ITranslationKey
 }
 
 export interface ISimpleDialog {
    uid: string
 
-   title: MaybeTranslationKey
-   text: MaybeTranslationKey
+   title: ITranslationKey
+   text: ITranslationKey
    closable: boolean
    options: IButton[]
+}
+
+export interface IGameState {
+   turns: number
+   player?: IPlayerStatus
+
+   modifiers?: object
+   variables: Record<string, any>
+
+   computedModifiers?: object
+   computedSkills?: IComputedSkills
+   computedAscensionPerks?: IComputedAscensionPerks
 }
