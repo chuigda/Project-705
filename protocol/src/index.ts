@@ -134,13 +134,21 @@ export interface IButton {
    tooltip: ITranslationKey
 }
 
+export interface IDialogOption {
+   optionKey: string
+
+   text: ITranslationKey
+   tooltip: ITranslationKey
+   danger: boolean
+}
+
 export interface ISimpleDialog {
    uid: string
 
    title: ITranslationKey
    text: ITranslationKey
-   closable: boolean
-   options: IButton[]
+   options: IDialogOption[]
+   display: boolean
 }
 
 export interface IGameState {

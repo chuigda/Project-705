@@ -2,7 +2,7 @@
    <n-modal
       preset="dialog"
       :title="dialogInfo.title"
-      :closable="dialogInfo.closable"
+      :closable="false"
       :close-on-esc="false"
       :mask-closable="false"
       :show="display"
@@ -16,12 +16,12 @@
       <div style="display: flex; flex-direction: column; row-gap: 1em; margin-top: 1em">
          <n-button
             v-for="button in dialogInfo?.options"
-            :key="button.ident"
-            type="primary"
+            :key="button.optionKey"
+            :type="button.danger ? 'error' : 'primary'"
             strong
             :title="translate(button.tooltip)"
             :bordered="true"
-            @click="onClick(button.ident)"
+            @click="onClick(button.optionKey)"
          >
             {{ translate(button.text) }}
          </n-button>
@@ -34,10 +34,11 @@
 import { ref } from 'vue'
 import { NModal, NText, NButton } from 'naive-ui'
 
-import { SimpleDialog } from '@protocol/index'
+import { ISimpleDialog } from '@protocol/index'
 import { translate } from '@app/util/translation'
 
-const { dialogInfo } = defineProps<{ dialogInfo: SimpleDialog }>()
+const props = defineProps<{ dialogInfo: ISimpleDialog }>()
+
 const display = ref(true)
 
 const emit = defineEmits<{
@@ -46,13 +47,13 @@ const emit = defineEmits<{
 }>()
 
 function onClick(buttonId: string) {
-   const dialogId = dialogInfo.ident || ''
+   const dialogId = props.dialogInfo.uid || ''
    display.value = false
    emit('click', dialogId, buttonId)
 }
 
 function onClose() {
-   const dialogId = dialogInfo.ident || ''
+   const dialogId = props.dialogInfo.uid || ''
    display.value = false
    emit('closed', dialogId)
 }
