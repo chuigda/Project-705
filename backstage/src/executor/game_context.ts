@@ -14,11 +14,13 @@ import computeFunctions, {
 } from '@app/executor/compute'
 import connectFunctions, { Signal } from '@app/executor/connect'
 import eventFunctions from '@app/executor/events'
-import grantFunctions from '@app/executor/grant'
+import grantFunctions from '@app/executor/skill'
 import propertyFunctions from '@app/executor/properties'
 import variableFunctions from '@app/executor/variables'
 import { Button, CustomScoreBoard, Menu } from '@app/ruleset/items/ui'
 import { BubbleMessage, SimpleDialog } from '@app/executor/ui'
+import ascensionPerkFunctions from '@app/executor/ascension_perk'
+import activityFunctions from '@app/executor/activity'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -38,6 +40,8 @@ export class PlayerStatus {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
 
+   energy: number = 0
+   energyMax: number = 150
    pressure: number = 0
    satisfactory: number = 50
    money: number = 0
@@ -197,6 +201,14 @@ export class GameContext {
 
    grantSkill(skill: Ident) {
       grantFunctions.grantSkill(this, skill)
+   }
+
+   activateAscensionPerk(ascensionPerk: Ident) {
+      ascensionPerkFunctions.activateAscensionPerk(this, ascensionPerk)
+   }
+
+   performActivity(activity: Ident) {
+      activityFunctions.performActivity(this, activity)
    }
 
    updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: Ident) {

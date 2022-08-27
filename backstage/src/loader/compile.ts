@@ -97,13 +97,14 @@ export function compileActivity(scope: Scope, activity: Activity): Activity {
 
    const events = activity.events?.map(event => compileMaybeInlineEvent(scope, event))
 
-   const { category, level, output, patch } = activity
+   const { category, level, output, energyCost, patch } = activity
    return {
       ...itemBase,
 
       category,
       level,
 
+      energyCost,
       events,
       output,
 

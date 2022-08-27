@@ -12,6 +12,7 @@ export class ActivityOutput {
 export class Activity extends ItemBase {
    readonly category: string
    readonly level: number
+   readonly energyCost: number
    readonly output?: ActivityOutput
    readonly events?: MaybeInlineEvent[]
 }
