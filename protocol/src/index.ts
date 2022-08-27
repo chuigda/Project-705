@@ -109,7 +109,7 @@ export interface IAvailableSkill {
 
 export interface IUnavailableSkill {
    skill: ISkill
-   resultPieces: ISkillPotentialResult
+   resultPieces: ISkillPotentialResult[]
 }
 
 export interface IComputedSkills {
