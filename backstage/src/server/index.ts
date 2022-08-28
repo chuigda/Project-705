@@ -2,6 +2,7 @@ import express = require('express')
 import { NextFunction, Request, Response } from 'express'
 
 import serverStore from '@app/server/store'
+import epLearnSkill from '@app/server/endpoints/learn_skill'
 import epGetTranslation from '@app/server/endpoints/translation'
 import { GameContext } from '@app/executor/game_context'
 import { IResponse } from '@protocol/src'
@@ -58,6 +59,8 @@ function applicationStart() {
    app.post('/api/nextTurn', (req, res) => {
       // TODO
    })
+
+   app.post('/api/learnSkill', verifyGameContext, epLearnSkill)
 
    app.get('/api/translation', epGetTranslation)
 
