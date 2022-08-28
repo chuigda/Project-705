@@ -9,7 +9,13 @@ import {
    UnavailableAscensionPerk,
    UnavailableSkill
 } from '@app/executor/compute'
-import { GameState, PlayerAttributes, PlayerStatus } from '@app/executor/game_context'
+import {
+   GameState,
+   PlayerAttributes,
+   PlayerStatus,
+   PlayerStatusUpdateTracker,
+   UpdateTracker
+} from '@app/executor/game_context'
 import { Activity, ActivityOutput, AscensionPerk, Skill, SkillCost, SkillOutput } from '@app/ruleset'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import {
@@ -32,7 +38,7 @@ import {
    IUnavailableSkill
 } from '@protocol/src'
 
-export function toProtoPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPartialPlayerAttributes {
+export function sendPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPartialPlayerAttributes {
    return {
       strength: pa.strength,
       intelligence: pa.intelligence,
@@ -43,7 +49,7 @@ export function toProtoPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPar
    }
 }
 
-export function toProtoPlayerAttributes(pa: PlayerAttributes): IPlayerAttributes {
+export function sendPlayerAttributes(pa: PlayerAttributes): IPlayerAttributes {
    return {
       strength: pa.strength,
       intelligence: pa.intelligence,
@@ -54,34 +60,34 @@ export function toProtoPlayerAttributes(pa: PlayerAttributes): IPlayerAttributes
    }
 }
 
-export function toProtoSkillCost(sc: SkillCost): ISkillCost {
+export function sendSkillCost(sc: SkillCost): ISkillCost {
    return {
       base: sc.base,
-      attributes: sc.attributes && toProtoPartialPlayerAttributes(sc.attributes)
+      attributes: sc.attributes && sendPartialPlayerAttributes(sc.attributes)
    }
 }
 
-export function toProtoSkillOutput(so: SkillOutput): ISkillOutput {
+export function sendSkillOutput(so: SkillOutput): ISkillOutput {
    return {
-      attributes: toProtoPartialPlayerAttributes(so.attributes)
+      attributes: sendPartialPlayerAttributes(so.attributes)
    }
 }
 
-export function toProtoSkill(s: Skill): ISkill {
+export function sendSkill(s: Skill): ISkill {
    return {
       ident: <string>s.ident,
       name: s.name,
       description: s.description,
       category: s.category,
-      cost: s.cost,
-      output: s.output && toProtoSkillOutput(s.output),
+      cost: sendSkillCost(s.cost),
+      output: s.output && sendSkillOutput(s.output),
       activities: s.activities && <string[]>s.activities
    }
 }
 
-export function toProtoActivityOutput(ao: ActivityOutput): IActivityOutput {
+export function sendActivityOutput(ao: ActivityOutput): IActivityOutput {
    return {
-      attributes: ao.attributes && toProtoPartialPlayerAttributes(ao.attributes),
+      attributes: ao.attributes && sendPartialPlayerAttributes(ao.attributes),
       skillPoints: ao.skillPoints,
       pressure: ao.pressure,
       satisfactory: ao.satisfactory,
@@ -89,18 +95,18 @@ export function toProtoActivityOutput(ao: ActivityOutput): IActivityOutput {
    }
 }
 
-export function toProtoActivity(a: Activity): IActivity {
+export function sendActivity(a: Activity): IActivity {
    return {
       ident: <string>a.ident,
       name: a.name,
       description: a.description,
       category: a.category,
       level: a.level,
-      output: a.output && toProtoActivityOutput(a.output)
+      output: a.output && sendActivityOutput(a.output)
    }
 }
 
-export function toProtoAscensionPerk(a: AscensionPerk): IAscensionPerk {
+export function sendAscensionPerk(a: AscensionPerk): IAscensionPerk {
    return {
       ident: <string>a.ident,
       name: a.name,
@@ -108,31 +114,53 @@ export function toProtoAscensionPerk(a: AscensionPerk): IAscensionPerk {
    }
 }
 
-export function toProtoPlayerStatus(ps: PlayerStatus): IPlayerStatus {
-   return {
-      attributes: toProtoPlayerAttributes(ps.attributes),
-      talent: toProtoPlayerAttributes(ps.attributes),
-      skillPoints: ps.skillPoints,
-      skills: Object.fromEntries(Object.keys(ps.skills).map((k) => [k, toProtoSkill(ps.skills[k])])),
-      activities: Object.fromEntries(Object.keys(ps.activities).map((k) => [k, toProtoActivity(ps.activities[k])])),
-      ascensionPerks: Object.fromEntries(
-         Object.keys(ps.ascensionPerks).map((k) => [k, toProtoAscensionPerk(ps.ascensionPerks[k])])
-      ),
-      pressure: ps.pressure,
-      satisfactory: ps.satisfactory,
-      money: ps.money,
-      moneyPerTurn: ps.moneyPerTurn
+export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusUpdateTracker): IPlayerStatus {
+   function makeSendTs<T, V>(sender: (t: T) => V): (ts: Record<string, T>) => V[] {
+      return (ts: Record<string, T>) => Object.values(ts).map(sender)
+   }
+
+   const sendSkills = makeSendTs(sendSkill)
+   const sendActivities = makeSendTs(sendActivity)
+   const sendAscensionPerks = makeSendTs(sendAscensionPerk)
+
+   if (!updateTracker) {
+      return {
+         attributes: sendPlayerAttributes(ps.attributes),
+         talent: sendPlayerAttributes(ps.talent),
+         skillPoints: ps.skillPoints,
+         skills: sendSkills(ps.skills),
+         activities: sendActivities(ps.activities),
+         ascensionPerks: sendAscensionPerks(ps.ascensionPerks),
+         pressure: ps.pressure,
+         satisfactory: ps.satisfactory,
+         money: ps.money,
+         moneyPerTurn: ps.moneyPerTurn
+      }
+   } else {
+      return {
+         attributes: updateTracker.properties ? sendPlayerAttributes(ps.attributes) : undefined,
+         talent: updateTracker.properties ? sendPlayerAttributes(ps.talent) : undefined,
+         skillPoints: updateTracker.properties ? ps.skillPoints : undefined,
+         pressure: updateTracker.properties ? ps.pressure : undefined,
+         satisfactory: updateTracker.properties ? ps.satisfactory : undefined,
+         money: updateTracker.properties ? ps.money : undefined,
+         moneyPerTurn: updateTracker.properties ? ps.moneyPerTurn : undefined,
+
+         skills: updateTracker.skills ? sendSkills(ps.skills) : undefined,
+         activities: updateTracker.activities ? sendActivities(ps.activities) : undefined,
+         ascensionPerks: updateTracker.ascensionPerks ? sendAscensionPerks(ps.ascensionPerks) : undefined
+      }
    }
 }
 
-export function toProtoAvailableSkill(as: AvailableSkill): IAvailableSkill {
+export function sendAvailableSkill(as: AvailableSkill): IAvailableSkill {
    return {
-      skill: toProtoSkill(as.skill),
+      skill: sendSkill(as.skill),
       cost: as.cost
    }
 }
 
-export function toProtoPotentialResult(pr: PotentialResult): IPotentialResult {
+export function sendPotentialResult(pr: PotentialResult): IPotentialResult {
    if (pr instanceof PotentialFunctionResult) {
       return {
          type: 'fn',
@@ -143,11 +171,11 @@ export function toProtoPotentialResult(pr: PotentialResult): IPotentialResult {
    return {
       type: 'logicOp',
       result: pr.result,
-      resultPieces: pr.resultPieces.map((p) => toProtoPotentialResult(p))
+      resultPieces: pr.resultPieces.map((p) => sendPotentialResult(p))
    }
 }
 
-export function toProtoSkillPotentialResult(spr: SkillPotentialResult): ISkillPotentialResult {
+export function sendSkillPotentialResult(spr: SkillPotentialResult): ISkillPotentialResult {
    if (spr instanceof HasSkillOrNot) {
       return {
          type: 'skill',
@@ -156,47 +184,63 @@ export function toProtoSkillPotentialResult(spr: SkillPotentialResult): ISkillPo
          skillName: spr.skillName
       }
    }
-   return toProtoPotentialResult(spr)
+   return sendPotentialResult(spr)
 }
 
-export function toProtoUnavailableSkill(us: UnavailableSkill): IUnavailableSkill {
+export function sendUnavailableSkill(us: UnavailableSkill): IUnavailableSkill {
    return {
-      skill: toProtoSkill(us.skill),
-      resultPieces: us.resultPieces.map((r) => toProtoSkillPotentialResult(r))
+      skill: sendSkill(us.skill),
+      resultPieces: us.resultPieces.map((r) => sendSkillPotentialResult(r))
    }
 }
 
-export function toProtoComputedSkills(cs: ComputedSkills): IComputedSkills {
+export function sendComputedSkills(cs: ComputedSkills): IComputedSkills {
    return {
-      available: Object.values(cs.available).map((x) => toProtoAvailableSkill(x)),
-      unavailable: Object.values(cs.unavailable).map((x) => toProtoUnavailableSkill(x))
+      available: Object.values(cs.available).map((x) => sendAvailableSkill(x)),
+      unavailable: Object.values(cs.unavailable).map((x) => sendUnavailableSkill(x))
    }
 }
 
-export function toProtoUnavailableAscensionPerks(uap: UnavailableAscensionPerk): IUnavailableAscensionPerk {
+export function sendUnavailableAscensionPerks(uap: UnavailableAscensionPerk): IUnavailableAscensionPerk {
    return {
-      ascensionPerk: toProtoAscensionPerk(uap.ascensionPerk),
-      resultPieces: uap.resultPieces.map((r) => toProtoPotentialResult(r))
+      ascensionPerk: sendAscensionPerk(uap.ascensionPerk),
+      resultPieces: uap.resultPieces.map((r) => sendPotentialResult(r))
    }
 }
 
-export function toProtoComputedAscensionPerks(ap: ComputedAscensionPerks): IComputedAscensionPerks {
+export function sendComputedAscensionPerks(ap: ComputedAscensionPerks): IComputedAscensionPerks {
    return {
-      available: Object.values(ap.available).map((x) => toProtoAscensionPerk(x)),
-      unavailable: Object.values(ap.unavailable).map((x) => toProtoUnavailableAscensionPerks(x))
+      available: Object.values(ap.available).map((x) => sendAscensionPerk(x)),
+      unavailable: Object.values(ap.unavailable).map((x) => sendUnavailableAscensionPerks(x))
    }
 }
 
-export function toProtoGameState(gs: GameState): IGameState {
-   return {
-      turns: gs.turns,
-      player: toProtoPlayerStatus(gs.player),
+export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGameState {
+   if (!updateTracker) {
+      return {
+         turns: gs.turns,
+         player: sendPlayerStatus(gs.player, undefined),
 
-      modifiers: gs.modifiers,
-      variables: gs.variables,
+         modifiers: gs.modifiers,
+         variables: gs.variables,
 
-      computedModifiers: gs.computedModifier,
-      computedSkills: gs.computedSkills && toProtoComputedSkills(gs.computedSkills),
-      computedAscensionPerks: gs.computedAscensionPerks && toProtoComputedAscensionPerks(gs.computedAscensionPerks)
+         computedModifiers: gs.computedModifier,
+         computedSkills: sendComputedSkills(gs.computedSkills!),
+         computedAscensionPerks: sendComputedAscensionPerks(gs.computedAscensionPerks!)
+      }
+   } else {
+      return {
+         turns: gs.turns,
+         player: updateTracker.player.any() ? sendPlayerStatus(gs.player, updateTracker.player) : undefined,
+
+         modifiers: gs.modifiers,
+         variables: updateTracker.variables ? gs.variables : undefined,
+
+         computedModifiers: updateTracker.computedModifiers ? gs.computedModifier : undefined,
+         computedSkills: updateTracker.computedSkills ? sendComputedSkills(gs.computedSkills!) : undefined,
+         computedAscensionPerks: updateTracker.computedAscensionPerks ?
+            sendComputedAscensionPerks(gs.computedAscensionPerks!)
+            : undefined
+      }
    }
 }

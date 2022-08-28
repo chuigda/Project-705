@@ -107,6 +107,10 @@ export class PlayerStatusUpdateTracker {
    skills: boolean = false
    activities: boolean = false
    ascensionPerks: boolean = false
+
+   any(): boolean {
+      return this.properties || this.skills || this.activities || this.ascensionPerks
+   }
 }
 
 export class UpdateTracker {

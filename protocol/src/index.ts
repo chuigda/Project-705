@@ -69,9 +69,9 @@ export interface IPlayerStatus {
    talent?: IPlayerAttributes
 
    skillPoints?: number
-   skills?: Record<string, ISkill>
-   activities?: Record<string, IActivity>
-   ascensionPerks?: Record<string, IAscensionPerk>
+   skills?: ISkill[]
+   activities?: IActivity[]
+   ascensionPerks?: IAscensionPerk[]
 
    pressure?: number
    satisfactory?: number
@@ -156,7 +156,7 @@ export interface IGameState {
    player?: IPlayerStatus
 
    modifiers?: object
-   variables: Record<string, any>
+   variables?: Record<string, any>
 
    computedModifiers?: object
    computedSkills?: IComputedSkills
