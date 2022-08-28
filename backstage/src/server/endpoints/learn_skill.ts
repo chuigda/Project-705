@@ -1,6 +1,6 @@
 import { GameContext } from '@app/executor/game_context'
 import { Request, Response } from 'express'
-import { IGameState, IResponse } from '@protocol/src'
+import { IGameState, IResponse } from '@protocol/index'
 import { learnSkill } from '@app/executor/skill'
 import { sendGameState } from '@app/server/mapping'
 

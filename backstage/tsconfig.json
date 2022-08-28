@@ -16,7 +16,7 @@
          "@app/*": ["src/*"],
          "@test/*": ["test/*"],
          "@rulesets/*": ["rulesets/*"],
-         "@protocol/*": ["../protocol/*"]
+         "@protocol/*": ["../protocol/src/*"]
       }
    },
    "include": [

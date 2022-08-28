@@ -1,6 +1,6 @@
 import ruleSet from '@app/server/ruleset'
 import { Request, Response } from 'express'
-import { IResponse, ITranslation } from '@protocol/src'
+import { IResponse, ITranslation } from '@protocol/index'
 
 export default function epGetTranslation(req: Request, res: Response<IResponse<ITranslation>>) {
    const { lang } = req.query

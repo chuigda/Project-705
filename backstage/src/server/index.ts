@@ -5,7 +5,7 @@ import serverStore from '@app/server/store'
 import epLearnSkill from '@app/server/endpoints/learn_skill'
 import epGetTranslation from '@app/server/endpoints/translation'
 import { GameContext } from '@app/executor/game_context'
-import { IResponse } from '@protocol/src'
+import { IResponse } from '@protocol/index'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 

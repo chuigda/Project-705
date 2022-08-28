@@ -36,7 +36,7 @@ import {
    ISkillPotentialResult,
    IUnavailableAscensionPerk,
    IUnavailableSkill
-} from '@protocol/src'
+} from '@protocol/index'
 
 export function sendPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPartialPlayerAttributes {
    return {
