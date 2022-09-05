@@ -210,8 +210,8 @@ export function sendUnavailableAscensionPerks(uap: UnavailableAscensionPerk): IU
 
 export function sendComputedAscensionPerks(ap: ComputedAscensionPerks): IComputedAscensionPerks {
    return {
-      available: Object.values(ap.available).map((x) => sendAscensionPerk(x)),
-      unavailable: Object.values(ap.unavailable).map((x) => sendUnavailableAscensionPerks(x))
+      available: Object.values(ap.available).map(x => sendAscensionPerk(x)),
+      unavailable: Object.values(ap.unavailable).map(x => sendUnavailableAscensionPerks(x))
    }
 }
 

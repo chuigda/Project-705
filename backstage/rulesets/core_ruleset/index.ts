@@ -2,6 +2,7 @@ import { RuleSet } from '@app/ruleset'
 
 import events from '@rulesets/core_ruleset/event'
 import startups from '@rulesets/core_ruleset/startup'
+import translations from '@rulesets/core_ruleset/translation'
 
 const ruleSet: RuleSet = {
    ident: {
@@ -9,7 +10,8 @@ const ruleSet: RuleSet = {
       moduleName: 'core'
    },
    events,
-   startups
+   startups,
+   translations
 }
 
 export default ruleSet

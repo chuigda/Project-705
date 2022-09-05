@@ -10,3 +10,17 @@ const wellPreparedActivation: Event = {
       }
    ]
 }
+
+const syntheicEvolutionActivation: Event = {
+   ident: 'synthetic_evolution_activation',
+   event: [
+      (gameContext: GameContext) => {
+         // TODO
+      }
+   ]
+}
+
+export default [
+   wellPreparedActivation,
+   syntheicEvolutionActivation
+]
