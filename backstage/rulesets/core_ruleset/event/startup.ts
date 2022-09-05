@@ -38,6 +38,17 @@ const detroitEvents = [
             gameContext.state.player.attributes.imagination += 250
          }
       ]
+   },
+   {
+      ident: 'detroit_add_attr3',
+      event: [
+         (gameContext: GameContext) => {
+            gameContext.state.player.attributes.intelligence += 8000
+            gameContext.state.player.attributes.emotionalIntelligence += 500
+            gameContext.state.player.attributes.strength += 2000
+            gameContext.state.player.attributes.imagination += 250
+         }
+      ]
    }
 ]
 
