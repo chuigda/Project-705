@@ -6,12 +6,31 @@ import epLearnSkill from '@app/server/endpoints/learn_skill'
 import epGetTranslation from '@app/server/endpoints/translation'
 import { GameContext } from '@app/executor/game_context'
 import { IResponse } from '@protocol/index'
+import epInitGame from '@app/server/endpoints/init'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 
+function verifyAccessToken<R>(
+   req: Request,
+   res: Response<IResponse<R>, { accessToken: string }>,
+   next: NextFunction
+) {
+   const accessToken = req.header(ACCESS_TOKEN_HEADER)
+   if (!accessToken) {
+      res.status(401).json({
+         success: false,
+         message: 'not logged in', // TODO(chuigda): use translation keys
+      })
+      return
+   }
+
+   res.locals.accessToken = accessToken
+   next()
+}
+
 function verifyGameContext<R>(
    req: Request,
-   res: Response<IResponse<R>, { gameContext: GameContext }>,
+   res: Response<IResponse<R>, { accessToken: string, gameContext: GameContext }>,
    next: NextFunction
 ) {
    const accessToken = req.header(ACCESS_TOKEN_HEADER)
@@ -32,6 +51,7 @@ function verifyGameContext<R>(
       return
    }
 
+   res.locals.accessToken = accessToken
    res.locals.gameContext = gameContext
    next()
 }
@@ -39,10 +59,7 @@ function verifyGameContext<R>(
 function applicationStart() {
    const app = express()
 
-   app.post('/api/newGame', (req, res) => {
-      // const accessToken = req.header(ACCESS_TOKEN_HEADER)
-      // respondOrErr(res, epInit())
-   })
+   app.post('/api/newGame', verifyAccessToken, epInitGame)
 
    app.get('/api/snapshot', verifyGameContext, (req, res) => {
       // TODO
