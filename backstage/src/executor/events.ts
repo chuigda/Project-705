@@ -30,7 +30,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
    }
 
    if (gameContext.eventChainCounter > 512) {
-      console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 events, killing')
+      console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 event, killing')
       if (unsetCounter) {
          gameContext.eventChainCounter = undefined
       } else {

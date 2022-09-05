@@ -89,3 +89,10 @@ export function createBubbleMessage(
    gameContext.updateTracker.bubbleMessages = true
    return bubbleMessage
 }
+
+const uiFunctions = {
+   createDialog,
+   createBubbleMessage
+}
+
+export default uiFunctions

@@ -17,8 +17,8 @@ import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/skill'
 import propertyFunctions from '@app/executor/properties'
 import variableFunctions from '@app/executor/variables'
-import { Button, CustomScoreBoard, Menu } from '@app/ruleset/items/ui'
-import { BubbleMessage, SimpleDialog } from '@app/executor/ui'
+import { BubbleMessageTemplate, Button, CustomScoreBoard, Menu, SimpleDialogTemplate } from '@app/ruleset/items/ui'
+import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
 
@@ -183,16 +183,16 @@ export class GameContext {
       computeFunctions.recomputeSkillCosts(this)
    }
 
-   get signals(): Record<string, (arg?: any) => object> {
+   get signals(): Record<string, (arg?: any) => Signal> {
       return connectFunctions.signals
    }
 
-   connect(gameContext: GameContext, signal: Signal, event: Ident) {
-      connectFunctions.connect(gameContext, signal, event)
+   connect(signal: Signal, event: Ident) {
+      connectFunctions.connect(this, signal, event)
    }
 
-   disconnect(gameContext: GameContext, signal: Signal, event: Ident) {
-      connectFunctions.disconnect(gameContext, signal, event)
+   disconnect(signal: Signal, event: Ident) {
+      connectFunctions.disconnect(this, signal, event)
    }
 
    triggerEvent(event: MaybeInlineEvent, ...args: any[]) {
@@ -225,5 +225,13 @@ export class GameContext {
 
    setV(varName: Ident, value: any) {
       variableFunctions.setVar(this, varName, value)
+   }
+
+   createDialog(template: Ident | SimpleDialogTemplate): SimpleDialog | null {
+      return uiFunctions.createDialog(this, template)
+   }
+
+   createBubbleMessage(template: Ident | BubbleMessageTemplate): BubbleMessage | null {
+      return uiFunctions.createBubbleMessage(this, template)
    }
 }
