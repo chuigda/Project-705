@@ -9,14 +9,6 @@ import { IResponse } from '@protocol/index'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 
-function respondOrErr<T>(resp: any, thing: T | undefined, code: number = 200, msg: string = '') {
-   resp.status(code).json({
-      success: !!thing,
-      msg: msg || '',
-      result: thing || null
-   })
-}
-
 function verifyGameContext<R>(
    req: Request,
    res: Response<IResponse<R>, { gameContext: GameContext }>,

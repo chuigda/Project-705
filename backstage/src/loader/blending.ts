@@ -14,8 +14,10 @@ import {
    BubbleMessageTemplate,
    Button,
    CustomScoreBoard,
-   CustomUI, DialogOption,
-   Divider, Label,
+   CustomUI,
+   DialogOption,
+   Divider,
+   Label,
    Menu,
    MenuItem,
    SimpleDialogTemplate
