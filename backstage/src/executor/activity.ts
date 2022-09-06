@@ -23,7 +23,7 @@ export function performActivity(gameContext: GameContext, activity: Ident) {
    )
 
    if (activityContent.output) {
-      const { attributes, skillPoints, pressure, satisfactory, money } = activityContent.output
+      const { attributes, skillPoints, mentalHealth, satisfactory, money } = activityContent.output
       if (attributes) {
          for (const attrName in attributes) {
             const attrValue = attributes[<keyof PlayerAttributesUpdate>attrName]
@@ -43,8 +43,8 @@ export function performActivity(gameContext: GameContext, activity: Ident) {
          updatePlayerProperty(gameContext, 'skillPoints', 'add', skillPoints, '@activity')
       }
 
-      if (pressure) {
-         updatePlayerProperty(gameContext, 'pressure', 'add', pressure, '@activity')
+      if (mentalHealth) {
+         updatePlayerProperty(gameContext, 'pressure', 'add', mentalHealth, '@activity')
       }
 
       if (satisfactory) {

@@ -42,7 +42,7 @@ export class PlayerStatus {
 
    energy: number = 0
    energyMax: number = 150
-   pressure: number = 0
+   mentalHealth: number = 0
    satisfactory: number = 50
    money: number = 0
    moneyPerTurn: number = 0
@@ -63,6 +63,7 @@ export class PlayerPropertyUpdatedEvents {
    skillPoints: Set<string> = new Set()
    attributes: AttributeEvents = new AttributeEvents()
    talent: AttributeEvents = new AttributeEvents()
+   mentalHealth: Set<string> = new Set()
 }
 
 export class TimedEvent {
@@ -223,8 +224,12 @@ export class GameContext {
       return variableFunctions.getVar(this, varName)
    }
 
-   setV(varName: Ident, value: any) {
-      variableFunctions.setVar(this, varName, value)
+   setV(varName: Ident, value: any): any {
+      return variableFunctions.setVar(this, varName, value)
+   }
+
+   updateV(varName: Ident, updater: (v: any) => any): any {
+      return variableFunctions.updateVar(this, varName, updater)
    }
 
    createDialog(template: Ident | SimpleDialogTemplate): SimpleDialog | null {

@@ -43,7 +43,7 @@ export interface ISkill {
 export interface IActivityOutput {
    attributes?: IPartialPlayerAttributes
    skillPoints?: number
-   pressure?: number
+   mentalHealth?: number
    satisfactory?: number
    money?: number
 }

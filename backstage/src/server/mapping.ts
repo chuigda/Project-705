@@ -89,7 +89,7 @@ export function sendActivityOutput(ao: ActivityOutput): IActivityOutput {
    return {
       attributes: ao.attributes && sendPartialPlayerAttributes(ao.attributes),
       skillPoints: ao.skillPoints,
-      pressure: ao.pressure,
+      mentalHealth: ao.mentalHealth,
       satisfactory: ao.satisfactory,
       money: ao.money
    }
@@ -131,7 +131,7 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
          skills: sendSkills(ps.skills),
          activities: sendActivities(ps.activities),
          ascensionPerks: sendAscensionPerks(ps.ascensionPerks),
-         pressure: ps.pressure,
+         pressure: ps.mentalHealth,
          satisfactory: ps.satisfactory,
          money: ps.money,
          moneyPerTurn: ps.moneyPerTurn
@@ -141,7 +141,7 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
          attributes: updateTracker.properties ? sendPlayerAttributes(ps.attributes) : undefined,
          talent: updateTracker.properties ? sendPlayerAttributes(ps.talent) : undefined,
          skillPoints: updateTracker.properties ? ps.skillPoints : undefined,
-         pressure: updateTracker.properties ? ps.pressure : undefined,
+         pressure: updateTracker.properties ? ps.mentalHealth : undefined,
          satisfactory: updateTracker.properties ? ps.satisfactory : undefined,
          money: updateTracker.properties ? ps.money : undefined,
          moneyPerTurn: updateTracker.properties ? ps.moneyPerTurn : undefined,

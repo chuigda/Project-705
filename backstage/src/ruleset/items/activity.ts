@@ -4,7 +4,7 @@ import { MaybeInlineEvent } from '@app/ruleset/items/event'
 export class ActivityOutput {
    readonly attributes?: PlayerAttributesUpdate
    readonly skillPoints?: number
-   readonly pressure?: number
+   readonly mentalHealth?: number
    readonly satisfactory?: number
    readonly money?: number
 }
