@@ -11,7 +11,7 @@ export function pushScope(gameContext: GameContext, scope: Scope) {
 
 export function popScope(gameContext: GameContext) {
    if (gameContext.scopeChain.length === 0) {
-      console.error('[E] [popScope] scope stack is empty')
+      gameContext.scope = undefined
       return
    }
 
@@ -40,6 +40,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
    }
 
    if (event instanceof Function) {
+      console.debug('[D] [triggerEvent] triggered inline event')
       try {
          event(gameContext, ...args)
       } catch (e) {
@@ -53,6 +54,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
          console.error(`[E] [triggerEvent] event '${eventId}' not found`)
       }
 
+      console.debug(`[D] [triggerEvent] triggered event '${eventId}'`)
       const hooks = gameContext.state.events.eventsTriggered[eventId]
       for (const hook in hooks) {
          triggerEvent(gameContext, hook, event, [event, args])

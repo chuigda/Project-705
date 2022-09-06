@@ -1,4 +1,3 @@
-// detroit event scripts
 import { GameContext } from '@app/executor/game_context'
 import { PropertyOp } from '@app/ruleset/ops'
 import { Event } from '@app/ruleset'

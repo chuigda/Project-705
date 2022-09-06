@@ -4,7 +4,7 @@ import { triggerEvent } from '@app/executor/events'
 import { PropertyOp } from '@app/ruleset/ops'
 
 export function updatePlayerProperty(
-   cx: GameContex,
+   gameContext: GameContext,
    property: string,
    operator: PropertyOp,
    value: number,
