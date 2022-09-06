@@ -83,6 +83,8 @@ export class GameContextEvents {
 }
 
 export class GameState {
+   startup: string = ''
+
    turns: number = 0
    player: PlayerStatus = new PlayerStatus()
 
