@@ -241,6 +241,7 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
       }
    }
 
+   gameContext.state.computedAscensionPerks = { available, unavailable }
    gameContext.updateTracker.computedAscensionPerks = true
 }
 

@@ -51,13 +51,14 @@ function verifyGameContext<R>(
       return
    }
 
-   res.locals.accessToken = accessToken
    res.locals.gameContext = gameContext
    next()
 }
 
 function applicationStart() {
    const app = express()
+
+   app.use(express.json())
 
    app.post('/api/newGame', verifyAccessToken, epInitGame)
 
@@ -73,7 +74,7 @@ function applicationStart() {
 
    app.get('/api/translation', epGetTranslation)
 
-   app.listen(3000, () => console.log('application started'))
+   app.listen(3000, () => console.info('application started'))
 }
 
 export default applicationStart

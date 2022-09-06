@@ -2,6 +2,7 @@ import { GameContext } from '@app/executor/game_context'
 import { triggerEvent } from '@app/executor/events'
 import ruleSet from '@app/server/ruleset'
 import { applyStartup } from '@app/executor/startup'
+import { computePotentialAscensionPerks, computePotentialSkills } from '@app/executor/compute'
 
 class ServerStore {
    gameContexts: Record<string, GameContext> = {}
@@ -13,10 +14,12 @@ class ServerStore {
       }
 
       const context = new GameContext(ruleSet)
-      applyStartup(context, startup)
       for (const event of ruleSet.onRuleSetLoaded) {
          triggerEvent(context, event)
       }
+      applyStartup(context, startup)
+      computePotentialSkills(context)
+      computePotentialAscensionPerks(context)
 
       this.gameContexts[accessToken] = context
       return context

@@ -8,7 +8,6 @@ export default function epInitGame(
    req: Request,
    res: Response<IResponse<IGameState>, { accessToken: string }>
 ): void {
-
    const { startupId } = req.body
    if (!startupId || typeof startupId !== 'string') {
       res.status(400).json({

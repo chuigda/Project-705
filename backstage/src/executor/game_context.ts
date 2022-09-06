@@ -78,7 +78,7 @@ export class GameContextEvents {
    activityPerformed: Record<string, Set<string>> = {}
    eventsTriggered: Record<string, Set<string>> = {}
 
-   timedEvents: TimedEvent[]
+   timedEvents: TimedEvent[] = []
 }
 
 export class GameState {
@@ -151,7 +151,7 @@ export class UpdateTracker {
 
 export class GameContext {
    readonly ruleSet: CompiledRuleSet
-   state: GameState
+   state: GameState = new GameState()
 
    updateTracker: UpdateTracker = new UpdateTracker()
    scope?: Scope = undefined

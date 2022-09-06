@@ -75,7 +75,7 @@ function buildCompileSeries<T extends HasIdent>(
          }
 
          // TODO(chuigda): implement "blending"
-         dest[ident] = item
+         dest[ident] = compiledItem
       }
    }
 }

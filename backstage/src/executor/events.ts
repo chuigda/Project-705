@@ -43,7 +43,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       try {
          event(gameContext, ...args)
       } catch (e) {
-         console.error(`[E] [triggerEvent] error when executing inline event script: ${e}`)
+         console.error(`[E] [triggerEvent] error when executing inline event script: ${e}\n${e.stack}`)
       }
    } else {
       const eventId = mEventId(scope, event)
@@ -64,7 +64,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
          try {
             eventFunction(gameContext, ...args)
          } catch (e) {
-            console.error(`[E] [triggerEvent] error when executing event script '${eventId}:${idx}': ${e}`)
+            console.error(`[E] [triggerEvent] error when executing event script '${eventId}:${idx}': ${e}\n${e.stack}`)
          }
       }
       popScope(gameContext)

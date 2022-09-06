@@ -28,7 +28,6 @@ export function updatePlayerProperty(
       container = container[pathPart]
       if (typeof propertyContainer[pathPart] === 'object') {
          propertyContainer = propertyContainer[pathPart]
-         console.log('pathPart:', pathPart, ', propertyContainer:', propertyContainer)
       }
    }
    const lastPropertyPath = propertyPath[propertyPath.length - 1]

@@ -21,7 +21,7 @@ const detroitStartup: Startup = {
          charisma: 0
       }
    },
-   events: []
+   events: ['detroit_init']
 }
 
 export default [
