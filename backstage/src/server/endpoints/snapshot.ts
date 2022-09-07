@@ -1,7 +1,15 @@
+import { Request, Response } from 'express'
+import { IGameState, IResponse } from '@protocol/index'
 import { GameContext } from '@app/executor/game_context'
-import serverStore from '@app/server/store'
+import { sendGameState } from '@app/server/mapping'
 
-export default function epGetSnapshot(accessToken?: string): GameContext | undefined {
-   if (!accessToken) return undefined
-   return serverStore.getGame(accessToken)
+export default function epSendSnapshot(
+   req: Request,
+   res: Response<IResponse<IGameState>, { gameContext: GameContext }>
+) {
+   res.json({
+      success: true,
+      message: 'success',
+      result: sendGameState(res.locals.gameContext.state)
+   })
 }

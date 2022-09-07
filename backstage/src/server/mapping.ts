@@ -16,7 +16,16 @@ import {
    PlayerStatusUpdateTracker,
    UpdateTracker
 } from '@app/executor/game_context'
-import { Activity, ActivityOutput, AscensionPerk, Skill, SkillCost, SkillOutput } from '@app/ruleset'
+import {
+   Activity,
+   ActivityOutput,
+   AscensionPerk,
+   Skill,
+   SkillCost,
+   SkillOutput,
+   Startup,
+   StartupPlayerProperties
+} from '@app/ruleset'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import {
    IActivity,
@@ -34,6 +43,8 @@ import {
    ISkillCost,
    ISkillOutput,
    ISkillPotentialResult,
+   IStartup,
+   IStartupPlayerProperties,
    IUnavailableAscensionPerk,
    IUnavailableSkill
 } from '@protocol/index'
@@ -215,9 +226,29 @@ export function sendComputedAscensionPerks(ap: ComputedAscensionPerks): ICompute
    }
 }
 
+export function sendStartupPlayerProperties(properties: StartupPlayerProperties): IStartupPlayerProperties {
+   return {
+      ...properties,
+
+      attributes: properties.attributes ? sendPartialPlayerAttributes(properties.attributes) : undefined,
+      talent: properties.talent ? sendPartialPlayerAttributes(properties.talent) : undefined
+   }
+}
+
+export function sendStartup(startup: Startup): IStartup {
+   return {
+      ident: <string>startup.ident,
+      name: startup.name,
+      description: startup.description,
+
+      player: startup.player ? sendStartupPlayerProperties(startup.player) : undefined,
+   }
+}
+
 export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGameState {
    if (!updateTracker) {
       return {
+         startup: gs.startup,
          turns: gs.turns,
          player: sendPlayerStatus(gs.player, undefined),
 
@@ -230,6 +261,7 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
       }
    } else {
       return {
+         startup: gs.startup,
          turns: gs.turns,
          player: updateTracker.player.any() ? sendPlayerStatus(gs.player, updateTracker.player) : undefined,
 

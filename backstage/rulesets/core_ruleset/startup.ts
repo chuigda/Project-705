@@ -3,7 +3,28 @@ import { Startup } from '@app/ruleset'
 const normalStartup: Startup = {
    ident: 'normal',
    name: '$startup_normal',
-   description: '$startup_normal_desc'
+   description: '$startup_normal_desc',
+
+   player: {
+      talent: {
+         intelligence: 20,
+         emotionalIntelligence: 20,
+         strength: 20,
+         memorization: 20,
+         imagination: 20
+      },
+      moneyPerTurn: 30
+   }
+}
+
+const giftedStartup: Startup = {
+   ident: 'gifted',
+   name: '$startup_gifted',
+   description: '$startup_gifted_desc',
+
+   player: {
+
+   }
 }
 
 const detroitStartup: Startup = {
@@ -17,13 +38,16 @@ const detroitStartup: Startup = {
          emotionalIntelligence: 500,
          strength: 500,
          memorization: 99999,
-         imagination: 500,
-         charisma: 0
+         imagination: 500
       }
    },
    events: ['detroit_init']
 }
 
-export default [
+
+const startups: Startup[] = [
+   normalStartup,
    detroitStartup
 ]
+
+export default startups

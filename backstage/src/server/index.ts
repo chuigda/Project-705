@@ -2,11 +2,16 @@ import express = require('express')
 import { NextFunction, Request, Response } from 'express'
 
 import serverStore from '@app/server/store'
-import epLearnSkill from '@app/server/endpoints/learn_skill'
-import epGetTranslation from '@app/server/endpoints/translation'
 import { GameContext } from '@app/executor/game_context'
 import { IResponse } from '@protocol/index'
+
 import epInitGame from '@app/server/endpoints/init'
+import epNextTurn from '@app/server/endpoints/next_turn'
+import epLearnSkill from '@app/server/endpoints/skill'
+import epSendSnapshot from '@app/server/endpoints/snapshot'
+import epGetTranslation from '@app/server/endpoints/translation'
+import epActivateAscensionPerk from '@app/server/endpoints/ascension_perk'
+import epGetStartups from '@app/server/endpoints/startup'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 
@@ -62,15 +67,15 @@ function applicationStart() {
 
    app.post('/api/newGame', verifyAccessToken, epInitGame)
 
-   app.get('/api/snapshot', verifyGameContext, (req, res) => {
-      // TODO
-   })
+   app.get('/api/snapshot', verifyGameContext, epSendSnapshot)
 
-   app.post('/api/nextTurn', (req, res) => {
-      // TODO
-   })
+   app.post('/api/nextTurn', verifyGameContext, epNextTurn)
 
    app.post('/api/learnSkill', verifyGameContext, epLearnSkill)
+
+   app.post('/api/ascension', verifyGameContext, epActivateAscensionPerk)
+
+   app.get('/api/startups', epGetStartups)
 
    app.get('/api/translation', epGetTranslation)
 

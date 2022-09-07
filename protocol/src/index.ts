@@ -152,6 +152,8 @@ export interface ISimpleDialog {
 }
 
 export interface IGameState {
+   startup: string
+
    turns: number
    player?: IPlayerStatus
 
@@ -161,6 +163,23 @@ export interface IGameState {
    computedModifiers?: object
    computedSkills?: IComputedSkills
    computedAscensionPerks?: IComputedAscensionPerks
+}
+
+export interface IStartupPlayerProperties {
+   attributes?: IPartialPlayerAttributes
+   talent?: IPartialPlayerAttributes
+   skillPoints?: number
+   money?: number
+   moneyPerTurn?: number
+}
+
+export interface IStartup {
+   ident: string,
+   name: ITranslationKey,
+   description: ITranslationKey,
+
+   player?: IStartupPlayerProperties
+   modifier?: object
 }
 
 export interface IResponseSuccess<R> {
