@@ -79,7 +79,7 @@ function applicationStart() {
 
    app.get('/api/translation', epGetTranslation)
 
-   app.listen(3000, () => console.info('application started'))
+   app.listen(3000, 'localhost', () => console.info('application started'))
 }
 
 export default applicationStart

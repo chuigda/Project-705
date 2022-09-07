@@ -55,7 +55,7 @@ export function load(): CompiledRuleSet {
             compileRuleSet(ret, debugRuleSet)
          }
       } catch (e) {
-         console.error(`[E] [load] error compiling core ruleset: ${e}`)
+         console.error(`[E] [load] error compiling core ruleset: ${e}\n${e.stack}`)
          abort()
       }
    }
@@ -64,14 +64,14 @@ export function load(): CompiledRuleSet {
    for (const modName of modList) {
       const [mod, err] = loadDynamicMod(modName)
       if (err) {
-         console.error(`[E] [load] error loading mod '${modName}': ${err}`)
+         console.error(`[E] [load] error loading mod '${modName}': ${err}\n${err.stack}`)
          continue
       }
 
       try {
          compileRuleSet(ret, mod!)
       } catch (e) {
-         console.error(`[E] [load] error compiling mod '${modName}': ${e}`)
+         console.error(`[E] [load] error compiling mod '${modName}': ${e}\n${e.stack}`)
          abort()
       }
    }

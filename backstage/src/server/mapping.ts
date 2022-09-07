@@ -187,15 +187,17 @@ export function sendPotentialResult(pr: PotentialResult): IPotentialResult {
 }
 
 export function sendSkillPotentialResult(spr: SkillPotentialResult): ISkillPotentialResult {
-   if (spr instanceof HasSkillOrNot) {
+   // @ts-ignore
+   if (spr.skillId) {
       return {
          type: 'skill',
          result: spr.result,
-         skillId: spr.skillId,
-         skillName: spr.skillName
+         skillId: (<HasSkillOrNot>spr).skillId,
+         skillName: (<HasSkillOrNot>spr).skillName
       }
+   } else {
+      return sendPotentialResult(<PotentialResult>spr)
    }
-   return sendPotentialResult(spr)
 }
 
 export function sendUnavailableSkill(us: UnavailableSkill): IUnavailableSkill {

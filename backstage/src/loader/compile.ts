@@ -1,6 +1,6 @@
 import {
    IdMangler, Scope,
-   mEventId, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId
+   mEventId, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId, Ident
 } from '@app/base/uid'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
@@ -50,11 +50,11 @@ export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): I
 export function compileSkill(scope: Scope, skill: Skill): Skill {
    const itemBase = compileBase(scope, skill, mSkillId)
    const potential = skill.potential?.map(skillPotential => {
-      if (skillPotential instanceof PotentialExpressionFunctionOp
-          || skillPotential instanceof PotentialExpressionLogicOp) {
-         return compilePotentialExpression(scope, skillPotential)
+      // @ts-ignore
+      if (skillPotential.op !== undefined) {
+         return compilePotentialExpression(scope, <PotentialExpression>skillPotential)
       } else {
-         return mSkillId(scope, skillPotential)
+         return mSkillId(scope, <Ident>skillPotential)
       }
    })
    const activities = skill.activities?.map(activity => mActivityId(scope, activity))

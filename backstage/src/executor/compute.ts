@@ -174,10 +174,10 @@ export function computePotentialSkills(gameContext: GameContext) {
       if (result) {
          const cost = computeSkillCost(gameContext, skill.cost)
          console.debug(`[D] [computePotentialSkills] skill '${ident}' available, it costs: ${cost}`)
-         gameContext.state.computedSkills!.available[identStr] = { skill, cost }
+         available[identStr] = { skill, cost }
       } else {
          console.debug(`[D] [computePotentialSkills] skill '${ident}' not available`)
-         gameContext.state.computedSkills!.unavailable[identStr] = { skill, resultPieces }
+         unavailable[identStr] = { skill, resultPieces }
       }
    }
 
