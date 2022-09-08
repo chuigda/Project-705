@@ -1,7 +1,7 @@
 import { ItemBase, PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
-export class ActivityOutput {
+export interface ActivityOutput {
    readonly attributes?: PlayerAttributesUpdate
    readonly skillPoints?: number
    readonly mentalHealth?: number
@@ -9,7 +9,7 @@ export class ActivityOutput {
    readonly money?: number
 }
 
-export class Activity extends ItemBase {
+export interface Activity extends ItemBase {
    readonly category: string
    readonly level: number
    readonly energyCost: number

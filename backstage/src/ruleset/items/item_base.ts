@@ -2,7 +2,7 @@ import { Ident, MaybeTranslationKey, Scope } from '@app/base/uid'
 
 export type PatchMode = 'overwrite' | 'and' | 'or'
 
-export class ItemBase {
+export interface ItemBase {
    readonly ident: Ident
    readonly name: MaybeTranslationKey
    readonly description: MaybeTranslationKey
@@ -10,7 +10,7 @@ export class ItemBase {
    readonly scope?: Scope
 }
 
-export class PlayerAttributesUpdate {
+export interface PlayerAttributesUpdate {
    strength?: number
    intelligence?: number
    emotionalIntelligence?: number

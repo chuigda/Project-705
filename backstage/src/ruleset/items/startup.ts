@@ -1,7 +1,7 @@
 import { ItemBase, PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
-export class StartupPlayerProperties {
+export interface StartupPlayerProperties {
    readonly attributes?: PlayerAttributesUpdate
    readonly talent?: PlayerAttributesUpdate
    readonly skillPoints?: number
@@ -9,7 +9,7 @@ export class StartupPlayerProperties {
    readonly moneyPerTurn?: number
 }
 
-export class Startup extends ItemBase {
+export interface Startup extends ItemBase {
    readonly player?: StartupPlayerProperties
    readonly events?: MaybeInlineEvent[]
    readonly modifier?: object

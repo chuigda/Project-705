@@ -5,16 +5,16 @@ import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export type SkillPotential = PotentialExpression | Ident
 
-export class SkillCost {
+export interface SkillCost {
    readonly base: number
    readonly attributes?: PlayerAttributesUpdate
 }
 
-export class SkillOutput {
+export interface SkillOutput {
    readonly attributes: PlayerAttributesUpdate
 }
 
-export class Skill extends ItemBase {
+export interface Skill extends ItemBase {
    readonly category?: string
    readonly potential?: SkillPotential[]
    readonly cost: SkillCost

@@ -2,8 +2,7 @@ import {
    AvailableSkill,
    ComputedAscensionPerks,
    ComputedSkills,
-   HasSkillOrNot,
-   PotentialFunctionResult,
+   HasSkillOrNot, isHasSkillOrNot, isPotentialFunctionResult, PotentialFunctionResult, PotentialLogicOpResult,
    PotentialResult,
    SkillPotentialResult,
    UnavailableAscensionPerk,
@@ -172,28 +171,31 @@ export function sendAvailableSkill(as: AvailableSkill): IAvailableSkill {
 }
 
 export function sendPotentialResult(pr: PotentialResult): IPotentialResult {
-   if (/* PotentialFunctionResult */ 'description' in pr) {
+   if (isPotentialFunctionResult(pr)) {
+      pr = <PotentialFunctionResult>pr
       return {
          type: 'fn',
          result: pr.result,
          description: pr.description
       }
    }
+
+   pr = <PotentialLogicOpResult>pr
    return {
       type: 'logicOp',
       result: pr.result,
-      resultPieces: pr.resultPieces.map((p) => sendPotentialResult(p))
+      resultPieces: pr.resultPieces.map(p => sendPotentialResult(p))
    }
 }
 
 export function sendSkillPotentialResult(spr: SkillPotentialResult): ISkillPotentialResult {
-   // @ts-ignore
-   if (spr.skillId) {
+   if (isHasSkillOrNot(spr)) {
+      spr = <HasSkillOrNot>spr
       return {
          type: 'skill',
          result: spr.result,
-         skillId: (<HasSkillOrNot>spr).skillId,
-         skillName: (<HasSkillOrNot>spr).skillName
+         skillId: spr.skillId,
+         skillName: spr.skillName
       }
    } else {
       return sendPotentialResult(<PotentialResult>spr)
@@ -203,28 +205,28 @@ export function sendSkillPotentialResult(spr: SkillPotentialResult): ISkillPoten
 export function sendUnavailableSkill(us: UnavailableSkill): IUnavailableSkill {
    return {
       skill: sendSkill(us.skill),
-      resultPieces: us.resultPieces.map((r) => sendSkillPotentialResult(r))
+      resultPieces: us.resultPieces.map(r => sendSkillPotentialResult(r))
    }
 }
 
 export function sendComputedSkills(cs: ComputedSkills): IComputedSkills {
    return {
-      available: Object.values(cs.available).map((x) => sendAvailableSkill(x)),
-      unavailable: Object.values(cs.unavailable).map((x) => sendUnavailableSkill(x))
+      available: Object.values(cs.available).map(x => sendAvailableSkill(x)),
+      unavailable: Object.values(cs.unavailable).map(x => sendUnavailableSkill(x))
    }
 }
 
 export function sendUnavailableAscensionPerks(uap: UnavailableAscensionPerk): IUnavailableAscensionPerk {
    return {
       ascensionPerk: sendAscensionPerk(uap.ascensionPerk),
-      resultPieces: uap.resultPieces.map((r) => sendPotentialResult(r))
+      resultPieces: uap.resultPieces.map(r => sendPotentialResult(r))
    }
 }
 
 export function sendComputedAscensionPerks(ap: ComputedAscensionPerks): IComputedAscensionPerks {
    return {
-      available: Object.values(ap.available).map((x) => sendAscensionPerk(x)),
-      unavailable: Object.values(ap.unavailable).map((x) => sendUnavailableAscensionPerks(x))
+      available: Object.values(ap.available).map(x => sendAscensionPerk(x)),
+      unavailable: Object.values(ap.unavailable).map(x => sendUnavailableAscensionPerks(x))
    }
 }
 

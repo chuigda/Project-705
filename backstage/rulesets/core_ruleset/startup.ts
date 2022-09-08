@@ -44,7 +44,6 @@ const detroitStartup: Startup = {
    events: ['detroit_init']
 }
 
-
 const startups: Startup[] = [
    normalStartup,
    detroitStartup

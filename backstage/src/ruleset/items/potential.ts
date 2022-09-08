@@ -15,3 +15,11 @@ export interface PotentialExpressionFunctionOp {
 }
 
 export type PotentialExpression = PotentialExpressionLogicOp | PotentialExpressionFunctionOp
+
+export function isPotentialExpressionLogicOp(expr: PotentialExpression): boolean {
+   return typeof expr.op === 'string'
+}
+
+export function isPotentialExpressionFunctionOp(expr: PotentialExpression): boolean {
+   return typeof expr.op === 'function'
+}

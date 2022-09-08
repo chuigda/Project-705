@@ -2,10 +2,14 @@ import { Ident, MaybeTranslationKey } from '@app/base/uid'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export interface Label {
+   readonly type: 'label'
+
    readonly text: MaybeTranslationKey
 }
 
 export interface Button {
+   readonly type: 'button'
+
    readonly ident: Ident
    readonly text: MaybeTranslationKey
    readonly tooltip: MaybeTranslationKey
@@ -13,16 +17,28 @@ export interface Button {
    readonly events: MaybeInlineEvent[]
 }
 
-export type Divider = Record<string, never> // empty
+export interface Divider {
+   readonly type: 'divider'
+}
 
 export type MenuItem = Button | Menu | Divider
 
 export interface Menu {
+   readonly type: 'menu'
+
    readonly ident: Ident
    readonly text: MaybeTranslationKey
    readonly tooltip: MaybeTranslationKey
 
    readonly children: MenuItem[]
+}
+
+export function isDivider(menuItem: MenuItem): boolean {
+   return menuItem.type === 'divider'
+}
+
+export function isButton(menuItem: MenuItem): boolean {
+   return menuItem.type === 'button'
 }
 
 export interface DialogOption {

@@ -16,7 +16,7 @@ import {
    Button,
    CustomScoreBoard,
    CustomUI,
-   DialogOption,
+   DialogOption, isButton, isDivider,
    Menu,
    MenuItem,
    SimpleDialogTemplate
@@ -105,23 +105,26 @@ export class CompiledCustomUI {
 }
 
 export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
-   if (/* Divider */ isEmpty(item)) {
+   if (isDivider(item)) {
       return item
-   } else if (/* Button */ 'events' in item) {
+   } else if (isButton(item)) {
+      item = <Button>item
       return {
+         type: 'button',
          ident: mDisplayItemId(scope, item.ident),
          text: mTranslationKey(scope, item.text),
          tooltip: mTranslationKey(scope, item.tooltip),
-         events: item.events.map((event) => compileMaybeInlineEvent(scope, event))
+         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
       }
-   } /* if (item instanceof Menu) */ else {
+   } else /* if (isMenu(item)) */ {
       const menu = <Menu>item
       return {
+         type: 'menu',
          ident: mDisplayItemId(scope, menu.ident),
          text: mTranslationKey(scope, menu.text),
          tooltip: mTranslationKey(scope, menu.tooltip),
 
-         children: menu.children.map((child) => compileMenuItem(scope, child))
+         children: menu.children.map(child => compileMenuItem(scope, child))
       }
    }
 }

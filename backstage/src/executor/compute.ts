@@ -69,6 +69,18 @@ export interface HasSkillOrNot extends PotentialResultBase {
 
 export type SkillPotentialResult = PotentialResult | HasSkillOrNot
 
+export function isPotentialFunctionResult(spr: SkillPotentialResult): boolean {
+   return 'description' in spr
+}
+
+export function isPotentialLogicOpResult(spr: SkillPotentialResult): boolean {
+   return 'op' in spr
+}
+
+export function isHasSkillOrNot(spr: SkillPotentialResult): boolean {
+   return 'skillId' in spr
+}
+
 export function computeSkillPotential(gameContext: GameContext, skillPotential: SkillPotential): SkillPotentialResult {
    if (/* PotentialExpression */ typeof skillPotential === 'object' && 'op' in skillPotential) {
       return computePotential(gameContext, skillPotential)

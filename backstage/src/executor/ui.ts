@@ -25,7 +25,6 @@ function nextItemID(gameContext: GameContext): number {
 
 export function createDialog(gameContext: GameContext, template: Ident | SimpleDialogTemplate): SimpleDialog | null {
    let inlineTemplate: SimpleDialogTemplate
-   // if (template instanceof SimpleDialogTemplate) {
    if (typeof template === 'object' && 'ident' in template) {
       inlineTemplate = template
    } else {
