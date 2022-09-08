@@ -1,14 +1,14 @@
-import { Ident } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
 import { triggerEvent } from '@app/executor/events'
 import { PropertyOp } from '@app/ruleset/ops'
+import { ValueSource } from '@app/ruleset/items/modifier'
 
 export function updatePlayerProperty(
    gameContext: GameContext,
    property: string,
    operator: PropertyOp,
    value: number,
-   source?: Ident
+   source?: ValueSource
 ) {
    // TODO(rebuild): 增加 modifiers 相关的计算
    // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算

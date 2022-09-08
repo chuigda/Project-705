@@ -10,17 +10,27 @@ import { MaybeInlineEvent } from '@app/ruleset/items/event'
 import { PropertyOp } from '@app/ruleset/ops'
 
 import computeFunctions, {
-   ComputedAscensionPerks, ComputedSkills, PotentialResult, SkillPotentialResult
+   ComputedAscensionPerks,
+   ComputedSkills,
+   PotentialResult,
+   SkillPotentialResult
 } from '@app/executor/compute'
 import connectFunctions, { Signal } from '@app/executor/connect'
 import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/skill'
 import propertyFunctions from '@app/executor/properties'
 import variableFunctions from '@app/executor/variables'
-import { BubbleMessageTemplate, Button, CustomScoreBoard, Menu, SimpleDialogTemplate } from '@app/ruleset/items/ui'
+import {
+   BubbleMessageTemplate,
+   Button,
+   CustomScoreBoard,
+   Menu,
+   SimpleDialogTemplate
+} from '@app/ruleset/items/ui'
 import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
+import { ValueSource } from '@app/ruleset/items/modifier'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -218,7 +228,7 @@ export class GameContext {
       activityFunctions.performActivity(this, activity)
    }
 
-   updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: Ident) {
+   updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: ValueSource) {
       propertyFunctions.updatePlayerProperty(this, property, operator, value, source)
    }
 
