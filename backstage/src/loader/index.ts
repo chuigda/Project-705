@@ -1,5 +1,4 @@
-import { SkillCategory } from '@app/ruleset/items/category'
-import { RuleSet } from '@app/ruleset'
+import { RuleSet, Modifier, SkillCategory } from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
 import { ruleSetAssertion } from '@app/loader/assertions'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
@@ -31,7 +30,7 @@ export class CompiledRuleSet {
    activityCategories: string[] = []
 
    events: Record<string, Event> = {}
-   modifiers: object = {} // TODO(chuigda): modifier system rework
+   modifiers: Record<string, Modifier> = {} // TODO(chuigda): modifier system rework
    skills: Record<string, Skill> = {}
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}

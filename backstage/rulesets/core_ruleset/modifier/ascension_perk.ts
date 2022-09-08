@@ -1,4 +1,4 @@
-import { Modifier } from '@app/ruleset/items/modifier'
+import { Modifier } from '@app/ruleset'
 
 const ascensionPerkModifiers: Modifier[] = [
    {
@@ -6,6 +6,15 @@ const ascensionPerkModifiers: Modifier[] = [
       name: '$md_town_swot',
       description: '$md_town_swot_desc',
 
+      player: {
+         mentalHealth: {
+            '@activity:@chinese': { loss: -0.25 },
+            '@activity:@math': { loss: -0.25 },
+            '@activity:@english': { loss: -0.25 },
+            '@activity:@liberal': { loss: -0.25 },
+            '@activity:@science': { loss: -0.25 }
+         }
+      },
       skillPointCost: {
          '@chinese': -0.2,
          '@math': -0.2,
@@ -28,11 +37,11 @@ const ascensionPerkModifiers: Modifier[] = [
             '@activity:@science': { gain: 0.3 },
          },
          mentalHealth: {
-            '@activity:@chinese': { loss: -0.3 },
-            '@activity:@math': { loss: -0.3 },
-            '@activity:@english': { loss: -0.3 },
-            '@activity:@liberal': { loss: -0.3 },
-            '@activity:@science': { loss: -0.3 }
+            '@activity:@chinese': { loss: -0.6 },
+            '@activity:@math': { loss: -0.6 },
+            '@activity:@english': { loss: -0.6 },
+            '@activity:@liberal': { loss: -0.6 },
+            '@activity:@science': { loss: -0.6 }
          }
       },
       skillPointCost: {
