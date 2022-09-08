@@ -19,7 +19,7 @@ export type IdMangler = (scope: Scope, id: Ident) => string
 
 export function buildMangler(idKind: string): IdMangler {
    return (scope: Scope, id: string | ComposedId): string => {
-      if (typeof id === 'object') {
+      if (/* ComposedId */ typeof id === 'object') {
          const { author, moduleName, id: id1 } = id
          return uniqueId(author, moduleName, idKind, id1)
       }
