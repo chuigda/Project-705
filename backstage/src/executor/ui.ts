@@ -2,13 +2,13 @@ import { Ident, MaybeTranslationKey, mDisplayItemId } from '@app/base/uid'
 import { BubbleMessageIcon, BubbleMessageTemplate, SimpleDialogTemplate } from '@app/ruleset/items/ui'
 import { GameContext } from '@app/executor/game_context'
 
-export type SimpleDialog = SimpleDialogTemplate & {
+export interface SimpleDialog extends SimpleDialogTemplate {
    readonly uid: string
 
    display: boolean
 }
 
-export type BubbleMessage = {
+export interface BubbleMessage {
    readonly ident: Ident
    readonly uid: string
 
@@ -67,7 +67,6 @@ export function createBubbleMessage(
    }
 
    let dialog: SimpleDialog | null
-   // if (inlineTemplate.linkedDialog instanceof SimpleDialogTemplate) {
    if (
    /* SimpleDialogTemplate */ typeof inlineTemplate.linkedDialog === 'object' &&
     'ident' in inlineTemplate.linkedDialog

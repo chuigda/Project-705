@@ -172,7 +172,6 @@ export function sendAvailableSkill(as: AvailableSkill): IAvailableSkill {
 }
 
 export function sendPotentialResult(pr: PotentialResult): IPotentialResult {
-   // if (pr instanceof PotentialFunctionResult) {
    if (/* PotentialFunctionResult */ 'description' in pr) {
       return {
          type: 'fn',
