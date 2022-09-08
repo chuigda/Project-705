@@ -157,10 +157,10 @@ export interface IGameState {
    turns: number
    player?: IPlayerStatus
 
-   modifiers?: object
+   modifiers?: string[]
    variables?: Record<string, any>
 
-   computedModifiers?: object
+   computedModifier?: object
    computedSkills?: IComputedSkills
    computedAscensionPerks?: IComputedAscensionPerks
 }

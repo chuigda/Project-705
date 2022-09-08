@@ -9,6 +9,7 @@ import { MaybeTranslationKey } from '@app/base/uid'
 import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
+import { Modifier, ValueSource } from '@app/ruleset/items/modifier'
 
 export interface PotentialResultBase {
    readonly result: boolean
@@ -244,8 +245,8 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
       let result = true
       let resultPieces: PotentialResult[] = []
       if (potential) {
-         resultPieces = potential.map((potentialPart) => computePotential(gameContext, potentialPart))
-         result = resultPieces.every((piece) => piece.result)
+         resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
+         result = resultPieces.every(piece => piece.result)
       }
 
       console.info(`[I] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
@@ -258,6 +259,48 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
 
    gameContext.state.computedAscensionPerks = { available, unavailable }
    gameContext.updateTracker.computedAscensionPerks = true
+}
+
+export interface ComputedContribution {
+   name: MaybeTranslationKey
+   value: number
+   displayIcon?: string
+}
+
+export interface ComputedPropertyModifier {
+   computedValue: number
+   contributions: ComputedContribution[]
+}
+
+export interface ComputedAttributeModifiers {
+   strength: ComputedPropertyModifier
+   intelligence: ComputedPropertyModifier
+   emotionalIntelligence: ComputedPropertyModifier
+   memorization: ComputedPropertyModifier
+   imagination: ComputedPropertyModifier
+   charisma: ComputedPropertyModifier
+}
+
+export interface ComputedPlayerModifier {
+   attributes: ComputedAttributeModifiers
+   intelligence: ComputedAttributeModifiers
+
+   skillPoints: ComputedPropertyModifier
+   energy: ComputedPropertyModifier
+   mentalHealth: ComputedPropertyModifier
+   satisfactory: ComputedPropertyModifier
+   money: ComputedPropertyModifier
+   moneyPerTurn: ComputedPropertyModifier
+}
+
+export interface ComputedSkillPointCostModifier {
+   computedValue: number
+   contributions: ComputedContribution[]
+}
+
+export interface ComputedModifier {
+   player: Record<ValueSource, ComputedPlayerModifier>
+   skillPointCost: Record</* skill category id */ string, ComputedSkillPointCostModifier>
 }
 
 export default {

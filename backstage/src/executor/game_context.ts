@@ -10,7 +10,7 @@ import { MaybeInlineEvent } from '@app/ruleset/items/event'
 import { PropertyOp } from '@app/ruleset/ops'
 
 import computeFunctions, {
-   ComputedAscensionPerks,
+   ComputedAscensionPerks, ComputedModifier,
    ComputedSkills,
    PotentialResult,
    SkillPotentialResult
@@ -99,10 +99,10 @@ export class GameState {
    player: PlayerStatus = new PlayerStatus()
 
    events: GameContextEvents = new GameContextEvents()
-   modifiers: object = {}
+   modifiers: string[] = []
    variables: Record<string, any> = {}
 
-   computedModifier?: object = undefined
+   computedModifier?: ComputedModifier = undefined
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
 

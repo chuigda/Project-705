@@ -259,7 +259,8 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          modifiers: gs.modifiers,
          variables: gs.variables,
 
-         computedModifiers: gs.computedModifier,
+         // TODO(chuigda): transpile ComputedModifier
+         // computedModifiers: gs.computedModifier,
          computedSkills: sendComputedSkills(gs.computedSkills!),
          computedAscensionPerks: sendComputedAscensionPerks(gs.computedAscensionPerks!)
       }
@@ -272,7 +273,7 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          modifiers: gs.modifiers,
          variables: updateTracker.variables ? gs.variables : undefined,
 
-         computedModifiers: updateTracker.computedModifiers ? gs.computedModifier : undefined,
+         // computedModifiers: updateTracker.computedModifiers ? gs.computedModifier : undefined,
          computedSkills: updateTracker.computedSkills ? sendComputedSkills(gs.computedSkills!) : undefined,
          computedAscensionPerks: updateTracker.computedAscensionPerks
             ? sendComputedAscensionPerks(gs.computedAscensionPerks!)
