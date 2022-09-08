@@ -261,7 +261,7 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
    gameContext.updateTracker.computedAscensionPerks = true
 }
 
-export interface ComputedContribution {
+export interface IContribution {
    name: MaybeTranslationKey
    value: number
    displayIcon?: string
@@ -269,7 +269,7 @@ export interface ComputedContribution {
 
 export interface ComputedPropertyModifier {
    computedValue: number
-   contributions: ComputedContribution[]
+   contributions: IContribution[]
 }
 
 export interface ComputedAttributeModifiers {
@@ -295,7 +295,7 @@ export interface ComputedPlayerModifier {
 
 export interface ComputedSkillPointCostModifier {
    computedValue: number
-   contributions: ComputedContribution[]
+   contributions: IContribution[]
 }
 
 export interface ComputedModifier {
