@@ -48,7 +48,7 @@ export function isTranslationKey(key: string): boolean {
 }
 
 export function isAbsoluteTranslationKey(key: string): boolean {
-   return key.startsWith('$') && key.indexOf('$') !== -1
+   return key.startsWith('@') && key.indexOf('$') !== -1
 }
 
 export type MaybeTranslationKey = string

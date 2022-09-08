@@ -1,12 +1,5 @@
-import { PotentialExpressionFunctionOp } from '@app/ruleset/items/potential'
-import { GameContext } from '@app/executor/game_context'
-import { mStartupId } from '@app/base/uid'
 import { Skill } from '@app/ruleset'
-
-const notPoorStartup: PotentialExpressionFunctionOp = {
-   op: (cx: GameContext) => cx.state.startup !== mStartupId({ author: 'cnpr', moduleName: 'core' }, 'poor'),
-   description: '$potential_no_poor_startup'
-}
+import { requireStartupNot } from '@rulesets/core_ruleset/common_potential'
 
 const computerSkills: Skill[] = [
    {
@@ -18,7 +11,7 @@ const computerSkills: Skill[] = [
       potential: [
          'math_function',
          'english_writing',
-         notPoorStartup
+         requireStartupNot({ author: 'cnpr', moduleName: 'core', id: 'poor' }, 'poor')
       ],
       cost: {
          base: 400,
