@@ -264,46 +264,89 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
 export interface IContribution {
    name: MaybeTranslationKey
    value: number
-   displayIcon?: string
+   icon?: string
 }
 
-export interface ComputedPropertyModifier {
-   gain: number
-   gainContributions: IContribution[]
+export class ComputedPropertyModifier {
+   gain: number = 0.0
+   gainContributions: IContribution[] = []
 
-   loss: number
-   lossContributions: IContribution[]
+   loss: number = 0.0
+   lossContributions: IContribution[] = []
+
+   addContribution(name: MaybeTranslationKey, value: ModifierValue, icon?: string) {
+      if (value.gain) {
+         this.gain += value.gain
+         this.gainContributions.push({
+            name,
+            value: value.gain,
+            icon
+         })
+      }
+      if (value.loss) {
+         this.loss += value.loss
+         this.gainContributions.push({
+            name,
+            value: value.loss,
+            icon
+         })
+      }
+   }
+
+   finalize() {
+      if (this.gain < 0.0) {
+         this.gain = 0.0
+      }
+      if (this.loss < 0.0) {
+         this.loss = 0.0
+      }
+   }
 }
 
-export interface ComputedAttributeModifiers {
-   strength: ComputedPropertyModifier
-   intelligence: ComputedPropertyModifier
-   emotionalIntelligence: ComputedPropertyModifier
-   memorization: ComputedPropertyModifier
-   imagination: ComputedPropertyModifier
-   charisma: ComputedPropertyModifier
+export class ComputedAttributeModifiers {
+   strength: ComputedPropertyModifier = new ComputedPropertyModifier()
+   intelligence: ComputedPropertyModifier = new ComputedPropertyModifier()
+   emotionalIntelligence: ComputedPropertyModifier = new ComputedPropertyModifier()
+   memorization: ComputedPropertyModifier = new ComputedPropertyModifier()
+   imagination: ComputedPropertyModifier = new ComputedPropertyModifier()
+   charisma: ComputedPropertyModifier = new ComputedPropertyModifier()
 }
 
-export interface ComputedPlayerModifier {
-   attributes: ComputedAttributeModifiers
-   intelligence: ComputedAttributeModifiers
+export class ComputedPlayerModifier {
+   attributes: ComputedAttributeModifiers = new ComputedAttributeModifiers()
+   intelligence: ComputedAttributeModifiers = new ComputedAttributeModifiers()
 
-   skillPoints: ComputedPropertyModifier
-   energy: ComputedPropertyModifier
-   mentalHealth: ComputedPropertyModifier
-   satisfactory: ComputedPropertyModifier
-   money: ComputedPropertyModifier
-   moneyPerTurn: ComputedPropertyModifier
+   skillPoints: ComputedPropertyModifier = new ComputedPropertyModifier()
+   energy: ComputedPropertyModifier = new ComputedPropertyModifier()
+   mentalHealth: ComputedPropertyModifier = new ComputedPropertyModifier()
+   satisfactory: ComputedPropertyModifier = new ComputedPropertyModifier()
+   money: ComputedPropertyModifier = new ComputedPropertyModifier()
+   moneyPerTurn: ComputedPropertyModifier = new ComputedPropertyModifier()
 }
 
-export interface ComputedSkillPointCostModifier {
-   computedValue: number
+export class ComputedSkillPointCostModifier {
+   computedValue: number = 0.0
    contributions: IContribution[]
+
+   addContribution(name: MaybeTranslationKey, value: number, icon?: string) {
+      this.computedValue += value
+      this.contributions.push({
+         name,
+         value,
+         icon
+      })
+   }
+
+   finalize() {
+      if (this.computedValue < 0.0) {
+         this.computedValue = 0.0
+      }
+   }
 }
 
-export interface ComputedModifier {
-   player: Record<ValueSource, ComputedPlayerModifier>
-   skillPointCost: Record</* skill category id */ string, ComputedSkillPointCostModifier>
+export class ComputedModifier {
+   player: Record<ValueSource, ComputedPlayerModifier> = {}
+   skillPointCost: Record</* skill category id */ string, ComputedSkillPointCostModifier> = {}
 }
 
 export default {
