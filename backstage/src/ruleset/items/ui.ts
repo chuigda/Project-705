@@ -41,6 +41,10 @@ export function isButton(menuItem: MenuItem): boolean {
    return menuItem.type === 'button'
 }
 
+export function isMenu(menuItem: MenuItem): boolean {
+   return menuItem.type === 'menu'
+}
+
 export interface DialogOption {
    readonly optionKey: string
 
