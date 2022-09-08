@@ -6,7 +6,6 @@ const wellPreparedActivation: Event = {
    event: [
       (gameContext: GameContext) => {
          gameContext.updatePlayerProperty('skillPoints', 'add', 500)
-         // TODO modifier
       }
    ]
 }

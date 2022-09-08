@@ -4,6 +4,6 @@ import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export interface AscensionPerk extends ItemBase {
    readonly potential?: PotentialExpression[]
-   readonly modifier?: object
+   readonly modifier?: string
    readonly events?: MaybeInlineEvent[]
 }

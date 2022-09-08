@@ -1,5 +1,5 @@
 import { PotentialExpressionFunctionOp } from '@app/ruleset/items/potential'
-import { ComposedId, mStartupId } from '@app/base/uid'
+import { ComposedId, mAscensionPerkId, mStartupId } from '@app/base/uid'
 
 export function turnsLater(turns: number): PotentialExpressionFunctionOp {
    return {
@@ -20,5 +20,19 @@ export function requireStartupNot(startup: ComposedId, startupNickName: string):
    return {
       op: gameContext => gameContext.state.startup !== mStartupId(startup, startup),
       description: `$potential_not_startup_${startupNickName}`
+   }
+}
+
+export function requireAscensionPerk(ascensionPerk: ComposedId, apNickName: string): PotentialExpressionFunctionOp {
+   return {
+      op: gameContext => !!gameContext.state.player.ascensionPerks[mAscensionPerkId(ascensionPerk, ascensionPerk)],
+      description: `$potential_ap_${apNickName}`
+   }
+}
+
+export function requireNoAscensionPerk(ascensionPerk: ComposedId, apNickName: string): PotentialExpressionFunctionOp {
+   return {
+      op: gameContext => !gameContext.state.player.ascensionPerks[mAscensionPerkId(ascensionPerk, ascensionPerk)],
+      description: `$potential_ap_${apNickName}`
    }
 }

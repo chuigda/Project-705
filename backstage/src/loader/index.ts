@@ -1,4 +1,4 @@
-import { SkillCategory } from '@app/ruleset/items/skill_category'
+import { SkillCategory } from '@app/ruleset/items/category'
 import { RuleSet } from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
 import { ruleSetAssertion } from '@app/loader/assertions'

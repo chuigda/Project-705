@@ -1,5 +1,6 @@
 import { ItemBase, PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
+import { Ident } from '@app/base/uid'
 
 export interface StartupPlayerProperties {
    readonly attributes?: PlayerAttributesUpdate
@@ -12,5 +13,5 @@ export interface StartupPlayerProperties {
 export interface Startup extends ItemBase {
    readonly player?: StartupPlayerProperties
    readonly events?: MaybeInlineEvent[]
-   readonly modifier?: object
+   readonly modifier?: Ident
 }

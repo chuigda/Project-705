@@ -1,5 +1,5 @@
 import { CompiledRuleSet } from '@app/loader'
-import { SkillCategory } from '@app/ruleset/items/skill_category'
+import { SkillCategory } from '@app/ruleset/items/category'
 import { Ident, mDisplayItemId, mEventId, mTranslationKey, mVarName, Scope } from '@app/base/uid'
 import {
    compileActivity,
