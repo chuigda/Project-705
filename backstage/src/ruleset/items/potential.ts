@@ -9,7 +9,7 @@ export class PotentialExpressionLogicOp {
 
 export type PotentialExpressionFunction = (gameContext: GameContext) => boolean
 
-export class PotentialExpressionFunctionOp {
+export type PotentialExpressionFunctionOp = {
    readonly op: PotentialExpressionFunction
    readonly description: MaybeTranslationKey
 }

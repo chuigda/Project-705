@@ -1,11 +1,11 @@
 import { Ident, MaybeTranslationKey } from '@app/base/uid'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
 
-export class Label {
+export interface Label {
    readonly text: MaybeTranslationKey
 }
 
-export class Button {
+export interface Button {
    readonly ident: Ident
    readonly text: MaybeTranslationKey
    readonly tooltip: MaybeTranslationKey
@@ -13,11 +13,11 @@ export class Button {
    readonly events: MaybeInlineEvent[]
 }
 
-export class Divider {}
+export type Divider = Record<string, never> // empty
 
 export type MenuItem = Button | Menu | Divider
 
-export class Menu {
+export interface Menu {
    readonly ident: Ident
    readonly text: MaybeTranslationKey
    readonly tooltip: MaybeTranslationKey
@@ -25,7 +25,7 @@ export class Menu {
    readonly children: MenuItem[]
 }
 
-export class DialogOption {
+export interface DialogOption {
    readonly optionKey: string
 
    readonly text: MaybeTranslationKey
@@ -34,7 +34,7 @@ export class DialogOption {
    readonly onClickEvents: MaybeInlineEvent[]
 }
 
-export class SimpleDialogTemplate {
+export interface SimpleDialogTemplate {
    readonly ident: Ident
 
    readonly title: MaybeTranslationKey
@@ -45,7 +45,7 @@ export class SimpleDialogTemplate {
 // TODO(chuigda): add more when we have gfx features
 export type BubbleMessageIcon = 'normal' | 'important'
 
-export class BubbleMessageTemplate {
+export interface BubbleMessageTemplate {
    readonly ident: Ident
 
    readonly icon: BubbleMessageIcon
@@ -53,7 +53,7 @@ export class BubbleMessageTemplate {
    readonly linkedDialog: Ident | SimpleDialogTemplate
 }
 
-export class CustomScoreBoard {
+export interface CustomScoreBoard {
    readonly ident: Ident
    readonly tooltip: MaybeTranslationKey
    readonly color: string
@@ -62,7 +62,7 @@ export class CustomScoreBoard {
    readonly bind?: Ident
 }
 
-export class CustomUI {
+export interface CustomUI {
    menus?: Menu[]
    buttons?: Button[]
    scoreBoards?: CustomScoreBoard[]

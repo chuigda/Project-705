@@ -2,13 +2,13 @@ import { Ident, MaybeTranslationKey, mDisplayItemId } from '@app/base/uid'
 import { BubbleMessageIcon, BubbleMessageTemplate, SimpleDialogTemplate } from '@app/ruleset/items/ui'
 import { GameContext } from '@app/executor/game_context'
 
-export class SimpleDialog extends SimpleDialogTemplate {
+export type SimpleDialog = SimpleDialogTemplate & {
    readonly uid: string
 
    display: boolean
 }
 
-export class BubbleMessage {
+export type BubbleMessage = {
    readonly ident: Ident
    readonly uid: string
 
@@ -25,7 +25,8 @@ function nextItemID(gameContext: GameContext): number {
 
 export function createDialog(gameContext: GameContext, template: Ident | SimpleDialogTemplate): SimpleDialog | null {
    let inlineTemplate: SimpleDialogTemplate
-   if (template instanceof SimpleDialogTemplate) {
+   // if (template instanceof SimpleDialogTemplate) {
+   if (typeof template === 'object' && 'ident' in template) {
       inlineTemplate = template
    } else {
       const templateId = mDisplayItemId(gameContext.scope!, template)
@@ -54,9 +55,9 @@ export function createBubbleMessage(
    template: Ident | BubbleMessageTemplate
 ): BubbleMessage | null {
    let inlineTemplate: BubbleMessageTemplate
-   if (template instanceof BubbleMessageTemplate) {
+   if (/* BubbleMessageTemplate */ typeof template === 'object' && 'ident' in template) {
       inlineTemplate = template
-   } else {
+   } /* Ident */ else {
       const templateId = mDisplayItemId(gameContext.scope!, template)
       inlineTemplate = gameContext.ruleSet.ui.bubbleMessageTemplates[templateId]
       if (!inlineTemplate) {
@@ -66,9 +67,13 @@ export function createBubbleMessage(
    }
 
    let dialog: SimpleDialog | null
-   if (inlineTemplate.linkedDialog instanceof SimpleDialogTemplate) {
+   // if (inlineTemplate.linkedDialog instanceof SimpleDialogTemplate) {
+   if (
+   /* SimpleDialogTemplate */ typeof inlineTemplate.linkedDialog === 'object' &&
+    'ident' in inlineTemplate.linkedDialog
+   ) {
       dialog = createDialog(gameContext, inlineTemplate.linkedDialog)
-   } else {
+   } /* Ident */ else {
       const linkedDialogId: string = mDisplayItemId(gameContext.scope!, inlineTemplate.linkedDialog)
       dialog = createDialog(gameContext, linkedDialogId)
    }

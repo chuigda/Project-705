@@ -172,7 +172,8 @@ export function sendAvailableSkill(as: AvailableSkill): IAvailableSkill {
 }
 
 export function sendPotentialResult(pr: PotentialResult): IPotentialResult {
-   if (pr instanceof PotentialFunctionResult) {
+   // if (pr instanceof PotentialFunctionResult) {
+   if (/* PotentialFunctionResult */ 'description' in pr) {
       return {
          type: 'fn',
          result: pr.result,
@@ -223,8 +224,8 @@ export function sendUnavailableAscensionPerks(uap: UnavailableAscensionPerk): IU
 
 export function sendComputedAscensionPerks(ap: ComputedAscensionPerks): IComputedAscensionPerks {
    return {
-      available: Object.values(ap.available).map(x => sendAscensionPerk(x)),
-      unavailable: Object.values(ap.unavailable).map(x => sendUnavailableAscensionPerks(x))
+      available: Object.values(ap.available).map((x) => sendAscensionPerk(x)),
+      unavailable: Object.values(ap.unavailable).map((x) => sendUnavailableAscensionPerks(x))
    }
 }
 
@@ -243,7 +244,7 @@ export function sendStartup(startup: Startup): IStartup {
       name: startup.name,
       description: startup.description,
 
-      player: startup.player ? sendStartupPlayerProperties(startup.player) : undefined,
+      player: startup.player ? sendStartupPlayerProperties(startup.player) : undefined
    }
 }
 
@@ -272,8 +273,8 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
 
          computedModifiers: updateTracker.computedModifiers ? gs.computedModifier : undefined,
          computedSkills: updateTracker.computedSkills ? sendComputedSkills(gs.computedSkills!) : undefined,
-         computedAscensionPerks: updateTracker.computedAscensionPerks ?
-            sendComputedAscensionPerks(gs.computedAscensionPerks!)
+         computedAscensionPerks: updateTracker.computedAscensionPerks
+            ? sendComputedAscensionPerks(gs.computedAscensionPerks!)
             : undefined
       }
    }

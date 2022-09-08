@@ -10,21 +10,22 @@ import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 
-export class PotentialResultBase {
+export interface PotentialResultBase {
    readonly result: boolean
 }
 
-export class PotentialFunctionResult extends PotentialResultBase {
+export interface PotentialFunctionResult extends PotentialResultBase {
    readonly description: string
 }
 
-export class PotentialLogicOpResult extends PotentialResultBase {
+export interface PotentialLogicOpResult extends PotentialResultBase {
    readonly op: LogicOp
    readonly resultPieces: PotentialResult[]
 }
 
 export function computePotential(gameContext: GameContext, potential: PotentialExpression): PotentialResult {
-   if (potential instanceof PotentialExpressionFunctionOp) {
+   if (typeof potential.op === 'function') {
+      potential = <PotentialExpressionFunctionOp>potential
       let result
       try {
          result = potential.op(gameContext)
@@ -37,17 +38,18 @@ export function computePotential(gameContext: GameContext, potential: PotentialE
          description: potential.description
       }
    } else {
-      const resultPieces = potential.arguments.map(arg => computePotential(gameContext, arg))
+      potential = <PotentialExpressionLogicOp>potential
+      const resultPieces = potential.arguments.map((arg) => computePotential(gameContext, arg))
       let result
       switch (potential.op) {
          case 'and':
-            result = resultPieces.every(piece => piece.result)
+            result = resultPieces.every((piece) => piece.result)
             break
          case 'or':
-            result = resultPieces.some(piece => piece.result)
+            result = resultPieces.some((piece) => piece.result)
             break
          case 'not':
-            result = !resultPieces.every(piece => piece.result)
+            result = !resultPieces.every((piece) => piece.result)
             break
       }
       return {
@@ -60,7 +62,7 @@ export function computePotential(gameContext: GameContext, potential: PotentialE
 
 export type PotentialResult = PotentialFunctionResult | PotentialLogicOpResult
 
-export class HasSkillOrNot extends PotentialResultBase {
+export interface HasSkillOrNot extends PotentialResultBase {
    readonly skillId: string
    readonly skillName: MaybeTranslationKey
 }
@@ -68,10 +70,9 @@ export class HasSkillOrNot extends PotentialResultBase {
 export type SkillPotentialResult = PotentialResult | HasSkillOrNot
 
 export function computeSkillPotential(gameContext: GameContext, skillPotential: SkillPotential): SkillPotentialResult {
-   if (skillPotential instanceof PotentialExpressionFunctionOp
-       || skillPotential instanceof PotentialExpressionLogicOp) {
+   if (/* PotentialExpression */ typeof skillPotential === 'object' && 'op' in skillPotential) {
       return computePotential(gameContext, skillPotential)
-   } else {
+   } /* Ident */ else {
       const skillId = <string>skillPotential
       const skill = gameContext.ruleSet.skills[skillId]
       if (!skill) {
@@ -104,14 +105,16 @@ export function computeSkillCost(gameContext: GameContext, skillCost: SkillCost)
    if (attributes) {
       for (const attrName in attributes) {
          const attribute = gameContext.state.player.attributes[<keyof PlayerAttributes>attrName]
-         const requiredAttribute = attributes[<keyof PlayerAttributesUpdate>(attrName)]
+         const requiredAttribute = attributes[<keyof PlayerAttributesUpdate>attrName]
 
          if (requiredAttribute) {
             const diff = attribute - requiredAttribute
-            console.debug(`[D] [computeSkillCost] gameContext.player.attributes[${attrName}]`
-               + `= ${attribute}`
-               + `, attributes[${attrName}] = ${requiredAttribute}`
-               + `, diff = ${diff}`)
+            console.debug(
+               `[D] [computeSkillCost] gameContext.player.attributes[${attrName}]` +
+            `= ${attribute}` +
+            `, attributes[${attrName}] = ${requiredAttribute}` +
+            `, diff = ${diff}`
+            )
             if (diff < 0) {
                totalDiffRatio += -(diff / requiredAttribute)
                console.debug(`[D] [computeSkillCost] diff contribution = ${-(diff / requiredAttribute)}`)
@@ -168,7 +171,7 @@ export function computePotentialSkills(gameContext: GameContext) {
          for (const potentialPart of potential) {
             resultPieces.push(computeSkillPotential(gameContext, potentialPart))
          }
-         result = resultPieces.every(piece => piece.result)
+         result = resultPieces.every((piece) => piece.result)
       }
 
       if (result) {
@@ -229,8 +232,8 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
       let result = true
       let resultPieces: PotentialResult[] = []
       if (potential) {
-         resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
-         result = resultPieces.every(piece => piece.result)
+         resultPieces = potential.map((potentialPart) => computePotential(gameContext, potentialPart))
+         result = resultPieces.every((piece) => piece.result)
       }
 
       console.info(`[I] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
