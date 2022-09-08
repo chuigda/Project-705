@@ -1,5 +1,9 @@
 import { AscensionPerk } from '@app/ruleset'
-import { requireAscensionPerk, turnsLater } from '@rulesets/core_ruleset/common_potential'
+import {
+   requireAscensionPerk,
+   requireStartupNot,
+   turnsLater
+} from '@rulesets/core_ruleset/common_potential'
 
 const ascensionPerks: AscensionPerk[] = [
    {
@@ -13,7 +17,10 @@ const ascensionPerks: AscensionPerk[] = [
       ident: 'town_swot',
       name: '$ap_town_swot',
       description: '$ap_town_swot_desc',
-      potential: [turnsLater(12)],
+      potential: [
+         turnsLater(12),
+         requireStartupNot({ author: 'cnpr', moduleName: 'core', id: 'detroit' }, 'detroit')
+      ],
       modifier: 'town_swot'
    },
    {

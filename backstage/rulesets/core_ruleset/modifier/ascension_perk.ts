@@ -29,6 +29,11 @@ const ascensionPerkModifiers: Modifier[] = [
       description: '$md_king_of_involution_desc',
 
       player: {
+         attributes: {
+            charisma: {
+               'all': { gain: -0.3, loss: 0.3 }
+            }
+         },
          skillPoints: {
             '@activity:@chinese': { gain: 0.3 },
             '@activity:@math': { gain: 0.3 },
@@ -45,11 +50,11 @@ const ascensionPerkModifiers: Modifier[] = [
          }
       },
       skillPointCost: {
-         '@chinese': -0.6,
-         '@math': -0.6,
-         '@english': -0.6,
-         '@liberal': -0.6,
-         '@science': -0.6
+         '@chinese': -0.4,
+         '@math': -0.4,
+         '@english': -0.4,
+         '@liberal': -0.4,
+         '@science': -0.4
       }
    }
 ]

@@ -42,7 +42,7 @@ const startups: Startup[] = [
       description: '$startup_detroit_desc',
 
       player: {
-         talent: {
+         attributes: {
             intelligence: 2000,
             emotionalIntelligence: 500,
             strength: 500,
