@@ -4,7 +4,8 @@ import { Ident, mDisplayItemId, mEventId, mTranslationKey, mVarName, Scope } fro
 import {
    compileActivity,
    compileAscensionPerk,
-   compileEvent, compileMaybeInlineEvent,
+   compileEvent,
+   compileMaybeInlineEvent,
    compileSkill,
    compileStartup,
    compileTranslation
@@ -16,17 +17,16 @@ import {
    CustomScoreBoard,
    CustomUI,
    DialogOption,
-   Divider,
-   Label,
    Menu,
    MenuItem,
    SimpleDialogTemplate
 } from '@app/ruleset/items/ui'
+import { isEmpty } from '@app/util/general'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
       const { ident } = category
-      const maybeExistingCategory = compilation.skillCategories.findIndex(category1 => category1.ident === ident)
+      const maybeExistingCategory = compilation.skillCategories.findIndex((category1) => category1.ident === ident)
       if (maybeExistingCategory !== -1) {
          console.warn(`[W] [compileSkillCategories] skill category '${category}' already exists, overwriting`)
          compilation.skillCategories[maybeExistingCategory] = category
@@ -61,13 +61,13 @@ function buildCompileSeries<T extends HasIdent>(
    seriesName: keyof CompiledRuleSet,
    fnName: string,
    compileSingleFn: CompileSingleFunction<T>
-) : CompileFunction<T> {
+): CompileFunction<T> {
    return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
       for (const item of series) {
          const compiledItem = compileSingleFn(scope, item)
          const ident = <string>compiledItem.ident
 
-         const dest = <Record<string, T>>(compilation[seriesName])
+         const dest = <Record<string, T>>compilation[seriesName]
          if (dest[ident]) {
             console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
          } else {
@@ -80,26 +80,11 @@ function buildCompileSeries<T extends HasIdent>(
    }
 }
 
-export const compileSkills = buildCompileSeries(
-   'skill',
-   'skills',
-   'compileSkills',
-   compileSkill
-)
+export const compileSkills = buildCompileSeries('skill', 'skills', 'compileSkills', compileSkill)
 
-export const compileActivities = buildCompileSeries(
-   'activity',
-   'activities',
-   'compileActivities',
-   compileActivity
-)
+export const compileActivities = buildCompileSeries('activity', 'activities', 'compileActivities', compileActivity)
 
-export const compileStartups = buildCompileSeries(
-   'startup',
-   'startups',
-   'compileStartups',
-   compileStartup
-)
+export const compileStartups = buildCompileSeries('startup', 'startups', 'compileStartups', compileStartup)
 
 export const compileAscensionPerks = buildCompileSeries(
    'ascension perk',
@@ -108,12 +93,7 @@ export const compileAscensionPerks = buildCompileSeries(
    compileAscensionPerk
 )
 
-export const compileEvents = buildCompileSeries(
-   'event',
-   'events',
-   'compileEvents',
-   compileEvent
-)
+export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
 
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}
@@ -125,26 +105,23 @@ export class CompiledCustomUI {
 }
 
 export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
-   if (item instanceof Divider) {
+   if (/* Divider */ isEmpty(item)) {
       return item
-   } else if (item instanceof Label) {
-      return {
-         text: mTranslationKey(scope, item.text)
-      }
-   } else if (item instanceof Button) {
+   } else if (/* Button */ 'events' in item) {
       return {
          ident: mDisplayItemId(scope, item.ident),
          text: mTranslationKey(scope, item.text),
          tooltip: mTranslationKey(scope, item.tooltip),
-         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
+         events: item.events.map((event) => compileMaybeInlineEvent(scope, event))
       }
-   } else /* if (item instanceof Menu) */ {
+   } /* if (item instanceof Menu) */ else {
+      const menu = <Menu>item
       return {
-         ident: mDisplayItemId(scope, item.ident),
-         text: mTranslationKey(scope, item.text),
-         tooltip: mTranslationKey(scope, item.tooltip),
+         ident: mDisplayItemId(scope, menu.ident),
+         text: mTranslationKey(scope, menu.text),
+         tooltip: mTranslationKey(scope, menu.tooltip),
 
-         children: item.children.map(child => compileMenuItem(scope, child))
+         children: menu.children.map((child) => compileMenuItem(scope, child))
       }
    }
 }
@@ -165,7 +142,7 @@ export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialog
          ...option,
 
          text: mTranslationKey(scope, option.text),
-         tooltip: mTranslationKey(scope, option.tooltip),
+         tooltip: mTranslationKey(scope, option.tooltip)
       }
    }
 
@@ -177,7 +154,7 @@ export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialog
    }
 }
 
-export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessageTemplate) : BubbleMessageTemplate {
+export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessageTemplate): BubbleMessageTemplate {
    return {
       ident: mDisplayItemId(scope, template.ident),
       icon: template.icon,
@@ -191,13 +168,13 @@ function buildCompileUISeries<T extends HasIdent>(
    seriesName: 'scoreBoards' | 'dialogTemplates' | 'bubbleMessageTemplates',
    fnName: string,
    compileSingleFn: CompileSingleFunction<T>
-) : CompileFunction<T> {
+): CompileFunction<T> {
    return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
       for (const item of series) {
          const compiledItem = compileSingleFn(scope, item)
          const ident = <string>compiledItem.ident
 
-         const dest = <Record<string, T>><unknown>(compilation.ui[seriesName])
+         const dest = <Record<string, T>>(<unknown>compilation.ui[seriesName])
          if (dest[ident]) {
             console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
          } else {

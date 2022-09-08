@@ -2,23 +2,12 @@ export function uniqueId(author: string, moduleName: string, category: string, i
    return `@${author}:${moduleName}:${category}:${id}`
 }
 
-export class Scope {
-   constructor(author: string, moduleName: string) {
-      this.author = author
-      this.moduleName = moduleName
-   }
-
+export interface Scope {
    readonly author: string
    readonly moduleName: string
 }
 
-export class ComposedId {
-   constructor(author: string, moduleName: string, id: string) {
-      this.author = author
-      this.moduleName = moduleName
-      this.id = id
-   }
-
+export interface ComposedId {
    readonly author: string
    readonly moduleName: string
    readonly id: string
@@ -30,7 +19,7 @@ export type IdMangler = (scope: Scope, id: Ident) => string
 
 export function buildMangler(idKind: string): IdMangler {
    return (scope: Scope, id: string | ComposedId): string => {
-      if (id instanceof ComposedId) {
+      if (typeof id === 'object') {
          const { author, moduleName, id: id1 } = id
          return uniqueId(author, moduleName, idKind, id1)
       }
