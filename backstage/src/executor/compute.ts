@@ -9,7 +9,7 @@ import { MaybeTranslationKey } from '@app/base/uid'
 import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
-import { Modifier, ValueSource } from '@app/ruleset/items/modifier'
+import { Modifier, ModifierValue, ValueSource } from '@app/ruleset/items/modifier'
 
 export interface PotentialResultBase {
    readonly result: boolean
@@ -268,8 +268,11 @@ export interface IContribution {
 }
 
 export interface ComputedPropertyModifier {
-   computedValue: number
-   contributions: IContribution[]
+   gain: number
+   gainContributions: IContribution[]
+
+   loss: number
+   lossContributions: IContribution[]
 }
 
 export interface ComputedAttributeModifiers {

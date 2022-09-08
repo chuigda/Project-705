@@ -12,25 +12,30 @@ export type ValueSource =
    | '@variety_show'
    | string
 
+export interface ModifierValue {
+   gain?: number
+   loss?: number
+}
+
 export interface AttributesModifier {
-   strength: Record<ValueSource, number>
-   intelligence: Record<ValueSource, number>
-   emotionalIntelligence: Record<ValueSource, number>
-   memorization: Record<ValueSource, number>
-   imagination: Record<ValueSource, number>
-   charisma: Record<ValueSource, number>
+   strength: Record<ValueSource, ModifierValue>
+   intelligence: Record<ValueSource, ModifierValue>
+   emotionalIntelligence: Record<ValueSource, ModifierValue>
+   memorization: Record<ValueSource, ModifierValue>
+   imagination: Record<ValueSource, ModifierValue>
+   charisma: Record<ValueSource, ModifierValue>
 }
 
 export interface PlayerModifier {
    attributes: AttributesModifier
    talent: AttributesModifier
 
-   skillPoints: Record<ValueSource, number>
-   energy: Record<ValueSource, number>
-   mentalHealth: Record<ValueSource, number>
-   satisfactory: Record<ValueSource, number>
-   money: Record<ValueSource, number>
-   moneyPerTurn: Record<ValueSource, number>
+   skillPoints: Record<ValueSource, ModifierValue>
+   energy: Record<ValueSource, ModifierValue>
+   mentalHealth: Record<ValueSource, ModifierValue>
+   satisfactory: Record<ValueSource, ModifierValue>
+   money: Record<ValueSource, ModifierValue>
+   moneyPerTurn: Record<ValueSource, ModifierValue>
 }
 
 export type SkillPointCostModifier = Record</* skill category id */ string, number>
