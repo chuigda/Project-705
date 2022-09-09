@@ -5,6 +5,7 @@ const commonSkills: Skill[] = [
       ident: 'walk',
       name: '$skill_walk',
       description: '$skill_walk_desc',
+      category: '@basic',
 
       cost: {
          base: 20
@@ -20,6 +21,7 @@ const commonSkills: Skill[] = [
       ident: 'speak',
       name: '$skill_speak',
       description: '$skill_speak_desc',
+      category: '@basic',
 
       cost: {
          base: 50,

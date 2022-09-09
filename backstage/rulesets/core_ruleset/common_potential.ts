@@ -1,10 +1,17 @@
 import { PotentialExpressionFunctionOp } from '@app/ruleset/items/potential'
 import { ComposedId, mAscensionPerkId, mStartupId } from '@app/base/uid'
 
-export function turnsLater(turns: number): PotentialExpressionFunctionOp {
+export function afterTurns(turns: number): PotentialExpressionFunctionOp {
    return {
       op: gameContext => gameContext.state.turns >= turns,
       // using absolute translation key
+      description: `@tr:$potential_turns_${turns}`
+   }
+}
+
+export function beforeTurns(turns: number): PotentialExpressionFunctionOp {
+   return {
+      op: gameContext => gameContext.state.turns <= turns,
       description: `@tr:$potential_turns_${turns}`
    }
 }

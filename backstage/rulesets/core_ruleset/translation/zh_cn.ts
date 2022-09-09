@@ -37,6 +37,21 @@ const startupTranslation: Record<string, string> = {
       + ' - 拥有独特的飞升路线和结局判定'
 }
 
+const ascensionPerkTranslation: Record<string, string> = {
+   '$ap_well_prepared': '未雨绸缪',
+   '$ap_well_prepared_desc': '获得 500 技能点数，且你学习初始技能所需的技能点数 -50%'
+}
+
+const modifierTranslation: Record<string, string> = {
+   '$md_town_swot': '小镇做题家',
+   '$md_town_swot_desc': '作为一个合格的小镇做题家，你在主科的学习上获得了加成',
+
+   '$king_of_involution': '卷王',
+   '$king_of_involution_desc': '作为一个卷王，你的做题能力足以让你在同龄人里乱杀。但这一切真的值得吗？'
+}
+
 export default {
-   ...startupTranslation
+   ...startupTranslation,
+   ...modifierTranslation,
+   ...ascensionPerkTranslation
 }

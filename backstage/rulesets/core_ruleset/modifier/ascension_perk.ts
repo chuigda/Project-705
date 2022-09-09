@@ -3,6 +3,14 @@ import { majorSubjects } from '@rulesets/core_ruleset/definition'
 
 const ascensionPerkModifiers: Modifier[] = [
    {
+      ident: 'well_prepared',
+      name: '$md_well_prepared',
+      description: '$md_well_prepared_desc',
+      skillPointCost: {
+         '@basic': -0.5
+      }
+   },
+   {
       ident: 'town_swot',
       name: '$md_town_swot',
       description: '$md_town_swot_desc',
