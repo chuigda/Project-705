@@ -29,7 +29,7 @@ const ascensionPerks: AscensionPerk[] = [
       description: '$ap_king_of_involution_desc',
       potential: [requireAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'town_swot' }, 'town_swot')],
       modifier: 'king_of_involution',
-      events: ['remove_town_swot_modifier']
+      events: ['king_of_evolution_activation']
    }
 ]
 
