@@ -10,10 +10,19 @@ const ascensionPerkEvents: Event[] = [
       ]
    },
    {
-      ident: 'king_of_evolution_activation',
+      ident: 'king_of_involution_activation',
       event: [
          gameContext => {
             gameContext.removeModifier('town_swot')
+            gameContext.connect(gameContext.signals.turnStart(), 'king_of_involution_turnstart')
+         }
+      ]
+   },
+   {
+      ident: 'king_of_involution_turnstart',
+      event: [
+         gameContext => {
+            // TODO 降低来自所有同学的外交评价
          }
       ]
    }

@@ -78,7 +78,7 @@ const ascensionPerks: AscensionPerk[] = [
          )
       ],
       modifier: 'king_of_involution',
-      events: ['king_of_evolution_activation']
+      events: ['king_of_involution_activation']
    },
    // 人造情感
    {
