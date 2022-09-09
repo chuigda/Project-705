@@ -113,7 +113,11 @@ export function computeSkillPotential(gameContext: GameContext, skillPotential: 
    }
 }
 
-export function computeSkillCost(gameContext: GameContext, skillCost: SkillCost): number {
+export function computeSkillCost(
+   gameContext: GameContext,
+   skillCost: SkillCost,
+   skillCategory?: SkillCategoryId
+): number {
    // TODO(?): compute skill cost modifiers here
 
    if (!skillCost || !skillCost.base) {
@@ -132,9 +136,9 @@ export function computeSkillCost(gameContext: GameContext, skillCost: SkillCost)
             const diff = attribute - requiredAttribute
             console.debug(
                `[D] [computeSkillCost] gameContext.player.attributes[${attrName}]` +
-            `= ${attribute}` +
-            `, attributes[${attrName}] = ${requiredAttribute}` +
-            `, diff = ${diff}`
+               `= ${attribute}` +
+               `, attributes[${attrName}] = ${requiredAttribute}` +
+               `, diff = ${diff}`
             )
             if (diff < 0) {
                totalDiffRatio += -(diff / requiredAttribute)
@@ -196,7 +200,7 @@ export function computePotentialSkills(gameContext: GameContext) {
       }
 
       if (result) {
-         const cost = computeSkillCost(gameContext, skill.cost)
+         const cost = computeSkillCost(gameContext, skill.cost, skill.category)
          console.debug(`[D] [computePotentialSkills] skill '${ident}' available, it costs: ${cost}`)
          available[identStr] = { skill, cost }
       } else {
@@ -216,7 +220,7 @@ export function recomputeSkillCosts(gameContext: GameContext) {
    const available: Record<string, AvailableSkill> = {}
    for (const { skill } of Object.values(gameContext.state.computedSkills!.available)) {
       const { ident, cost } = skill
-      const newCost = computeSkillCost(gameContext, cost)
+      const newCost = computeSkillCost(gameContext, cost, skill.category)
       console.debug(`[D] [recomputeSkillCosts] skill '${ident}' costs ${newCost}`)
 
       available[<string>ident] = { skill, cost: newCost }

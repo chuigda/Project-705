@@ -10,7 +10,7 @@ export function updatePlayerProperty(
    value: number,
    source?: ValueSource
 ) {
-   // TODO(rebuild): 增加 modifiers 相关的计算
+   // TODO(chuigda): 增加 modifiers 相关的计算
    // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算
    // 技能点消耗的计算是在 computeSkillCost 里进行的
 

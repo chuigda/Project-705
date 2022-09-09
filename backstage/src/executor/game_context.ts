@@ -33,6 +33,7 @@ import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
 import modifierFunctions from '@app/executor/modifier'
+import { SkillCategoryId } from '@app/ruleset'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -190,8 +191,8 @@ export class GameContext {
       return computeFunctions.computeSkillPotential(this, skillPotential)
    }
 
-   computeSkillCost(skillCost: SkillCost): number {
-      return computeFunctions.computeSkillCost(this, skillCost)
+   computeSkillCost(skillCost: SkillCost, skillCategory?: SkillCategoryId): number {
+      return computeFunctions.computeSkillCost(this, skillCost, skillCategory)
    }
 
    recomputeSkillCosts(): void {
