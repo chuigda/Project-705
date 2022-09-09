@@ -1,4 +1,5 @@
 import { Modifier } from '@app/ruleset'
+import { majorSubjects } from '@rulesets/core_ruleset/definition'
 
 const ascensionPerkModifiers: Modifier[] = [
    {
@@ -50,17 +51,10 @@ const ascensionPerkModifiers: Modifier[] = [
          }
       },
       skillPointCost: compilation => {
-         const r: Record<string, number> = {
-            '@chinese': -0.5,
-            '@math': -0.5,
-            '@english': -0.5,
-            '@liberal': -0.5,
-            '@science': -0.5,
-         }
-
+         const r: Record<string, number> = Object.fromEntries(majorSubjects.map(subject => [subject, -0.5]))
          for (const skillCategory of compilation.skillCategories) {
             const skillCategoryId = skillCategory.ident
-            if (['@chinese', '@math', '@english', '@liberal', '@science'].indexOf(skillCategoryId) === -1) {
+            if (majorSubjects.indexOf(skillCategoryId) === -1) {
                r[skillCategoryId] = 0.2
             }
          }

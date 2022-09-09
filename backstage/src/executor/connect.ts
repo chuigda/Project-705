@@ -112,10 +112,77 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
    }
 }
 
-// TODO(chuigda): implement disconnect and disconnectAll
+export function disconnect(gameContext: GameContext, signal: Signal, event: Ident) {
+   const eventId = mEventId(<Scope>(gameContext.scope), event)
 
-// eslint-disable-next-line no-unused-vars
-export function disconnect(gameContext: GameContext, signal: Signal, event: Ident) { }
+   if (!(eventId in gameContext.ruleSet.events)) {
+      console.warn(`[W] [connect] event '${event}(${eventId})' not found`)
+      return
+   }
+
+   switch (signal.signalType) {
+      case 'turn_start':
+         gameContext.state.events.turnStart.delete(eventId)
+         break
+      case 'turn_over':
+         gameContext.state.events.turnOver.delete(eventId)
+         break
+      case 'skill': {
+         const sig = <SkillSignal>signal
+         if (sig.skillId in gameContext.state.events.skillLearnt) {
+            gameContext.state.events.skillLearnt[sig.skillId].delete(eventId)
+         }
+         break
+      }
+      case 'activity': {
+         const sig = <ActivitySignal>signal
+         if (sig.activityId in gameContext.state.events.activityPerformed) {
+            gameContext.state.events.activityPerformed[sig.activityId].delete(eventId)
+         }
+         break
+      }
+      case 'player': {
+         const sig = <PlayerPropertyUpdatedSignal>signal
+         const propertyPath = sig.property.split('.')
+         let container: any = gameContext.state.events.playerPropertyUpdated
+         for (const pathPart of propertyPath) {
+            container = container[pathPart]
+         }
+         if (!(container instanceof Set<string>)) {
+            console.warn(`[W] [disconnect] playerPropertyUpdated: invalid property path: '${sig.property}'`)
+            return
+         }
+         (<Set<string>>container).delete(eventId)
+         break
+      }
+      case 'turns': {
+         console.warn(
+            '[W] [disconnect] cannot remove connections with \'turns\' signals,'
+            + 'use \'disconnectAll\' instead'
+         )
+         break
+      }
+      case 'count_down': {
+         console.warn(
+            '[W] [disconnect] cannot remove connections with \'count_down\' signals,'
+            + 'use \'disconnectAll\' instead'
+         )
+         break
+      }
+      case 'event': {
+         const sig = <EventSignal>signal
+         const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
+         if (gameContext.state.events.eventsTriggered[sourceEventId]) {
+            gameContext.state.events.eventsTriggered[sourceEventId].delete(eventId)
+         }
+         break
+      }
+      default:
+         console.warn(`[W] [disconnect] invalid signal '${signal.signalType}'`)
+   }
+}
+
+// TODO(chuigda): implement disconnectAll
 
 export default {
    signals,
