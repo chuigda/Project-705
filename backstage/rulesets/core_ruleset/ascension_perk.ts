@@ -25,7 +25,21 @@ const ascensionPerks: AscensionPerk[] = [
       name: '$ap_dont_be_busy',
       description: '$ap_dont_be_busy_desc',
       modifier: 'dont_be_busy',
-      events: ['dont_be_busy_desc']
+      events: ['dont_be_busy_activation']
+   },
+
+   // 碎片整理程序
+   {
+      ident: 'defrag',
+      name: '$ap_defrag',
+      description: '$ap_defrag_desc',
+      potential: [
+         requireStartup(
+            { author: 'cnpr', moduleName: 'core', id: 'detroit' },
+            'detroit'
+         )
+      ],
+      events: ['defrag_activation']
    },
 
    /// -*- ------------ 一阶飞升 ------------ -*-

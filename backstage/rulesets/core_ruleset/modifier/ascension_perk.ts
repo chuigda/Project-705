@@ -11,6 +11,37 @@ const ascensionPerkModifiers: Modifier[] = [
       }
    },
    {
+      ident: 'dont_be_busy',
+      name: '$md_dont_be_busy',
+      description: '$md_dont_be_busy_desc',
+      player: {
+         attributes: {
+            strength: { '@activity:all': { gain: -0.1 } },
+            intelligence: { '@activity:all': { gain: -0.1 } },
+            emotionalIntelligence: { '@activity:all': { gain: -0.1 } },
+            memorization: { '@activity:all': { gain: -0.1 } },
+            imagination: { '@activity:all': { gain: -0.1 } }
+         }
+      }
+   },
+   {
+      ident: 'dont_be_busy_boost',
+      name: '$md_dont_be_busy_boost',
+      description: '$md_dont_be_busy_boot_desc',
+      player: {
+         attributes: {
+            strength: { '@activity:all': { gain: 0.15 } },
+            intelligence: { '@activity:all': { gain: 0.15 } },
+            emotionalIntelligence: { '@activity:all': { gain: 0.15 } },
+            memorization: { '@activity:all': { gain: 0.15 } },
+            imagination: { '@activity:all': { gain: 0.15 } }
+         },
+         skillPoints: {
+            'all': { gain: 0.1 }
+         }
+      }
+   },
+   {
       ident: 'town_swot',
       name: '$md_town_swot',
       description: '$md_town_swot_desc',
