@@ -24,7 +24,9 @@ import {
    Modifier,
    PlayerModifier,
    PlayerModifierGen,
-   Skill, SkillPointCostModifier, SkillPointCostModifierGen,
+   Skill,
+   SkillPointCostModifier,
+   SkillPointCostModifierGen,
    Startup
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'

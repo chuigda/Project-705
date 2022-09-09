@@ -1,6 +1,5 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
 import { SkillCategoryId } from '@app/ruleset'
-import ruleset from '@app/server/ruleset'
 import { CompiledRuleSet } from '@app/loader'
 
 export type ValueSource =

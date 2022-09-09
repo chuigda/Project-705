@@ -39,7 +39,7 @@ const ascensionPerkModifiers: Modifier[] = [
             '@activity:@math': { gain: 0.3 },
             '@activity:@english': { gain: 0.3 },
             '@activity:@liberal': { gain: 0.3 },
-            '@activity:@science': { gain: 0.3 },
+            '@activity:@science': { gain: 0.3 }
          },
          mentalHealth: {
             '@activity:@chinese': { loss: -0.6 },
@@ -49,12 +49,22 @@ const ascensionPerkModifiers: Modifier[] = [
             '@activity:@science': { loss: -0.6 }
          }
       },
-      skillPointCost: {
-         '@chinese': -0.4,
-         '@math': -0.4,
-         '@english': -0.4,
-         '@liberal': -0.4,
-         '@science': -0.4,
+      skillPointCost: compilation => {
+         const r: Record<string, number> = {
+            '@chinese': -0.5,
+            '@math': -0.5,
+            '@english': -0.5,
+            '@liberal': -0.5,
+            '@science': -0.5,
+         }
+
+         for (const skillCategory of compilation.skillCategories) {
+            const skillCategoryId = skillCategory.ident
+            if (['@chinese', '@math', '@english', '@liberal', '@science'].indexOf(skillCategoryId) === -1) {
+               r[skillCategoryId] = 0.2
+            }
+         }
+         return r
       }
    }
 ]
