@@ -69,9 +69,7 @@ const ascensionPerkAssertion = {
    ...baseAssertion,
 
    potential: [potentialExpressionAssertion].orNull(),
-   modifier: {
-      // TODO(rebuild): rework with modifier assertion
-   }.orNull(),
+   modifier: identAssertion.orNull(),
    events: eventSeriesAssertion.orNull(),
 
    ...patchModeAssertion
@@ -107,9 +105,7 @@ const startupAssertion = {
       money: 'number?'
    }.orNull(),
    events: eventSeriesAssertion.orNull(),
-   modifier: {
-      // TODO(rebuild): rework with modifier assertion
-   }.orNull(),
+   modifier: identAssertion.orNull(),
 
    ...patchModeAssertion
 }
@@ -119,6 +115,32 @@ const eventAssertion = {
    event: ['function'],
 
    ...patchModeAssertion
+}
+
+const attributeModifiersAssertion = {
+   strength: 'object?',
+   intelligence: 'object?',
+   emotionalIntelligence: 'object?',
+   memorization: 'object?',
+   imagination: 'object?',
+   charisma: 'object?'
+}
+
+const modifierAssertion = {
+   ...baseAssertion,
+
+   player: {
+      attributes: attributeModifiersAssertion.orNull(),
+      talent: attributeModifiersAssertion.orNull(),
+
+      skillPoints: 'object?',
+      energy: 'object?',
+      mentalHealth: 'object?',
+      satisfactory: 'object?',
+      money: 'object?',
+      moneyPerTurn: 'object?'
+   }.orNull(),
+   skillPointCost: 'object?'
 }
 
 const ruleSetAssertion = {
@@ -135,6 +157,7 @@ const ruleSetAssertion = {
    activities: [activityAssertion].orNull(),
    ascensionPerks: [ascensionPerkAssertion].orNull(),
    events: [eventAssertion].orNull(),
+   modifiers: [modifierAssertion].orNull(),
    translations: {}.orNull()
 }
 
@@ -144,6 +167,7 @@ module.exports = {
    skillAssertion,
    startupAssertion,
    eventAssertion,
+   modifierAssertion,
 
    ruleSetAssertion
 }

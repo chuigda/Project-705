@@ -1,18 +1,30 @@
 import {
-   IdMangler, Scope,
-   mEventId, mTranslationKey, mSkillId, mActivityId, mStartupId, mAscensionPerkId, Ident
+   Ident,
+   IdMangler,
+   Scope,
+   mEventId,
+   mTranslationKey,
+   mSkillId,
+   mActivityId,
+   mStartupId,
+   mAscensionPerkId,
+   mModifierId
 } from '@app/base/uid'
-import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
-import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
-import { ItemBase } from '@app/ruleset/items/item_base'
 import {
    PotentialExpression,
    PotentialExpressionFunctionOp,
    PotentialExpressionLogicOp
 } from '@app/ruleset/items/potential'
-import { Skill } from '@app/ruleset/items/skill'
-import { Startup } from '@app/ruleset/items/startup'
-import { Activity } from '@app/ruleset/items/activity'
+import { ItemBase } from '@app/ruleset/items/item_base'
+import {
+   Activity,
+   AscensionPerk,
+   Event,
+   MaybeInlineEvent,
+   Modifier,
+   Skill,
+   Startup
+} from '@app/ruleset'
 
 export function compilePotentialExpression(scope: Scope, potential: PotentialExpression): PotentialExpression {
    if (potential.op instanceof Function) {
@@ -84,7 +96,7 @@ export function compileStartup(scope: Scope, startup: Startup): Startup {
       ...itemBase,
 
       player,
-      modifier,
+      modifier: modifier ? mModifierId(scope, modifier) : undefined,
       events,
 
       scope,
@@ -126,7 +138,7 @@ export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk)
       ...itemBase,
 
       potential,
-      modifier,
+      modifier: modifier ? mModifierId(scope, modifier) : undefined,
       events,
 
       scope,
@@ -141,6 +153,21 @@ export function compileEvent(scope: Scope, event: Event): Event {
       ident,
       scope,
       event: event.event
+   }
+}
+
+export function compileModifier(scope: Scope, modifier: Modifier): Modifier {
+   const itemBase = compileBase(scope, modifier, mModifierId)
+
+   const { player, skillPointCost, patch } = modifier
+   return {
+      ...itemBase,
+
+      player,
+      skillPointCost,
+
+      scope,
+      patch
    }
 }
 

@@ -7,10 +7,19 @@ import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { CompiledRuleSet } from '@app/loader'
 import { PotentialExpression } from '@app/ruleset/items/potential'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
+import { ValueSource } from '@app/ruleset/items/modifier'
 import { PropertyOp } from '@app/ruleset/ops'
+import {
+   BubbleMessageTemplate,
+   Button,
+   CustomScoreBoard,
+   Menu,
+   SimpleDialogTemplate
+} from '@app/ruleset/items/ui'
 
 import computeFunctions, {
-   ComputedAscensionPerks, ComputedModifier,
+   ComputedAscensionPerks,
+   ComputedModifier,
    ComputedSkills,
    PotentialResult,
    SkillPotentialResult
@@ -20,17 +29,10 @@ import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/skill'
 import propertyFunctions from '@app/executor/properties'
 import variableFunctions from '@app/executor/variables'
-import {
-   BubbleMessageTemplate,
-   Button,
-   CustomScoreBoard,
-   Menu,
-   SimpleDialogTemplate
-} from '@app/ruleset/items/ui'
 import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
-import { ValueSource } from '@app/ruleset/items/modifier'
+import modifierFunctions from '@app/executor/modifier'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -99,7 +101,7 @@ export class GameState {
    player: PlayerStatus = new PlayerStatus()
 
    events: GameContextEvents = new GameContextEvents()
-   modifiers: string[] = []
+   modifiers: Set<string> = new Set()
    variables: Record<string, any> = {}
 
    computedModifier?: ComputedModifier = undefined
@@ -210,6 +212,14 @@ export class GameContext {
 
    triggerEvent(event: MaybeInlineEvent, ...args: any[]) {
       eventFunctions.triggerEvent(this, event, ...args)
+   }
+
+   addModifier(modifier: Ident) {
+      modifierFunctions.addModifier(this, modifier)
+   }
+
+   removeModifier(modifier: Ident) {
+      modifierFunctions.removeModifier(this, modifier)
    }
 
    learnSkill(skill: Ident) {

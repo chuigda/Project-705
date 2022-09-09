@@ -30,7 +30,7 @@ export class CompiledRuleSet {
    activityCategories: string[] = []
 
    events: Record<string, Event> = {}
-   modifiers: Record<string, Modifier> = {} // TODO(chuigda): modifier system rework
+   modifiers: Record<string, Modifier> = {}
    skills: Record<string, Skill> = {}
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}

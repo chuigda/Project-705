@@ -1,5 +1,5 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
-import { ActivityCategoryId, SkillCategoryId } from '@app/ruleset'
+import { SkillCategoryId } from '@app/ruleset'
 
 export type ValueSource =
    '@talent'
@@ -17,31 +17,33 @@ export interface ModifierValue {
    loss?: number
 }
 
-export interface AttributesModifier {
-   strength?: Record<ValueSource, ModifierValue>
-   intelligence?: Record<ValueSource, ModifierValue>
-   emotionalIntelligence?: Record<ValueSource, ModifierValue>
-   memorization?: Record<ValueSource, ModifierValue>
-   imagination?: Record<ValueSource, ModifierValue>
-   charisma?: Record<ValueSource, ModifierValue>
+export type PropertyModifier = Record<ValueSource, ModifierValue>
+
+export interface AttributeModifiers {
+   strength?: PropertyModifier
+   intelligence?: PropertyModifier
+   emotionalIntelligence?: PropertyModifier
+   memorization?: PropertyModifier
+   imagination?: PropertyModifier
+   charisma?: PropertyModifier
 }
 
 export interface PlayerModifier {
-   attributes?: AttributesModifier
-   talent?: AttributesModifier
+   attributes?: AttributeModifiers
+   talent?: AttributeModifiers
 
-   skillPoints?: Record<ValueSource, ModifierValue>
-   energy?: Record<ValueSource, ModifierValue>
-   mentalHealth?: Record<ValueSource, ModifierValue>
-   satisfactory?: Record<ValueSource, ModifierValue>
-   money?: Record<ValueSource, ModifierValue>
-   moneyPerTurn?: Record<ValueSource, ModifierValue>
+   skillPoints?: PropertyModifier
+   energy?: PropertyModifier
+   mentalHealth?: PropertyModifier
+   satisfactory?: PropertyModifier
+   money?: PropertyModifier
+   moneyPerTurn?: PropertyModifier
 }
 
 export type SkillPointCostModifier = Record<'all' | SkillCategoryId, number>
 
 export interface Modifier extends ItemBase {
-   displayIcon?: string // TODO(chuigda): gfx features
+   icon?: string // TODO(chuigda): gfx features
 
    player?: PlayerModifier
    skillPointCost?: SkillPointCostModifier

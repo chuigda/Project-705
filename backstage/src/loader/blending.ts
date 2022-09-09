@@ -5,7 +5,7 @@ import {
    compileActivity,
    compileAscensionPerk,
    compileEvent,
-   compileMaybeInlineEvent,
+   compileMaybeInlineEvent, compileModifier,
    compileSkill,
    compileStartup,
    compileTranslation
@@ -21,7 +21,6 @@ import {
    MenuItem,
    SimpleDialogTemplate
 } from '@app/ruleset/items/ui'
-import { isEmpty } from '@app/util/general'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
@@ -67,7 +66,7 @@ function buildCompileSeries<T extends HasIdent>(
          const compiledItem = compileSingleFn(scope, item)
          const ident = <string>compiledItem.ident
 
-         const dest = <Record<string, T>>compilation[seriesName]
+         const dest = <Record<string, T>>(<unknown>compilation[seriesName])
          if (dest[ident]) {
             console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
          } else {
@@ -94,6 +93,8 @@ export const compileAscensionPerks = buildCompileSeries(
 )
 
 export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
+
+export const compileModifiers = buildCompileSeries('modifier', 'modifiers', 'compileModifiers', compileModifier)
 
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}
@@ -285,6 +286,7 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
       activities,
       ascensionPerks,
       events,
+      modifiers,
       translations,
       ui,
       onRuleSetLoaded
@@ -316,6 +318,10 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
 
    if (events) {
       compileEvents(compilation, scope, events)
+   }
+
+   if (modifiers) {
+      compileModifiers(compilation, scope, modifiers)
    }
 
    if (translations) {

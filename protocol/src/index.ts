@@ -157,7 +157,7 @@ export interface IGameState {
    turns: number
    player?: IPlayerStatus
 
-   modifiers?: string[]
+   modifiers?: Set<string>
    variables?: Record<string, any>
 
    computedModifier?: object

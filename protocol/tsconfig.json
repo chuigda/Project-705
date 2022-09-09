@@ -3,7 +3,8 @@
       "declaration": true,
       "declarationMap": true,
       "rootDir": ".",
-      "composite": true
+      "composite": true,
+      "lib": ["es2015"]
    },
    "include": ["src"],
    "references": []
