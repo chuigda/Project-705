@@ -54,7 +54,7 @@ const ascensionPerkModifiers: Modifier[] = [
          '@math': -0.4,
          '@english': -0.4,
          '@liberal': -0.4,
-         '@science': -0.4
+         '@science': -0.4,
       }
    }
 ]

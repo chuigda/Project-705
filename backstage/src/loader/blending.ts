@@ -276,11 +276,20 @@ export function compileTranslations(
    }
 }
 
+export function preCompileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
+   const { skillCategories, activityCategories } = ruleSet
+   if (skillCategories) {
+      compileSkillCategories(compilation, skillCategories)
+   }
+
+   if (activityCategories) {
+      compileActivityCategories(compilation, activityCategories)
+   }
+}
+
 export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
    const {
       ident: scope,
-      skillCategories,
-      activityCategories,
       skills,
       startups,
       activities,
@@ -291,14 +300,6 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
       ui,
       onRuleSetLoaded
    } = ruleSet
-
-   if (skillCategories) {
-      compileSkillCategories(compilation, skillCategories)
-   }
-
-   if (activityCategories) {
-      compileActivityCategories(compilation, activityCategories)
-   }
 
    if (skills) {
       compileSkills(compilation, scope, skills)

@@ -6,7 +6,7 @@ import { Skill } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Activity } from '@app/ruleset/items/activity'
 import { Startup } from '@app/ruleset/items/startup'
-import { CompiledCustomUI, compileRuleSet } from '@app/loader/blending'
+import { CompiledCustomUI, compileRuleSet, preCompileRuleSet } from '@app/loader/blending'
 import { abort } from '@app/util/emergency'
 
 import coreRuleSet from '@rulesets/core_ruleset'
@@ -44,30 +44,70 @@ export class CompiledRuleSet {
 
 export function load(): CompiledRuleSet {
    const ret = new CompiledRuleSet()
+   const modList: string[] = require(`${process.cwd()}/mods/mods.json`)
+
+   let mods: RuleSet[]
+   try {
+      mods = modList.map((modName: string) => {
+         const [mod, err] = loadDynamicMod(modName)
+         if (err) {
+            console.error(`[E] [load] error loading mod '${modName}': ${err}\n${err.stack}`)
+            throw err
+         }
+         return mod!
+      })
+   } catch (e) {
+      abort()
+   }
+
+   // precompile: load all skill categories and activity categories for further use
 
    if (process.env.SKIP_CORE_RULESET !== '1') {
+      console.info('[I] [load] pre-compiling core ruleset')
+      preCompileRuleSet(ret, coreRuleSet)
+   }
+
+   if (process.env.DEBUG === '1') {
+      console.info('[I] [load] pre-compiling debug ruleset')
+      preCompileRuleSet(ret, debugRuleSet)
+   }
+
+   for (const idx in modList) {
+      const modName = modList[idx]
+      const mod = mods[idx]
+
+      console.info(`[I] [load] pre-compiling mod '${modName}'`)
+      preCompileRuleSet(ret, mod)
+   }
+
+   // compile: actually instantiate all things required
+
+   if (process.env.SKIP_CORE_RULESET !== '1') {
+      console.info('[I] [load] loading core ruleset')
       try {
-         console.info('[I] [load] loading core ruleset')
          compileRuleSet(ret, coreRuleSet)
-         if (process.env.DEBUG === '1') {
-            console.info('[I] [load] debug mode enabled, also loading debug ruleset')
-            compileRuleSet(ret, debugRuleSet)
-         }
       } catch (e) {
          console.error(`[E] [load] error compiling core ruleset: ${e}\n${e.stack}`)
          abort()
       }
    }
 
-   const modList = require(`${process.cwd()}/mods/mods.json`)
-   for (const modName of modList) {
-      const [mod, err] = loadDynamicMod(modName)
-      if (err) {
-         console.error(`[E] [load] error loading mod '${modName}': ${err}\n${err.stack}`)
-         continue
+   if (process.env.DEBUG === '1') {
+      console.info('[I] [load] debug mode enabled, also loading debug ruleset')
+      try {
+         compileRuleSet(ret, debugRuleSet)
+      } catch (e) {
+         console.error(`[E] [load] error compiling debug ruleset: ${e}\n${e.stack}`)
+         abort()
       }
+   }
+
+   for (const idx in modList) {
+      const modName = modList[idx]
+      const mod = mods[idx]
 
       try {
+         console.info(`[I] [load] compiling mod '${modName}'`)
          compileRuleSet(ret, mod!)
       } catch (e) {
          console.error(`[E] [load] error compiling mod '${modName}': ${e}\n${e.stack}`)
