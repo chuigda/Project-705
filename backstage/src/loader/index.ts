@@ -1,4 +1,4 @@
-import { RuleSet, Modifier, SkillCategory } from '@app/ruleset'
+import { RuleSet, Modifier, SkillCategory, Scope } from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
 import { ruleSetAssertion } from '@app/loader/assertions'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
@@ -26,6 +26,7 @@ export function loadDynamicMod(modName: string): [RuleSet | null, any] {
 export type Translation = Record<string, string>
 
 export class CompiledRuleSet {
+   loadedRuleSets: Scope[] = []
    skillCategories: SkillCategory[] = []
    activityCategories: string[] = []
 

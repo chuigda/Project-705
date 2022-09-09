@@ -1,5 +1,7 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
 import { SkillCategoryId } from '@app/ruleset'
+import ruleset from '@app/server/ruleset'
+import { CompiledRuleSet } from '@app/loader'
 
 export type ValueSource =
    '@talent'
@@ -40,11 +42,15 @@ export interface PlayerModifier {
    moneyPerTurn?: PropertyModifier
 }
 
+export type PlayerModifierGen = (compilation: CompiledRuleSet) => PlayerModifier
+
 export type SkillPointCostModifier = Record<'all' | SkillCategoryId, number>
+
+export type SkillPointCostModifierGen = (compilation: CompiledRuleSet) => SkillPointCostModifier
 
 export interface Modifier extends ItemBase {
    icon?: string // TODO(chuigda): gfx features
 
-   player?: PlayerModifier
-   skillPointCost?: SkillPointCostModifier
+   player?: PlayerModifier | PlayerModifierGen
+   skillPointCost?: SkillPointCostModifier | SkillPointCostModifierGen
 }

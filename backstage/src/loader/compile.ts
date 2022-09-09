@@ -22,9 +22,12 @@ import {
    Event,
    MaybeInlineEvent,
    Modifier,
-   Skill,
+   PlayerModifier,
+   PlayerModifierGen,
+   Skill, SkillPointCostModifier, SkillPointCostModifierGen,
    Startup
 } from '@app/ruleset'
+import { CompiledRuleSet } from '@app/loader/index'
 
 export function compilePotentialExpression(scope: Scope, potential: PotentialExpression): PotentialExpression {
    if (potential.op instanceof Function) {
@@ -156,15 +159,43 @@ export function compileEvent(scope: Scope, event: Event): Event {
    }
 }
 
-export function compileModifier(scope: Scope, modifier: Modifier): Modifier {
+export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modifier: Modifier): Modifier {
+   function compilePlayerModifier(
+      playerModifier: PlayerModifier | PlayerModifierGen | undefined
+   ): PlayerModifier | undefined {
+      if (!playerModifier) {
+         return undefined
+      }
+
+      if (playerModifier instanceof Function) {
+         return playerModifier(compilation)
+      } else {
+         return playerModifier
+      }
+   }
+
+   function compileSkillPointCostModifier(
+      skillPointCostModifier: SkillPointCostModifier | SkillPointCostModifierGen | undefined
+   ): SkillPointCostModifier | undefined {
+      if (!skillPointCostModifier) {
+         return undefined
+      }
+
+      if (skillPointCostModifier instanceof Function) {
+         return skillPointCostModifier(compilation)
+      } else {
+         return skillPointCostModifier
+      }
+   }
+
    const itemBase = compileBase(scope, modifier, mModifierId)
 
    const { player, skillPointCost, patch } = modifier
    return {
       ...itemBase,
 
-      player,
-      skillPointCost,
+      player: compilePlayerModifier(player),
+      skillPointCost: compileSkillPointCostModifier(skillPointCost),
 
       scope,
       patch

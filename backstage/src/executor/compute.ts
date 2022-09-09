@@ -13,8 +13,8 @@ import {
    AttributeModifiers,
    Modifier,
    ModifierValue,
-   PlayerModifier,
-   PropertyModifier,
+   PlayerModifier, PlayerModifierGen,
+   PropertyModifier, SkillPointCostModifier,
    ValueSource
 } from '@app/ruleset/items/modifier'
 import { SkillCategoryId } from '@app/ruleset'
@@ -421,7 +421,7 @@ function computeAttributeModifiers(
             computed.player[valueSource] = new ComputedPlayerModifier()
          }
 
-         const value = attrModifiers[valueSource]
+         const value = (<PropertyModifier>attrModifiers)[valueSource]
          const dest =
             <ComputedPropertyModifier>computed.player[valueSource][property][<keyof ComputedAttributeModifiers>attrName]
          dest.addContribution(name, value, icon)
@@ -443,7 +443,7 @@ export function computeModifier(gameContext: GameContext) {
       const { name, icon, player, skillPointCost } = modifier
 
       if (player) {
-         const { attributes, talent } = player
+         const { attributes, talent } = <PlayerModifier>player
 
          if (attributes) {
             computeAttributeModifiers(computed, 'attributes', attributes, name, icon)
@@ -462,7 +462,9 @@ export function computeModifier(gameContext: GameContext) {
             'money',
             'moneyPerTurn'
          ]) {
-            const propertyModifier = <PropertyModifier | undefined>player[<keyof PlayerModifier>field]
+            const propertyModifier = <PropertyModifier | undefined>(
+               (<PlayerModifier>player)[<keyof PlayerModifier>field]
+            )
             if (!propertyModifier) {
                continue
             }
@@ -482,7 +484,11 @@ export function computeModifier(gameContext: GameContext) {
 
       if (skillPointCost) {
          for (const skillCategory in skillPointCost) {
-            computed.skillPointCost[skillCategory].addContribution(name, skillPointCost[skillCategory], icon)
+            computed.skillPointCost[skillCategory].addContribution(
+               name,
+               (<SkillPointCostModifier>skillPointCost)[skillCategory],
+               icon
+            )
          }
       }
    }

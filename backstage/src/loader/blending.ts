@@ -79,6 +79,32 @@ function buildCompileSeries<T extends HasIdent>(
    }
 }
 
+type CompileSingleFunction2<T extends HasIdent> = (compilation: CompiledRuleSet, scope: Scope, item: T) => T
+
+function buildCompileSeries2<T extends HasIdent>(
+   itemName: string,
+   seriesName: keyof CompiledRuleSet,
+   fnName: string,
+   compileSingleFn: CompileSingleFunction2<T>
+): CompileFunction<T> {
+   return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
+      for (const item of series) {
+         const compiledItem = compileSingleFn(compilation, scope, item)
+         const ident = <string>compiledItem.ident
+
+         const dest = <Record<string, T>>(<unknown>compilation[seriesName])
+         if (dest[ident]) {
+            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
+         } else {
+            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
+         }
+
+         // TODO(chuigda): implement "blending"
+         dest[ident] = compiledItem
+      }
+   }
+}
+
 export const compileSkills = buildCompileSeries('skill', 'skills', 'compileSkills', compileSkill)
 
 export const compileActivities = buildCompileSeries('activity', 'activities', 'compileActivities', compileActivity)
@@ -94,7 +120,7 @@ export const compileAscensionPerks = buildCompileSeries(
 
 export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
 
-export const compileModifiers = buildCompileSeries('modifier', 'modifiers', 'compileModifiers', compileModifier)
+export const compileModifiers = buildCompileSeries2('modifier', 'modifiers', 'compileModifiers', compileModifier)
 
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}
@@ -277,7 +303,17 @@ export function compileTranslations(
 }
 
 export function preCompileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
-   const { skillCategories, activityCategories } = ruleSet
+   const { ident, skillCategories, activityCategories } = ruleSet
+
+   if (compilation.loadedRuleSets.find(
+      thatIdent => thatIdent.moduleName === ident.moduleName
+         && thatIdent.author === ident.author
+   )) {
+      console.warn(`[W] [preCompileRuleSet] duplicate mod identifier: '${ident.author}:${ident.moduleName}'`)
+   }
+
+   compilation.loadedRuleSets.push(ident)
+
    if (skillCategories) {
       compileSkillCategories(compilation, skillCategories)
    }
