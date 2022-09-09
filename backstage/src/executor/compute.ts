@@ -118,7 +118,14 @@ export function computeSkillCost(
    skillCost: SkillCost,
    skillCategory?: SkillCategoryId
 ): number {
-   // TODO(?): compute skill cost modifiers here
+   const costModifiers = gameContext.state.computedModifier!.skillPointCost
+   let modifier = 1
+   if ('all' in costModifiers) {
+      modifier += costModifiers.all.computedValue
+   }
+   if (skillCategory && skillCategory in costModifiers) {
+      modifier += costModifiers[skillCategory].computedValue
+   }
 
    if (!skillCost || !skillCost.base) {
       return 0
@@ -152,7 +159,7 @@ export function computeSkillCost(
       totalDiffRatio = 10.0
    }
 
-   let cost = base * (1.0 + totalDiffRatio)
+   let cost = base * (1.0 + totalDiffRatio) * modifier
    if (cost > 999) {
       cost = 999
    }
