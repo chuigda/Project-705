@@ -12,7 +12,7 @@ export function updatePlayerProperty(
    source?: ValueSource
 ) {
    if (operator === 'add' || operator === 'sub') {
-      const playerModifierAll = gameContext.state.computedModifier!.player.all
+      const playerModifierAll: ComputedPlayerModifier | undefined = gameContext.state.computedModifier!.player.all
       let playerModifier: ComputedPlayerModifier | undefined
       if (source) {
          playerModifier = gameContext.state.computedModifier!.player[source]
@@ -20,16 +20,14 @@ export function updatePlayerProperty(
          playerModifier = undefined
       }
 
-      const allModifier = playerModifierAll.getModifier(property)
-      if (!allModifier) {
-         console.warn(`[E] [updatePlayerProperty] invalid property path: '${property}'`)
-         return
-      }
-
+      const allModifier = playerModifierAll ? playerModifierAll.getModifier(property)! : undefined
       const specificModifier = playerModifier ? playerModifier.getModifier(property)! : undefined
       const gainOrLoss = operator === 'add' ? 'gain' : 'loss'
 
-      let sumUpModifier = 1.0 + allModifier[gainOrLoss]
+      let sumUpModifier = 1.0
+      if (allModifier) {
+         sumUpModifier += allModifier[gainOrLoss]
+      }
       if (specificModifier) {
          sumUpModifier += specificModifier[gainOrLoss]
       }

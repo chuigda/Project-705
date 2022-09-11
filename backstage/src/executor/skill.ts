@@ -58,6 +58,7 @@ export function learnSkill(gameContext: GameContext, skill: Ident) {
       return
    }
 
+   console.info(`[I] [learnSkill] learning skill '${skillId}'`)
    if (gameContext.state.player.skills[skillId]) {
       console.warn(`[W] [learnSkill] skill '${skillId}' has already been learnt, re-learning`)
    }
@@ -80,6 +81,7 @@ export function grantSkill(gameContext: GameContext, skill: Ident) {
       console.error(`[E] [grantSkill] skill '${skillId}' does not exist`)
       return
    }
+   console.info(`[I] [grantSkill] granting skill '${skillId}'`)
 
    if (gameContext.state.player.skills[skillId]) {
       console.warn(`[W] [grantSkill] skill '${skillId}' has already been learnt, re-granting`)

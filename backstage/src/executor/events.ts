@@ -52,6 +52,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
 
       if (!eventContent) {
          console.error(`[E] [triggerEvent] event '${eventId}' not found`)
+         return
       }
 
       console.debug(`[D] [triggerEvent] triggered event '${eventId}'`)
