@@ -12,7 +12,7 @@ const startupTranslation: Record<string, string> = {
       + ' - 开局时拥有 50 各项天赋和 500 技能点\n'
       + ' - 零用钱基准为 40\n'
       + ' - 学习数学研究、物理研究类项目所消耗的技能点数减少 25%\n'
-      + ' - 会遇到随机的负面事件，因意外事件损失心态时，所损失的心态增加 50%\n',
+      + ' - 会遇到随机的负面事件，因意外事件损失心态时，所损失的心态增加 50%',
 
    '$startup_poor': '寒窗苦读',
    '$startup_poor_desc':
@@ -22,7 +22,8 @@ const startupTranslation: Record<string, string> = {
       + ' - 心态值上限增加至 150%，且因各种原因损失的心态值仅为 50%\n'
       + ' - 没有零用钱\n'
       + ' - 你的体魄至少为 50 * 回合数，并且你不会生病\n'
-      + ' - 无法学习计算机和金融相关项目\n',
+      + ' - 无法学习计算机和金融相关项目\n'
+      + ' - 免除激活“卷王”飞升后所受的外交评价惩罚',
 
    '$startup_detroit': '化身为人',
    '$startup_detroit_desc':
@@ -39,15 +40,47 @@ const startupTranslation: Record<string, string> = {
 
 const ascensionPerkTranslation: Record<string, string> = {
    '$ap_well_prepared': '未雨绸缪',
-   '$ap_well_prepared_desc': '获得 500 技能点数，且你学习初始技能所需的技能点数 -50%'
+   '$ap_well_prepared_desc': '获得 500 技能点数，且你学习初始技能所需的技能点数 -50%',
+
+   '$ap_dont_be_busy': '厚积薄发',
+   '$ap_dont_be_busy_desc': '10 回合内，任何活动的基础属性产出 -10%；10 回合后，任何活动的基础属性产出 +15%',
+
+   '$ap_go_over': '温故知新',
+   '$ap_go_over_desc':
+      '你每学习过一项技能，回合结束时便获得 1.5 技能点数。'
+      + '游戏进行至 10 回合后，这个效果增加到 3 技能点数',
+
+   '$ap_defrag': '碎片整理程序',
+   '$ap_defrag_desc': '回合结束时，返还你本回合消耗技能点数的 20%',
+
+   '$ap_town_swot': '小镇做题家',
+   '$ap_town_swot_desc': '学习主科技能所需的技能点数 -30%，且进行主科类活动消耗的心态值 -25%',
+
+   '$ap_emotion_emulation': '情感模拟器',
+   '$ap_emotion_emulation_desc':
+      '“你不能总是像个绅士一样。犯点错！”\n'
+      + '允许情感分析模块控制和改变你的行为，不再总是彬彬有礼的你看上去会更像一个人类。', // 其实还没想好给啥 buff
+
+   '$ap_king_of_involution': '卷王',
+   '$ap_king_of_involution_desc':
+      '学习主科技能所需的技能点数 -50%\n'
+      + '学习其他技能所需的技能点数 +20%\n'
+      + '进行主科类活动时消耗的心态值 -60%，且产出额外的 30% 技能点数\n'
+      + '你获得的魅力 -30%，减少的魅力 +30%\n'
+      + '如果你没有“寒窗苦读”起源，则大幅度降低你的外交评价',
+
+   '$ap_artificial_emotion': '人造情感',
+   '$ap_artificial_emotion_desc':
+      '你立即获得相当于你智商 50% 的情商和想象力。\n'
+      + '在这之后所有的活动都会正常产出情商、想象力和魅力，并提供额外的软件不稳定'
 }
 
 const modifierTranslation: Record<string, string> = {
    '$md_town_swot': '小镇做题家',
    '$md_town_swot_desc': '作为一个合格的小镇做题家，你在主科的学习上获得了加成',
 
-   '$king_of_involution': '卷王',
-   '$king_of_involution_desc': '作为一个卷王，你的做题能力足以让你在同龄人里乱杀。但这一切真的值得吗？'
+   '$md_king_of_involution': '卷王',
+   '$md_king_of_involution_desc': '作为一个卷王，你的做题能力足以让你在同龄人里乱杀。但这一切真的值得吗？',
 }
 
 export default {

@@ -70,7 +70,7 @@ const ascensionPerks: AscensionPerk[] = [
    {
       ident: 'emotion_emulation',
       name: '$ap_emotion_emulation',
-      description: '$ap_emotion_emulation',
+      description: '$ap_emotion_emulation_desc',
       potential: [
          afterTurns(12),
          requireStartup({ author: 'cnpr', moduleName: 'core', id: 'detroit' }, 'detroit'),

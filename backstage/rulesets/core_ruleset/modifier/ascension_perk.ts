@@ -55,13 +55,7 @@ const ascensionPerkModifiers: Modifier[] = [
             '@activity:@science': { loss: -0.25 }
          }
       },
-      skillPointCost: {
-         '@chinese': -0.2,
-         '@math': -0.2,
-         '@english': -0.2,
-         '@liberal': -0.2,
-         '@science': -0.2
-      }
+      skillPointCost: Object.fromEntries(majorSubjects.map(subject => [subject, -0.3]))
    },
    {
       ident: 'king_of_involution',

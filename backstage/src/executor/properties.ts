@@ -12,6 +12,7 @@ export function updatePlayerProperty(
    source?: ValueSource
 ) {
    if (operator === 'add' || operator === 'sub') {
+      // TODO(chuigda): actually incomplete and ugly code, needs much refinement
       const playerModifierAll: ComputedPlayerModifier | undefined = gameContext.state.computedModifier!.player.all
       let playerModifier: ComputedPlayerModifier | undefined
       if (source) {
@@ -38,6 +39,7 @@ export function updatePlayerProperty(
       value = Math.ceil(value * sumUpModifier)
    }
 
+   // TODO(chuigda): I almost forgot the logic of these things
    const opRef = { operator, value }
    const propertyPath = property.split('.')
    let container: Record<string, any> = gameContext.state.events.playerPropertyUpdated
