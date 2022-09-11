@@ -1,4 +1,5 @@
-import { Event } from '@app/ruleset'
+import { Event, ValueSource } from '@app/ruleset'
+import { PropertyOp } from '@app/ruleset/ops'
 
 const ascensionPerkEvents: Event[] = [
    {
@@ -25,30 +26,27 @@ const ascensionPerkEvents: Event[] = [
    {
       ident: 'defrag_activation',
       event: cx => {
-         cx.connect(cx.signals.turnStart(), 'defrag_turnstart')
+         cx.setV('defrag_counter', 0)
+         cx.connect(
+            cx.signals.playerPropertyUpdated('skillPoints'),
+            'defrag_skill_point_cost'
+         )
          cx.connect(cx.signals.turnOver(), 'defrag_turnover')
       }
    },
    {
-      ident: 'defrag_turnstart',
-      event: cx => {
-         cx.setV('defrag_init_value', cx.state.player.skillPoints)
+      ident: 'defrag_skill_point_cost',
+      event: (cx, opRef: { operator: PropertyOp, value: number }, source: ValueSource) => {
+         if (opRef.operator === 'sub' && source === '@learn_skill') {
+            cx.updateV('defrag_counter', counter => counter + opRef.value)
+         }
       }
    },
    {
       ident: 'defrag_turnover',
       event: cx => {
-         cx.state.player.attributes.intelligence += 50
-
-         const skillPoints1 = cx.getV('defrag_init_value')
-         const skillPoints2 = cx.state.player.skillPoints
-
-         const diff = skillPoints2 - skillPoints1
-         if (diff < 0) {
-            cx.state.player.skillPoints += Math.ceil(diff / 5)
-         } else {
-            cx.state.player.energy += Math.ceil(diff / 2)
-         }
+         const defragCounter = cx.setV('defrag_counter', 0)
+         cx.updatePlayerProperty('skillPoints', 'add', Math.ceil(defragCounter / 5))
       }
    },
    {

@@ -66,7 +66,7 @@ export function learnSkill(gameContext: GameContext, skill: Ident) {
    delete gameContext.state.computedSkills!.available[skillId]
 
    gameContext.state.player.skills[skillId] = skillContent
-   gameContext.state.player.skillPoints -= cost
+   gameContext.updatePlayerProperty('skillPoints', 'sub', cost, '@learn_skill')
 
    executeSkillEffects(gameContext, skillContent)
 }
