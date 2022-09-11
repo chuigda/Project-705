@@ -112,7 +112,7 @@ const startupAssertion = {
 
 const eventAssertion = {
    ident: identAssertion,
-   event: ['function'],
+   event: 'function',
 
    ...patchModeAssertion
 }

@@ -1,6 +1,6 @@
 import { mEventId, Scope } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
-import { MaybeInlineEvent } from '@app/ruleset/items/event'
+import { EventFunction, MaybeInlineEvent } from '@app/ruleset/items/event'
 
 export function pushScope(gameContext: GameContext, scope: Scope) {
    if (gameContext.scope) {
@@ -61,13 +61,11 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       }
 
       pushScope(gameContext, scope)
-      for (const idx in eventContent.event) {
-         const eventFunction = eventContent.event[idx]
-         try {
-            eventFunction(gameContext, ...args)
-         } catch (e) {
-            console.error(`[E] [triggerEvent] error when executing event script '${eventId}:${idx}': ${e}\n${e.stack}`)
-         }
+      const eventFunction: EventFunction = eventContent.event
+      try {
+         eventFunction(gameContext, ...args)
+      } catch (e) {
+         console.error(`[E] [triggerEvent] error when executing event script '${eventId}': ${e}\n${e.stack}`)
       }
       popScope(gameContext)
    }
