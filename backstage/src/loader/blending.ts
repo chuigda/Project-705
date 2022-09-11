@@ -1,6 +1,13 @@
 import { CompiledRuleSet } from '@app/loader'
 import { SkillCategory } from '@app/ruleset/items/category'
-import { Ident, mDisplayItemId, mEventId, mTranslationKey, mVarName, Scope } from '@app/base/uid'
+import {
+   Ident,
+   mDisplayItemId,
+   mEventId,
+   mTranslationKey,
+   mVarName,
+   Scope
+} from '@app/base/uid'
 import {
    compileActivity,
    compileAscensionPerk,

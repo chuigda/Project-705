@@ -6,7 +6,6 @@
   "scripts": {
     "launch": "ts-node -r tsconfig-paths/register src/index.ts",
     "launch_debug": "DEBUG=1 ts-node -r tsconfig-paths/register src/index.ts",
-    "test_quick": "node test/test_quick.js",
     "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
     "release_build": "tsc --project tsconfig.build.json && resolve-tspaths --project tsconfig.build.json",
     "make_dts": "npm-run-all make_dts:*",

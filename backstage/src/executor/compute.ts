@@ -401,7 +401,7 @@ export class ComputedPlayerModifier {
 
 export class ComputedSkillPointCostModifier {
    computedValue: number = 0.0
-   contributions: IContribution[]
+   contributions: IContribution[] = []
 
    addContribution(name: MaybeTranslationKey, value: number, icon?: string) {
       this.computedValue += value
@@ -519,6 +519,9 @@ export function computeModifier(gameContext: GameContext) {
 
       if (skillPointCost) {
          for (const skillCategory in skillPointCost) {
+            if (!computed.skillPointCost[skillCategory]) {
+               computed.skillPointCost[skillCategory] = new ComputedSkillPointCostModifier()
+            }
             computed.skillPointCost[skillCategory].addContribution(
                name,
                (<SkillPointCostModifier>skillPointCost)[skillCategory],

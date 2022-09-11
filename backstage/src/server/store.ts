@@ -1,25 +1,17 @@
 import { GameContext } from '@app/executor/game_context'
 import { triggerEvent } from '@app/executor/events'
 import ruleSet from '@app/server/ruleset'
-import { applyStartup } from '@app/executor/startup'
-import { computePotentialAscensionPerks, computePotentialSkills } from '@app/executor/compute'
+import initGame from '@app/loader/init'
 
 class ServerStore {
    gameContexts: Record<string, GameContext> = {}
 
    initGame(accessToken: string, startupId: string): GameContext | undefined {
-      const startup = ruleSet.startups[startupId]
-      if (!startup) {
+      const context = initGame(ruleSet, startupId)
+      if (!context) {
+         console.error('[E] [ServerStore.initGame] error initializing game context')
          return undefined
       }
-
-      const context = new GameContext(ruleSet)
-      for (const event of ruleSet.onRuleSetLoaded) {
-         triggerEvent(context, event)
-      }
-      applyStartup(context, startup)
-      computePotentialSkills(context)
-      computePotentialAscensionPerks(context)
 
       this.gameContexts[accessToken] = context
       return context
