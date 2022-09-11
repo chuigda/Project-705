@@ -13,8 +13,9 @@ import {
    AttributeModifiers,
    Modifier,
    ModifierValue,
-   PlayerModifier, PlayerModifierGen,
-   PropertyModifier, SkillPointCostModifier,
+   PlayerModifier,
+   PropertyModifier,
+   SkillPointCostModifier,
    ValueSource
 } from '@app/ruleset/items/modifier'
 import { SkillCategoryId } from '@app/ruleset'
@@ -310,7 +311,7 @@ export class ComputedPropertyModifier {
       }
       if (value.loss) {
          this.loss += value.loss
-         this.gainContributions.push({
+         this.lossContributions.push({
             name,
             value: value.loss,
             icon
@@ -373,7 +374,7 @@ export class ComputedPlayerModifier {
       const pathParts: string[] = propertyPath.split('.')
       // eslint-disable-next-line @typescript-eslint/no-this-alias
       let that: ComputedPlayerModifier | ComputedAttributeModifiers | ComputedPropertyModifier = this
-      for (const pathPart of propertyPath) {
+      for (const pathPart of pathParts) {
          if (that instanceof ComputedPropertyModifier) {
             console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
             return undefined
