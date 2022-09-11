@@ -120,11 +120,17 @@ export function computeSkillCost(
 ): number {
    const costModifiers = gameContext.state.computedModifier!.skillPointCost
    let modifier = 1
+
    if ('all' in costModifiers) {
       modifier += costModifiers.all.computedValue
    }
+
    if (skillCategory && skillCategory in costModifiers) {
       modifier += costModifiers[skillCategory].computedValue
+   }
+
+   if (modifier < 0) {
+      modifier = 0
    }
 
    if (!skillCost || !skillCost.base) {
@@ -159,7 +165,7 @@ export function computeSkillCost(
       totalDiffRatio = 10.0
    }
 
-   let cost = base * (1.0 + totalDiffRatio) * modifier
+   let cost = Math.ceil(base * (1.0 + totalDiffRatio) * modifier)
    if (cost > 999) {
       cost = 999
    }
@@ -361,6 +367,34 @@ export class ComputedPlayerModifier {
       this.satisfactory.finalize()
       this.money.finalize()
       this.money.finalize()
+   }
+
+   getModifier(propertyPath: string): ComputedPropertyModifier | undefined {
+      const pathParts: string[] = propertyPath.split('.')
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      let that: ComputedPlayerModifier | ComputedAttributeModifiers | ComputedPropertyModifier = this
+      for (const pathPart of propertyPath) {
+         if (that instanceof ComputedPropertyModifier) {
+            console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
+            return undefined
+         }
+
+         // @ts-ignore
+         const part: ComputedAttributeModifiers | ComputedPropertyModifier | undefined = that[pathPart]
+         if (!part) {
+            console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
+            return undefined
+         }
+
+         that = part
+      }
+
+      if (!(that instanceof ComputedPropertyModifier)) {
+         console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
+         return undefined
+      }
+
+      return that
    }
 }
 

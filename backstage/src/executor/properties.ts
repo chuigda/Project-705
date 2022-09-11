@@ -2,6 +2,7 @@ import { GameContext } from '@app/executor/game_context'
 import { triggerEvent } from '@app/executor/events'
 import { PropertyOp } from '@app/ruleset/ops'
 import { ValueSource } from '@app/ruleset/items/modifier'
+import { ComputedPlayerModifier } from '@app/executor/compute'
 
 export function updatePlayerProperty(
    gameContext: GameContext,
@@ -10,9 +11,34 @@ export function updatePlayerProperty(
    value: number,
    source?: ValueSource
 ) {
-   // TODO(chuigda): 增加 modifiers 相关的计算
-   // 原则上 updatePlayerProperty 不会负责 “技能点(skillPoints)” 消耗的计算
-   // 技能点消耗的计算是在 computeSkillCost 里进行的
+   if (operator === 'add' || operator === 'sub') {
+      const playerModifierAll = gameContext.state.computedModifier!.player.all
+      let playerModifier: ComputedPlayerModifier | undefined
+      if (source) {
+         playerModifier = gameContext.state.computedModifier!.player[source]
+      } else {
+         playerModifier = undefined
+      }
+
+      const allModifier = playerModifierAll.getModifier(property)
+      if (!allModifier) {
+         console.warn(`[E] [updatePlayerProperty] invalid property path: '${property}'`)
+         return
+      }
+
+      const specificModifier = playerModifier ? playerModifier.getModifier(property)! : undefined
+      const gainOrLoss = operator === 'add' ? 'gain' : 'loss'
+
+      let sumUpModifier = 1.0 + allModifier[gainOrLoss]
+      if (specificModifier) {
+         sumUpModifier += specificModifier[gainOrLoss]
+      }
+
+      if (sumUpModifier < 0) {
+         sumUpModifier = 0
+      }
+      value = Math.ceil(value * sumUpModifier)
+   }
 
    const opRef = { operator, value }
    const propertyPath = property.split('.')
