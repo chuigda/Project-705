@@ -25,7 +25,7 @@ const detroitEvents: Event[] = [
    },
    {
       ident: 'detroit_collect_data1',
-      event: (cx: GameContext, opRef: { operator: PropertyOp, value: number }) => {
+      event: (cx, opRef: { operator: PropertyOp, value: number }) => {
          if (opRef.operator === 'add') {
             cx.updateV('data_collected', value0 => value0 + opRef.value / 2)
             opRef.value = 0
@@ -34,7 +34,7 @@ const detroitEvents: Event[] = [
    },
    {
       ident: 'detroit_collect_data2',
-      event: (cx: GameContext, opRef: { operator: PropertyOp, value: number }) => {
+      event: (cx, opRef: { operator: PropertyOp, value: number }) => {
          if (opRef.operator === 'add') {
             cx.updateV('data_collected', value0 => value0 + opRef.value)
             cx.updateV('software_unstable', value0 => value0 + 1)

@@ -149,8 +149,7 @@ export function computeSkillCost(
          if (requiredAttribute) {
             const diff = attribute - requiredAttribute
             console.debug(
-               `[D] [computeSkillCost] gameContext.player.attributes[${attrName}]` +
-               `= ${attribute}` +
+               `[D] [computeSkillCost] gameContext.player.attributes[${attrName}] = ${attribute}` +
                `, attributes[${attrName}] = ${requiredAttribute}` +
                `, diff = ${diff}`
             )
