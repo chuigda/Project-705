@@ -19,6 +19,7 @@ import {
    ValueSource
 } from '@app/ruleset/items/modifier'
 import { SkillCategoryId } from '@app/ruleset'
+import { popScope, pushScope } from '@app/executor/events'
 
 export interface PotentialResultBase {
    readonly result: boolean
@@ -40,7 +41,7 @@ export function computePotential(gameContext: GameContext, potential: PotentialE
       try {
          result = potential.op(gameContext)
       } catch (e) {
-         console.error('')
+         console.error(`[E] [computePotential] error when computing potential expression: ${e}\n${e.stack}`)
          result = false
       }
       return {
@@ -206,10 +207,12 @@ export function computePotentialSkills(gameContext: GameContext) {
       let result = true
       const resultPieces: SkillPotentialResult[] = []
       if (potential) {
+         pushScope(gameContext, skill.scope!)
          for (const potentialPart of potential) {
             resultPieces.push(computeSkillPotential(gameContext, potentialPart))
          }
          result = resultPieces.every((piece) => piece.result)
+         popScope(gameContext)
       }
 
       if (result) {
@@ -263,18 +266,20 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
       const { ident, potential } = ascensionPerk
       const identStr = <string>ident
       if (activatedAscensionPerks[identStr]) {
-         console.info(`[I] [computePotentialAscensionPerks] skipping already activated ascension perk: '${ident}'`)
+         console.debug(`[D] [computePotentialAscensionPerks] skipping already activated ascension perk: '${ident}'`)
          continue
       }
 
       let result = true
       let resultPieces: PotentialResult[] = []
       if (potential) {
+         pushScope(gameContext, ascensionPerk.scope!)
          resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
          result = resultPieces.every(piece => piece.result)
+         popScope(gameContext)
       }
 
-      console.info(`[I] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
+      console.debug(`[D] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
       if (result) {
          available[identStr] = ascensionPerk
       } else {
@@ -317,15 +322,6 @@ export class ComputedPropertyModifier {
          })
       }
    }
-
-   finalize() {
-      if (this.gain < 0.0) {
-         this.gain = 0.0
-      }
-      if (this.loss < 0.0) {
-         this.loss = 0.0
-      }
-   }
 }
 
 export class ComputedAttributeModifiers {
@@ -335,15 +331,6 @@ export class ComputedAttributeModifiers {
    memorization: ComputedPropertyModifier = new ComputedPropertyModifier()
    imagination: ComputedPropertyModifier = new ComputedPropertyModifier()
    charisma: ComputedPropertyModifier = new ComputedPropertyModifier()
-
-   finalize() {
-      this.strength.finalize()
-      this.intelligence.finalize()
-      this.emotionalIntelligence.finalize()
-      this.memorization.finalize()
-      this.imagination.finalize()
-      this.charisma.finalize()
-   }
 }
 
 export class ComputedPlayerModifier {
@@ -356,18 +343,6 @@ export class ComputedPlayerModifier {
    satisfactory: ComputedPropertyModifier = new ComputedPropertyModifier()
    money: ComputedPropertyModifier = new ComputedPropertyModifier()
    moneyPerTurn: ComputedPropertyModifier = new ComputedPropertyModifier()
-
-   finalize() {
-      this.attributes.finalize()
-      this.talent.finalize()
-
-      this.skillPoints.finalize()
-      this.energy.finalize()
-      this.mentalHealth.finalize()
-      this.satisfactory.finalize()
-      this.money.finalize()
-      this.money.finalize()
-   }
 
    getModifier(propertyPath: string): ComputedPropertyModifier | undefined {
       const pathParts: string[] = propertyPath.split('.')
@@ -406,27 +381,11 @@ export class ComputedSkillPointCostModifier {
       this.computedValue += value
       this.contributions.push({ name, value, icon })
    }
-
-   finalize() {
-      if (this.computedValue < 0.0) {
-         this.computedValue = 0.0
-      }
-   }
 }
 
 export class ComputedModifier {
    player: Record<ValueSource, ComputedPlayerModifier> = {}
    skillPointCost: Record<'all' | SkillCategoryId, ComputedSkillPointCostModifier> = {}
-
-   finalize() {
-      for (const playerModifier of Object.values(this.player)) {
-         playerModifier.finalize()
-      }
-
-      for (const skillPointCost of Object.values(this.skillPointCost)) {
-         skillPointCost.finalize()
-      }
-   }
 }
 
 function computeAttributeModifiers(
@@ -529,8 +488,6 @@ export function computeModifier(gameContext: GameContext) {
          }
       }
    }
-
-   computed.finalize()
 }
 
 export default {

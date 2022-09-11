@@ -77,9 +77,10 @@ export function compileSkill(scope: Scope, skill: Skill): Skill {
    const activities = skill.activities?.map(activity => mActivityId(scope, activity))
    const events = skill.events?.map(event => compileMaybeInlineEvent(scope, event))
 
-   const { cost, patch } = skill
+   const { category, cost, patch } = skill
    return {
       ...itemBase,
+      category,
 
       cost,
       potential,
@@ -193,6 +194,7 @@ export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modi
    const itemBase = compileBase(scope, modifier, mModifierId)
 
    const { player, skillPointCost, patch } = modifier
+
    return {
       ...itemBase,
 

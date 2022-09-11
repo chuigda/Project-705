@@ -1,6 +1,7 @@
 import { GameContext } from '@app/executor/game_context'
 import { Ident, mAscensionPerkId } from '@app/base/uid'
 import { popScope, pushScope, triggerEvent } from '@app/executor/events'
+import { addModifier } from '@app/executor/modifier'
 
 export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: Ident) {
    const scope = gameContext.scope!
@@ -10,6 +11,7 @@ export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: I
       return
    }
 
+   console.info(`[I] [activateAscensionPerk] activating ascension perk '${ascensionPerkId}'`)
    if (gameContext.state.player.ascensionPerks[ascensionPerkId]) {
       console.warn(`[W] [activateAscensionPerk] ascension perk '${ascensionPerkId}' already activated, re-activating`)
    }
@@ -21,6 +23,10 @@ export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: I
    gameContext.state.player.ascensionPerks[ascensionPerkId] = apContent
    gameContext.updateTracker.player.ascensionPerks = true
    gameContext.updateTracker.computedAscensionPerks = true
+
+   if (apContent.modifier) {
+      addModifier(gameContext, apContent.modifier)
+   }
 
    if (events) {
       if (apScope) {

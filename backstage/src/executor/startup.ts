@@ -2,6 +2,7 @@ import { GameContext, PlayerAttributes } from '@app/executor/game_context'
 import { Startup } from '@app/ruleset'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import { popScope, pushScope, triggerEvent } from '@app/executor/events'
+import { addModifier } from '@app/executor/modifier'
 
 export function applyStartup(gameContext: GameContext, startup: Startup) {
    if (startup.player) {
@@ -35,6 +36,10 @@ export function applyStartup(gameContext: GameContext, startup: Startup) {
       if (moneyPerTurn) {
          gameContext.state.player.moneyPerTurn = moneyPerTurn
       }
+   }
+
+   if (startup.modifier) {
+      addModifier(gameContext, startup.modifier)
    }
 
    if (startup.events) {
