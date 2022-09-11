@@ -24,6 +24,24 @@ const ascensionPerkEvents: Event[] = [
       }
    },
    {
+      ident: 'go_over_activation',
+      event: cx => {
+         cx.connect(cx.signals.turnOver(), 'go_over_turnover')
+      }
+   },
+   {
+      ident: 'go_over_turnover',
+      event: cx => {
+         const learntSkillCount = Object.keys(cx.state.player.skills).length
+
+         if (cx.state.turns >= 10) {
+            cx.updatePlayerProperty('skillPoints', 'add', learntSkillCount * 3)
+         } else {
+            cx.updatePlayerProperty('skillPoints', 'add', Math.ceil(learntSkillCount * 1.5))
+         }
+      }
+   },
+   {
       ident: 'defrag_activation',
       event: cx => {
          cx.setV('defrag_counter', 0)

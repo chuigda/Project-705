@@ -28,6 +28,14 @@ const ascensionPerks: AscensionPerk[] = [
       events: ['dont_be_busy_activation']
    },
 
+   // 温故知新
+   {
+      ident: 'go_over',
+      name: '$ap_go_over',
+      description: '$ap_go_over_desc',
+      events: ['go_over_activation']
+   },
+
    // 碎片整理程序
    {
       ident: 'defrag',
