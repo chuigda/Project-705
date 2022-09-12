@@ -142,6 +142,8 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
       return {
          attributes: sendPlayerAttributes(ps.attributes),
          talent: sendPlayerAttributes(ps.talent),
+         energy: ps.energy,
+         energyMax: ps.energyMax,
          skillPoints: ps.skillPoints,
          skills: sendSkills(ps.skills),
          activities: sendActivities(ps.activities),

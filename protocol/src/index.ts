@@ -68,6 +68,8 @@ export interface IPlayerStatus {
    attributes?: IPlayerAttributes
    talent?: IPlayerAttributes
 
+   energy?: number
+   energyMax?: number
    skillPoints?: number
    skills?: ISkill[]
    activities?: IActivity[]
