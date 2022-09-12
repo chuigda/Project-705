@@ -125,9 +125,14 @@ export class PlayerStatusUpdateTracker {
    skills: boolean = false
    activities: boolean = false
    ascensionPerks: boolean = false
+   ascensionPerkSlots: boolean = false
 
    any(): boolean {
-      return this.properties || this.skills || this.activities || this.ascensionPerks
+      return this.properties
+         || this.skills
+         || this.activities
+         || this.ascensionPerks
+         || this.ascensionPerkSlots
    }
 }
 
@@ -231,6 +236,10 @@ export class GameContext {
 
    grantSkill(skill: Ident) {
       grantFunctions.grantSkill(this, skill)
+   }
+
+   addAscensionPerkSlot(count: number) {
+      ascensionPerkFunctions.addAscensionPerkSlot(this, count)
    }
 
    activateAscensionPerk(ascensionPerk: Ident) {

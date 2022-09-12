@@ -2,11 +2,16 @@ import {
    AvailableSkill,
    ComputedAscensionPerks,
    ComputedSkills,
-   HasSkillOrNot, isHasSkillOrNot, isPotentialFunctionResult, PotentialFunctionResult, PotentialLogicOpResult,
+   HasSkillOrNot,
+   PotentialFunctionResult,
+   PotentialLogicOpResult,
    PotentialResult,
    SkillPotentialResult,
    UnavailableAscensionPerk,
-   UnavailableSkill
+   UnavailableSkill,
+
+   isHasSkillOrNot,
+   isPotentialFunctionResult,
 } from '@app/executor/compute'
 import {
    GameState,
@@ -265,6 +270,8 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          // computedModifiers: gs.computedModifier,
          computedSkills: sendComputedSkills(gs.computedSkills!),
          computedAscensionPerks: sendComputedAscensionPerks(gs.computedAscensionPerks!)
+
+         // TODO(chuigda): transpile custom UI items
       }
    } else {
       return {

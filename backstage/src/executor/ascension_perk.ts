@@ -3,6 +3,11 @@ import { Ident, mAscensionPerkId } from '@app/base/uid'
 import { popScope, pushScope, triggerEvent } from '@app/executor/events'
 import { addModifier } from '@app/executor/modifier'
 
+export function addAscensionPerkSlot(gameContext: GameContext, count: number) {
+   gameContext.state.player.ascensionPerkSlots += count
+   gameContext.updateTracker.player.ascensionPerkSlots = true
+}
+
 export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: Ident) {
    const scope = gameContext.scope!
    const ascensionPerkId = mAscensionPerkId(scope, ascensionPerk)
@@ -44,6 +49,7 @@ export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: I
 }
 
 const ascensionPerkFunctions = {
+   addAscensionPerkSlot,
    activateAscensionPerk
 }
 
