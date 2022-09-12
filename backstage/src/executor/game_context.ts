@@ -52,6 +52,7 @@ export class PlayerStatus {
    skills: Record<string, Skill> = {}
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
+   ascensionPerkSlots: number = 0
 
    energy: number = 0
    energyMax: number = 150
@@ -82,6 +83,7 @@ export class PlayerPropertyUpdatedEvents {
 export class TimedEvent {
    turn: number
    eventId: string
+   trigger: 'turn_start' | 'turn_over'
 }
 
 export class GameContextEvents {
@@ -199,7 +201,7 @@ export class GameContext {
       computeFunctions.recomputeSkillCosts(this)
    }
 
-   get signals(): Record<string, (arg?: any) => Signal> {
+   get signals(): Record<string, (...args: any) => Signal> {
       return connectFunctions.signals
    }
 

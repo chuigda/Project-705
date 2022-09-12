@@ -72,6 +72,7 @@ export interface IPlayerStatus {
    skills?: ISkill[]
    activities?: IActivity[]
    ascensionPerks?: IAscensionPerk[]
+   ascensionPerkSlots: number
 
    pressure?: number
    satisfactory?: number

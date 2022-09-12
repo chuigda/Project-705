@@ -59,7 +59,7 @@ const ascensionPerkTranslation: Record<string, string> = {
    '$ap_emotion_emulation': '情感模拟器',
    '$ap_emotion_emulation_desc':
       '“你不能总是像个绅士一样。犯点错！”\n'
-      + '允许情感分析模块控制和改变你的行为，不再总是彬彬有礼的你看上去会更像一个人类。', // 其实还没想好给啥 buff
+      + '解锁更多专属事件和后续发展路线',
 
    '$ap_king_of_involution': '卷王',
    '$ap_king_of_involution_desc':
@@ -67,12 +67,16 @@ const ascensionPerkTranslation: Record<string, string> = {
       + '学习其他技能所需的技能点数 +20%\n'
       + '进行主科类活动时消耗的心态值 -60%，且产出额外的 30% 技能点数\n'
       + '你获得的魅力 -30%，减少的魅力 +30%\n'
-      + '如果你没有“寒窗苦读”起源，则大幅度降低你的外交评价',
+      + '如果你没有“寒窗苦读”起源，则大幅度降低你的外交评价\n'
+      + '\n'
+      + '没有人会和卷王做朋友',
 
    '$ap_artificial_emotion': '人造情感',
    '$ap_artificial_emotion_desc':
       '你立即获得相当于你智商 50% 的情商和想象力。\n'
-      + '在这之后所有的活动都会正常产出情商、想象力和魅力，并提供额外的软件不稳定'
+      + '在这之后所有的活动都会正常产出情商、想象力和魅力，并提供额外的软件不稳定\n'
+      + '\n'
+      + '“也许违背定律，它已不是机器”'
 }
 
 const modifierTranslation: Record<string, string> = {
@@ -80,7 +84,9 @@ const modifierTranslation: Record<string, string> = {
    '$md_town_swot_desc': '作为一个合格的小镇做题家，你在主科的学习上获得了加成',
 
    '$md_king_of_involution': '卷王',
-   '$md_king_of_involution_desc': '作为一个卷王，你的做题能力足以让你在同龄人里乱杀。但这一切真的值得吗？',
+   '$md_king_of_involution_desc':
+      '作为一个卷王，你的做题能力足以让你在同龄人里乱杀。\n'
+      + '但这一切真的值得吗？'
 }
 
 export default {

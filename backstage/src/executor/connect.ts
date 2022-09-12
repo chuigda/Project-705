@@ -1,11 +1,13 @@
 import { Scope, Ident, mEventId } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
 
+export type TurnsSignalTrigger = 'turn_start' | 'turn_over'
+
 export type Signal = { signalType: string }
 export type SkillSignal = Signal & { skillId: string }
 export type ActivitySignal = Signal & { activityId: string }
 export type PlayerPropertyUpdatedSignal = Signal & { property: string }
-export type TurnsSignal = Signal & { turns: number }
+export type TurnsSignal = Signal & { turns: number, trigger: 'turn_start' | 'turn_over' }
 export type EventSignal = Signal & { eventId: string }
 
 export const signals = {
@@ -23,13 +25,15 @@ export const signals = {
       signalType: 'player',
       property,
    }),
-   timer: (turns: number): TurnsSignal => ({
+   timer: (turns: number, trigger: TurnsSignalTrigger): TurnsSignal => ({
       signalType: 'turns',
-      turns
+      turns,
+      trigger
    }),
-   countDown: (turns: number): TurnsSignal => ({
+   countDown: (turns: number, trigger: TurnsSignalTrigger): TurnsSignal => ({
       signalType: 'count_down',
-      turns
+      turns,
+      trigger
    }),
    event: (sourceEventId: string): EventSignal => ({
       signalType: 'event',
@@ -86,7 +90,8 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const sig = <TurnsSignal>signal
          gameContext.state.events.timedEvents.push({
             turn: sig.turns,
-            eventId
+            eventId,
+            trigger: sig.trigger
          })
          break
       }
@@ -94,7 +99,8 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const sig = <TurnsSignal>signal
          gameContext.state.events.timedEvents.push({
             turn: sig.turns + gameContext.state.turns,
-            eventId
+            eventId,
+            trigger: sig.trigger
          })
          break
       }

@@ -141,6 +141,7 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
          skills: sendSkills(ps.skills),
          activities: sendActivities(ps.activities),
          ascensionPerks: sendAscensionPerks(ps.ascensionPerks),
+         ascensionPerkSlots: ps.ascensionPerkSlots,
          pressure: ps.mentalHealth,
          satisfactory: ps.satisfactory,
          money: ps.money,
@@ -158,7 +159,8 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
 
          skills: updateTracker.skills ? sendSkills(ps.skills) : undefined,
          activities: updateTracker.activities ? sendActivities(ps.activities) : undefined,
-         ascensionPerks: updateTracker.ascensionPerks ? sendAscensionPerks(ps.ascensionPerks) : undefined
+         ascensionPerks: updateTracker.ascensionPerks ? sendAscensionPerks(ps.ascensionPerks) : undefined,
+         ascensionPerkSlots: ps.ascensionPerkSlots,
       }
    }
 }
