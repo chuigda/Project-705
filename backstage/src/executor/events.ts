@@ -49,7 +49,6 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
    } else {
       const eventId = mEventId(scope, event)
       const eventContent = gameContext.ruleSet.events[eventId]
-
       if (!eventContent) {
          console.error(`[E] [triggerEvent] event '${eventId}' not found`)
          return
@@ -61,7 +60,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
          triggerEvent(gameContext, hook, event, [event, args])
       }
 
-      pushScope(gameContext, scope)
+      pushScope(gameContext, eventContent.scope!)
       const eventFunction: EventFunction = eventContent.event
       try {
          eventFunction(gameContext, ...args)
