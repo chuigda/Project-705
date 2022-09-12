@@ -51,6 +51,11 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       const eventContent = gameContext.ruleSet.events[eventId]
       if (!eventContent) {
          console.error(`[E] [triggerEvent] event '${eventId}' not found`)
+         if (unsetCounter) {
+            gameContext.eventChainCounter = undefined
+         } else {
+            gameContext.eventChainCounter -= 1
+         }
          return
       }
 
