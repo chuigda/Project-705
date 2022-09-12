@@ -3,6 +3,8 @@ import { triggerEvent } from '@app/executor/events'
 import { computePotentialAscensionPerks, computePotentialSkills } from '@app/executor/compute'
 
 export function nextTurn(gameContext: GameContext) {
+   console.info('[I] [nextTurn] proceeding to the next turn')
+
    for (const event of gameContext.state.events.turnOver) {
       triggerEvent(gameContext, event)
    }

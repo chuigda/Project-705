@@ -258,7 +258,7 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          turns: gs.turns,
          player: sendPlayerStatus(gs.player, undefined),
 
-         modifiers: gs.modifiers,
+         modifiers: [...gs.modifiers],
          variables: gs.variables,
 
          // TODO(chuigda): transpile ComputedModifier
@@ -272,7 +272,7 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          turns: gs.turns,
          player: updateTracker.player.any() ? sendPlayerStatus(gs.player, updateTracker.player) : undefined,
 
-         modifiers: gs.modifiers,
+         modifiers: updateTracker.modifiers ? [...gs.modifiers] : undefined,
          variables: updateTracker.variables ? gs.variables : undefined,
 
          // computedModifiers: updateTracker.computedModifiers ? gs.computedModifier : undefined,

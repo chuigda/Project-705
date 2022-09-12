@@ -12,10 +12,13 @@ export default function initGame(ruleSet: CompiledRuleSet, startupId: string): G
    }
 
    const context = new GameContext(ruleSet)
+   context.state.startup = startupId
+
    for (const event of ruleSet.onRuleSetLoaded) {
       triggerEvent(context, event)
    }
    applyStartup(context, startup)
+
    computeModifier(context)
    computePotentialSkills(context)
    computePotentialAscensionPerks(context)

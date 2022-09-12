@@ -111,12 +111,12 @@ export class GameState {
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
 
-   customButtons: Button[]
-   customMenus: Menu[]
-   customScoreBoards: CustomScoreBoard[]
+   customButtons: Button[] = []
+   customMenus: Menu[] = []
+   customScoreBoards: CustomScoreBoard[] = []
 
-   dialogs: SimpleDialog[]
-   bubbleMessages: BubbleMessage[]
+   dialogs: SimpleDialog[] = []
+   bubbleMessages: BubbleMessage[] = []
 }
 
 export class PlayerStatusUpdateTracker {

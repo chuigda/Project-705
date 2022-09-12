@@ -11,6 +11,7 @@ export function addModifier(gameContext: GameContext, modifier: Ident) {
 
    console.info(`[I] [addModifier] adding modifier '${modifierId}'`)
    gameContext.state.modifiers.add(modifierId)
+   gameContext.updateTracker.modifiers = true
    computeModifier(gameContext)
    recomputeSkillCosts(gameContext)
 }
@@ -24,6 +25,7 @@ export function removeModifier(gameContext: GameContext, modifier: Ident) {
 
    console.info(`[I] [addModifier] removing modifier '${modifierId}'`)
    gameContext.state.modifiers.delete(modifierId)
+   gameContext.updateTracker.modifiers = true
    computeModifier(gameContext)
    recomputeSkillCosts(gameContext)
 }
