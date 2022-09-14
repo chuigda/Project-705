@@ -1,9 +1,11 @@
 <template>
    <simple-dialog :dialog-info="dialogInfo" />
+   <HUDVue></HUDVue>
 </template>
 
 <script setup lang="ts">
 import SimpleDialog from '@app/components/simple-dialog.vue'
+import HUDVue from '@app/components/HUD.vue'
 import { ISimpleDialog } from '@protocol/index'
 
 const dialogInfo: ISimpleDialog = {
@@ -29,4 +31,5 @@ const dialogInfo: ISimpleDialog = {
 </script>
 
 <style scoped>
+
 </style>
