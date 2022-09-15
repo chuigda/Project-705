@@ -1,11 +1,13 @@
 <template>
    <Avatar></Avatar>
    <Status></Status>
+   <Triforce></Triforce>
 </template>
 
 <script setup lang="ts">
 import Avatar from './Avatar.vue'
 import Status from './Status.vue'
+import Triforce from './Triforce.vue'
 </script>
 
 <style>
