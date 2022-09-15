@@ -9,7 +9,7 @@
    display: flex;
    justify-content: center;
    align-items: center;
-   position: fixed;
+   position: absolute;
    top: 0;
    left: 0px;
    width: 94px;
