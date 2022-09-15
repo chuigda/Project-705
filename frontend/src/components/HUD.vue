@@ -2,12 +2,14 @@
    <Avatar></Avatar>
    <Status></Status>
    <Triforce></Triforce>
+   <Menu></Menu>
 </template>
 
 <script setup lang="ts">
 import Avatar from './Avatar.vue'
 import Status from './Status.vue'
 import Triforce from './Triforce.vue'
+import Menu from './Menu.vue'
 </script>
 
 <style>
