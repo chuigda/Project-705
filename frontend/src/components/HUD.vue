@@ -14,5 +14,6 @@ import Status from './Status.vue'
    --color-hud-bg-dark: #6E665A;
    --color-hud-bg: #E5BF92;
    --color-hud-text: #FFFFFF;
+   --color-hud-red: #F26161;
 }
 </style>
