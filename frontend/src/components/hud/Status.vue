@@ -1,10 +1,8 @@
 <template>
    <div class="status-box">
-      <div
-         v-for="(item, idx) in attributeItems"
-         :key="idx"
-         class="status-item"
-      >
+      <div v-for="(item, idx) in attributeItems"
+           :key="idx"
+           class="status-item">
          <span>▲ {{ item[0] }} </span>
          <span class="value"> {{ item[1] }} ({{ item[2] }}) </span>
       </div>
@@ -21,21 +19,17 @@
       </div>
    </div>
    <div class="status-bar">
-      <div
-         v-for="(e,i) in injured"
-         :key="i"
-         :class="['record', {'injured': e}]"
-         :style="`left: ${4+30*i}px`"
-         title="你只能犯两次错误，再多一次你就寄了"
+      <div v-for="(e,i) in injured"
+           :key="i"
+           :class="['record', {'injured': e}]"
+           :style="`left: ${4+30*i}px`"
+           title="你只能犯两次错误，再多一次你就寄了"
       />
-      <div
-         class="energy-bg"
-         :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
-      >
-         <div
-            class="energy-bar"
-            :style="`width: ${rescale(props.playerStatus.mentalHealth, props.playerStatus.mentalHealthMax)}%`"
-            :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
+      <div class="energy-bg"
+           :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`">
+         <div class="energy-bar"
+              :style="`width: ${rescale(props.playerStatus.mentalHealth, props.playerStatus.mentalHealthMax)}%`"
+              :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
          />
       </div>
    </div>

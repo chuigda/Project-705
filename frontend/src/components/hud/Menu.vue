@@ -1,6 +1,9 @@
 <template>
    <div class="menu">
-      <div v-for="item in items">[ ]</div>
+      <div v-for="(item, idx) in items"
+           :key="idx">
+         [ ]
+      </div>
    </div>
 </template>
 

@@ -1,6 +1,8 @@
 {
    "extends": [
       "eslint:recommended",
+      "plugin:vue/essential",
+      "plugin:vue/strongly-recommended",
       "plugin:vue/vue3-recommended",
       "@vue/eslint-config-typescript",
       "@vue/eslint-config-typescript/recommended"
@@ -28,6 +30,8 @@
       "no-use-before-define": "off",
       "max-len": ["error", { "code": 120 }],
       "default-case": "off", // since we have TypeScript, this could be non-necessary
+      "prefer-template": "error",
+      "quotes": ["error", "single"],
 
       "import/extensions": "off",
       "import/no-dynamic-require": "off",

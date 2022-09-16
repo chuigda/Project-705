@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import HUDVue from '@app/components/hud/HUD.vue'
-import {IPlayerStatus} from "@protocol/index"
+import { IPlayerStatus } from '@protocol/index'
 
 const playerStatus: IPlayerStatus = {
    attributes: {

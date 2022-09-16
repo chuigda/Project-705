@@ -1,9 +1,10 @@
+import { ITranslationKey } from '@protocol/index'
 
 let translation: Record<string, string> | null = null
 
 export async function initTranslation(lang: string) {
    if (!translation) {
-      const r = await fetch(`/api/translation?` + new URLSearchParams({ lang }))
+      const r = await fetch(`/api/translation?${new URLSearchParams({ lang })}`)
       const { success, result } = await r.json()
       if (!success) {
          // TODO: error handling
@@ -12,7 +13,7 @@ export async function initTranslation(lang: string) {
    }
 }
 
-export function translate(item: string): string {
+export function translate(item: ITranslationKey): string {
    if (item.startsWith('$')) {
       return translation![item] || item
    } else {
