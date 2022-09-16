@@ -1,4 +1,4 @@
-import {ITranslatable, ITranslationKey} from '@protocol/index'
+import { ITranslatable, ITranslationKey } from '@protocol/index'
 
 let translation: Record<string, string> | null = null
 

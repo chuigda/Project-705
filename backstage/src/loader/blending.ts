@@ -1,37 +1,21 @@
 import { CompiledRuleSet } from '@app/loader'
 import { SkillCategory } from '@app/ruleset/items/category'
-import {
-   Ident,
-   Scope,
-   mDisplayItemId,
-   mEventId,
-   mTranslationKey,
-   mVarName
-} from '@app/base/uid'
+import { Ident, Scope, mEventId } from '@app/base/uid'
 import {
    compileActivity,
-   compileAscensionPerk, compileBubbleMessageTemplate,
+   compileAscensionPerk,
+   compileBubbleMessageTemplate,
    compileEvent,
-   compileMaybeInlineEvent, compileMenuItem,
-   compileModifier, compileScoreBoard, compileSimpleDialogTemplate,
+   compileMenuItem,
+   compileModifier,
+   compileScoreBoard,
+   compileSimpleDialogTemplate,
    compileSkill,
-   compileStartup, compileTranslatable,
+   compileStartup,
    compileTranslation
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
-import {
-   BubbleMessageTemplate,
-   Button,
-   CustomScoreBoard,
-   CustomUI,
-   DialogOption,
-   Menu,
-   MenuItem,
-   SimpleDialogTemplate,
-
-   isButton,
-   isDivider
-} from '@app/ruleset/items/ui'
+import { Button, CustomUI, Menu } from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
