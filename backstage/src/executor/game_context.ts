@@ -57,6 +57,7 @@ export class PlayerStatus {
    energy: number = 0
    energyMax: number = 150
    mentalHealth: number = 0
+   mentalHealthMax: number = 100
    satisfactory: number = 50
    money: number = 0
    moneyPerTurn: number = 0

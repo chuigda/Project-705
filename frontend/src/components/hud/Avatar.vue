@@ -11,7 +11,7 @@
    align-items: center;
    position: absolute;
    top: 0;
-   left: 0px;
+   left: 0;
    width: 94px;
    height: 94px;
    border: 1px solid var(--color-hud-border);

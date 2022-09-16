@@ -2,24 +2,35 @@
    <div class="triforce">
       <div>
          <div>[img]</div>
-         <div>114/514</div>
+         <div>
+            {{ props.playerStatus.energy }} / {{ props.playerStatus.energyMax }}
+         </div>
       </div>
       <div>
          <div>[img]</div>
-         <div>1919</div>
+         <div> {{ props.playerStatus.skillPoints }} </div>
       </div>
       <div>
          <div>[img]</div>
-         <div>810</div>
+         <div> {{ props.playerStatus.money }} </div>
       </div>
    </div>
 </template>
+
+<script setup lang="ts">
+
+import { defineProps } from 'vue'
+import { IPlayerStatus } from '@protocol/index'
+
+const props = defineProps<{ playerStatus: IPlayerStatus }>()
+
+</script>
 
 <style>
 .triforce {
    position: absolute;
    display: flex;
-   top: 0px;
+   top: 0;
    left: 757px;
    color: white;
    font-size: 13px;

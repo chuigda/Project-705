@@ -58,8 +58,6 @@ function onClose() {
    emit('closed', dialogId)
 }
 
-defineExpose(open)
-
 </script>
 
 <style>

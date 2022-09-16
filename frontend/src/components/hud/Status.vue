@@ -1,32 +1,62 @@
 <template>
    <div class="status-box">
-      <div class="status-item" v-for="item in items">
-         <span>▲ {{item[0]}}</span>
-         <span class="value">{{item[1]}}({{item[2]}})</span>
+      <div
+         v-for="(item, idx) in items"
+         :key="idx"
+         class="status-item"
+      >
+         <span>▲ {{ item[0] }} </span>
+         <span class="value"> {{ item[1] }} ({{ item[2] }}) </span>
       </div>
    </div>
    <div class="status-bar">
-      <div :class="['record', {'injured': e}]" :style="`left: ${4+30*i}px`" v-for="e,i in injured"></div>
-      <div class="energy-bg">
-         <div class="energy-bar" :style="`width: ${rescale(energy)*100}%`"></div>
+      <div
+         v-for="(e,i) in injured"
+         :key="i"
+         :class="['record', {'injured': e}]"
+         :style="`left: ${4+30*i}px`"
+         title="你只能犯两次错误，再多一次你就寄了"
+      />
+      <div
+         class="energy-bg"
+         :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
+      >
+         <div
+            class="energy-bar"
+            :style="`width: ${rescale(props.playerStatus.mentalHealth, props.playerStatus.mentalHealthMax)}%`"
+            :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
+         />
       </div>
    </div>
 </template>
 
 <script setup lang="ts">
-const injured = Array(3).fill(true)
-const energy = 1;
-const items = [
-   ['智商', 114514, 15],
-   ['记忆力', 114514, 15],
-   ['体魄', 114514, 15],
-   ['评价', 114514, 15],
-   ['情商', 114514, 15],
-   ['想象力', 114514, 15],
-   ['魅力', 114514, 15],
-   ['其它', 114514, 15],
+
+import { IPlayerAttributes, IPlayerStatus } from '@protocol/index'
+
+const props = defineProps<{ playerStatus: IPlayerStatus }>()
+
+const itemKeys: [string, keyof IPlayerAttributes][] = [
+   ['智商', 'intelligence'],
+   ['记忆力', 'memorization']
 ]
-const rescale = (x: number) => 3 * x ** 3 - 4.5 * x ** 2 + 2.5 * x
+
+const injured = Array(3).fill(true)
+const items = itemKeys.map(itemKey => {
+   const [displayName, field] = itemKey
+   return [
+      displayName,
+      props.playerStatus.attributes![field],
+      props.playerStatus.talent![field]
+   ]
+})
+
+const rescale = (mentalHealth: number, mentalHealthMax: number) => {
+   const x = mentalHealth / mentalHealthMax
+   const r = 0.4 * x**3 - 0.6 * x**2 + 1.2 * x
+   return r * 100
+}
+
 </script>
 
 <style>
@@ -39,6 +69,7 @@ const rescale = (x: number) => 3 * x ** 3 - 4.5 * x ** 2 + 2.5 * x
    display: grid;
    grid-template-columns: repeat(4, 158px);
    grid-template-rows: repeat(2, 24px);
+   grid-auto-flow: column;
    gap: 6px 6px;
    justify-content: center;
    align-content: center;

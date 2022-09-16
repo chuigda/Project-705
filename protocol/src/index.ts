@@ -76,7 +76,8 @@ export interface IPlayerStatus {
    ascensionPerks?: IAscensionPerk[]
    ascensionPerkSlots: number
 
-   pressure?: number
+   mentalHealth?: number
+   mentalHealthMax?: number
    satisfactory?: number
    money?: number
    moneyPerTurn?: number
