@@ -103,6 +103,9 @@ const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    font-size: 13px;
    display: flex;
    padding: 0 3px;
+   user-select: none;
+   -moz-user-select: none;
+   -webkit-user-select: none;
 }
 
 .status-item .icon {

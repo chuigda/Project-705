@@ -37,7 +37,7 @@ const imageUrl = attributeIcons[props.type]
    --size-iq: 17px;
    --size-eq: 17px;
    --size-mem: 19px;
-   --size-khar: 21px;
+   --size-khar: 20px;
    --size-str: 21px;
    --size-sat: 21px;
 
