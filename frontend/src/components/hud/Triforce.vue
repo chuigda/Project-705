@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 
-import { defineProps } from 'vue'
 import { IPlayerStatus } from '@protocol/index'
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()

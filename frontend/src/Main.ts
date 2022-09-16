@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 
-import App from '@app/app.vue'
+import App from '@app/App.vue'
 import { initTranslation } from '@app/util/translation'
 import { getLocalStorage } from '@app/util/localStorage'
 import makeI18nOption from '@app/i18n'
