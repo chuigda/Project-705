@@ -14,7 +14,7 @@ export async function initTranslation(lang: string) {
 }
 
 export function translate(item: ITranslationKey): string {
-   if (item.startsWith('$')) {
+   if (item.startsWith('$') || item.startsWith('@$') || (item.startsWith('@') && item.includes(':tr:$'))) {
       return translation![item] || item
    } else {
       return item
