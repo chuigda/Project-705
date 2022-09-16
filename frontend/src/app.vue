@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import HUDVue from '@app/components/hud/HUD.vue'
+import HUDVue from '@app/components/hud/hud.vue'
 import { IPlayerStatus } from '@protocol/index'
 
 const playerStatus: IPlayerStatus = {

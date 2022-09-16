@@ -1,17 +1,17 @@
 <template>
    <Avatar />
-   <Status :player-status="props.playerStatus" />
+   <HUDAttr :player-status="props.playerStatus" />
    <Triforce :player-status="props.playerStatus" />
-   <Menu />
+   <HUDMenu />
 </template>
 
 <script setup lang="ts">
 
 import { IPlayerStatus } from '@protocol/index'
-import Avatar from './Avatar.vue'
-import Status from './Status.vue'
-import Triforce from './Triforce.vue'
-import Menu from './Menu.vue'
+import Avatar from '@app/components/hud/hud_avatar.vue'
+import HUDAttr from '@app/components/hud/hud_attr.vue'
+import Triforce from '@app/components/hud/triforce.vue'
+import HUDMenu from '@app/components/hud/hud_menu.vue'
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
 
