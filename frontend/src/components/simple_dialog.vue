@@ -35,7 +35,7 @@ import { ref } from 'vue'
 import { NModal, NText, NButton } from 'naive-ui'
 
 import { ISimpleDialog } from '@protocol/index'
-import { translate, translate2 } from '@app/util/translation'
+import { translate2 } from '@app/util/translation'
 
 const props = defineProps<{ dialogInfo: ISimpleDialog }>()
 

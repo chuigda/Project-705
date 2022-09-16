@@ -42,10 +42,7 @@ const ascensionPerks: AscensionPerk[] = [
       name: '$ap_defrag',
       description: '$ap_defrag_desc',
       potential: [
-         requireStartup(
-            { author: 'cnpr', moduleName: 'core', id: 'detroit' },
-            'detroit'
-         )
+         requireStartup({ author: 'cnpr', moduleName: 'core', id: 'detroit' })
       ],
       events: ['defrag_activation']
    },
@@ -59,10 +56,7 @@ const ascensionPerks: AscensionPerk[] = [
       description: '$ap_town_swot_desc',
       potential: [
          afterTurns(12),
-         requireStartupNot(
-            { author: 'cnpr', moduleName: 'core', id: 'detroit' },
-            'detroit'
-         )
+         requireStartupNot({ author: 'cnpr', moduleName: 'core', id: 'detroit' })
       ],
       modifier: 'town_swot'
    },
@@ -73,11 +67,8 @@ const ascensionPerks: AscensionPerk[] = [
       description: '$ap_emotion_emulation_desc',
       potential: [
          afterTurns(12),
-         requireStartup({ author: 'cnpr', moduleName: 'core', id: 'detroit' }, 'detroit'),
-         requireNoAscensionPerk(
-            { author: 'cnpr', moduleName: 'core', id: 'synthetic_evolution' },
-            'synthetic_evolution'
-         ),
+         requireStartup({ author: 'cnpr', moduleName: 'core', id: 'detroit' }),
+         requireNoAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'synthetic_evolution' },),
          {
             op: gameContext => gameContext.getV('software_unstable') >= 500,
             description: '$potential_detroit_software_unstable_500'
@@ -94,10 +85,7 @@ const ascensionPerks: AscensionPerk[] = [
       name: '$ap_king_of_involution',
       description: '$ap_king_of_involution_desc',
       potential: [
-         requireAscensionPerk(
-            { author: 'cnpr', moduleName: 'core', id: 'town_swot' },
-            'town_swot'
-         )
+         requireAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'town_swot' })
       ],
       modifier: 'king_of_involution',
       events: ['king_of_involution_activation']
@@ -108,10 +96,7 @@ const ascensionPerks: AscensionPerk[] = [
       name: '$ap_artificial_emotion',
       description: '$ap_artificial_emotion',
       potential: [
-         requireAscensionPerk(
-            { author: 'cnpr', moduleName: 'core', id: 'emotion_emulation' },
-            'emotion_emulation'
-         ),
+         requireAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'emotion_emulation' }),
          {
             op: gameContext => gameContext.getV('software_unstable') >= 1000,
             description: '$potential_detroit_software_unstable_1000'

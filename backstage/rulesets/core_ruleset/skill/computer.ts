@@ -11,7 +11,7 @@ const computerSkills: Skill[] = [
       potential: [
          'math_function',
          'english_writing',
-         requireStartupNot({ author: 'cnpr', moduleName: 'core', id: 'poor' }, 'poor')
+         requireStartupNot({ author: 'cnpr', moduleName: 'core', id: 'poor' })
       ],
       cost: {
          base: 400,
