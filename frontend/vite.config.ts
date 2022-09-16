@@ -14,6 +14,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@app': resolve(__dirname, 'src'),
+         '@assets': resolve(__dirname, 'src/assets'),
          '@protocol': resolve(__dirname, '../protocol')
       }
    },
@@ -25,5 +26,8 @@ export default defineConfig({
             changeOrigin: true
          }
       }
-   }
+   },
+   assetsInclude: [
+      '**/*.png'
+   ]
 })

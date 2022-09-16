@@ -3,12 +3,18 @@
       <div v-for="(item, idx) in attributeItems"
            :key="idx"
            class="status-item">
-         <span>▲ {{ item[0] }} </span>
-         <span class="value"> {{ item[1] }} ({{ item[2] }}) </span>
+         <AttrIcon class="icon"
+                   :type="item[1]"
+         />
+         <span>{{ item[0] }}</span>
+         <span class="value">{{ item[2] }}(+{{ item[3] }})</span>
       </div>
 
       <div class="status-item">
-         <span>▲ 评价</span>
+         <AttrIcon class="icon"
+                   type="satisfactory"
+         />
+         <span class="label">评价</span>
          <span class="value"> {{ props.playerStatus.satisfactory }} </span>
       </div>
 
@@ -19,7 +25,7 @@
       </div>
    </div>
    <div class="status-bar">
-      <div v-for="(e,i) in injured"
+      <div v-for="(e, i) in injured"
            :key="i"
            :class="['record', {'injured': e}]"
            :style="`left: ${4+30*i}px`"
@@ -38,6 +44,7 @@
 <script setup lang="ts">
 
 import { IPlayerAttributes, IPlayerStatus } from '@protocol/index'
+import AttrIcon from '@app/components/icon/attr_icon.vue'
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
 
@@ -54,6 +61,7 @@ const attributeItems = itemKeys.map(itemKey => {
    const [displayName, field] = itemKey
    return [
       displayName,
+      field,
       props.playerStatus.attributes![field],
       props.playerStatus.talent![field]
    ]
@@ -95,6 +103,14 @@ const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    font-size: 13px;
    display: flex;
    padding: 0 3px;
+}
+
+.status-item .icon {
+   margin-right: 3px;
+}
+
+.status-item .label {
+   text-align: left;
 }
 
 .status-item .value {

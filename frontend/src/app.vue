@@ -31,6 +31,8 @@ const playerStatus: IPlayerStatus = {
    mentalHealth: 20,
    mentalHealthMax: 150,
 
+   satisfactory: 500,
+
    ascensionPerkSlots: 1
 }
 </script>
