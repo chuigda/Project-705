@@ -20,8 +20,8 @@
 }
 
 .avatar {
-   width: 88px;
-   height: 88px;
+   width: 84px;
+   height: 84px;
    border-radius: 4px;
    background-color: white;
 }
