@@ -1,12 +1,23 @@
 <template>
    <div class="status-box">
       <div
-         v-for="(item, idx) in items"
+         v-for="(item, idx) in attributeItems"
          :key="idx"
          class="status-item"
       >
          <span>▲ {{ item[0] }} </span>
          <span class="value"> {{ item[1] }} ({{ item[2] }}) </span>
+      </div>
+
+      <div class="status-item">
+         <span>▲ 评价</span>
+         <span class="value"> {{ props.playerStatus.satisfactory }} </span>
+      </div>
+
+      <div class="status-item">
+         <span>▲ 其他</span>
+         <!-- TODO send custom scoreboard to frontend -->
+         <span class="value"> {{ 114514 }} </span>
       </div>
    </div>
    <div class="status-bar">
@@ -38,11 +49,14 @@ const props = defineProps<{ playerStatus: IPlayerStatus }>()
 
 const itemKeys: [string, keyof IPlayerAttributes][] = [
    ['智商', 'intelligence'],
-   ['记忆力', 'memorization']
+   ['情商', 'emotionalIntelligence'],
+   ['记忆力', 'memorization'],
+   ['想象力', 'imagination'],
+   ['体魄', 'strength'],
+   ['魅力', 'charisma']
 ]
 
-const injured = Array(3).fill(true)
-const items = itemKeys.map(itemKey => {
+const attributeItems = itemKeys.map(itemKey => {
    const [displayName, field] = itemKey
    return [
       displayName,
@@ -50,6 +64,8 @@ const items = itemKeys.map(itemKey => {
       props.playerStatus.talent![field]
    ]
 })
+
+const injured = Array(3).fill(true)
 
 const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    const x = mentalHealth / mentalHealthMax
