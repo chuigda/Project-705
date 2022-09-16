@@ -1,6 +1,6 @@
 import { GameContext } from '@app/executor/game_context'
-import { MaybeTranslationKey } from '@app/base/uid'
 import { LogicOp } from '@app/ruleset/ops'
+import { MaybeTranslatable } from '@app/base/translation'
 
 export interface PotentialExpressionLogicOp {
    readonly op: LogicOp
@@ -11,7 +11,7 @@ export type PotentialExpressionFunction = (gameContext: GameContext) => boolean
 
 export interface PotentialExpressionFunctionOp {
    readonly op: PotentialExpressionFunction
-   readonly description: MaybeTranslationKey
+   readonly description: MaybeTranslatable
 }
 
 export type PotentialExpression = PotentialExpressionLogicOp | PotentialExpressionFunctionOp

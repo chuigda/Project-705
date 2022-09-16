@@ -1,7 +1,6 @@
 import { MaybeTranslationKey } from '@app/base/uid'
 
 export type SkillCategoryId = string
-
 export type ActivityCategoryId = string
 
 export interface SkillCategory {

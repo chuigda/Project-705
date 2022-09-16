@@ -8,7 +8,10 @@ import {
    mActivityId,
    mStartupId,
    mAscensionPerkId,
-   mModifierId
+   mModifierId,
+   mDisplayItemId,
+   mVarName,
+   isTranslationKey
 } from '@app/base/uid'
 import {
    PotentialExpression,
@@ -30,12 +33,45 @@ import {
    Startup
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'
+import { MaybeTranslatable } from '@app/base/translation'
+import {
+   BubbleMessageTemplate,
+   Button,
+   CustomScoreBoard,
+   DialogOption,
+   Menu,
+   MenuItem,
+   SimpleDialogTemplate,
+   isButton,
+   isDivider
+} from '@app/ruleset/items/ui'
+
+export function compileTranslatable(scope: Scope, item: MaybeTranslatable): MaybeTranslatable {
+   if (typeof item === 'string') {
+      if (isTranslationKey(item)) {
+         return mTranslationKey(scope, item)
+      } else {
+         return item
+      }
+   } else if ('id' in item) {
+      return mTranslationKey(scope, item)
+   } else {
+      return {
+         template: mTranslationKey(scope, item.template),
+         args: Object.fromEntries(
+            Object.entries(item.args).map(
+               ([argName, arg]) => [argName, compileTranslatable(scope, arg)]
+            )
+         )
+      }
+   }
+}
 
 export function compilePotentialExpression(scope: Scope, potential: PotentialExpression): PotentialExpression {
    if (potential.op instanceof Function) {
       return {
          op: potential.op,
-         description: mTranslationKey(scope, (<PotentialExpressionFunctionOp>potential).description)
+         description: compileTranslatable(scope, (<PotentialExpressionFunctionOp>potential).description)
       }
    } else {
       return {
@@ -206,11 +242,74 @@ export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modi
    }
 }
 
-export function compileTranslation(scope: Scope, translations: Record<string, string>): Record<string, string> {
+export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
+   if (isDivider(item)) {
+      return item
+   } else if (isButton(item)) {
+      item = <Button>item
+      return {
+         type: 'button',
+         ident: mDisplayItemId(scope, item.ident),
+         text: compileTranslatable(scope, item.text),
+         tooltip: compileTranslatable(scope, item.tooltip),
+         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
+      }
+   } else /* if (isMenu(item)) */ {
+      const menu = <Menu>item
+      return {
+         type: 'menu',
+         ident: mDisplayItemId(scope, menu.ident),
+         text: compileTranslatable(scope, menu.text),
+         tooltip: compileTranslatable(scope, menu.tooltip),
+
+         children: menu.children.map(child => compileMenuItem(scope, child))
+      }
+   }
+}
+
+export function compileScoreBoard(scope: Scope, scoreboard: CustomScoreBoard): CustomScoreBoard {
+   return {
+      ident: mDisplayItemId(scope, scoreboard.ident),
+      tooltip: compileTranslatable(scope, scoreboard.tooltip),
+      color: scoreboard.color,
+      value: scoreboard.value ? compileTranslatable(scope, scoreboard.value) : undefined,
+      bind: scoreboard.bind ? mVarName(scope, scoreboard.bind) : undefined
+   }
+}
+
+export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialogTemplate): SimpleDialogTemplate {
+   function compileDialogOption(option: DialogOption): DialogOption {
+      return {
+         ...option,
+
+         text: compileTranslatable(scope, option.text),
+         tooltip: compileTranslatable(scope, option.tooltip)
+      }
+   }
+
+   return {
+      ident: mDisplayItemId(scope, template.ident),
+      title: compileTranslatable(scope, template.title),
+      text: compileTranslatable(scope, template.text),
+      options: template.options.map(compileDialogOption)
+   }
+}
+
+export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessageTemplate): BubbleMessageTemplate {
+   return {
+      ident: mDisplayItemId(scope, template.ident),
+      icon: template.icon,
+      tooltip: compileTranslatable(scope, template.tooltip),
+      // TODO(chuigda): linked dialog
+      linkedDialog: ''
+   }
+}
+
+export function compileTranslation(scope: Scope, translation: Record<string, string>): Record<string, string> {
    const ret: Record<string, string> = {}
-   for (const key in translations) {
+   for (const key in translation) {
       const compiledKey = mTranslationKey(scope, key)
-      ret[compiledKey] = translations[key]
+      ret[compiledKey] = translation[key]
    }
    return ret
 }

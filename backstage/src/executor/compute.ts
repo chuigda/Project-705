@@ -20,13 +20,14 @@ import {
 } from '@app/ruleset/items/modifier'
 import { SkillCategoryId } from '@app/ruleset'
 import { popScope, pushScope } from '@app/executor/events'
+import { MaybeTranslatable } from '@app/base/translation'
 
 export interface PotentialResultBase {
    readonly result: boolean
 }
 
 export interface PotentialFunctionResult extends PotentialResultBase {
-   readonly description: string
+   readonly description: MaybeTranslatable
 }
 
 export interface PotentialLogicOpResult extends PotentialResultBase {
@@ -392,7 +393,7 @@ function computeAttributeModifiers(
    computed: ComputedModifier,
    property: 'attributes' | 'talent',
    input: AttributeModifiers,
-   name: string,
+   name: MaybeTranslationKey,
    icon: string | undefined
 ) {
    // TODO: poor hard-coded bullshit, would break if we add more properties. needs improvement.

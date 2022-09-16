@@ -1,5 +1,12 @@
 export type ITranslationKey = string
 
+export interface IComposedTranslatable {
+   template: ITranslationKey,
+   args: Record<string, ITranslatable>
+}
+
+export type ITranslatable = ITranslationKey | IComposedTranslatable
+
 export type ITranslation = Record<string, string>
 
 export interface IPlayerAttributes {
@@ -86,7 +93,7 @@ export interface IPlayerStatus {
 export interface IPotentialFunctionResult {
    type: 'fn'
    result: boolean
-   description: string
+   description: ITranslatable
 }
 
 export interface IPotentialLogicOpResult {
@@ -134,23 +141,23 @@ export interface IComputedAscensionPerks {
 export interface IButton {
    ident: string
 
-   text: ITranslationKey
-   tooltip: ITranslationKey
+   text: ITranslatable
+   tooltip: ITranslatable
 }
 
 export interface IDialogOption {
    optionKey: string
 
-   text: ITranslationKey
-   tooltip: ITranslationKey
+   text: ITranslatable
+   tooltip: ITranslatable
    danger: boolean
 }
 
 export interface ISimpleDialog {
    uid: string
 
-   title: ITranslationKey
-   text: ITranslationKey
+   title: ITranslatable
+   text: ITranslatable
    options: IDialogOption[]
    display: boolean
 }

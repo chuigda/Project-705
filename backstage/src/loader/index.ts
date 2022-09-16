@@ -6,11 +6,18 @@ import { Skill } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Activity } from '@app/ruleset/items/activity'
 import { Startup } from '@app/ruleset/items/startup'
-import { CompiledCustomUI, compileRuleSet, preCompileRuleSet } from '@app/loader/blending'
+import { compileRuleSet, preCompileRuleSet } from '@app/loader/blending'
 import { abort } from '@app/util/emergency'
 
 import coreRuleSet from '@rulesets/core_ruleset'
 import debugRuleSet from '@rulesets/debug_ruleset'
+import {
+   BubbleMessageTemplate,
+   Button,
+   CustomScoreBoard,
+   Menu,
+   SimpleDialogTemplate
+} from '@app/ruleset/items/ui'
 
 export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {
@@ -24,6 +31,15 @@ export function loadDynamicMod(modName: string): [RuleSet | null, any] {
 }
 
 export type Translation = Record<string, string>
+
+export class CompiledCustomUI {
+   menus: Record<string, Menu> = {}
+   buttons: Record<string, Button> = {}
+   scoreBoards: Record<string, CustomScoreBoard> = {}
+
+   dialogTemplates: Record<string, SimpleDialogTemplate> = {}
+   bubbleMessageTemplates: Record<string, BubbleMessageTemplate> = {}
+}
 
 export class CompiledRuleSet {
    loadedRuleSets: Scope[] = []

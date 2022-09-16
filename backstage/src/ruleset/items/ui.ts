@@ -1,18 +1,19 @@
-import { Ident, MaybeTranslationKey } from '@app/base/uid'
+import { Ident } from '@app/base/uid'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
+import { MaybeTranslatable } from '@app/base/translation'
 
 export interface Label {
    readonly type: 'label'
 
-   readonly text: MaybeTranslationKey
+   readonly text: MaybeTranslatable
 }
 
 export interface Button {
    readonly type: 'button'
 
    readonly ident: Ident
-   readonly text: MaybeTranslationKey
-   readonly tooltip: MaybeTranslationKey
+   readonly text: MaybeTranslatable
+   readonly tooltip: MaybeTranslatable
 
    readonly events: MaybeInlineEvent[]
 }
@@ -27,8 +28,8 @@ export interface Menu {
    readonly type: 'menu'
 
    readonly ident: Ident
-   readonly text: MaybeTranslationKey
-   readonly tooltip: MaybeTranslationKey
+   readonly text: MaybeTranslatable
+   readonly tooltip: MaybeTranslatable
 
    readonly children: MenuItem[]
 }
@@ -48,8 +49,8 @@ export function isMenu(menuItem: MenuItem): boolean {
 export interface DialogOption {
    readonly optionKey: string
 
-   readonly text: MaybeTranslationKey
-   readonly tooltip: MaybeTranslationKey
+   readonly text: MaybeTranslatable
+   readonly tooltip: MaybeTranslatable
    readonly danger: boolean
    readonly onClickEvents: MaybeInlineEvent[]
 }
@@ -57,8 +58,8 @@ export interface DialogOption {
 export interface SimpleDialogTemplate {
    readonly ident: Ident
 
-   readonly title: MaybeTranslationKey
-   readonly text: MaybeTranslationKey
+   readonly title: MaybeTranslatable
+   readonly text: MaybeTranslatable
    readonly options: DialogOption[]
 }
 
@@ -69,16 +70,16 @@ export interface BubbleMessageTemplate {
    readonly ident: Ident
 
    readonly icon: BubbleMessageIcon
-   readonly tooltip: MaybeTranslationKey
+   readonly tooltip: MaybeTranslatable
    readonly linkedDialog: Ident | SimpleDialogTemplate
 }
 
 export interface CustomScoreBoard {
    readonly ident: Ident
-   readonly tooltip: MaybeTranslationKey
+   readonly tooltip: MaybeTranslatable
    readonly color: string
 
-   readonly value?: MaybeTranslationKey
+   readonly value?: MaybeTranslatable
    readonly bind?: Ident
 }
 
