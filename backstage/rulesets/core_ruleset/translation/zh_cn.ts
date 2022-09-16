@@ -1,3 +1,12 @@
+const commonPotentialTranslation: Record<string, string> = {
+   '@tr:$potential_after_turns': '回合数大于或者等于 :turns:',
+   '@tr:$potential_before_turns': '回合数小于或者等于 :turns:',
+   '@tr:$potential_require_startup': '具有 :startup: 起源',
+   '@tr:$potential_require_no_startup': '没有 :startup: 起源',
+   '@tr:$potential_require_ap': '已经激活了 :ap: 飞升',
+   '@tr:$potential_require_no_ap': '没有激活 :ap: 飞升'
+}
+
 const startupTranslation: Record<string, string> = {
    '$startup_normal': '繁荣一统',
    '$startup_normal_desc':
@@ -90,6 +99,7 @@ const modifierTranslation: Record<string, string> = {
 }
 
 export default {
+   ...commonPotentialTranslation,
    ...startupTranslation,
    ...modifierTranslation,
    ...ascensionPerkTranslation

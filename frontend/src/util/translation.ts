@@ -1,4 +1,4 @@
-import { ITranslationKey } from '@protocol/index'
+import { ITranslatable, ITranslationKey } from '@protocol/index'
 
 let translation: Record<string, string> | null = null
 
@@ -18,5 +18,20 @@ export function translate(item: ITranslationKey): string {
       return translation![item] || item
    } else {
       return item
+   }
+}
+
+export function translate2(item: ITranslatable): string {
+   if (typeof item === 'string') {
+      return translation![item] || item
+   } else {
+      const { template, args } = item
+
+      let ret = translate(template)
+      for (const argName in args) {
+         const translatedArg = translate2(args[argName])
+         ret = ret.replaceAll(`:${argName}:`, translatedArg)
+      }
+      return ret
    }
 }

@@ -23,14 +23,14 @@ import {
 import {
    Activity,
    ActivityOutput,
-   AscensionPerk,
+   AscensionPerk, MaybeTranslationKey,
    Skill,
    SkillCost,
    SkillOutput,
    Startup,
    StartupPlayerProperties
 } from '@app/ruleset'
-import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
+import { ItemBase, PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import {
    IActivity,
    IActivityOutput,
@@ -49,9 +49,20 @@ import {
    ISkillPotentialResult,
    IStartup,
    IStartupPlayerProperties,
+   ITranslatable,
+   ITranslationKey,
    IUnavailableAscensionPerk,
    IUnavailableSkill
 } from '@protocol/index'
+import { MaybeTranslatable } from '@app/base/translation'
+
+export function sendTranslationKey(k: MaybeTranslationKey): ITranslationKey {
+   return <ITranslationKey>k
+}
+
+export function sendTranslatable(t: MaybeTranslatable): ITranslatable {
+   return <ITranslatable>t
+}
 
 export function sendPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPartialPlayerAttributes {
    return {
@@ -88,15 +99,23 @@ export function sendSkillOutput(so: SkillOutput): ISkillOutput {
    }
 }
 
+function sendItemBase(itemBase: ItemBase): { ident: string, name: string, description: string } {
+   return {
+      ident: <string>itemBase.ident,
+      name: sendTranslationKey(itemBase.name),
+      description: sendTranslationKey(itemBase.description)
+   }
+}
+
 export function sendSkill(s: Skill): ISkill {
    return {
-      ident: <string>s.ident,
-      name: s.name,
-      description: s.description,
+      ...sendItemBase(s),
+
       category: s.category,
       cost: sendSkillCost(s.cost),
       output: s.output && sendSkillOutput(s.output),
-      activities: s.activities && <string[]>s.activities
+      // 按理说应该写 s.activities.map(sendTranslationKey)，不过因为 sendTranslationKey 是 NOP 所以直接转了
+      activities: s.activities && <ITranslationKey[]>s.activities
    }
 }
 
@@ -112,9 +131,8 @@ export function sendActivityOutput(ao: ActivityOutput): IActivityOutput {
 
 export function sendActivity(a: Activity): IActivity {
    return {
-      ident: <string>a.ident,
-      name: a.name,
-      description: a.description,
+      ...sendItemBase(a),
+
       category: a.category,
       level: a.level,
       output: a.output && sendActivityOutput(a.output)
@@ -122,11 +140,7 @@ export function sendActivity(a: Activity): IActivity {
 }
 
 export function sendAscensionPerk(a: AscensionPerk): IAscensionPerk {
-   return {
-      ident: <string>a.ident,
-      name: a.name,
-      description: a.description
-   }
+   return sendItemBase(a)
 }
 
 export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusUpdateTracker): IPlayerStatus {
@@ -187,7 +201,7 @@ export function sendPotentialResult(pr: PotentialResult): IPotentialResult {
       return {
          type: 'fn',
          result: pr.result,
-         description: pr.description
+         description: sendTranslatable(pr.description)
       }
    }
 
@@ -206,7 +220,7 @@ export function sendSkillPotentialResult(spr: SkillPotentialResult): ISkillPoten
          type: 'skill',
          result: spr.result,
          skillId: spr.skillId,
-         skillName: spr.skillName
+         skillName: sendTranslationKey(spr.skillName)
       }
    } else {
       return sendPotentialResult(<PotentialResult>spr)
@@ -252,9 +266,7 @@ export function sendStartupPlayerProperties(properties: StartupPlayerProperties)
 
 export function sendStartup(startup: Startup): IStartup {
    return {
-      ident: <string>startup.ident,
-      name: startup.name,
-      description: startup.description,
+      ...sendItemBase(startup),
 
       player: startup.player ? sendStartupPlayerProperties(startup.player) : undefined
    }

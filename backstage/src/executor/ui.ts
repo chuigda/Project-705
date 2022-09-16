@@ -1,6 +1,7 @@
-import { Ident, MaybeTranslationKey, mDisplayItemId } from '@app/base/uid'
+import { Ident, mDisplayItemId } from '@app/base/uid'
 import { BubbleMessageIcon, BubbleMessageTemplate, SimpleDialogTemplate } from '@app/ruleset/items/ui'
 import { GameContext } from '@app/executor/game_context'
+import { MaybeTranslatable } from '@app/base/translation'
 
 export interface SimpleDialog extends SimpleDialogTemplate {
    readonly uid: string
@@ -13,7 +14,7 @@ export interface BubbleMessage {
    readonly uid: string
 
    readonly icon: BubbleMessageIcon
-   readonly tooltip: MaybeTranslationKey
+   readonly tooltip: MaybeTranslatable
    readonly linkedDialog: string
 }
 

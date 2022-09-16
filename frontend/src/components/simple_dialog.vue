@@ -1,7 +1,7 @@
 <template>
    <n-modal
       preset="dialog"
-      :title="dialogInfo.title"
+      :title="translate2(dialogInfo.title)"
       :closable="false"
       :close-on-esc="false"
       :mask-closable="false"
@@ -10,7 +10,7 @@
       @close="onClose"
    >
       <n-text type="primary">
-         {{ translate(dialogInfo?.text) }}
+         {{ translate2(dialogInfo?.text) }}
       </n-text>
 
       <div style="display: flex; flex-direction: column; row-gap: 1em; margin-top: 1em">
@@ -19,11 +19,11 @@
             :key="button.optionKey"
             :type="button.danger ? 'error' : 'primary'"
             strong
-            :title="translate(button.tooltip)"
+            :title="translate2(button.tooltip)"
             :bordered="true"
             @click="onClick(button.optionKey)"
          >
-            {{ translate(button.text) }}
+            {{ translate2(button.text) }}
          </n-button>
       </div>
    </n-modal>
@@ -35,7 +35,7 @@ import { ref } from 'vue'
 import { NModal, NText, NButton } from 'naive-ui'
 
 import { ISimpleDialog } from '@protocol/index'
-import { translate } from '@app/util/translation'
+import { translate2 } from '@app/util/translation'
 
 const props = defineProps<{ dialogInfo: ISimpleDialog }>()
 

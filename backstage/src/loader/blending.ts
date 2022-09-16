@@ -1,33 +1,21 @@
 import { CompiledRuleSet } from '@app/loader'
 import { SkillCategory } from '@app/ruleset/items/category'
-import {
-   Ident,
-   mDisplayItemId,
-   mEventId,
-   mTranslationKey,
-   mVarName,
-   Scope
-} from '@app/base/uid'
+import { Ident, Scope, mEventId } from '@app/base/uid'
 import {
    compileActivity,
    compileAscensionPerk,
+   compileBubbleMessageTemplate,
    compileEvent,
-   compileMaybeInlineEvent, compileModifier,
+   compileMenuItem,
+   compileModifier,
+   compileScoreBoard,
+   compileSimpleDialogTemplate,
    compileSkill,
    compileStartup,
    compileTranslation
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
-import {
-   BubbleMessageTemplate,
-   Button,
-   CustomScoreBoard,
-   CustomUI,
-   DialogOption, isButton, isDivider,
-   Menu,
-   MenuItem,
-   SimpleDialogTemplate
-} from '@app/ruleset/items/ui'
+import { Button, CustomUI, Menu } from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
@@ -128,77 +116,6 @@ export const compileAscensionPerks = buildCompileSeries(
 export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
 
 export const compileModifiers = buildCompileSeries2('modifier', 'modifiers', 'compileModifiers', compileModifier)
-
-export class CompiledCustomUI {
-   menus: Record<string, Menu> = {}
-   buttons: Record<string, Button> = {}
-   scoreBoards: Record<string, CustomScoreBoard> = {}
-
-   dialogTemplates: Record<string, SimpleDialogTemplate> = {}
-   bubbleMessageTemplates: Record<string, BubbleMessageTemplate> = {}
-}
-
-export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
-   if (isDivider(item)) {
-      return item
-   } else if (isButton(item)) {
-      item = <Button>item
-      return {
-         type: 'button',
-         ident: mDisplayItemId(scope, item.ident),
-         text: mTranslationKey(scope, item.text),
-         tooltip: mTranslationKey(scope, item.tooltip),
-         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
-      }
-   } else /* if (isMenu(item)) */ {
-      const menu = <Menu>item
-      return {
-         type: 'menu',
-         ident: mDisplayItemId(scope, menu.ident),
-         text: mTranslationKey(scope, menu.text),
-         tooltip: mTranslationKey(scope, menu.tooltip),
-
-         children: menu.children.map(child => compileMenuItem(scope, child))
-      }
-   }
-}
-
-export function compileScoreBoard(scope: Scope, scoreboard: CustomScoreBoard): CustomScoreBoard {
-   return {
-      ident: mDisplayItemId(scope, scoreboard.ident),
-      tooltip: mTranslationKey(scope, scoreboard.tooltip),
-      color: scoreboard.color,
-      value: scoreboard.value ? mTranslationKey(scope, scoreboard.value) : undefined,
-      bind: scoreboard.bind ? mVarName(scope, scoreboard.bind) : undefined
-   }
-}
-
-export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialogTemplate): SimpleDialogTemplate {
-   function compileDialogOption(option: DialogOption): DialogOption {
-      return {
-         ...option,
-
-         text: mTranslationKey(scope, option.text),
-         tooltip: mTranslationKey(scope, option.tooltip)
-      }
-   }
-
-   return {
-      ident: mDisplayItemId(scope, template.ident),
-      title: mTranslationKey(scope, template.title),
-      text: mTranslationKey(scope, template.text),
-      options: template.options.map(compileDialogOption)
-   }
-}
-
-export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessageTemplate): BubbleMessageTemplate {
-   return {
-      ident: mDisplayItemId(scope, template.ident),
-      icon: template.icon,
-      tooltip: mTranslationKey(scope, template.tooltip),
-      linkedDialog: mDisplayItemId(scope, template.tooltip)
-   }
-}
 
 function buildCompileUISeries<T extends HasIdent>(
    itemName: string,

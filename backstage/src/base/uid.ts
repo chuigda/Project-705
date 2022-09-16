@@ -45,10 +45,8 @@ export const mDisplayItemId = buildMangler('ui')
 
 export function isTranslationKey(key: string): boolean {
    return key.startsWith('$')
+      || key.startsWith('@$')
+      || (key.startsWith('@') && key.includes(':tr:$'))
 }
 
-export function isAbsoluteTranslationKey(key: string): boolean {
-   return key.startsWith('@') && key.indexOf('$') !== -1
-}
-
-export type MaybeTranslationKey = string
+export type MaybeTranslationKey = string | ComposedId
