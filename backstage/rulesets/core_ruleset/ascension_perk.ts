@@ -1,10 +1,11 @@
 import { AscensionPerk } from '@app/ruleset'
 import {
+   afterTurns,
    requireAscensionPerk,
    requireNoAscensionPerk,
    requireStartup,
    requireStartupNot,
-   afterTurns
+   requireSoftwareUnstable
 } from '@rulesets/core_ruleset/common_potential'
 
 const ascensionPerks: AscensionPerk[] = [
@@ -68,11 +69,8 @@ const ascensionPerks: AscensionPerk[] = [
       potential: [
          afterTurns(12),
          requireStartup({ author: 'cnpr', moduleName: 'core', id: 'detroit' }),
-         requireNoAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'synthetic_evolution' },),
-         {
-            op: gameContext => gameContext.getV('software_unstable') >= 500,
-            description: '$potential_detroit_software_unstable_500'
-         }
+         requireNoAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'synthetic_evolution' }),
+         requireSoftwareUnstable(500)
       ],
       events: ['emotion_emulation_activation']
    },
@@ -97,10 +95,7 @@ const ascensionPerks: AscensionPerk[] = [
       description: '$ap_artificial_emotion',
       potential: [
          requireAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'emotion_emulation' }),
-         {
-            op: gameContext => gameContext.getV('software_unstable') >= 1000,
-            description: '$potential_detroit_software_unstable_1000'
-         }
+         requireSoftwareUnstable(1000)
       ],
       events: ['artificial_emotion_activation']
    }

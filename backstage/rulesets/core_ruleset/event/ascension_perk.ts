@@ -45,10 +45,7 @@ const ascensionPerkEvents: Event[] = [
       ident: 'defrag_activation',
       event: cx => {
          cx.setV('defrag_counter', 0)
-         cx.connect(
-            cx.signals.playerPropertyUpdated('skillPoints'),
-            'defrag_skill_point_cost'
-         )
+         cx.connect(cx.signals.playerPropertyUpdated('skillPoints'), 'defrag_skill_point_cost')
          cx.connect(cx.signals.turnOver(), 'defrag_turnover')
       }
    },
