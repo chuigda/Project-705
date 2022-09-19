@@ -47,6 +47,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
       }
    }
 
+   delete gameContext.skillPool[<string>skillContent.ident]
    recomputeSkillCosts(gameContext)
 }
 

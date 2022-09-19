@@ -183,8 +183,13 @@ export class GameContext {
    eventChainCounter?: number = undefined
    uiItemCounter: number = 0
 
+   skillPool: Record<string, Skill> = {}
+   ascensionPerkPool: Record<string, AscensionPerk> = {}
+
    constructor(ruleSet: CompiledRuleSet) {
       this.ruleSet = ruleSet
+      Object.assign(this.skillPool, ruleSet.skills)
+      Object.assign(this.ascensionPerkPool, ruleSet.ascensionPerks)
    }
 
    // ----------------------------------------------------------------------------------------------
