@@ -25,6 +25,7 @@ export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: I
    const { scope: apScope, events } = apContent
    delete gameContext.state.computedAscensionPerks!.available[ascensionPerkId]
 
+   delete gameContext.ascensionPerkPool[ascensionPerkId]
    gameContext.state.player.ascensionPerks[ascensionPerkId] = apContent
    gameContext.updateTracker.player.ascensionPerks = true
    gameContext.updateTracker.computedAscensionPerks = true

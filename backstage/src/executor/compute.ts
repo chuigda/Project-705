@@ -198,26 +198,21 @@ export function computePotentialSkills(gameContext: GameContext) {
    const available: Record<string, AvailableSkill> = {}
    const unavailable: Record<string, UnavailableSkill> = {}
 
-   const { skills } = gameContext.ruleSet
-
-   const { skills: learntSkills } = gameContext.state.player
-   for (const skill of Object.values(skills)) {
+   const { skillPool } = gameContext
+   for (const skill of Object.values(skillPool)) {
       const { ident, potential } = skill
       const identStr = <string>ident
 
-      if (learntSkills[identStr]) {
-         console.debug(`[D] [computePotentialSkills] skipping already learned skill: '${ident}'`)
-         continue
-      }
-
       let result = true
+      let neverAgain = false
       const resultPieces: SkillPotentialResult[] = []
       if (potential) {
          pushScope(gameContext, skill.scope!)
          for (const potentialPart of potential) {
             resultPieces.push(computeSkillPotential(gameContext, potentialPart))
          }
-         result = resultPieces.every((piece) => piece.result)
+         result = resultPieces.every(piece => piece.result)
+         neverAgain = resultPieces.some(piece => piece.neverAgain)
          popScope(gameContext)
       }
 
@@ -227,7 +222,14 @@ export function computePotentialSkills(gameContext: GameContext) {
          available[identStr] = { skill, cost }
       } else {
          console.debug(`[D] [computePotentialSkills] skill '${ident}' not available`)
-         unavailable[identStr] = { skill, resultPieces }
+         if (neverAgain) {
+            delete gameContext.skillPool[identStr]
+         } else {
+            unavailable[identStr] = {
+               skill,
+               resultPieces
+            }
+         }
       }
    }
 
@@ -265,31 +267,37 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
    const available: Record<string, AscensionPerk> = {}
    const unavailable: Record<string, UnavailableAscensionPerk> = {}
 
-   const { ascensionPerks } = gameContext.ruleSet
-   const { ascensionPerks: activatedAscensionPerks } = gameContext.state.player
+   const { ascensionPerkPool } = gameContext
 
-   for (const ascensionPerk of Object.values(ascensionPerks)) {
+   for (const ascensionPerk of Object.values(ascensionPerkPool)) {
       const { ident, potential } = ascensionPerk
       const identStr = <string>ident
-      if (activatedAscensionPerks[identStr]) {
-         console.debug(`[D] [computePotentialAscensionPerks] skipping already activated ascension perk: '${ident}'`)
-         continue
-      }
 
       let result = true
+      let neverAgain = false
       let resultPieces: PotentialResult[] = []
       if (potential) {
          pushScope(gameContext, ascensionPerk.scope!)
          resultPieces = potential.map(potentialPart => computePotential(gameContext, potentialPart))
          result = resultPieces.every(piece => piece.result)
+         neverAgain = resultPieces.some(piece => piece.neverAgain)
          popScope(gameContext)
       }
 
       console.debug(`[D] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
       if (result) {
+         console.debug(`[D] [computePotentialAscensionPerks] ascension perk '${ident}' available`)
          available[identStr] = ascensionPerk
       } else {
-         unavailable[identStr] = { ascensionPerk, resultPieces }
+         console.debug(`[D] [computePotentialAscensionPerks] ascension perk '${ident}' not available`)
+         if (neverAgain) {
+            delete gameContext.ascensionPerkPool[identStr]
+         } else {
+            unavailable[identStr] = {
+               ascensionPerk,
+               resultPieces
+            }
+         }
       }
    }
 
