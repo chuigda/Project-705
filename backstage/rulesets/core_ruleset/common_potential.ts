@@ -16,8 +16,9 @@ export function beforeTurns(turns: number): PotentialExpressionFunctionOp {
       op: cx => cx.state.turns <= turns,
       description: {
          template: '@tr:$potential_before_turns',
-         args: { turns: `${turns}` }
-      }
+         args: { turns: `${turns}` },
+      },
+      onceFalse: true
    }
 }
 
@@ -28,7 +29,8 @@ export function requireStartup(startup: ComposedId): PotentialExpressionFunction
       description: {
          template: '@tr:$potential_require_startup',
          args: { startup: `$st_${startup.id}` }
-      }
+      },
+      onceFalse: true
    }
 }
 
@@ -39,7 +41,8 @@ export function requireStartupNot(startup: ComposedId): PotentialExpressionFunct
       description: {
          template: '@tr:$potential_require_startup',
          args: { startup: `$st_${startup.id}` }
-      }
+      },
+      onceFalse: true
    }
 }
 
