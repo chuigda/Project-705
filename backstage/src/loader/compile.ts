@@ -11,7 +11,7 @@ import {
    mModifierId,
    mDisplayItemId,
    mVarName,
-   isTranslationKey
+   isTranslationKey, mStoreItemId
 } from '@app/base/uid'
 import {
    PotentialExpression,
@@ -20,17 +20,18 @@ import {
 } from '@app/ruleset/items/potential'
 import { ItemBase } from '@app/ruleset/items/item_base'
 import {
+   ActiveRelicItem,
    Activity,
-   AscensionPerk,
+   AscensionPerk, ConsumableItem,
    Event,
    MaybeInlineEvent,
-   Modifier,
+   Modifier, PassiveRelicItem,
    PlayerModifier,
-   PlayerModifierGen,
+   PlayerModifierGen, RechargeableItem,
    Skill,
    SkillPointCostModifier,
    SkillPointCostModifierGen,
-   Startup
+   Startup, StoreItem, TradableItem
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'
 import { MaybeTranslatable } from '@app/base/translation'
@@ -195,6 +196,63 @@ export function compileEvent(scope: Scope, event: Event): Event {
       ident,
       scope,
       event: event.event
+   }
+}
+
+// eslint-disable-next-line consistent-return
+export function compileStoreItem(scope: Scope, storeItem: StoreItem): StoreItem {
+   const itemBase = compileBase(scope, storeItem, mStoreItemId)
+   const { itemKind, price, events } = storeItem
+   switch (itemKind) {
+      case 'consumable': {
+         const { initCharge } = <ConsumableItem>storeItem
+         return {
+            ...itemBase,
+            itemKind,
+            price,
+            events,
+            initCharge
+         } as ConsumableItem
+      }
+      case 'rechargeable': {
+         const { initCharge, maxCharge } = <RechargeableItem>storeItem
+         return {
+            ...itemBase,
+            itemKind,
+            price,
+            events,
+            initCharge,
+            maxCharge
+         } as RechargeableItem
+      }
+      case 'active_relic': {
+         const { cooldown } = <ActiveRelicItem>storeItem
+         return {
+            ...itemBase,
+            itemKind,
+            price,
+            events,
+            cooldown
+         } as ActiveRelicItem
+      }
+      case 'passive_relic': {
+         return {
+            ...itemBase,
+            itemKind,
+            price,
+            events
+         } as PassiveRelicItem
+      }
+      case 'tradable': {
+         const { sellValue } = <TradableItem>storeItem
+         return {
+            ...itemBase,
+            itemKind,
+            price,
+            events,
+            sellValue
+         } as TradableItem
+      }
    }
 }
 

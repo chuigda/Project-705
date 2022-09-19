@@ -3,7 +3,7 @@
 // Don't build assertions with TypeScript
 // because I don't know how to make these defineProperty magic work with TypeScript
 
-const { enableChainAPI } = require('../util/type_assert_cjs')
+const { SumType, enableChainAPI } = require('../util/type_assert_cjs')
 
 enableChainAPI()
 
@@ -143,6 +143,50 @@ const modifierAssertion = {
    skillPointCost: 'object?'
 }
 
+const storeItemBaseAssertion = {
+   ...baseAssertion,
+   price: 'number?',
+   events: eventSeriesAssertion.orNull()
+}
+
+const consumableItemAssertion = {
+   ...storeItemBaseAssertion,
+   itemKind: 'string'.assertValue('consumable'),
+   initCharge: 'number'
+}
+
+const rechargeableItemAssertion = {
+   ...storeItemBaseAssertion,
+   itemKind: 'string'.assertValue('rechargeable'),
+   initCharge: 'number',
+   maxCharge: 'number'
+}
+
+const activeRelicItemAssertion = {
+   ...storeItemBaseAssertion,
+   itemKind: 'string'.assertValue('active_relic'),
+   cooldown: 'number'
+}
+
+const passiveRelicItemAssertion = {
+   ...storeItemBaseAssertion,
+   itemKind: 'string'.assertValue('passive_relic')
+}
+
+const tradableItemAssertion = {
+   ...storeItemBaseAssertion,
+   itemKind: 'string'.assertValue('tradable'),
+   sellValue: 'number'.sumWith('function')
+}
+
+const storeItemAssertion = new SumType([
+   consumableItemAssertion,
+   rechargeableItemAssertion,
+   activeRelicItemAssertion,
+   passiveRelicItemAssertion,
+   tradableItemAssertion
+])
+
 const ruleSetAssertion = {
    ident: {
       author: 'string',
@@ -156,6 +200,7 @@ const ruleSetAssertion = {
    startups: [startupAssertion].orNull(),
    activities: [activityAssertion].orNull(),
    ascensionPerks: [ascensionPerkAssertion].orNull(),
+   storeItems: [storeItemAssertion].orNull(),
    events: [eventAssertion].orNull(),
    modifiers: [modifierAssertion].orNull(),
    translations: {}.orNull()

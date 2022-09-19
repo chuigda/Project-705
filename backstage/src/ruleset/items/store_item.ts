@@ -12,7 +12,7 @@ export type StoreItemKind =
 export interface StoreItem extends ItemBase {
    itemKind: StoreItemKind
    price?: number
-   events: MaybeInlineEvent[]
+   events?: MaybeInlineEvent[]
 }
 
 export interface ConsumableItem extends StoreItem {
@@ -20,7 +20,7 @@ export interface ConsumableItem extends StoreItem {
    initCharge: number
 }
 
-export interface RechargableItem extends StoreItem {
+export interface RechargeableItem extends StoreItem {
    itemKind: 'rechargeable'
    initCharge: number
    maxCharge: number
@@ -29,15 +29,13 @@ export interface RechargableItem extends StoreItem {
 export interface ActiveRelicItem extends StoreItem {
    itemKind: 'active_relic'
    cooldown: number
-   unique: boolean
 }
 
 export interface PassiveRelicItem extends StoreItem {
    itemKind: 'passive_relic'
-   unique: boolean
 }
 
-export interface Tradable extends StoreItem {
+export interface TradableItem extends StoreItem {
    itemKind: 'tradable'
    sellValue: number | ((gameContext: GameContext) => number)
 }

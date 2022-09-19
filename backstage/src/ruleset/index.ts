@@ -7,6 +7,7 @@ import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
 import { CustomUI } from '@app/ruleset/items/ui'
 import { Modifier } from '@app/ruleset/items/modifier'
+import { StoreItem } from '@app/ruleset/items/store_item'
 
 export * from '@app/base/uid'
 export * from '@app/ruleset/items/category'
@@ -15,6 +16,7 @@ export * from '@app/ruleset/items/startup'
 export * from '@app/ruleset/items/modifier'
 export * from '@app/ruleset/items/activity'
 export * from '@app/ruleset/items/ascension_perk'
+export * from '@app/ruleset/items/store_item'
 export * from '@app/ruleset/items/event'
 
 export interface RuleSet {
@@ -28,6 +30,7 @@ export interface RuleSet {
    readonly modifiers?: Modifier[]
    readonly activities?: Activity[]
    readonly ascensionPerks?: AscensionPerk[]
+   readonly storeItems?: StoreItem[]
    readonly events?: Event[]
    readonly translations?: Record<string, Record<string, string>>
    readonly ui?: CustomUI

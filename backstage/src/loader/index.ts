@@ -1,4 +1,4 @@
-import { RuleSet, Modifier, SkillCategory, Scope } from '@app/ruleset'
+import { RuleSet, Modifier, SkillCategory, Scope, StoreItem } from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
 import { ruleSetAssertion } from '@app/loader/assertions'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
@@ -52,6 +52,7 @@ export class CompiledRuleSet {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    startups: Record<string, Startup> = {}
+   storeItems: Record<string, StoreItem> = {}
    ui: CompiledCustomUI = new CompiledCustomUI()
 
    translations: Record<string, Translation> = {}

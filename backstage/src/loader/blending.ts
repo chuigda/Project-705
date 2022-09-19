@@ -11,7 +11,7 @@ import {
    compileScoreBoard,
    compileSimpleDialogTemplate,
    compileSkill,
-   compileStartup,
+   compileStartup, compileStoreItem,
    compileTranslation
 } from '@app/loader/compile'
 import { RuleSet } from '@app/ruleset'
@@ -116,6 +116,8 @@ export const compileAscensionPerks = buildCompileSeries(
 export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
 
 export const compileModifiers = buildCompileSeries2('modifier', 'modifiers', 'compileModifiers', compileModifier)
+
+export const compileStoreItems = buildCompileSeries('store item', 'storeItems', 'compileStoreItems', compileStoreItem)
 
 function buildCompileUISeries<T extends HasIdent>(
    itemName: string,
@@ -254,6 +256,7 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
       startups,
       activities,
       ascensionPerks,
+      storeItems,
       events,
       modifiers,
       translations,
@@ -275,6 +278,10 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
 
    if (ascensionPerks) {
       compileAscensionPerks(compilation, scope, ascensionPerks)
+   }
+
+   if (storeItems) {
+      compileStoreItems(compilation, scope, storeItems)
    }
 
    if (events) {
