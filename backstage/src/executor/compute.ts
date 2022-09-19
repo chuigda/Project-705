@@ -24,6 +24,7 @@ import { MaybeTranslatable } from '@app/base/translation'
 
 export interface PotentialResultBase {
    readonly result: boolean
+   readonly neverAgain: boolean
 }
 
 export interface PotentialFunctionResult extends PotentialResultBase {
@@ -47,7 +48,8 @@ export function computePotential(gameContext: GameContext, potential: PotentialE
       }
       return {
          result,
-         description: potential.description
+         neverAgain: result ? false : (!!potential.onceFalse),
+         description: potential.description,
       }
    } else {
       potential = <PotentialExpressionLogicOp>potential
@@ -66,6 +68,7 @@ export function computePotential(gameContext: GameContext, potential: PotentialE
       }
       return {
          result,
+         neverAgain: resultPieces.some(piece => piece.neverAgain),
          op: potential.op,
          resultPieces
       }
@@ -103,6 +106,7 @@ export function computeSkillPotential(gameContext: GameContext, skillPotential: 
          console.error(`[E] [computeSkillPotential] skill '${skillPotential}' does not exist`)
          return {
             result: false,
+            neverAgain: false,
             skillId: '@unknown_skill',
             skillName: '@unknown_skill_name'
          }
@@ -110,6 +114,7 @@ export function computeSkillPotential(gameContext: GameContext, skillPotential: 
 
       return {
          result: !!gameContext.state.player.skills[skillId],
+         neverAgain: false,
          skillId,
          skillName: skill.name
       }
