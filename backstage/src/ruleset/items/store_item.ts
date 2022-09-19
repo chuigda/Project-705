@@ -12,6 +12,7 @@ export type StoreItemKind =
 export interface StoreItem extends ItemBase {
    itemKind: StoreItemKind
    price?: number
+   energyCost?: number
    events?: MaybeInlineEvent[]
 }
 
