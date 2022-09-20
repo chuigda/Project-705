@@ -4,7 +4,7 @@
       "paths": {
          "@app/*": ["src/*"],
          "@rulesets/*": ["rulesets/*"],
-         "@protocol/*": ["../protocol/*"]
+         "@protocol/*": ["../protocol/src/*"]
       }
    },
    "include": [

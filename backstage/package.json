@@ -6,14 +6,16 @@
   "scripts": {
     "launch": "ts-node -r tsconfig-paths/register src/index.ts",
     "launch_debug": "DEBUG=1 ts-node -r tsconfig-paths/register src/index.ts",
-    "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
     "release_build": "tsc --project tsconfig.build.json && resolve-tspaths --project tsconfig.build.json",
     "make_dts": "npm-run-all make_dts:*",
     "make_dts:game_context": "dts-bundle-generator src/executor/game_context.ts -o game_context.d.ts",
     "make_dts:ruleset": "dts-bundle-generator src/ruleset/index.ts -o ruleset.d.ts",
     "clean": "npm-run-all clean:*",
     "clean:dts": "rm -f *.d.ts",
-    "clean:dist": "rm -rf dist"
+    "clean:dist": "rm -rf dist",
+
+    "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
+    "test_type_assert": "ts-node -r tsconfig-paths/register test/test_type_assert.ts"
   },
   "author": "",
   "license": "ISC",
