@@ -13,6 +13,13 @@ const identAssertion = 'string'.sumWith({
    id: 'string'
 })
 
+const translationKeyAssertion = identAssertion
+
+const translatableAssertion = translationKeyAssertion.sumWith({
+   template: translationKeyAssertion,
+   args: 'object'
+})
+
 const attributesAssertion = {
    strength: 'number?',
    emotionalIntelligence: 'number?',
@@ -35,15 +42,15 @@ const potentialExpressionAssertion = {
    arguments: potentialExpressionArgumentsAssertion.chainWith(arr => arr.length >= 1)
 }.sumWith({
    op: 'function',
-   description: 'string?'
+   description: translatableAssertion
 })
 
 potentialExpressionArgumentsAssertion.push(potentialExpressionAssertion)
 
 const baseAssertion = {
    ident: identAssertion,
-   name: 'string',
-   description: 'string',
+   name: translationKeyAssertion,
+   description: translationKeyAssertion,
 }
 
 const activityAssertion = {
@@ -60,7 +67,7 @@ const activityAssertion = {
       satisfactory: 'number?',
       money: 'number?'
    }.orNull(),
-   events: (eventSeriesAssertion).orNull(),
+   events: eventSeriesAssertion.orNull(),
 
    ...patchModeAssertion
 }
@@ -129,7 +136,7 @@ const attributeModifiersAssertion = {
 const modifierAssertion = {
    ...baseAssertion,
 
-   player: {
+   player: ({
       attributes: attributeModifiersAssertion.orNull(),
       talent: attributeModifiersAssertion.orNull(),
 
@@ -139,8 +146,8 @@ const modifierAssertion = {
       satisfactory: 'object?',
       money: 'object?',
       moneyPerTurn: 'object?'
-   }.orNull(),
-   skillPointCost: 'object?'
+   }).sumWith('function').orNull(),
+   skillPointCost: 'object'.sumWith('function').orNull()
 }
 
 const storeItemBaseAssertion = {
