@@ -1,4 +1,4 @@
-/* eslint-disable strict */
+/* eslint-disable strict,@typescript-eslint/no-this-alias */
 /* eslint-disable no-extend-native, no-use-before-define, func-names, no-shadow, no-throw-literal */
 
 /**
@@ -32,9 +32,9 @@
 
 'use strict'
 
+/* eslint-disable no-extend-native, no-use-before-define, func-names, no-shadow, no-throw-literal */
 const TypeStrings = {
    String: typeof '',
-   // eslint-disable-next-line no-undef
    Symbol: typeof Symbol(''),
    Number: typeof 0,
    Object: typeof {},
@@ -131,7 +131,7 @@ const typeAssertImpl = (path, object, assertion, preventErr) => {
                assertTypeEqImpl2(path, RegExp.prototype.constructor, object.constructor, type, preventErr)
                return
             default:
-            // fall through
+             // fall through
          }
       }
 
@@ -165,6 +165,11 @@ const typeAssertImpl = (path, object, assertion, preventErr) => {
       }
    } else if (assertion.constructor === ValueAssertion.prototype.constructor) {
       assertEquals(`${path}:value`, assertion.value, object, preventErr)
+   } else if (assertion.constructor === ObjectValueAssertion.prototype.constructor) {
+      typeAssertImpl(path, object, {}, preventErr)
+      for (const [key, value] of Object.entries(object)) {
+         typeAssertImpl(`${path}.${key}`, value, assertion.valueAssertion, preventErr)
+      }
    } else if (object === undefined) {
       typeAssertError(path, 'unexpected "undefined" value', preventErr)
    } else if (object === null) {
@@ -181,7 +186,7 @@ const typeAssertImpl = (path, object, assertion, preventErr) => {
          typeAssertError(path, '"array" type assertion should only have one element', preventErr)
       }
    } else if (assertionType === TypeStrings.Object
-      && assertion.constructor === Object.prototype.constructor) {
+       && assertion.constructor === Object.prototype.constructor) {
       for (const [field, fieldAssertion] of Object.entries(assertion)) {
          typeAssertImpl(`${path}.${field}`, object[field], fieldAssertion, preventErr)
       }
@@ -224,18 +229,28 @@ const ValueAssertion = (function () {
    return ValueAssertion
 }())
 
+const ObjectValueAssertion = (function () {
+   function ObjectValueAssertion(valueAssertion) {
+      this.valueAssertion = valueAssertion
+   }
+
+   return ObjectValueAssertion
+}())
+
 const enableChainAPI = methodNames => {
    let orNullName = 'orNull'
    let sumWithName = 'sumWith'
    let chainWithName = 'chainWith'
    let assertValueName = 'assertValue'
+   let assertObjectValueName = 'assertObjectValue'
 
-   if (methodNames !== null && methodNames !== undefined) {
-      const { orNull, sumWith, chainWith, assertValue } = methodNames
+   if (methodNames) {
+      const { orNull, sumWith, chainWith, assertValue, assertObjectValue } = methodNames
       orNullName = orNull || orNullName
       sumWithName = sumWith || sumWithName
       chainWithName = chainWith || chainWithName
       assertValueName = assertValue || assertValueName
+      assertObjectValueName = assertObjectValue || assertObjectValueName
    }
 
    const checkChainNotEndedByValueAssertion = types => {
@@ -321,7 +336,32 @@ const enableChainAPI = methodNames => {
       configurable: false,
       writable: false,
       value(that) {
-         return (new ChainType([this]))[chainWithName](that)
+         let self = this
+         if (self.constructor === NullableType.prototype.constructor) {
+            self = self.origin
+            return new NullableType(self[chainWithName](that))
+         }
+         return (new ChainType([self]))[chainWithName](that)
+      }
+   })
+
+   Object.defineProperty(String.prototype, chainWithName, {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value(that) {
+         let nullable = false
+         let self = `${this}`
+         if (self.endsWith('?')) {
+            nullable = true
+            self = self.slice(0, -1)
+         }
+
+         let ret = (new ChainType([self]))[chainWithName](that)
+         if (nullable) {
+            ret = new NullableType(ret)
+         }
+         return ret
       }
    })
 
@@ -343,6 +383,48 @@ const enableChainAPI = methodNames => {
          return new ChainType([...this.types, new ValueAssertion(that)])
       }
    })
+
+   Object.defineProperty(Object.prototype, assertObjectValueName, {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value(valueAssertion) {
+         if (this.constructor !== Object.prototype.constructor) {
+            typeAssertError(
+               '<onbuild> Object.prototype.assertObjectValue',
+               `cannot assert object values of "${this.constructor.name}"`
+            )
+         }
+         return new ObjectValueAssertion(valueAssertion)
+      }
+   })
+
+   Object.defineProperty(String.prototype, assertObjectValueName, {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value(valueAssertion) {
+         let nullable = false
+         let self = `${this}`
+         if (self.endsWith('?')) {
+            nullable = true
+            self = self.slice(0, -1)
+         }
+
+         if (self !== 'object') {
+            typeAssertError(
+               '<onbuild> String.prototype.assertObjectValue',
+               `cannot assert object values of "${self}"`
+            )
+         }
+
+         let ret = new ObjectValueAssertion(valueAssertion)
+         if (nullable) {
+            ret = new NullableType(ret)
+         }
+         return ret
+      }
+   })
 }
 
 module.exports = {
@@ -352,6 +434,7 @@ module.exports = {
    SumType,
    ChainType,
    ValueAssertion,
+   ObjectValueAssertion,
    enableChainAPI,
    preventErrTrace
 }
