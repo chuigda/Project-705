@@ -31,7 +31,7 @@ import {
    Skill,
    SkillPointCostModifier,
    SkillPointCostModifierGen,
-   Startup, StoreItem, TradableItem
+   Startup, StoreItem, StoreItemKind, TradableItem
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'
 import { MaybeTranslatable } from '@app/base/translation'
@@ -92,12 +92,21 @@ export function compileMaybeInlineEvent(scope: Scope, event: MaybeInlineEvent): 
    }
 }
 
+export function compileEventSeries(scope: Scope, eventSeries?: MaybeInlineEvent[]): MaybeInlineEvent[] | undefined {
+   if (!eventSeries) {
+      return undefined
+   }
+   return eventSeries.map(event => compileMaybeInlineEvent(scope, event))
+}
+
 export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): ItemBase {
-   const { ident, name, description } = item
+   const { ident, name, description, scope: itemScope, patch } = item
    return {
       ident: mangler(scope, ident),
       name: mTranslationKey(scope, name),
-      description: mTranslationKey(scope, description)
+      description: mTranslationKey(scope, description),
+      scope: itemScope || scope,
+      patch
    }
 }
 
@@ -112,9 +121,9 @@ export function compileSkill(scope: Scope, skill: Skill): Skill {
       }
    })
    const activities = skill.activities?.map(activity => mActivityId(scope, activity))
-   const events = skill.events?.map(event => compileMaybeInlineEvent(scope, event))
+   const events = compileEventSeries(scope, skill.events)
 
-   const { category, cost, patch } = skill
+   const { category, cost } = skill
    return {
       ...itemBase,
       category,
@@ -123,36 +132,28 @@ export function compileSkill(scope: Scope, skill: Skill): Skill {
       potential,
       activities,
       events,
-
-      scope,
-      patch
    }
 }
 
 export function compileStartup(scope: Scope, startup: Startup): Startup {
    const itemBase = compileBase(scope, startup, mStartupId)
 
-   const events = startup.events?.map(event => compileMaybeInlineEvent(scope, event))
-
-   const { patch, player, modifier } = startup
+   const events = compileEventSeries(scope, startup.events)
+   const { player, modifier } = startup
    return {
       ...itemBase,
 
       player,
       modifier: modifier ? mModifierId(scope, modifier) : undefined,
-      events,
-
-      scope,
-      patch
+      events
    }
 }
 
 export function compileActivity(scope: Scope, activity: Activity): Activity {
    const itemBase = compileBase(scope, activity, mActivityId)
 
-   const events = activity.events?.map(event => compileMaybeInlineEvent(scope, event))
-
-   const { category, level, output, energyCost, patch } = activity
+   const events = compileEventSeries(scope, activity.events)
+   const { category, level, output, energyCost } = activity
    return {
       ...itemBase,
 
@@ -161,10 +162,7 @@ export function compileActivity(scope: Scope, activity: Activity): Activity {
 
       energyCost,
       events,
-      output,
-
-      scope,
-      patch
+      output
    }
 }
 
@@ -174,24 +172,20 @@ export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk)
    const potential = ascensionPerk.potential?.map(
       ascensionPerkPotential => compilePotentialExpression(scope, ascensionPerkPotential)
    )
-   const events = ascensionPerk.events?.map(event => compileMaybeInlineEvent(scope, event))
+   const events = compileEventSeries(scope, ascensionPerk.events)
 
-   const { modifier, patch } = ascensionPerk
+   const { modifier } = ascensionPerk
    return {
       ...itemBase,
 
       potential,
       modifier: modifier ? mModifierId(scope, modifier) : undefined,
-      events,
-
-      scope,
-      patch
+      events
    }
 }
 
 export function compileEvent(scope: Scope, event: Event): Event {
    const ident = mEventId(scope, event.ident)
-
    return {
       ident,
       scope,
@@ -199,60 +193,66 @@ export function compileEvent(scope: Scope, event: Event): Event {
    }
 }
 
-// eslint-disable-next-line consistent-return
-export function compileStoreItem(scope: Scope, storeItem: StoreItem): StoreItem {
+export function compileStoreItemBase<IKS extends StoreItemKind>(
+   scope: Scope,
+   storeItem: StoreItem<IKS>
+): StoreItem<IKS> {
    const itemBase = compileBase(scope, storeItem, mStoreItemId)
-   const { itemKind, price, events } = storeItem
-   switch (itemKind) {
-      case 'consumable': {
-         const { initCharge } = <ConsumableItem>storeItem
-         return {
-            ...itemBase,
-            itemKind,
-            price,
-            events,
-            initCharge
-         } as ConsumableItem
-      }
-      case 'rechargeable': {
-         const { initCharge, maxCharge } = <RechargeableItem>storeItem
-         return {
-            ...itemBase,
-            itemKind,
-            price,
-            events,
-            initCharge,
-            maxCharge
-         } as RechargeableItem
-      }
-      case 'active_relic': {
-         const { cooldown } = <ActiveRelicItem>storeItem
-         return {
-            ...itemBase,
-            itemKind,
-            price,
-            events,
-            cooldown
-         } as ActiveRelicItem
-      }
-      case 'passive_relic': {
-         return {
-            ...itemBase,
-            itemKind,
-            price,
-            events
-         } as PassiveRelicItem
-      }
-      case 'tradable': {
-         const { sellValue } = <TradableItem>storeItem
-         return {
-            ...itemBase,
-            itemKind,
-            price,
-            events,
-            sellValue
-         } as TradableItem
-      }
+   const { itemKind, price, energyCost } = storeItem
+   return {
+      ...itemBase,
+      itemKind,
+      price,
+      energyCost
+   }
+}
+
+export function compileConsumableItem(scope: Scope, consumable: ConsumableItem): ConsumableItem {
+   const itemBase = compileStoreItemBase(scope, consumable)
+   const { initCharge, consumeEvents } = consumable
+   return {
+      ...itemBase,
+      initCharge,
+      consumeEvents
+   }
+}
+
+export function compileRechargeableItem(scope: Scope, rechargeable: RechargeableItem): RechargeableItem {
+   const itemBase = compileStoreItemBase(scope, rechargeable)
+   const { initCharge, maxCharge, consumeEvents } = rechargeable
+   return {
+      ...itemBase,
+      initCharge,
+      maxCharge,
+      consumeEvents
+   }
+}
+
+export function compileActiveRelicItem(scope: Scope, relic: ActiveRelicItem): ActiveRelicItem {
+   const itemBase = compileStoreItemBase(scope, relic)
+   const { cooldown, activateEvents } = relic
+   return {
+      ...itemBase,
+      cooldown,
+      activateEvents
+   }
+}
+
+export function compilePassiveRelicItem(scope: Scope, relic: PassiveRelicItem): PassiveRelicItem {
+   const itemBase = compileStoreItemBase(scope, relic)
+   const { onAddedEvents } = relic
+   return {
+      ...itemBase,
+      onAddedEvents
+   }
+}
+
+export function compileTradableItem(scope: Scope, tradable: TradableItem): TradableItem {
+   const itemBase = compileStoreItemBase(scope, tradable)
+   const { sellValue } = tradable
+   return {
+      ...itemBase,
+      sellValue
    }
 }
 
@@ -286,17 +286,13 @@ export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modi
    }
 
    const itemBase = compileBase(scope, modifier, mModifierId)
-
-   const { player, skillPointCost, patch } = modifier
+   const { player, skillPointCost } = modifier
 
    return {
       ...itemBase,
 
       player: compilePlayerModifier(player),
       skillPointCost: compileSkillPointCostModifier(skillPointCost),
-
-      scope,
-      patch
    }
 }
 

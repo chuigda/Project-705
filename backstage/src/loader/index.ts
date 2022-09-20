@@ -32,6 +32,8 @@ export function loadDynamicMod(modName: string): [RuleSet | null, any] {
 
 export type Translation = Record<string, string>
 
+export class CompiledStoreItems {}
+
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}
    buttons: Record<string, Button> = {}
@@ -52,7 +54,7 @@ export class CompiledRuleSet {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    startups: Record<string, Startup> = {}
-   storeItems: Record<string, StoreItem> = {}
+   storeItems: CompiledStoreItems = new CompiledStoreItems()
    ui: CompiledCustomUI = new CompiledCustomUI()
 
    translations: Record<string, Translation> = {}

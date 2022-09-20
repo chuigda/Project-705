@@ -153,31 +153,35 @@ const modifierAssertion = {
 const storeItemBaseAssertion = {
    ...baseAssertion,
    price: 'number?',
-   events: eventSeriesAssertion.orNull()
+   energyCost: 'number?'
 }
 
 const consumableItemAssertion = {
    ...storeItemBaseAssertion,
    itemKind: 'string'.assertValue('consumable'),
-   initCharge: 'number'
+   initCharge: 'number',
+   consumeEvents: eventSeriesAssertion.orNull()
 }
 
 const rechargeableItemAssertion = {
    ...storeItemBaseAssertion,
    itemKind: 'string'.assertValue('rechargeable'),
    initCharge: 'number',
-   maxCharge: 'number'
+   maxCharge: 'number',
+   consumeEvents: eventSeriesAssertion.orNull()
 }
 
 const activeRelicItemAssertion = {
    ...storeItemBaseAssertion,
    itemKind: 'string'.assertValue('active_relic'),
-   cooldown: 'number'
+   cooldown: 'number',
+   activateEvents: eventSeriesAssertion.orNull()
 }
 
 const passiveRelicItemAssertion = {
    ...storeItemBaseAssertion,
-   itemKind: 'string'.assertValue('passive_relic')
+   itemKind: 'string'.assertValue('passive_relic'),
+   onAddedEvents: eventSeriesAssertion.orNull()
 }
 
 const tradableItemAssertion = {
@@ -185,14 +189,6 @@ const tradableItemAssertion = {
    itemKind: 'string'.assertValue('tradable'),
    sellValue: 'number'.sumWith('function')
 }
-
-const storeItemAssertion = new SumType([
-   consumableItemAssertion,
-   rechargeableItemAssertion,
-   activeRelicItemAssertion,
-   passiveRelicItemAssertion,
-   tradableItemAssertion
-])
 
 const ruleSetAssertion = {
    ident: {
@@ -207,7 +203,6 @@ const ruleSetAssertion = {
    startups: [startupAssertion].orNull(),
    activities: [activityAssertion].orNull(),
    ascensionPerks: [ascensionPerkAssertion].orNull(),
-   storeItems: [storeItemAssertion].orNull(),
    events: [eventAssertion].orNull(),
    modifiers: [modifierAssertion].orNull(),
    translations: {}.orNull()

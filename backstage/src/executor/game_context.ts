@@ -1,22 +1,26 @@
 /* eslint-disable import/no-named-as-default-member */
 
 import { Ident, Scope } from '@app/base/uid'
-import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
-import { Activity } from '@app/ruleset/items/activity'
-import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
-import { CompiledRuleSet } from '@app/loader'
-import { PotentialExpression } from '@app/ruleset/items/potential'
-import { MaybeInlineEvent } from '@app/ruleset/items/event'
-import { ValueSource } from '@app/ruleset/items/modifier'
-import { PropertyOp } from '@app/ruleset/ops'
 import {
+   Activity,
+   AscensionPerk,
    BubbleMessageTemplate,
    Button,
    CustomScoreBoard,
+   MaybeInlineEvent,
    Menu,
-   SimpleDialogTemplate
-} from '@app/ruleset/items/ui'
+   PotentialExpression,
+   PropertyOp,
+   SimpleDialogTemplate,
+   Skill,
+   SkillCategoryId,
+   SkillCost,
+   SkillPotential,
+   StoreItem,
+   ValueSource
+} from '@app/ruleset'
 
+import { CompiledRuleSet } from '@app/loader'
 import computeFunctions, {
    ComputedAscensionPerks,
    ComputedModifier,
@@ -33,7 +37,6 @@ import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
 import modifierFunctions from '@app/executor/modifier'
-import { SkillCategoryId } from '@app/ruleset'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -53,6 +56,7 @@ export class PlayerStatus {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    ascensionPerkSlots: number = 0
+   storeItems: Record<string, StoreItem> = {}
 
    energy: number = 0
    energyMax: number = 150

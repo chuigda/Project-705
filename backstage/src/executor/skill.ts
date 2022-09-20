@@ -82,11 +82,12 @@ export function grantSkill(gameContext: GameContext, skill: Ident) {
       console.error(`[E] [grantSkill] skill '${skillId}' does not exist`)
       return
    }
-   console.info(`[I] [grantSkill] granting skill '${skillId}'`)
 
+   console.info(`[I] [grantSkill] granting skill '${skillId}'`)
    if (gameContext.state.player.skills[skillId]) {
       console.warn(`[W] [grantSkill] skill '${skillId}' has already been learnt, re-granting`)
    }
+
    gameContext.state.player.skills[skillId] = skillContent
 
    executeSkillEffects(gameContext, skillContent)

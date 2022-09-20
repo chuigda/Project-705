@@ -9,34 +9,32 @@ export type StoreItemKind =
    | 'passive_relic'
    | 'tradable'
 
-export interface StoreItem extends ItemBase {
-   itemKind: StoreItemKind
+export interface StoreItem<ItemKindString extends StoreItemKind> extends ItemBase {
+   itemKind: ItemKindString
    price?: number
    energyCost?: number
-   events?: MaybeInlineEvent[]
 }
 
-export interface ConsumableItem extends StoreItem {
-   itemKind: 'consumable'
+export interface ConsumableItem extends StoreItem<'consumable'> {
    initCharge: number
+   consumeEvents?: MaybeInlineEvent[]
 }
 
-export interface RechargeableItem extends StoreItem {
-   itemKind: 'rechargeable'
+export interface RechargeableItem extends StoreItem<'rechargeable'> {
    initCharge: number
    maxCharge: number
+   consumeEvents?: MaybeInlineEvent[]
 }
 
-export interface ActiveRelicItem extends StoreItem {
-   itemKind: 'active_relic'
+export interface ActiveRelicItem extends StoreItem<'active_relic'> {
    cooldown: number
+   activateEvents?: MaybeInlineEvent[]
 }
 
-export interface PassiveRelicItem extends StoreItem {
-   itemKind: 'passive_relic'
+export interface PassiveRelicItem extends StoreItem<'passive_relic'> {
+   onAddedEvents?: MaybeInlineEvent[]
 }
 
-export interface TradableItem extends StoreItem {
-   itemKind: 'tradable'
+export interface TradableItem extends StoreItem<'tradable'> {
    sellValue: number | ((gameContext: GameContext) => number)
 }
