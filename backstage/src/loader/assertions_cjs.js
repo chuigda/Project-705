@@ -3,7 +3,7 @@
 // Don't build assertions with TypeScript
 // because I don't know how to make these defineProperty magic work with TypeScript
 
-const { SumType, enableChainAPI } = require('../util/type_assert_cjs')
+const { enableChainAPI } = require('../util/type_assert_cjs')
 
 enableChainAPI()
 
@@ -152,41 +152,42 @@ const modifierAssertion = {
 
 const storeItemBaseAssertion = {
    ...baseAssertion,
+   level: 'string'.chainWith(x => ['normal', 'rare', 'epic', 'legend', 'myth'].includes(x)),
    price: 'number?',
    energyCost: 'number?'
 }
 
 const consumableItemAssertion = {
    ...storeItemBaseAssertion,
-   itemKind: 'string'.assertValue('consumable'),
-   initCharge: 'number',
+   kind: 'string'.assertValue('consumable'),
+   initCharge: 'number?',
    consumeEvents: eventSeriesAssertion.orNull()
 }
 
 const rechargeableItemAssertion = {
    ...storeItemBaseAssertion,
-   itemKind: 'string'.assertValue('rechargeable'),
-   initCharge: 'number',
-   maxCharge: 'number',
+   kind: 'string'.assertValue('rechargeable'),
+   initCharge: 'number?',
+   maxCharge: 'number?',
    consumeEvents: eventSeriesAssertion.orNull()
 }
 
 const activeRelicItemAssertion = {
    ...storeItemBaseAssertion,
-   itemKind: 'string'.assertValue('active_relic'),
+   kind: 'string'.assertValue('active_relic'),
    cooldown: 'number',
    activateEvents: eventSeriesAssertion.orNull()
 }
 
 const passiveRelicItemAssertion = {
    ...storeItemBaseAssertion,
-   itemKind: 'string'.assertValue('passive_relic'),
+   kind: 'string'.assertValue('passive_relic'),
    onAddedEvents: eventSeriesAssertion.orNull()
 }
 
 const tradableItemAssertion = {
    ...storeItemBaseAssertion,
-   itemKind: 'string'.assertValue('tradable'),
+   kind: 'string'.assertValue('tradable'),
    sellValue: 'number'.sumWith('function')
 }
 

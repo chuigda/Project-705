@@ -31,7 +31,10 @@ import {
    Skill,
    SkillPointCostModifier,
    SkillPointCostModifierGen,
-   Startup, StoreItem, StoreItemKind, TradableItem
+   Startup,
+   StoreItem,
+   StoreItemKind,
+   TradableItem
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'
 import { MaybeTranslatable } from '@app/base/translation'
@@ -198,10 +201,11 @@ export function compileStoreItemBase<IKS extends StoreItemKind>(
    storeItem: StoreItem<IKS>
 ): StoreItem<IKS> {
    const itemBase = compileBase(scope, storeItem, mStoreItemId)
-   const { itemKind, price, energyCost } = storeItem
+   const { kind, level, price, energyCost } = storeItem
    return {
       ...itemBase,
-      itemKind,
+      kind,
+      level: level || 'normal',
       price,
       energyCost
    }
@@ -212,7 +216,7 @@ export function compileConsumableItem(scope: Scope, consumable: ConsumableItem):
    const { initCharge, consumeEvents } = consumable
    return {
       ...itemBase,
-      initCharge,
+      initCharge: initCharge || 1,
       consumeEvents
    }
 }
@@ -222,8 +226,8 @@ export function compileRechargeableItem(scope: Scope, rechargeable: Rechargeable
    const { initCharge, maxCharge, consumeEvents } = rechargeable
    return {
       ...itemBase,
-      initCharge,
-      maxCharge,
+      initCharge: initCharge || 1,
+      maxCharge: maxCharge || 1,
       consumeEvents
    }
 }

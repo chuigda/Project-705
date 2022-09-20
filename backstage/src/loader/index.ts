@@ -1,4 +1,13 @@
-import { RuleSet, Modifier, SkillCategory, Scope, StoreItem } from '@app/ruleset'
+import {
+   RuleSet,
+   Modifier,
+   SkillCategory,
+   Scope,
+   StoreItem,
+   ConsumableItem,
+   PassiveRelicItem,
+   RechargeableItem, ActiveRelicItem, TradableItem
+} from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
 import { ruleSetAssertion } from '@app/loader/assertions'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
@@ -32,7 +41,13 @@ export function loadDynamicMod(modName: string): [RuleSet | null, any] {
 
 export type Translation = Record<string, string>
 
-export class CompiledStoreItems {}
+export class CompiledStoreItems {
+   consumableItems: Record<string, ConsumableItem> = {}
+   rechargeableItems: Record<string, RechargeableItem> = {}
+   activeRelicItems: Record<string, ActiveRelicItem> = {}
+   passiveRelicItems: Record<string, PassiveRelicItem> = {}
+   tradableItems: Record<string, TradableItem> = {}
+}
 
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}

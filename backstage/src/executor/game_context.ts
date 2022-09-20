@@ -5,7 +5,7 @@ import {
    Activity,
    AscensionPerk,
    BubbleMessageTemplate,
-   Button,
+   Button, ConsumableItem,
    CustomScoreBoard,
    MaybeInlineEvent,
    Menu,
@@ -47,6 +47,11 @@ export class PlayerAttributes {
    charisma: number = 0
 }
 
+export class PlayerConsumableItem {
+   base: ConsumableItem
+   count: number
+}
+
 export class PlayerStatus {
    attributes: PlayerAttributes = new PlayerAttributes()
    talent: PlayerAttributes = new PlayerAttributes()
@@ -56,7 +61,6 @@ export class PlayerStatus {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    ascensionPerkSlots: number = 0
-   storeItems: Record<string, StoreItem> = {}
 
    energy: number = 0
    energyMax: number = 150

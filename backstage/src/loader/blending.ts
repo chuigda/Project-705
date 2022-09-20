@@ -1,20 +1,21 @@
-import { CompiledRuleSet } from '@app/loader'
+import { CompiledRuleSet, CompiledStoreItems } from '@app/loader'
 import { SkillCategory } from '@app/ruleset/items/category'
 import { Ident, Scope, mEventId } from '@app/base/uid'
 import {
+   compileActiveRelicItem,
    compileActivity,
    compileAscensionPerk,
-   compileBubbleMessageTemplate,
+   compileBubbleMessageTemplate, compileConsumableItem,
    compileEvent,
    compileMenuItem,
-   compileModifier,
+   compileModifier, compilePassiveRelicItem, compileRechargeableItem,
    compileScoreBoard,
    compileSimpleDialogTemplate,
    compileSkill,
-   compileStartup,
+   compileStartup, compileTradableItem,
    compileTranslation
 } from '@app/loader/compile'
-import { RuleSet } from '@app/ruleset'
+import { RuleSet, RuleSetStoreItems, StoreItem, StoreItemKind } from '@app/ruleset'
 import { Button, CustomUI, Menu } from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
@@ -116,6 +117,95 @@ export const compileAscensionPerks = buildCompileSeries(
 export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
 
 export const compileModifiers = buildCompileSeries2('modifier', 'modifiers', 'compileModifiers', compileModifier)
+
+function buildCompileStoreItemSeries<IKS extends StoreItemKind, T extends StoreItem<IKS>>(
+   itemName: string,
+   seriesName: keyof CompiledStoreItems,
+   fnName: string,
+   compileSingleFn: CompileSingleFunction<T>
+): CompileFunction<T> {
+   return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
+      for (const item of series) {
+         const compiledItem = compileSingleFn(scope, item)
+         const ident = <string>compiledItem.ident
+
+         const dest = <Record<string, T>>(<unknown>compilation.storeItems[seriesName])
+         if (dest[ident]) {
+            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
+         } else {
+            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
+         }
+
+         // TODO(chuigda): implement "blending"
+         dest[ident] = item
+      }
+   }
+}
+
+export const compileConsumableItems = buildCompileStoreItemSeries(
+   'consumable item',
+   'consumableItems',
+   'compileConsumableItems',
+   compileConsumableItem
+)
+
+export const compileRechargeableItems = buildCompileStoreItemSeries(
+   'rechargeable item',
+   'rechargeableItems',
+   'compileRechargeableItems',
+   compileRechargeableItem
+)
+
+export const compileActiveRelicItems = buildCompileStoreItemSeries(
+   'active relic item',
+   'activeRelicItems',
+   'compileActiveRelicItems',
+   compileActiveRelicItem
+)
+
+export const compilePassiveRelicItems = buildCompileStoreItemSeries(
+   'passive relic item',
+   'passiveRelicItems',
+   'compilePassiveRelicItems',
+   compilePassiveRelicItem
+)
+
+export const compileTradableItems = buildCompileStoreItemSeries(
+   'tradable item',
+   'tradableItems',
+   'compileTradableItems',
+   compileTradableItem
+)
+
+export function compileStoreItems(compilation: CompiledRuleSet, scope: Scope, storeItems: RuleSetStoreItems) {
+   const {
+      consumableItems,
+      rechargeableItems,
+      activeRelicItems,
+      passiveRelicItems,
+      tradableItems
+   } = storeItems
+
+   if (consumableItems) {
+      compileConsumableItems(compilation, scope, consumableItems)
+   }
+
+   if (rechargeableItems) {
+      compileRechargeableItems(compilation, scope, rechargeableItems)
+   }
+
+   if (activeRelicItems) {
+      compileActiveRelicItems(compilation, scope, activeRelicItems)
+   }
+
+   if (passiveRelicItems) {
+      compilePassiveRelicItems(compilation, scope, passiveRelicItems)
+   }
+
+   if (tradableItems) {
+      compileTradableItems(compilation, scope, tradableItems)
+   }
+}
 
 function buildCompileUISeries<T extends HasIdent>(
    itemName: string,
@@ -276,6 +366,10 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
 
    if (ascensionPerks) {
       compileAscensionPerks(compilation, scope, ascensionPerks)
+   }
+
+   if (storeItems) {
+      compileStoreItems(compilation, scope, storeItems)
    }
 
    if (events) {

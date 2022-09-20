@@ -9,20 +9,28 @@ export type StoreItemKind =
    | 'passive_relic'
    | 'tradable'
 
+export type StoreItemLevel =
+   'normal'
+   | 'rare'
+   | 'epic'
+   | 'legend'
+   | 'myth'
+
 export interface StoreItem<ItemKindString extends StoreItemKind> extends ItemBase {
-   itemKind: ItemKindString
+   kind: ItemKindString
+   level?: StoreItemLevel
    price?: number
    energyCost?: number
 }
 
 export interface ConsumableItem extends StoreItem<'consumable'> {
-   initCharge: number
+   initCharge?: number
    consumeEvents?: MaybeInlineEvent[]
 }
 
 export interface RechargeableItem extends StoreItem<'rechargeable'> {
-   initCharge: number
-   maxCharge: number
+   initCharge?: number
+   maxCharge?: number
    consumeEvents?: MaybeInlineEvent[]
 }
 
