@@ -99,9 +99,70 @@ const modifierTranslation: Record<string, string> = {
       + '但这一切真的值得吗？'
 }
 
+const storeItemTranslation: Record<string, string> = {
+   '$si_cola': '可乐',
+   '$si_cola_desc':
+      '能让你乐一下\n'
+      + '\n'
+      + '恢复 15 精神健康，但降低 1 体魄（连续使用时效果降低且惩罚增加）',
+
+   '$si_firework_bunch': '烟花',
+   '$si_firework_bunch_desc':
+      '观看一次烟花表演\n'
+      + '\n'
+      + '恢复 15 精神健康，获得 15 想象力',
+
+   '$si_energy_drink': '能量饮料',
+   '$si_energy_drink_desc':
+      '疲惫的时候来上一罐，能让你重新充满活力\n'
+      + '\n'
+      + '恢复你已消耗体力值的 15%（连续使用时效果降低）',
+
+   '$si_ultraman_card_pack': '奥特曼卡片包',
+   '$si_ultraman_card_pack_desc':
+      '使用后会开出 10 张 N ~ SSR 级别的奥特曼卡片，可以留着收藏，也可以卖给小伙伴',
+
+   '$si_five_three': '五年高考三年模拟',
+   '$si_five_three_desc':
+      '经典教材，学霸必备\n'
+      + '\n'
+      + '使用后获得 100 点智商、情商和记忆力，可使用 10 次',
+
+   '$si_hg_exam_overlord': '黄冈考霸',
+   '$si_hg_exam_overlord_desc':
+      '和“海腚踢王”并列为大脸妹的两大神器\n'
+      + '\n'
+      + '使用后立即获得一种你尚未习得的主科技能。如果没有尚未习得的技能，则使你每门科目的成绩 +2。'
+      + '可使用 4 次',
+
+   '$si_school_test_lv1': '学校发的试题 Lv.1',
+   '$si_school_test_lv1_desc':
+      '使用后获得 10 点智商、情商和记忆力，并使你下次考试的总成绩 +25\n'
+      + '\n'
+      + '学校每 4 回合会给你发放 1 份试题，最多同时持有 2 份。\n'
+      + '这个道具会在第 29 回合时升级为 “学校发的试题 Lv.2”',
+
+   '$si_school_test_lv2': '学校发的试题 Lv.2',
+   '$si_school_test_lv2_desc':
+      '使用后获得 15 点智商、情商和记忆力，并使你下次考试的总成绩 +25\n'
+      + '\n'
+      + '学校每 4 回合会给你发放 1 份试题，最多同时持有 3 份。\n'
+      + '这个道具会在第 41 回合时升级为 “学校发的试题 Lv.3”',
+
+   '$si_school_test_lv3': '学校发的试题 Lv.3',
+   '$si_school_test_lv3_desc':
+      '使用后获得 20 点智商、情商和记忆力，并使你下次考试的总成绩 +25\n'
+      + '\n'
+      + '学校每 3 回合会给你发放 1 份试题，最多同时持有 4 份。\n',
+
+   '$si_hextech_power_generator': '海克斯科技发电机',
+   '$si_hextech_power_generator_desc': '使用后恢复行动力至上限的 50%'
+}
+
 export default {
    ...commonPotentialTranslation,
    ...startupTranslation,
    ...modifierTranslation,
-   ...ascensionPerkTranslation
+   ...ascensionPerkTranslation,
+   ...storeItemTranslation
 }

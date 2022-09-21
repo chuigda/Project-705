@@ -18,6 +18,14 @@ const consumableItems: ConsumableItem[] = [
       consumeEvents: ['play_firework']
    },
    {
+      ident: 'energy_drink',
+      name: '$si_energy_drink',
+      description: '$si_energy_drink_desc',
+      kind: 'consumable',
+      price: 7,
+      consumeEvents: ['drink_energy_drink']
+   },
+   {
       ident: 'ultraman_card_pack',
       name: '$si_ultraman_card_pack',
       description: '$si_ultraman_card_pack_desc',

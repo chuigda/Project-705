@@ -6,9 +6,9 @@ const rechargeableItems: RechargeableItem[] = [
       name: '$si_school_test_lv1',
       description: '$si_school_test_lv1_desc',
       kind: 'rechargeable',
-      energyCost: 25,
+      energyCost: 35,
       consumeEvents: ['do_school_test_v1'],
-      initCharge: 2,
+      initCharge: 1,
       maxCharge: 2
    },
    {
@@ -16,9 +16,9 @@ const rechargeableItems: RechargeableItem[] = [
       name: '$si_school_test_lv2',
       description: '$si_school_test_lv2_desc',
       kind: 'rechargeable',
-      energyCost: 35,
+      energyCost: 45,
       consumeEvents: ['do_school_test_v2'],
-      initCharge: 3,
+      initCharge: 1,
       maxCharge: 3
    }
 ]
