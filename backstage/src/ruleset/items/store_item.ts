@@ -31,6 +31,7 @@ export interface ConsumableItem extends StoreItem<'consumable'> {
 export interface RechargeableItem extends StoreItem<'rechargeable'> {
    initCharge?: number
    maxCharge?: number
+   onAddedEvents?: MaybeInlineEvent[]
    consumeEvents?: MaybeInlineEvent[]
 }
 

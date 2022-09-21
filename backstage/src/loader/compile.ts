@@ -217,18 +217,19 @@ export function compileConsumableItem(scope: Scope, consumable: ConsumableItem):
    return {
       ...itemBase,
       initCharge: initCharge || 1,
-      consumeEvents
+      consumeEvents: compileEventSeries(scope, consumeEvents)
    }
 }
 
 export function compileRechargeableItem(scope: Scope, rechargeable: RechargeableItem): RechargeableItem {
    const itemBase = compileStoreItemBase(scope, rechargeable)
-   const { initCharge, maxCharge, consumeEvents } = rechargeable
+   const { initCharge, maxCharge, onAddedEvents, consumeEvents } = rechargeable
    return {
       ...itemBase,
       initCharge: initCharge || 1,
       maxCharge: maxCharge || 1,
-      consumeEvents
+      onAddedEvents: compileEventSeries(scope, onAddedEvents),
+      consumeEvents: compileEventSeries(scope, consumeEvents)
    }
 }
 
@@ -238,7 +239,7 @@ export function compileActiveRelicItem(scope: Scope, relic: ActiveRelicItem): Ac
    return {
       ...itemBase,
       cooldown,
-      activateEvents
+      activateEvents: compileEventSeries(scope, activateEvents)
    }
 }
 
@@ -247,7 +248,7 @@ export function compilePassiveRelicItem(scope: Scope, relic: PassiveRelicItem): 
    const { onAddedEvents } = relic
    return {
       ...itemBase,
-      onAddedEvents
+      onAddedEvents: compileEventSeries(scope, onAddedEvents)
    }
 }
 
@@ -310,7 +311,7 @@ export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
          ident: mDisplayItemId(scope, item.ident),
          text: compileTranslatable(scope, item.text),
          tooltip: compileTranslatable(scope, item.tooltip),
-         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
+         events: compileEventSeries(scope, item.events)!
       }
    } else /* if (isMenu(item)) */ {
       const menu = <Menu>item
@@ -341,7 +342,8 @@ export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialog
          ...option,
 
          text: compileTranslatable(scope, option.text),
-         tooltip: compileTranslatable(scope, option.tooltip)
+         tooltip: compileTranslatable(scope, option.tooltip),
+         onClickEvents: compileEventSeries(scope, option.onClickEvents)!
       }
    }
 
