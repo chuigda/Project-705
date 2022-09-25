@@ -4,9 +4,9 @@
 }
 
 主科技能赛道: dict[str, list[str]] = {
-    '语文': [],
-    '数学': [],
-    '英语': [],
+    '语文': [None, '拼音', '识字写字', '古诗', '作文', '写小说', '文言文', '名著', '文学基础', '高级应试语文', '语文非常规技巧'],
+    '数学': [None, '四则运算', '代数初步', '认识几何', '概率', '函数', '奥数', '逻辑学', '数学压轴题', '高级应试数学', '数学非常规技巧'],
+    '英语': [None, '字母与音标', '英语单词', '简单会话', '英语语法', '英语听力', '阅读理解', '英语作文', '英语做题速度', '高级应试英语', '英语非常规技巧'],
     '文科': [],
     '理科': []
 }
@@ -24,6 +24,7 @@ def 赛道初始技能等级(skill_lane: list[str]) -> int:
     for (i, skill_name) in enumerate(skill_lane):
         if skill_name is not None:
             return i
+    return 0
 
 
 class 可用技能:
@@ -44,7 +45,7 @@ class 可用技能:
         self.所属赛道类别 = 所属赛道类别
 
     def __str__(self):
-        return '(' + self.技能名 + ', ' + str(self.等级) + ', ' + str(self.基础消耗) + ',' + str(self.实际消耗) + ')'
+        return '(' + self.技能名 + ', ' + str(self.等级) + ', ' + str(self.基础消耗) + ', ' + str(self.实际消耗) + ')'
 
 
 def get_实际开销(available_skill: 可用技能):

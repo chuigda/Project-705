@@ -11,6 +11,8 @@ def 主函数():
 
     for 条目 in 上下文.技能学习记录:
         print(条目)
+    print(上下文.属性曲线)
+    print(上下文.累计技能点曲线)
 
 
 if __name__ == '__main__':
