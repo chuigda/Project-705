@@ -11,7 +11,7 @@ import {
    mModifierId,
    mDisplayItemId,
    mVarName,
-   isTranslationKey
+   isTranslationKey, mStoreItemId
 } from '@app/base/uid'
 import {
    PotentialExpression,
@@ -20,17 +20,21 @@ import {
 } from '@app/ruleset/items/potential'
 import { ItemBase } from '@app/ruleset/items/item_base'
 import {
+   ActiveRelicItem,
    Activity,
-   AscensionPerk,
+   AscensionPerk, ConsumableItem,
    Event,
    MaybeInlineEvent,
-   Modifier,
+   Modifier, PassiveRelicItem,
    PlayerModifier,
-   PlayerModifierGen,
+   PlayerModifierGen, RechargeableItem,
    Skill,
    SkillPointCostModifier,
    SkillPointCostModifierGen,
-   Startup
+   Startup,
+   StoreItem,
+   StoreItemKind,
+   TradableItem
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'
 import { MaybeTranslatable } from '@app/base/translation'
@@ -91,12 +95,21 @@ export function compileMaybeInlineEvent(scope: Scope, event: MaybeInlineEvent): 
    }
 }
 
+export function compileEventSeries(scope: Scope, eventSeries?: MaybeInlineEvent[]): MaybeInlineEvent[] | undefined {
+   if (!eventSeries) {
+      return undefined
+   }
+   return eventSeries.map(event => compileMaybeInlineEvent(scope, event))
+}
+
 export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): ItemBase {
-   const { ident, name, description } = item
+   const { ident, name, description, scope: itemScope, patch } = item
    return {
       ident: mangler(scope, ident),
       name: mTranslationKey(scope, name),
-      description: mTranslationKey(scope, description)
+      description: mTranslationKey(scope, description),
+      scope: itemScope || scope,
+      patch
    }
 }
 
@@ -111,9 +124,9 @@ export function compileSkill(scope: Scope, skill: Skill): Skill {
       }
    })
    const activities = skill.activities?.map(activity => mActivityId(scope, activity))
-   const events = skill.events?.map(event => compileMaybeInlineEvent(scope, event))
+   const events = compileEventSeries(scope, skill.events)
 
-   const { category, cost, patch } = skill
+   const { category, cost } = skill
    return {
       ...itemBase,
       category,
@@ -122,36 +135,28 @@ export function compileSkill(scope: Scope, skill: Skill): Skill {
       potential,
       activities,
       events,
-
-      scope,
-      patch
    }
 }
 
 export function compileStartup(scope: Scope, startup: Startup): Startup {
    const itemBase = compileBase(scope, startup, mStartupId)
 
-   const events = startup.events?.map(event => compileMaybeInlineEvent(scope, event))
-
-   const { patch, player, modifier } = startup
+   const events = compileEventSeries(scope, startup.events)
+   const { player, modifier } = startup
    return {
       ...itemBase,
 
       player,
       modifier: modifier ? mModifierId(scope, modifier) : undefined,
-      events,
-
-      scope,
-      patch
+      events
    }
 }
 
 export function compileActivity(scope: Scope, activity: Activity): Activity {
    const itemBase = compileBase(scope, activity, mActivityId)
 
-   const events = activity.events?.map(event => compileMaybeInlineEvent(scope, event))
-
-   const { category, level, output, energyCost, patch } = activity
+   const events = compileEventSeries(scope, activity.events)
+   const { category, level, output, energyCost } = activity
    return {
       ...itemBase,
 
@@ -160,10 +165,7 @@ export function compileActivity(scope: Scope, activity: Activity): Activity {
 
       energyCost,
       events,
-      output,
-
-      scope,
-      patch
+      output
    }
 }
 
@@ -173,28 +175,89 @@ export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk)
    const potential = ascensionPerk.potential?.map(
       ascensionPerkPotential => compilePotentialExpression(scope, ascensionPerkPotential)
    )
-   const events = ascensionPerk.events?.map(event => compileMaybeInlineEvent(scope, event))
+   const events = compileEventSeries(scope, ascensionPerk.events)
 
-   const { modifier, patch } = ascensionPerk
+   const { modifier } = ascensionPerk
    return {
       ...itemBase,
 
       potential,
       modifier: modifier ? mModifierId(scope, modifier) : undefined,
-      events,
-
-      scope,
-      patch
+      events
    }
 }
 
 export function compileEvent(scope: Scope, event: Event): Event {
    const ident = mEventId(scope, event.ident)
-
    return {
       ident,
       scope,
       event: event.event
+   }
+}
+
+export function compileStoreItemBase<IKS extends StoreItemKind>(
+   scope: Scope,
+   storeItem: StoreItem<IKS>
+): StoreItem<IKS> {
+   const itemBase = compileBase(scope, storeItem, mStoreItemId)
+   const { kind, level, price, energyCost } = storeItem
+   return {
+      ...itemBase,
+      kind,
+      level: level || 'normal',
+      price,
+      energyCost
+   }
+}
+
+export function compileConsumableItem(scope: Scope, consumable: ConsumableItem): ConsumableItem {
+   const itemBase = compileStoreItemBase(scope, consumable)
+   const { initCharge, consumeEvents } = consumable
+   return {
+      ...itemBase,
+      initCharge: initCharge || 1,
+      consumeEvents: compileEventSeries(scope, consumeEvents)
+   }
+}
+
+export function compileRechargeableItem(scope: Scope, rechargeable: RechargeableItem): RechargeableItem {
+   const itemBase = compileStoreItemBase(scope, rechargeable)
+   const { initCharge, maxCharge, onAddedEvents, consumeEvents } = rechargeable
+   return {
+      ...itemBase,
+      initCharge: initCharge || 1,
+      maxCharge: maxCharge || 1,
+      onAddedEvents: compileEventSeries(scope, onAddedEvents),
+      consumeEvents: compileEventSeries(scope, consumeEvents)
+   }
+}
+
+export function compileActiveRelicItem(scope: Scope, relic: ActiveRelicItem): ActiveRelicItem {
+   const itemBase = compileStoreItemBase(scope, relic)
+   const { cooldown, activateEvents } = relic
+   return {
+      ...itemBase,
+      cooldown,
+      activateEvents: compileEventSeries(scope, activateEvents)
+   }
+}
+
+export function compilePassiveRelicItem(scope: Scope, relic: PassiveRelicItem): PassiveRelicItem {
+   const itemBase = compileStoreItemBase(scope, relic)
+   const { onAddedEvents } = relic
+   return {
+      ...itemBase,
+      onAddedEvents: compileEventSeries(scope, onAddedEvents)
+   }
+}
+
+export function compileTradableItem(scope: Scope, tradable: TradableItem): TradableItem {
+   const itemBase = compileStoreItemBase(scope, tradable)
+   const { sellValue } = tradable
+   return {
+      ...itemBase,
+      sellValue
    }
 }
 
@@ -228,17 +291,13 @@ export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modi
    }
 
    const itemBase = compileBase(scope, modifier, mModifierId)
-
-   const { player, skillPointCost, patch } = modifier
+   const { player, skillPointCost } = modifier
 
    return {
       ...itemBase,
 
       player: compilePlayerModifier(player),
       skillPointCost: compileSkillPointCostModifier(skillPointCost),
-
-      scope,
-      patch
    }
 }
 
@@ -252,7 +311,7 @@ export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
          ident: mDisplayItemId(scope, item.ident),
          text: compileTranslatable(scope, item.text),
          tooltip: compileTranslatable(scope, item.tooltip),
-         events: item.events.map(event => compileMaybeInlineEvent(scope, event))
+         events: compileEventSeries(scope, item.events)!
       }
    } else /* if (isMenu(item)) */ {
       const menu = <Menu>item
@@ -283,7 +342,8 @@ export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialog
          ...option,
 
          text: compileTranslatable(scope, option.text),
-         tooltip: compileTranslatable(scope, option.tooltip)
+         tooltip: compileTranslatable(scope, option.tooltip),
+         onClickEvents: compileEventSeries(scope, option.onClickEvents)!
       }
    }
 

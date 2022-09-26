@@ -10,7 +10,7 @@ export type PlayerPropertyUpdatedSignal = Signal & { property: string }
 export type TurnsSignal = Signal & { turns: number, trigger: 'turn_start' | 'turn_over' }
 export type EventSignal = Signal & { eventId: string }
 
-export const signals = {
+export const signals: Record<string, (...args: any[]) => Signal> = {
    turnStart: (): Signal => ({ signalType: 'turn_start' }),
    turnOver: (): Signal => ({ signalType: 'turn_over' }),
    skillLearnt: (skillId: string): SkillSignal => ({

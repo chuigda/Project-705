@@ -150,6 +150,47 @@ const modifierAssertion = {
    skillPointCost: 'object'.sumWith('function').orNull()
 }
 
+const storeItemBaseAssertion = {
+   ...baseAssertion,
+   level: 'string'.chainWith(x => ['normal', 'rare', 'epic', 'legend', 'myth'].includes(x)),
+   price: 'number?',
+   energyCost: 'number?'
+}
+
+const consumableItemAssertion = {
+   ...storeItemBaseAssertion,
+   kind: 'string'.assertValue('consumable'),
+   initCharge: 'number?',
+   consumeEvents: eventSeriesAssertion.orNull()
+}
+
+const rechargeableItemAssertion = {
+   ...storeItemBaseAssertion,
+   kind: 'string'.assertValue('rechargeable'),
+   initCharge: 'number?',
+   maxCharge: 'number?',
+   consumeEvents: eventSeriesAssertion.orNull()
+}
+
+const activeRelicItemAssertion = {
+   ...storeItemBaseAssertion,
+   kind: 'string'.assertValue('active_relic'),
+   cooldown: 'number',
+   activateEvents: eventSeriesAssertion.orNull()
+}
+
+const passiveRelicItemAssertion = {
+   ...storeItemBaseAssertion,
+   kind: 'string'.assertValue('passive_relic'),
+   onAddedEvents: eventSeriesAssertion.orNull()
+}
+
+const tradableItemAssertion = {
+   ...storeItemBaseAssertion,
+   kind: 'string'.assertValue('tradable'),
+   sellValue: 'number'.sumWith('function')
+}
+
 const ruleSetAssertion = {
    ident: {
       author: 'string',

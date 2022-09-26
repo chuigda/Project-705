@@ -1,22 +1,29 @@
 /* eslint-disable import/no-named-as-default-member */
 
 import { Ident, Scope } from '@app/base/uid'
-import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
-import { Activity } from '@app/ruleset/items/activity'
-import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
-import { CompiledRuleSet } from '@app/loader'
-import { PotentialExpression } from '@app/ruleset/items/potential'
-import { MaybeInlineEvent } from '@app/ruleset/items/event'
-import { ValueSource } from '@app/ruleset/items/modifier'
-import { PropertyOp } from '@app/ruleset/ops'
 import {
+   ActiveRelicItem,
+   Activity,
+   AscensionPerk,
    BubbleMessageTemplate,
    Button,
+   ConsumableItem,
    CustomScoreBoard,
-   Menu,
-   SimpleDialogTemplate
-} from '@app/ruleset/items/ui'
+   MaybeInlineEvent,
+   Menu, PassiveRelicItem,
+   PotentialExpression,
+   PropertyOp,
+   RechargeableItem,
+   SimpleDialogTemplate,
+   Skill,
+   SkillCategoryId,
+   SkillCost,
+   SkillPotential,
+   TradableItem,
+   ValueSource
+} from '@app/ruleset'
 
+import { CompiledRuleSet } from '@app/loader'
 import computeFunctions, {
    ComputedAscensionPerks,
    ComputedModifier,
@@ -33,7 +40,6 @@ import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
 import modifierFunctions from '@app/executor/modifier'
-import { SkillCategoryId } from '@app/ruleset'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -42,6 +48,66 @@ export class PlayerAttributes {
    memorization: number = 0
    imagination: number = 0
    charisma: number = 0
+}
+
+export class PlayerConsumableItem {
+   readonly item: ConsumableItem
+   totalChargeLevel: number
+
+   constructor(item: ConsumableItem, count?: number) {
+      this.item = item
+      this.totalChargeLevel = (count || 1) * item.initCharge!
+   }
+}
+
+export class PlayerRechargeableItem {
+   readonly item: RechargeableItem
+   chargeLevel: number
+
+   constructor(item: RechargeableItem, chargeLevel: number) {
+      this.item = item
+      this.chargeLevel = chargeLevel
+   }
+
+   recharge(chargeLevel?: number) {
+      chargeLevel = chargeLevel || 1
+      this.chargeLevel = Math.max(this.chargeLevel + chargeLevel, this.item.maxCharge!)
+   }
+}
+
+export class PlayerActiveRelicItem {
+   readonly item: ActiveRelicItem
+   cooldown: number
+
+   constructor(item: ActiveRelicItem) {
+      this.item = item
+      this.cooldown = 0
+   }
+
+   reload() {
+      this.cooldown -= 1
+      if (this.cooldown <= 0) {
+         this.cooldown = 0
+      }
+   }
+}
+
+export class PlayerTradableItem {
+   readonly item: TradableItem
+   count: number
+
+   constructor(item: TradableItem, count?: number) {
+      this.item = item
+      this.count = count || 1
+   }
+}
+
+export class PlayerItems {
+   consumableItems: Record<string, PlayerConsumableItem> = {}
+   rechargeableItems: Record<string, PlayerRechargeableItem> = {}
+   activeRelicItems: Record<string, PlayerActiveRelicItem> = {}
+   passiveRelicItems: Record<string, PassiveRelicItem> = {}
+   tradableItems: Record<string, PlayerTradableItem> = {}
 }
 
 export class PlayerStatus {
@@ -53,6 +119,7 @@ export class PlayerStatus {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    ascensionPerkSlots: number = 0
+   items: PlayerItems = new PlayerItems()
 
    energy: number = 0
    energyMax: number = 150
@@ -98,11 +165,22 @@ export class GameContextEvents {
    timedEvents: TimedEvent[] = []
 }
 
+export class ShopStatus {
+   shopEnabled: boolean = false
+
+   consumableItems: Record<string, number> = {}
+   rechargeableItems: Record<string, number> = {}
+   activeRelicItems: Record<string, number> = {}
+   passiveRelicItems: Record<string, number> = {}
+   tradableItems: Record<string, number> = {}
+}
+
 export class GameState {
    startup: string = ''
 
    turns: number = 0
    player: PlayerStatus = new PlayerStatus()
+   shop: ShopStatus = new ShopStatus()
 
    events: GameContextEvents = new GameContextEvents()
    modifiers: Set<string> = new Set()
@@ -127,6 +205,7 @@ export class PlayerStatusUpdateTracker {
    activities: boolean = false
    ascensionPerks: boolean = false
    ascensionPerkSlots: boolean = false
+   items: boolean = false
 
    any(): boolean {
       return this.properties
@@ -134,11 +213,13 @@ export class PlayerStatusUpdateTracker {
          || this.activities
          || this.ascensionPerks
          || this.ascensionPerkSlots
+         || this.items
    }
 }
 
 export class UpdateTracker {
    player: PlayerStatusUpdateTracker = new PlayerStatusUpdateTracker()
+   shop: boolean = false
 
    modifiers: boolean = false
    variables: boolean = false
@@ -156,6 +237,7 @@ export class UpdateTracker {
 
    reset(): void {
       this.player = new PlayerStatusUpdateTracker()
+      this.shop = false
 
       this.modifiers = false
       this.variables = false

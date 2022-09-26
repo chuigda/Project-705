@@ -7,15 +7,34 @@ import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
 import { CustomUI } from '@app/ruleset/items/ui'
 import { Modifier } from '@app/ruleset/items/modifier'
+import {
+   ActiveRelicItem,
+   ConsumableItem,
+   PassiveRelicItem,
+   RechargeableItem,
+   TradableItem
+} from '@app/ruleset/items/store_item'
 
 export * from '@app/base/uid'
+export * from '@app/ruleset/ops'
 export * from '@app/ruleset/items/category'
+export * from '@app/ruleset/items/potential'
 export * from '@app/ruleset/items/skill'
 export * from '@app/ruleset/items/startup'
 export * from '@app/ruleset/items/modifier'
 export * from '@app/ruleset/items/activity'
 export * from '@app/ruleset/items/ascension_perk'
+export * from '@app/ruleset/items/store_item'
 export * from '@app/ruleset/items/event'
+export * from '@app/ruleset/items/ui'
+
+export interface RuleSetStoreItems {
+   consumableItems?: ConsumableItem[]
+   rechargeableItems?: RechargeableItem[]
+   activeRelicItems?: ActiveRelicItem[]
+   passiveRelicItems?: PassiveRelicItem[]
+   tradableItems?: TradableItem[]
+}
 
 export interface RuleSet {
    readonly ident: Scope
@@ -28,6 +47,7 @@ export interface RuleSet {
    readonly modifiers?: Modifier[]
    readonly activities?: Activity[]
    readonly ascensionPerks?: AscensionPerk[]
+   readonly storeItems?: RuleSetStoreItems
    readonly events?: Event[]
    readonly translations?: Record<string, Record<string, string>>
    readonly ui?: CustomUI
