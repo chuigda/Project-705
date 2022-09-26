@@ -42,7 +42,7 @@ export function giveRechargeableItem(gameContext: GameContext, itemId: Ident, ch
       return
    }
 
-   chargeLevel = chargeLevel || item.maxCharge!
+   chargeLevel = chargeLevel || item.initCharge || item.maxCharge!
    if (gameContext.state.player.items.rechargeableItems[identString]) {
       console.warn(`[W] [giveRechargeableItem] player already has '${identString}', supplying charge level instead`)
       const currentChargeLevel = gameContext.state.player.items.rechargeableItems[identString].chargeLevel
@@ -107,15 +107,11 @@ export function giveTradableItem(gameContext: GameContext, itemId: Ident, count?
    }
 }
 
-export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, count?: number) {}
-
 export function useConsumableItem(gameContext: GameContext, itemId: Ident) {}
 
 export function useRechargeableItem(gameContext: GameContext, itemId: Ident) {}
 
 export function useActiveRelicItem(gameContext: GameContext, itemId: Ident) {}
-
-export function sellTradableItem(gameContext: GameContext, itemId: Ident) {}
 
 export function rechargeItem(gameContext: GameContext, itemId: Ident, chargeLevel?: number) {}
 
@@ -150,3 +146,15 @@ export function removeItemFromShop(gameContext: GameContext, itemId: Ident, kind
 
    removeItemFromShopImpl(kindToFieldMapping[kind])
 }
+
+export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, count?: number) {}
+
+export function purchaseRechargeableItem(gameContext: GameContext, itemId: Ident, count?: number) {}
+
+export function purchaseActiveRelicItem(gameContext: GameContext, itemId: Ident) {}
+
+export function purchasePassiveRelicItem(gameContext: GameContext, itemId: Ident) {}
+
+export function purchaseTradableItem(gameContext: GameContext, itemId: Ident) {}
+
+export function sellTradableItem(gameContext: GameContext, itemId: Ident) {}
