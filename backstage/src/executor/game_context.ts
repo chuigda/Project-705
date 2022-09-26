@@ -86,7 +86,7 @@ export class PlayerActiveRelicItem {
 
    reload() {
       this.cooldown -= 1
-      if (this.cooldown === 0) {
+      if (this.cooldown <= 0) {
          this.cooldown = 0
       }
    }
