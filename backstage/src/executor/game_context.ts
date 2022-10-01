@@ -18,7 +18,7 @@ import {
    Skill,
    SkillCategoryId,
    SkillCost,
-   SkillPotential,
+   SkillPotential, StoreItemKind,
    TradableItem,
    ValueSource
 } from '@app/ruleset'
@@ -40,6 +40,7 @@ import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import activityFunctions from '@app/executor/activity'
 import modifierFunctions from '@app/executor/modifier'
+import storeItemFunctions, { addItemToShop, removeItemFromShop } from '@app/executor/store_item'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -322,10 +323,6 @@ export class GameContext {
       grantFunctions.learnSkill(this, skill)
    }
 
-   grantSkill(skill: Ident) {
-      grantFunctions.grantSkill(this, skill)
-   }
-
    addAscensionPerkSlot(count: number) {
       ascensionPerkFunctions.addAscensionPerkSlot(this, count)
    }
@@ -334,8 +331,36 @@ export class GameContext {
       ascensionPerkFunctions.activateAscensionPerk(this, ascensionPerk)
    }
 
-   performActivity(activity: Ident) {
-      activityFunctions.performActivity(this, activity)
+   giveConsumableItem(itemId: Ident, count?: number) {
+      storeItemFunctions.giveConsumableItem(this, itemId, count)
+   }
+
+   giveRechargeableItem(itemId: Ident, chargeLevel?: number) {
+      storeItemFunctions.giveRechargeableItem(this, itemId, chargeLevel)
+   }
+
+   giveActiveRelicItem(itemId: Ident) {
+      storeItemFunctions.giveActiveRelicItem(this, itemId)
+   }
+
+   givePassiveRelicItem(itemId: Ident) {
+      storeItemFunctions.givePassiveRelicItem(this, itemId)
+   }
+
+   giveTradableItem(itemId: Ident, count?: number) {
+      storeItemFunctions.giveTradableItem(this, itemId, count)
+   }
+
+   rechargeItem(itemId: Ident, chargeLevel?: number) {
+      storeItemFunctions.rechargeItem(this, itemId, chargeLevel)
+   }
+
+   addItemToShop(itemId: Ident, kind: StoreItemKind, count?: number) {
+      storeItemFunctions.addItemToShop(this, itemId, kind, count)
+   }
+
+   removeItemFromShop(itemId: Ident, kind: StoreItemKind) {
+      storeItemFunctions.removeItemFromShop(this, itemId, kind)
    }
 
    updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: ValueSource) {
