@@ -12,6 +12,7 @@ import epSendSnapshot from '@app/server/endpoints/snapshot'
 import epGetTranslation from '@app/server/endpoints/translation'
 import epActivateAscensionPerk from '@app/server/endpoints/ascension_perk'
 import epGetStartups from '@app/server/endpoints/startup'
+import { epPurchaseItem, epUseItem } from '@app/server/endpoints/store_item'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 
@@ -65,15 +66,19 @@ function applicationStart() {
 
    app.use(express.json())
 
-   app.post('/api/newGame', verifyAccessToken, epInitGame)
+   app.post('/api/new_game', verifyAccessToken, epInitGame)
 
    app.get('/api/snapshot', verifyGameContext, epSendSnapshot)
 
-   app.post('/api/nextTurn', verifyGameContext, epNextTurn)
+   app.post('/api/next_turn', verifyGameContext, epNextTurn)
 
-   app.post('/api/learnSkill', verifyGameContext, epLearnSkill)
+   app.post('/api/learn_skill', verifyGameContext, epLearnSkill)
 
    app.post('/api/ascension', verifyGameContext, epActivateAscensionPerk)
+
+   app.post('/api/purchase_item', verifyGameContext, epPurchaseItem)
+
+   app.post('/api/use_item', verifyGameContext, epUseItem)
 
    app.get('/api/startups', epGetStartups)
 
