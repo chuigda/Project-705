@@ -2,7 +2,7 @@ import { Ident, mActivityId } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
 import { updatePlayerProperty } from '@app/executor/properties'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
-import { popScope, pushScope, triggerEvent } from '@app/executor/events'
+import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 
 export function performActivity(gameContext: GameContext, activity: Ident) {
@@ -53,19 +53,7 @@ export function performActivity(gameContext: GameContext, activity: Ident) {
       recomputeSkillCosts(gameContext)
    }
 
-   if (activityContent.events) {
-      if (activityContent.scope) {
-         pushScope(gameContext, activityContent.scope)
-      }
-
-      for (const event of activityContent.events) {
-         triggerEvent(gameContext, event)
-      }
-
-      if (activityContent.scope) {
-         popScope(gameContext)
-      }
-   }
+   triggerEventSeries(gameContext, activityContent.events, activityContent.scope)
 }
 
 const activityFunctions = {

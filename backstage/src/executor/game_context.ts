@@ -169,10 +169,10 @@ export class ShopStatus {
    shopEnabled: boolean = false
 
    consumableItems: Record<string, number> = {}
-   rechargeableItems: Record<string, number> = {}
-   activeRelicItems: Record<string, number> = {}
-   passiveRelicItems: Record<string, number> = {}
    tradableItems: Record<string, number> = {}
+   rechargeableItems: Set<string> = new Set()
+   activeRelicItems: Set<string> = new Set()
+   passiveRelicItems: Set<string> = new Set()
 }
 
 export class GameState {

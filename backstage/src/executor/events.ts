@@ -82,6 +82,22 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
    }
 }
 
+export function triggerEventSeries(gameContext: GameContext, events?: MaybeInlineEvent[], scope?: Scope) {
+   if (scope) {
+      pushScope(gameContext, scope)
+   }
+
+   if (events) {
+      for (const event of events) {
+         triggerEvent(gameContext, event)
+      }
+   }
+
+   if (scope) {
+      popScope(gameContext)
+   }
+}
+
 export default {
    triggerEvent
 }
