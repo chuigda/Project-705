@@ -1,14 +1,31 @@
 <template>
-   <div class="menu">
-      <div v-for="(item, idx) in items"
-           :key="idx">
-         [ ]
+   <div :class="['menu',{'expand':expand}]">
+      <div class="item" v-for="(item, idx) in items" :key="idx">
+         <img class="menu-icon" :src="menuIcons[item.icon]" :alt="item.text">
+         <span class="menu-text">{{item.text}}</span>
+      </div>
+      <div class="item no-text">
+         <img class="menu-icon" @click="expand_menu" :src="menuIcons[expand?'expand_menu':'retract_menu']" alt="icon">
       </div>
    </div>
 </template>
 
 <script setup lang="ts">
-const items = Array(6)
+import menuIcons from '@app/assets/components/hud'
+import { ref } from 'vue'
+interface menuItem { icon: keyof typeof menuIcons, text: string }
+const expand = ref(false)
+const expand_menu = () => {
+   expand.value = !expand.value
+}
+const items: menuItem[] = [
+   { icon: 'ascension_perk', text: '飞升' },
+   { icon: 'learn_skill', text: '学习' },
+   { icon: 'diplomacy', text: '外交' },
+   { icon: 'item_storage', text: '道具' },
+   { icon: 'shop', text: '商店' },
+   { icon: 'debug', text: '调试' },
+];
 </script>
 
 <style>
@@ -24,11 +41,37 @@ const items = Array(6)
    border-radius: 0 0 4px 0;
    border: 1px solid var(--color-hud-border);
    background-color: var(--color-hud-bg);
+   overflow: hidden;
+   transition: width 0.2s ease-in-out;
+
+   --icon-size: 22px;
 }
 
-.menu>div {
-   width: 22px;
-   height: 22px;
+.menu.expand {
+   width: 66px;
+}
+
+.menu .item {
+   display: flex;
+   height: var(--icon-size);
    padding: 4px;
+   width: 58px;
+}
+
+.menu .item.no-text {
+   width: auto;
+   flex-direction: row-reverse;
+}
+
+.menu .menu-icon {
+   width: var(--icon-size);
+   height: var(--icon-size);
+   cursor: pointer;
+}
+
+.menu .menu-text {
+   margin-left: 6px;
+   color: black;
+   cursor: pointer;
 }
 </style>
