@@ -12,4 +12,5 @@ backstage/*/dist*
 */dist/
 
 *.d.ts
+!env.d.ts
 */__pycache__/*
