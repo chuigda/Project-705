@@ -1,42 +1,39 @@
 <template>
    <div class="status-box">
-      <div v-for="(item, idx) in attributeItems"
-           :key="idx"
-           class="status-item">
-         <AttrIcon class="icon"
-                   :type="item[1]"
-         />
+      <div v-for="(item, idx) in attributeItems" :key="idx" class="status-item">
+         <AttrIcon class="icon" :type="item[1]" />
          <span>{{ item[0] }}</span>
          <span class="value">{{ item[2] }}(+{{ item[3] }})</span>
       </div>
 
       <div class="status-item">
-         <AttrIcon class="icon"
-                   type="satisfactory"
-         />
+         <AttrIcon class="icon" type="satisfactory" />
          <span class="label">评价</span>
          <span class="value"> {{ props.playerStatus.satisfactory }} </span>
       </div>
 
-      <div class="status-item">
-         <span>▲ 其他</span>
-         <!-- TODO send custom scoreboard to frontend -->
+      <div class="status-item" style="cursor: pointer;" @click="expand=!expand">
+         <img class="icon" :src="expand?menuIcons.retract_more:menuIcons.expand_more" alt="icon">
+         <span class="label">其他</span>
          <span class="value"> {{ 114514 }} </span>
       </div>
+
+      <Transition>
+         <div class="other-items" v-if="expand">
+            <div v-for="(item, idx) in otherItems" :key="idx">
+               {{item[0]}}
+               <div class="value">{{item[1]}}</div>
+            </div>
+         </div>
+      </Transition>
    </div>
    <div class="status-bar">
-      <div v-for="(e, i) in injured"
-           :key="i"
-           :class="['record', {'injured': e}]"
-           :style="`left: ${4+30*i}px`"
-           title="你只能犯两次错误，再多一次你就寄了"
-      />
-      <div class="energy-bg"
-           :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`">
+      <div v-for="(e, i) in injured" :key="i" :class="['record', {'injured': e}]" :style="`left: ${4+30*i}px`"
+         title="你只能犯两次错误，再多一次你就寄了" />
+      <div class="energy-bg" :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`">
          <div class="energy-bar"
-              :style="`width: ${rescale(props.playerStatus.mentalHealth, props.playerStatus.mentalHealthMax)}%`"
-              :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
-         />
+            :style="`width: ${rescale(props.playerStatus.mentalHealth, props.playerStatus.mentalHealthMax)}%`"
+            :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`" />
       </div>
    </div>
 </template>
@@ -45,8 +42,11 @@
 
 import { IPlayerAttributes, IPlayerStatus } from '@protocol/index'
 import AttrIcon from '@app/components/icon/attr_icon.vue'
+import menuIcons from '@app/assets/components/hud'
+import { ref, Transition } from 'vue'
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
+const expand = ref(false)
 
 const itemKeys: [string, keyof IPlayerAttributes][] = [
    ['智商', 'intelligence'],
@@ -66,12 +66,19 @@ const attributeItems = itemKeys.map(itemKey => {
       props.playerStatus.talent![field]
    ]
 })
+const otherItems = [
+   ['还无法说出我爱你', 3141],
+   ['因为我还不敢确定', 5926],
+   ['山盟海誓的重力', 5358],
+   ['是不是会拖垮我', 9793],
+   ['濒临透明的身躯', 2384],
+]
 
 const injured = Array(3).fill(true)
 
 const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    const x = mentalHealth / mentalHealthMax
-   const r = 0.4 * x**3 - 0.6 * x**2 + 1.2 * x
+   const r = 0.4 * x ** 3 - 0.6 * x ** 2 + 1.2 * x
    return r * 100
 }
 
@@ -119,6 +126,36 @@ const rescale = (mentalHealth: number, mentalHealthMax: number) => {
 .status-item .value {
    flex-grow: 1;
    text-align: right;
+}
+
+.other-items {
+   position: absolute;
+   width: 156px;
+   border: 1px solid var(--color-hud-border);
+   background-color: var(--color-hud-bg);
+   border-radius: 2px;
+   font-size: 13px;
+   line-height: 1.5em;
+   left: 497px;
+   top: 62px;
+   overflow: hidden;
+   /* max-height够用就行 */
+   max-height: 200px;
+   transition: max-height 0.2s ease-in-out;
+}
+
+.other-items.v-enter-from,
+.other-items.v-leave-to {
+   max-height: 0;
+}
+
+.other-items>div {
+   text-align: left;
+   padding: 0 4px;
+}
+
+.other-items .value {
+   float: right;
 }
 
 .status-bar {

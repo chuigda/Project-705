@@ -1,25 +1,25 @@
 <template>
    <div class="triforce">
       <div>
-         <div>[img]</div>
+         <TriforceIcon type="energy"></TriforceIcon>
          <div>
             {{ props.playerStatus.energy }} / {{ props.playerStatus.energyMax }}
          </div>
       </div>
       <div>
-         <div>[img]</div>
+         <TriforceIcon type="skillPoints"></TriforceIcon>
          <div> {{ props.playerStatus.skillPoints }} </div>
       </div>
       <div>
-         <div>[img]</div>
+         <TriforceIcon type="money"></TriforceIcon>
          <div> {{ props.playerStatus.money }} </div>
       </div>
    </div>
 </template>
 
 <script setup lang="ts">
-
 import { IPlayerStatus } from '@protocol/index'
+import TriforceIcon from '../icon/triforce_icon.vue'
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
 
