@@ -1,17 +1,20 @@
 <template>
-   <HUDVue :player-status="playerStatus" />
+   <!-- <HUDVue :player-status="playerStatus" />
    <StandardButton
       style="position: absolute; left: 300px; top: 300px; height: 26px"
       text="测试按钮"
       @click="testClick"
-   />
+   /> -->
+   <Choose_startup/>
 </template>
 
 <script setup lang="ts">
+import ChooseStartup from '@app/views/choose_startup.vue'
 import HUDVue from '@app/components/hud/hud.vue'
 import StandardButton from '@app/components/standard_button.vue'
-import { IPlayerStatus } from '@protocol/index'
 
+import Choose_startup from '@app/components/choose_startup/choose_startup.vue';
+import { IPlayerStatus } from '@protocol/index'
 const playerStatus: IPlayerStatus = {
    attributes: {
       strength: 114514,
