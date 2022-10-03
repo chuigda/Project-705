@@ -3,6 +3,7 @@
       <img :src="imageUrl"
            alt="icon"
            :class="`attr-icon attr-icon-${props.type}`"
+           draggable="false"
       >
    </div>
 </template>

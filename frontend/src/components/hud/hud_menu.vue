@@ -1,16 +1,30 @@
 <template>
    <div :class="['menu',{'expand':expand}]">
-      <div class="item" v-for="(item, idx) in items" :key="idx">
-         <img class="menu-icon" :src="menuIcons[item.icon]" :alt="item.text">
-         <span class="menu-text">{{item.text}}</span>
+      <div v-for="(item, idx) in items"
+           :key="idx"
+           class="item">
+         <img class="menu-icon"
+              :src="menuIcons[item.icon]"
+              :alt="item.text"
+              draggable="false"
+         >
+         <span class="menu-text">
+            {{ item.text }}
+         </span>
       </div>
       <div class="item no-text">
-         <img class="menu-icon" @click="expand_menu" :src="menuIcons[expand?'expand_menu':'retract_menu']" alt="icon">
+         <img class="menu-icon"
+              :src="menuIcons[expand?'expand_menu':'retract_menu']"
+              alt="icon"
+              draggable="false"
+              @click="expand_menu"
+         >
       </div>
    </div>
 </template>
 
 <script setup lang="ts">
+
 import menuIcons from '@app/assets/components/hud'
 import { ref } from 'vue'
 interface menuItem { icon: keyof typeof menuIcons, text: string }
@@ -24,8 +38,9 @@ const items: menuItem[] = [
    { icon: 'diplomacy', text: '外交' },
    { icon: 'item_storage', text: '道具' },
    { icon: 'shop', text: '商店' },
-   { icon: 'debug', text: '调试' },
-];
+   { icon: 'debug', text: '调试' }
+]
+
 </script>
 
 <style>
@@ -34,7 +49,7 @@ const items: menuItem[] = [
    display: flex;
    flex-direction: column;
    top: 95px;
-   left: 0px;
+   left: 0;
    width: 30px;
    color: white;
    font-size: 13px;
@@ -42,9 +57,10 @@ const items: menuItem[] = [
    border: 1px solid var(--color-hud-border);
    background-color: var(--color-hud-bg);
    overflow: hidden;
-   transition: width 0.2s ease-in-out;
+   transition: width 0.15s ease-in-out;
 
    --icon-size: 22px;
+   user-select: none;
 }
 
 .menu.expand {
@@ -74,4 +90,10 @@ const items: menuItem[] = [
    color: black;
    cursor: pointer;
 }
+
+.menu .item:hover {
+   background: var(--color-hud-border);
+   color: var(--color-hud-text);
+}
+
 </style>

@@ -1,15 +1,19 @@
 <template>
    <div class="triforce-icon-container">
-      <img :src="imageUrl" alt="icon" :class="`triforce-icon triforce-icon-${props.type}`">
+      <img :src="imageUrl"
+           alt="icon"
+           :class="`triforce-icon triforce-icon-${props.type}`"
+           draggable="false"
+      >
    </div>
 </template>
- 
+
 <script setup lang="ts">
 import triforceIcons from '@app/assets/common/triforce'
 const props = defineProps<{ type: 'energy' | 'money' | 'skillPoints' }>()
 const imageUrl = triforceIcons[props.type]
 </script>
- 
+
 <style>
 .triforce-icon-container {
    --icon-size: 40px;

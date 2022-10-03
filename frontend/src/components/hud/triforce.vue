@@ -1,17 +1,17 @@
 <template>
    <div class="triforce">
       <div>
-         <TriforceIcon type="energy"></TriforceIcon>
+         <TriforceIcon type="energy" />
          <div>
             {{ props.playerStatus.energy }} / {{ props.playerStatus.energyMax }}
          </div>
       </div>
       <div>
-         <TriforceIcon type="skillPoints"></TriforceIcon>
+         <TriforceIcon type="skillPoints" />
          <div> {{ props.playerStatus.skillPoints }} </div>
       </div>
       <div>
-         <TriforceIcon type="money"></TriforceIcon>
+         <TriforceIcon type="money" />
          <div> {{ props.playerStatus.money }} </div>
       </div>
    </div>
@@ -31,7 +31,7 @@ const props = defineProps<{ playerStatus: IPlayerStatus }>()
    display: flex;
    top: 0;
    left: 757px;
-   color: white;
+   color: black;
    font-size: 13px;
 }
 
@@ -42,6 +42,8 @@ const props = defineProps<{ playerStatus: IPlayerStatus }>()
    background-color: var(--color-hud-bg);
    width: 64px;
    height: 64px;
+
+   user-select: none;
 }
 
 .triforce>div:last-child {
