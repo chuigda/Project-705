@@ -152,7 +152,7 @@ const modifierAssertion = {
 
 const storeItemBaseAssertion = {
    ...baseAssertion,
-   level: 'string'.chainWith(x => ['normal', 'rare', 'epic', 'legend', 'myth'].includes(x)),
+   level: 'string?'.chainWith(x => ['normal', 'rare', 'epic', 'legend', 'myth'].includes(x)),
    price: 'number?',
    energyCost: 'number?'
 }
@@ -188,7 +188,15 @@ const passiveRelicItemAssertion = {
 const tradableItemAssertion = {
    ...storeItemBaseAssertion,
    kind: 'string'.assertValue('tradable'),
-   sellValue: 'number'.sumWith('function')
+   sellValue: 'number'
+}
+
+const storeItemsAssertion = {
+   consumableItems: [consumableItemAssertion].orNull(),
+   rechargeableItems: [rechargeableItemAssertion].orNull(),
+   activeRelicItems: [activeRelicItemAssertion].orNull(),
+   passiveRelicItems: [passiveRelicItemAssertion].orNull(),
+   tradableItems: [tradableItemAssertion].orNull()
 }
 
 const ruleSetAssertion = {

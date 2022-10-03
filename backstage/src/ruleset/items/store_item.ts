@@ -1,6 +1,5 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset'
-import { GameContext } from '@app/executor/game_context'
 
 export type StoreItemKind =
    'consumable'
@@ -45,5 +44,5 @@ export interface PassiveRelicItem extends StoreItem<'passive_relic'> {
 }
 
 export interface TradableItem extends StoreItem<'tradable'> {
-   sellValue: number | ((gameContext: GameContext) => number)
+   sellValue: number
 }

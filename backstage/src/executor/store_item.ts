@@ -1,5 +1,5 @@
 import {
-   GameContext, GameContextEvents,
+   GameContext,
    PlayerActiveRelicItem,
    PlayerConsumableItem,
    PlayerRechargeableItem, PlayerStatus,
@@ -15,6 +15,7 @@ import {
    StoreItemKind, TradableItem
 } from '@app/ruleset'
 import { triggerEventSeries } from '@app/executor/events'
+import { updatePlayerProperty } from '@app/executor/properties'
 
 const kindToFieldMapping: Record<StoreItemKind, keyof RuleSetStoreItems> = {
    'consumable': 'consumableItems',
@@ -25,6 +26,7 @@ const kindToFieldMapping: Record<StoreItemKind, keyof RuleSetStoreItems> = {
 }
 
 function addConsumableItemImpl(gameContext: GameContext, item: ConsumableItem, identString: string, count: number) {
+   gameContext.updateTracker.player.items = true
    if (gameContext.state.player.items.consumableItems[identString]) {
       gameContext.state.player.items.consumableItems[identString].totalChargeLevel += count
    } else {
@@ -38,6 +40,7 @@ function addRechargeableItemImpl(
    identString: string,
    chargeLevel: number
 ) {
+   gameContext.updateTracker.player.items = true
    if (gameContext.state.player.items.rechargeableItems[identString]) {
       console.warn(`[W] [addRechargeableItemImpl] player already has '${identString}', supplying charge level instead`)
       const currentChargeLevel = gameContext.state.player.items.rechargeableItems[identString].chargeLevel
@@ -50,6 +53,7 @@ function addRechargeableItemImpl(
 }
 
 function addActiveRelicItemImpl(gameContext: GameContext, item: ActiveRelicItem, identString: string) {
+   gameContext.updateTracker.player.items = true
    if (gameContext.state.player.items.activeRelicItems[identString]) {
       console.warn(`[W] [addActiveRelicItemImpl] player already has '${identString}', resetting its cooldown`)
       gameContext.state.player.items.activeRelicItems[identString].cooldown = 0
@@ -59,6 +63,7 @@ function addActiveRelicItemImpl(gameContext: GameContext, item: ActiveRelicItem,
 }
 
 function addPassiveRelicItemImpl(gameContext: GameContext, item: PassiveRelicItem, identString: string) {
+   gameContext.updateTracker.player.items = true
    if (gameContext.state.player.items.passiveRelicItems[identString]) {
       console.warn(`[W] [addPassiveRelicItemImpl] player already has '${identString}', re-triggering its events`)
    } else {
@@ -69,6 +74,7 @@ function addPassiveRelicItemImpl(gameContext: GameContext, item: PassiveRelicIte
 }
 
 function addTradableItemImpl(gameContext: GameContext, item: TradableItem, identString: string, count: number) {
+   gameContext.updateTracker.player.items = true
    if (gameContext.state.player.items.tradableItems[identString]) {
       gameContext.state.player.items.tradableItems[identString].count += count
    } else {
@@ -144,6 +150,7 @@ export function useConsumableItem(gameContext: GameContext, itemId: Ident) {
       return
    }
 
+   gameContext.updateTracker.player.items = true
    triggerEventSeries(gameContext, playerItem.item.consumeEvents, playerItem.item.scope)
    playerItem.totalChargeLevel -= 1
    if (playerItem.totalChargeLevel === 0) {
@@ -164,6 +171,7 @@ export function useRechargeableItem(gameContext: GameContext, itemId: Ident) {
       return
    }
 
+   gameContext.updateTracker.player.items = true
    triggerEventSeries(gameContext, playerItem.item.consumeEvents)
    playerItem.chargeLevel -= 1
 }
@@ -181,6 +189,7 @@ export function useActiveRelicItem(gameContext: GameContext, itemId: Ident) {
       return
    }
 
+   gameContext.updateTracker.player.items = true
    triggerEventSeries(gameContext, playerItem.item.activateEvents)
    playerItem.cooldown = playerItem.item.cooldown
 }
@@ -195,6 +204,7 @@ export function rechargeItem(gameContext: GameContext, itemId: Ident, chargeLeve
       return
    }
 
+   gameContext.updateTracker.player.items = true
    playerItem.chargeLevel += chargeLevel
    if (playerItem.item.maxCharge && playerItem.chargeLevel > playerItem.item.maxCharge) {
       playerItem.chargeLevel = playerItem.item.maxCharge
@@ -209,6 +219,7 @@ export function addItemToShop(gameContext: GameContext, itemId: Ident, kind: Sto
          return
       }
 
+      gameContext.updateTracker.shop = true
       if (gameContext.state.shop[k] instanceof Set) {
          if (count && count !== 1) {
             console.warn('[W] [addItemToShop] relic items and rechargeable items are considered unique')
@@ -236,6 +247,7 @@ export function removeItemFromShop(gameContext: GameContext, itemId: Ident, kind
          return
       }
 
+      gameContext.updateTracker.shop = true
       if (gameContext.state.shop[k] instanceof Set) {
          const shop = <Set<string>>gameContext.state.shop[k]
          shop.delete(identString)
@@ -370,16 +382,10 @@ export function sellTradableItem(gameContext: GameContext, itemId: Ident, count?
       return
    }
 
+   gameContext.updateTracker.player.items = true
    playerItem.count -= count
-   if (playerItem.item.sellValue) {
-      let sellValue: number
-      if (playerItem.item.sellValue instanceof Function) {
-         sellValue = playerItem.item.sellValue(gameContext) * count
-      } else {
-         sellValue = playerItem.item.sellValue * count
-      }
-      gameContext.state.player.money += Math.ceil(sellValue)
-   }
+   const sellValue = playerItem.item.sellValue * count
+   updatePlayerProperty(gameContext, 'money', 'add', Math.ceil(sellValue))
    if (playerItem.count === 0) {
       delete gameContext.state.player.items.tradableItems[identString]
    }
