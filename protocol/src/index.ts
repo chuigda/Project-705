@@ -1,166 +1,18 @@
-export type ITranslationKey = string
+import {
+   ITranslationKey
+} from './translation'
+import {IPartialPlayerAttributes, IPlayerStatus} from "./player";
+import {IComputedAscensionPerks, IComputedSkills} from "./computed";
 
-export interface IComposedTranslatable {
-   template: ITranslationKey,
-   args: Record<string, ITranslatable>
-}
-
-export type ITranslatable = ITranslationKey | IComposedTranslatable
-
-export type ITranslation = Record<string, string>
-
-export interface IPlayerAttributes {
-   strength: number
-   intelligence: number
-   emotionalIntelligence: number
-   memorization: number
-   imagination: number
-   charisma: number
-}
-
-export interface IPartialPlayerAttributes {
-   strength?: number
-   intelligence?: number
-   emotionalIntelligence?: number
-   memorization?: number
-   imagination?: number
-   charisma?: number
-}
-
-export interface ISkillCost {
-   base: number
-   attributes?: IPartialPlayerAttributes
-}
-
-export interface ISkillOutput {
-   attributes: IPartialPlayerAttributes
-}
-
-export interface ISkill {
-   ident: string
-   name: ITranslationKey
-   description: ITranslationKey
-
-   category?: string
-   cost: ISkillCost
-   output?: ISkillOutput
-   activities?: string[]
-}
-
-export interface IActivityOutput {
-   attributes?: IPartialPlayerAttributes
-   skillPoints?: number
-   mentalHealth?: number
-   satisfactory?: number
-   money?: number
-}
-
-export interface IActivity {
-   ident: string
-   name: ITranslationKey
-   description: ITranslationKey
-
-   category: string
-   level: number
-   output?: IActivityOutput
-}
-
-export interface IAscensionPerk {
-   ident: string
-   name: ITranslationKey
-   description: ITranslationKey
-}
-
-export interface IPlayerStatus {
-   attributes?: IPlayerAttributes
-   talent?: IPlayerAttributes
-
-   energy?: number
-   energyMax?: number
-   skillPoints?: number
-   skills?: ISkill[]
-   activities?: IActivity[]
-   ascensionPerks?: IAscensionPerk[]
-   ascensionPerkSlots: number
-
-   mentalHealth?: number
-   mentalHealthMax?: number
-   satisfactory?: number
-   money?: number
-   moneyPerTurn?: number
-}
-
-export interface IPotentialFunctionResult {
-   type: 'fn'
-   result: boolean
-   description: ITranslatable
-}
-
-export interface IPotentialLogicOpResult {
-   type: 'logicOp'
-   result: boolean
-   resultPieces: IPotentialResult[]
-}
-
-export interface IHasSkillOrNot {
-   type: 'skill'
-   result: boolean
-   skillId: string
-   skillName: ITranslationKey
-}
-
-export type IPotentialResult = IPotentialFunctionResult | IPotentialLogicOpResult
-
-export type ISkillPotentialResult = IPotentialResult | IHasSkillOrNot
-
-export interface IAvailableSkill {
-   skill: ISkill
-   cost: number
-}
-
-export interface IUnavailableSkill {
-   skill: ISkill
-   resultPieces: ISkillPotentialResult[]
-}
-
-export interface IComputedSkills {
-   available: IAvailableSkill[]
-   unavailable: IUnavailableSkill[]
-}
-
-export interface IUnavailableAscensionPerk {
-   ascensionPerk: IAscensionPerk
-   resultPieces: IPotentialResult[]
-}
-
-export interface IComputedAscensionPerks {
-   available: IAscensionPerk[]
-   unavailable: IUnavailableAscensionPerk[]
-}
-
-export interface IButton {
-   ident: string
-
-   text: ITranslatable
-   tooltip: ITranslatable
-}
-
-export interface IDialogOption {
-   optionKey: string
-
-   text: ITranslatable
-   tooltip: ITranslatable
-   danger: boolean
-}
-
-export interface ISimpleDialog {
-   uid: string
-
-   title: ITranslatable
-   text: ITranslatable
-   options: IDialogOption[]
-   display: boolean
-}
+export * from './activity'
+export * from './ascension_perk'
+export * from './computed'
+export * from './player'
+export * from './potential'
+export * from './skill'
+export * from './startup'
+export * from './translation'
+export * from './ui'
 
 export interface IGameState {
    startup: string
@@ -182,15 +34,6 @@ export interface IStartupPlayerProperties {
    skillPoints?: number
    money?: number
    moneyPerTurn?: number
-}
-
-export interface IStartup {
-   ident: string,
-   name: ITranslationKey,
-   description: ITranslationKey,
-
-   player?: IStartupPlayerProperties
-   modifier?: object
 }
 
 export interface IResponseSuccess<R> {
