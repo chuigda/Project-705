@@ -3,6 +3,7 @@ import { IGameState } from '@protocol/index'
 
 import { sendComputedAscensionPerks, sendComputedSkills } from './computed'
 import { sendPlayerStatus } from './player'
+import { sendShopStatus } from './shop'
 
 export { sendStartup } from './startup'
 
@@ -12,6 +13,7 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          startup: gs.startup,
          turns: gs.turns,
          player: sendPlayerStatus(gs.player, undefined),
+         shop: sendShopStatus(gs.shop),
 
          modifiers: [...gs.modifiers],
          variables: gs.variables,
@@ -28,6 +30,7 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          startup: gs.startup,
          turns: gs.turns,
          player: updateTracker.player.any() ? sendPlayerStatus(gs.player, updateTracker.player) : undefined,
+         shop: updateTracker.shop ? sendShopStatus(gs.shop) : undefined,
 
          modifiers: updateTracker.modifiers ? [...gs.modifiers] : undefined,
          variables: updateTracker.variables ? gs.variables : undefined,

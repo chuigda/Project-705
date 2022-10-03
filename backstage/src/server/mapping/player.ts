@@ -1,10 +1,26 @@
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
-import { IPartialPlayerAttributes, IPlayerAttributes, IPlayerStatus } from '@protocol/player'
-import { PlayerAttributes, PlayerStatus, PlayerStatusUpdateTracker } from '@app/executor/game_context'
+import {
+   IPartialPlayerAttributes,
+   IPlayerAttributes,
+   IPlayerStatus,
+   IPlayerItems, IPlayerConsumableItem, IPlayerRechargeableItem, IPlayerActiveRelicItem, IPlayerTradableItem
+} from '@protocol/player'
+import {
+   PlayerAttributes,
+   PlayerStatus,
+   PlayerStatusUpdateTracker,
+   PlayerItems, PlayerConsumableItem, PlayerRechargeableItem, PlayerActiveRelicItem, PlayerTradableItem
+} from '@app/executor/game_context'
 
 import { sendActivity } from './activity'
-import { sendSkill } from './skill'
 import { sendAscensionPerk } from './ascension_perk'
+import { sendSkill } from './skill'
+import {
+   sendActiveRelicItem,
+   sendConsumableItem, sendPassiveRelicItem,
+   sendRechargeableItem,
+   sendTradableItem
+} from './store_item'
 
 export function sendPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPartialPlayerAttributes {
    return {
@@ -25,6 +41,52 @@ export function sendPlayerAttributes(pa: PlayerAttributes): IPlayerAttributes {
       memorization: pa.memorization,
       imagination: pa.imagination,
       charisma: pa.charisma
+   }
+}
+
+export function sendPlayerConsumableItem(playerItem: PlayerConsumableItem): IPlayerConsumableItem {
+   const { item, totalChargeLevel } = playerItem
+   return {
+      item: sendConsumableItem(item),
+      totalChargeLevel
+   }
+}
+
+export function sendPlayerRechargeableItem(playerItem: PlayerRechargeableItem): IPlayerRechargeableItem {
+   const { item, chargeLevel } = playerItem
+   return {
+      item: sendRechargeableItem(item),
+      chargeLevel
+   }
+}
+
+export function sendPlayerActiveRelicItem(playerItem: PlayerActiveRelicItem): IPlayerActiveRelicItem {
+   const { item, cooldown } = playerItem
+   return {
+      item: sendActiveRelicItem(item),
+      cooldown
+   }
+}
+
+export function sendPlayerTradableItem(playerItem: PlayerTradableItem): IPlayerTradableItem {
+   const { item, count } = playerItem
+   return {
+      item: sendTradableItem(item),
+      count
+   }
+}
+
+export function sendPlayerItems(items: PlayerItems): IPlayerItems {
+   function sendItems<T, U>(series: Record<string, T>, fn: (t: T) => U): U[] {
+      return Object.values(series).map(fn)
+   }
+
+   return {
+      consumableItems: sendItems(items.consumableItems, sendPlayerConsumableItem),
+      rechargeableItems: sendItems(items.rechargeableItems, sendPlayerRechargeableItem),
+      activeRelicItems: sendItems(items.activeRelicItems, sendPlayerActiveRelicItem),
+      passiveRelicItems: sendItems(items.passiveRelicItems, sendPassiveRelicItem),
+      tradableItems: sendItems(items.tradableItems, sendPlayerTradableItem)
    }
 }
 
@@ -52,7 +114,8 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
          mentalHealthMax: ps.mentalHealthMax,
          satisfactory: ps.satisfactory,
          money: ps.money,
-         moneyPerTurn: ps.moneyPerTurn
+         moneyPerTurn: ps.moneyPerTurn,
+         items: sendPlayerItems(ps.items)
       }
    } else {
       return {
@@ -69,7 +132,7 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
          activities: updateTracker.activities ? sendActivities(ps.activities) : undefined,
          ascensionPerks: updateTracker.ascensionPerks ? sendAscensionPerks(ps.ascensionPerks) : undefined,
          ascensionPerkSlots: ps.ascensionPerkSlots,
+         items: updateTracker.items ? sendPlayerItems(ps.items) : undefined
       }
    }
 }
-

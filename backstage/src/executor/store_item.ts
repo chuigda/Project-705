@@ -3,7 +3,7 @@ import {
    PlayerActiveRelicItem,
    PlayerConsumableItem,
    PlayerRechargeableItem, PlayerStatus,
-   PlayerTradableItem
+   PlayerTradableItem, ShopItem
 } from '@app/executor/game_context'
 import { Ident, mStoreItemId } from '@app/base/uid'
 import {
@@ -212,52 +212,55 @@ export function rechargeItem(gameContext: GameContext, itemId: Ident, chargeLeve
 }
 
 export function addItemToShop(gameContext: GameContext, itemId: Ident, kind: StoreItemKind, count?: number) {
-   function addItemToShopImpl(k: keyof RuleSetStoreItems) {
-      const identString = mStoreItemId(gameContext.scope!, itemId)
-      if (!gameContext.ruleSet.storeItems[k][identString]) {
-         console.error(`[E] [addItemToShop] shop item '${identString}' of kind '${kind}' does not exist`)
-         return
-      }
+   const k = kindToFieldMapping[kind]
 
-      gameContext.updateTracker.shop = true
-      if (gameContext.state.shop[k] instanceof Set) {
+   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const item = gameContext.ruleSet.storeItems[k][identString]
+   if (!item) {
+      console.error(`[E] [addItemToShop] shop item '${identString}' of kind '${kind}' does not exist`)
+      return
+   }
+
+   gameContext.updateTracker.shop = true
+   switch (kind) {
+      case 'consumable':
+      case 'tradable': {
+         const shop = <Record<string, ShopItem<StoreItem<any>>>>gameContext.state.shop[k]
+         if (!shop[identString]) {
+            shop[identString] = new ShopItem(item, count)
+         } else {
+            shop[identString].count += (count || 1)
+         }
+         break
+      }
+      case 'rechargeable':
+      case 'active_relic':
+      case 'passive_relic': {
          if (count && count !== 1) {
             console.warn('[W] [addItemToShop] relic items and rechargeable items are considered unique')
          }
-         const shop = <Set<string>>gameContext.state.shop[k]
-         shop.add(identString)
-      } else {
-         const shop = <Record<string, number>>gameContext.state.shop[k]
+         const shop = <Record<string, StoreItem<any>>>gameContext.state.shop[k]
          if (shop[identString]) {
-            shop[identString] += (count || 1)
-         } else {
-            shop[identString] = (count || 1)
+            console.warn(`[W] [addItemToShop] item '${identString}' already exists in shop`)
          }
+         shop[identString] = item
+         break
       }
    }
-
-   addItemToShopImpl(kindToFieldMapping[kind])
 }
 
 export function removeItemFromShop(gameContext: GameContext, itemId: Ident, kind: StoreItemKind) {
-   function removeItemFromShopImpl(k: keyof RuleSetStoreItems) {
-      const identString = mStoreItemId(gameContext.scope!, itemId)
-      if (!gameContext.ruleSet.storeItems[k][identString]) {
-         console.error(`[E] [removeItemFromShop] shop item '${identString}' of kind '${kind}' does not exist`)
-         return
-      }
+   const k = kindToFieldMapping[kind]
 
-      gameContext.updateTracker.shop = true
-      if (gameContext.state.shop[k] instanceof Set) {
-         const shop = <Set<string>>gameContext.state.shop[k]
-         shop.delete(identString)
-      } else {
-         const shop = <Record<string, number>>gameContext.state.shop[k]
-         delete shop[identString]
-      }
+   const identString = mStoreItemId(gameContext.scope!, itemId)
+   if (!gameContext.ruleSet.storeItems[k][identString]) {
+      console.error(`[E] [removeItemFromShop] shop item '${identString}' of kind '${kind}' does not exist`)
+      return
    }
 
-   removeItemFromShopImpl(kindToFieldMapping[kind])
+   gameContext.updateTracker.shop = true
+   const shop = <Record<string, any>>gameContext.state.shop[k]
+   delete shop[identString]
 }
 
 function checkPrice<IKS extends StoreItemKind>(player: PlayerStatus, item: StoreItem<IKS>, count?: number) {
@@ -275,7 +278,7 @@ export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, 
    count = count || 1
 
    const identString = mStoreItemId(gameContext.scope!, itemId)
-   const shopItemCount = gameContext.state.shop.consumableItems[identString]
+   const shopItemCount = gameContext.state.shop.consumableItems[identString].count
    if (!shopItemCount) {
       console.error(`[E] [purchaseConsumableItem] item '${identString}' does not exist`)
       return
@@ -291,63 +294,64 @@ export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, 
       return
    }
 
-   gameContext.state.shop.consumableItems[identString] -= count
+   gameContext.state.shop.consumableItems[identString].count -= count
    addConsumableItemImpl(gameContext, item, identString, count)
 }
 
 export function purchaseRechargeableItem(gameContext: GameContext, itemId: Ident) {
    const identString = mStoreItemId(gameContext.scope!, itemId)
-   if (!gameContext.state.shop.rechargeableItems.has(identString)) {
+   const item = gameContext.state.shop.rechargeableItems[identString]
+   if (!item) {
       console.error(`[E] [purchaseRechargeableItem] item '${identString}' does not exist`)
       return
    }
 
-   const item = gameContext.ruleSet.storeItems.rechargeableItems[identString]
    if (!checkPrice(gameContext.state.player, item)) {
       return
    }
 
-   gameContext.state.shop.rechargeableItems.delete(identString)
+   delete gameContext.state.shop.rechargeableItems[identString]
    addRechargeableItemImpl(gameContext, item, identString, item.initCharge!)
 }
 
 export function purchaseActiveRelicItem(gameContext: GameContext, itemId: Ident) {
    const identString = mStoreItemId(gameContext.scope!, itemId)
-   if (!gameContext.state.shop.activeRelicItems.has(identString)) {
+   const item = gameContext.state.shop.activeRelicItems[identString]
+
+   if (!item) {
       console.error(`[E] [purchaseActiveRelicItem] item '${identString}' does not exist`)
       return
    }
 
-   const item = gameContext.ruleSet.storeItems.activeRelicItems[identString]
    if (!checkPrice(gameContext.state.player, item)) {
       return
    }
 
-   gameContext.state.shop.activeRelicItems.delete(identString)
    addActiveRelicItemImpl(gameContext, item, identString)
+   delete gameContext.state.shop.activeRelicItems[identString]
 }
 
 export function purchasePassiveRelicItem(gameContext: GameContext, itemId: Ident) {
    const identString = mStoreItemId(gameContext.scope!, itemId)
-   if (!gameContext.state.shop.passiveRelicItems.has(identString)) {
+   const item = gameContext.state.shop.passiveRelicItems[identString]
+   if (!item) {
       console.error(`[E] [purchasePassiveRelicItem] item '${identString}' does not exist`)
       return
    }
 
-   const item = gameContext.ruleSet.storeItems.passiveRelicItems[identString]
    if (!checkPrice(gameContext.state.player, item)) {
       return
    }
 
-   gameContext.state.shop.passiveRelicItems.delete(identString)
    addPassiveRelicItemImpl(gameContext, item, identString)
+   delete gameContext.state.shop.passiveRelicItems[identString]
 }
 
 export function purchaseTradableItem(gameContext: GameContext, itemId: Ident, count?: number) {
    count = count || 1
 
    const identString = mStoreItemId(gameContext.scope!, itemId)
-   const shopItemCount = gameContext.state.shop.tradableItems[identString]
+   const shopItemCount = gameContext.state.shop.tradableItems[identString].count
    if (!shopItemCount) {
       console.error(`[E] [purchaseTradableItem] item '${identString}' does not exist`)
       return
@@ -363,7 +367,7 @@ export function purchaseTradableItem(gameContext: GameContext, itemId: Ident, co
       return
    }
 
-   gameContext.state.shop.tradableItems[identString] -= count
+   gameContext.state.shop.tradableItems[identString].count -= count
    addTradableItemImpl(gameContext, item, identString, count)
 }
 

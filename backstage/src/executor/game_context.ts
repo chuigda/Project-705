@@ -18,7 +18,7 @@ import {
    Skill,
    SkillCategoryId,
    SkillCost,
-   SkillPotential, StoreItemKind,
+   SkillPotential, StoreItem, StoreItemKind,
    TradableItem,
    ValueSource
 } from '@app/ruleset'
@@ -166,14 +166,24 @@ export class GameContextEvents {
    timedEvents: TimedEvent[] = []
 }
 
+export class ShopItem<T extends StoreItem<any>> {
+   readonly item: T
+   count: number
+
+   constructor(item: T, count?: number) {
+      this.item = item
+      this.count = count || 1
+   }
+}
+
 export class ShopStatus {
    shopEnabled: boolean = false
 
-   consumableItems: Record<string, number> = {}
-   tradableItems: Record<string, number> = {}
-   rechargeableItems: Set<string> = new Set()
-   activeRelicItems: Set<string> = new Set()
-   passiveRelicItems: Set<string> = new Set()
+   consumableItems: Record<string, ShopItem<ConsumableItem>> = {}
+   tradableItems: Record<string, ShopItem<TradableItem>> = {}
+   rechargeableItems: Record<string, RechargeableItem> = {}
+   activeRelicItems: Record<string, ActiveRelicItem> = {}
+   passiveRelicItems: Record<string, PassiveRelicItem> = {}
 }
 
 export class GameState {

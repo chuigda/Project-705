@@ -1,19 +1,9 @@
+import { IStoreItemKind, IStoreItemLevel } from '@protocol/index'
 import { ItemBase } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset'
 
-export type StoreItemKind =
-   'consumable'
-   | 'rechargeable'
-   | 'active_relic'
-   | 'passive_relic'
-   | 'tradable'
-
-export type StoreItemLevel =
-   'normal'
-   | 'rare'
-   | 'epic'
-   | 'legend'
-   | 'myth'
+export type StoreItemKind = IStoreItemKind
+export type StoreItemLevel = IStoreItemLevel
 
 export interface StoreItem<ItemKindString extends StoreItemKind> extends ItemBase {
    kind: ItemKindString
