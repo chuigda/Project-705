@@ -38,9 +38,8 @@ import propertyFunctions from '@app/executor/properties'
 import variableFunctions from '@app/executor/variables'
 import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
-import activityFunctions from '@app/executor/activity'
 import modifierFunctions from '@app/executor/modifier'
-import storeItemFunctions, { addItemToShop, removeItemFromShop } from '@app/executor/store_item'
+import storeItemFunctions from '@app/executor/store_item'
 
 export class PlayerAttributes {
    strength: number = 0
