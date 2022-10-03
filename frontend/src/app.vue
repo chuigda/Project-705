@@ -1,9 +1,15 @@
 <template>
    <HUDVue :player-status="playerStatus" />
+   <StandardButton
+      style="position: absolute; left: 300px; top: 300px; height: 26px"
+      text="测试按钮"
+      @click="testClick"
+   />
 </template>
 
 <script setup lang="ts">
 import HUDVue from '@app/components/hud/hud.vue'
+import StandardButton from '@app/components/standard_button.vue'
 import { IPlayerStatus } from '@protocol/index'
 
 const playerStatus: IPlayerStatus = {
@@ -34,6 +40,10 @@ const playerStatus: IPlayerStatus = {
    satisfactory: 500,
 
    ascensionPerkSlots: 1
+}
+
+function testClick() {
+   alert('bullshit!')
 }
 </script>
 
