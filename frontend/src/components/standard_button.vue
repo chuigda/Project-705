@@ -39,6 +39,7 @@ function onClick(e: Event) {
    display: flex;
    align-items: center;
    justify-content: center;
+   cursor: pointer;
 }
 
 .standard-button:hover {
