@@ -5,16 +5,15 @@
       text="测试按钮"
       @click="testClick"
    /> -->
-   <Choose_startup/>
+   <ChooseStartup />
 </template>
 
 <script setup lang="ts">
 import ChooseStartup from '@app/views/choose_startup.vue'
 import HUDVue from '@app/components/hud/hud.vue'
 import StandardButton from '@app/components/standard_button.vue'
-
-import Choose_startup from '@app/components/choose_startup/choose_startup.vue';
 import { IPlayerStatus } from '@protocol/index'
+
 const playerStatus: IPlayerStatus = {
    attributes: {
       strength: 114514,
