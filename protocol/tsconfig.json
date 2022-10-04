@@ -3,6 +3,7 @@
       "declaration": true,
       "declarationMap": true,
       "rootDir": ".",
+      "outDir": "dist",
       "composite": true,
       "lib": ["es2015"]
    },
