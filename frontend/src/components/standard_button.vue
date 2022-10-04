@@ -20,7 +20,9 @@ const props = defineProps<{
 const emit = defineEmits<{ (event: 'click', jsEvent: Event): void }>()
 
 function onClick(e: Event) {
-   emit('click', e)
+   if (!props.disabled) {
+      emit('click', e)
+   }
 }
 
 </script>

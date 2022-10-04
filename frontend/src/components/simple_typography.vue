@@ -1,6 +1,6 @@
 <template>
    <div class="simple-typography">
-      <div v-for="(chunk, idx) in chunks"
+      <div v-for="(chunk, idx) in props.text.split('\n')"
            :key="`chunk-${idx}`">
          {{ chunk }}
          <span class="non-selectable-span">&nbsp;</span>
@@ -11,7 +11,6 @@
 <script setup lang="ts">
 
 const props = defineProps<{ text: string }>()
-const chunks = props.text.split('\n')
 
 </script>
 

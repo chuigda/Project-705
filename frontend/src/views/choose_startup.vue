@@ -2,49 +2,60 @@
    <div class="choose-startup-container">
       <div class="left">
          <div class="startup-button-list">
-            <div v-for="(text, idx) in textList"
-                 :key="`startup-${idx}`"
-                 class="button">
-               <StandardButton class="startup-button"
-                               :text="text"
-               />
-            </div>
+            <StandardButton v-for="startup in startups"
+                            :key="startup.ident"
+                            class="startup-button"
+                            :text="translate(startup.name)"
+                            :toggled="chosenStartup === startup"
+                            @click="chooseStartup(startup)"
+            />
          </div>
       </div>
       <div class="right">
-         <div class="choose-startup-title">
+         <div v-if="chosenStartup"
+              class="choose-startup-title">
+            {{ translate(chosenStartup.name) }}
+         </div>
+         <div v-if="!chosenStartup"
+              class="choose-startup-title">
             选择一个起源以开始游戏
          </div>
-         <SimpleTypography class="choose-startup-content" :text="funnyText"/>
+         <SimpleTypography class="choose-startup-content"
+                           :text="chosenStartupDesc"
+         />
          <StandardButton class="start-game-button"
                          text="开始游戏"
+                         :disabled="!chosenStartup"
+                         @click="startGame"
          />
       </div>
    </div>
 </template>
 
 <script setup lang="ts">
+import { Ref, onMounted, ref } from 'vue'
+
+import { IStartup } from '@protocol/index'
 import StandardButton from '@app/components/standard_button.vue'
 import SimpleTypography from '@app/components/simple_typography.vue'
+import { getStartups } from '@app/api'
+import { translate } from '@app/util/translation'
 
-import { ref } from 'vue'
-const textList = ref([
-   '化身为人',
-   '天赋异禀',
-   '寒窗苦读',
-   '第四天灾',
-   '化身为人'
-])
+const startups: Ref<IStartup[]> = ref([])
+const chosenStartup: Ref<IStartup | undefined> = ref(undefined)
+const chosenStartupDesc: Ref<string> = ref('')
 
-const funnyText =
-   '不要存档接着打，\n'
-   + '奇观太多落地几个啦？\n'
-   + '在工业区建什么？\n'
-   + '你丫别踩我的小地格\n'
-   + ' \n'
-   + '可爱的羊巴鲁\n'
-   + '刚好拿下菌菇\n'
-   + '就把你给毙了'
+function chooseStartup(startup: IStartup) {
+   chosenStartup.value = startup
+   chosenStartupDesc.value = translate(startup.description)
+}
+
+function startGame() {
+}
+
+onMounted(async () => {
+   startups.value = await getStartups()
+})
 
 </script>
 

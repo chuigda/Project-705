@@ -1,12 +1,13 @@
-const api = {
-   closeDialog: async (dialogId: string) => {
-      const r = await fetch(`/api/dialog/${dialogId}/close`, {
-         method: 'POST',
-         body: JSON.stringify({ dialogId  })
-      })
-      return await r.json()
+import { IStartup } from '@protocol/index'
+
+export async function getStartups(): Promise<IStartup[]> {
+   const r = await fetch('/api/startups', { method: 'GET' })
+   const { success, message, result } = await r.json()
+   if (!success) {
+      // TODO 遇到致命错误
+      console.error(message)
+      return []
    }
+
+   return <IStartup[]>result
 }
-
-
-export default api
