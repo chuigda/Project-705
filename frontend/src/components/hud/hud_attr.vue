@@ -153,6 +153,7 @@ const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    width: 156px;
    border: 1px solid var(--color-hud-border);
    background-color: var(--color-hud-bg);
+   color: black;
    border-radius: 2px;
    font-size: 13px;
    line-height: 1.5em;

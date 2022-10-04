@@ -92,8 +92,7 @@ const items: menuItem[] = [
 }
 
 .menu .item:hover {
-   background: var(--color-hud-border);
-   color: var(--color-hud-text);
+   background: #FFE7CC;
 }
 
 </style>
