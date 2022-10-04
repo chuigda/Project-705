@@ -13,14 +13,14 @@
       </div>
       <div class="right">
          <div v-if="chosenStartup"
-              class="choose-startup-title">
+              class="chosen-startup-title">
             {{ translate(chosenStartup.name) }}
          </div>
          <div v-if="!chosenStartup"
-              class="choose-startup-title">
+              class="chosen-startup-title">
             选择一个起源以开始游戏
          </div>
-         <SimpleTypography class="choose-startup-content"
+         <SimpleTypography class="chosen-startup-content"
                            :text="chosenStartupDesc"
          />
          <StandardButton class="start-game-button"
@@ -36,10 +36,10 @@
 import { Ref, onMounted, ref } from 'vue'
 
 import { IStartup } from '@protocol/index'
-import StandardButton from '@app/components/standard_button.vue'
-import SimpleTypography from '@app/components/simple_typography.vue'
 import { getStartups } from '@app/api'
 import { translate } from '@app/util/translation'
+import StandardButton from '@app/components/standard_button.vue'
+import SimpleTypography from '@app/components/simple_typography.vue'
 
 const startups: Ref<IStartup[]> = ref([])
 const chosenStartup: Ref<IStartup | undefined> = ref(undefined)
@@ -103,7 +103,7 @@ onMounted(async () => {
    row-gap: 4px;
 }
 
-.choose-startup-title {
+.chosen-startup-title {
    height: 24px;
 
    box-sizing: border-box;
@@ -118,7 +118,7 @@ onMounted(async () => {
    font-size: 14px;
 }
 
-.choose-startup-content {
+.chosen-startup-content {
    flex-grow: 1;
    flex-shrink: 0;
 
@@ -135,10 +135,6 @@ onMounted(async () => {
 
 .start-game-button {
    height: 26px;
-}
-
-.choose-startup-content>div{
-   margin-bottom: 18px;
 }
 
 *::-webkit-scrollbar {
