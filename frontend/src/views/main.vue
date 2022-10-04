@@ -1,10 +1,16 @@
 <template>
-   <HUDVue :player-status="playerStatus" />
+   <HUDVue :player-status="playerStatus"
+           @menu="handleMenuClick"
+   />
+   <DebugView :display="showDebugView" />
 </template>
 
 <script setup lang="ts">
-import HUDVue from '@app/components/hud/hud.vue'
+import { ref } from 'vue'
+
 import { IPlayerStatus } from '@protocol/index'
+import HUDVue from '@app/components/hud/hud.vue'
+import DebugView from '@app/components/debug_view.vue'
 
 const playerStatus: IPlayerStatus = {
    attributes: {
@@ -34,6 +40,14 @@ const playerStatus: IPlayerStatus = {
    satisfactory: 500,
 
    ascensionPerkSlots: 1
+}
+
+const showDebugView = ref(false)
+
+function handleMenuClick(ident: string) {
+   if (ident === 'debug') {
+      showDebugView.value = !showDebugView.value
+   }
 }
 
 </script>

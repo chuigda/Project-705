@@ -20,7 +20,7 @@
            style="cursor: pointer;"
            @click="expand=!expand">
          <img class="icon"
-              :src="expand?menuIcons.retract_more:menuIcons.expand_more"
+              :src="expand ? menuIcons.retract_more : menuIcons.expand_more"
               alt="icon"
          >
          <span class="label">其他</span>

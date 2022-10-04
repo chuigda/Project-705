@@ -2,7 +2,8 @@
    <div :class="['menu',{'expand':expand}]">
       <div v-for="(item, idx) in items"
            :key="idx"
-           class="item">
+           class="item"
+           @click="emitMenuMessage(item.ident)">
          <img class="menu-icon"
               :src="menuIcons[item.icon]"
               :alt="item.text"
@@ -14,7 +15,7 @@
       </div>
       <div class="item no-text">
          <img class="menu-icon"
-              :src="menuIcons[expand?'expand_menu':'retract_menu']"
+              :src="menuIcons[expand ? 'expand_menu' : 'retract_menu']"
               alt="icon"
               draggable="false"
               @click="expand_menu"
@@ -27,19 +28,42 @@
 
 import menuIcons from '@app/assets/components/hud'
 import { ref } from 'vue'
-interface menuItem { icon: keyof typeof menuIcons, text: string }
+
+type BuiltinMenuItemIdent =
+   'ascension_perk'
+   | 'learn_skill'
+   | 'diplomacy'
+   | 'item_storage'
+   | 'shop'
+   | 'debug'
+
+interface BuiltinMenuItem {
+   ident: BuiltinMenuItemIdent,
+   icon: keyof typeof menuIcons,
+   text: string
+}
+
+const emit = defineEmits<{
+   (event: 'menu', ident: string): void
+}>()
+
 const expand = ref(false)
 const expand_menu = () => {
    expand.value = !expand.value
 }
-const items: menuItem[] = [
-   { icon: 'ascension_perk', text: '飞升' },
-   { icon: 'learn_skill', text: '学习' },
-   { icon: 'diplomacy', text: '外交' },
-   { icon: 'item_storage', text: '道具' },
-   { icon: 'shop', text: '商店' },
-   { icon: 'debug', text: '调试' }
+
+const items: BuiltinMenuItem[] = [
+   { ident: 'ascension_perk', icon: 'ascension_perk', text: '飞升' },
+   { ident: 'learn_skill', icon: 'learn_skill', text: '学习' },
+   { ident: 'diplomacy', icon: 'diplomacy', text: '外交' },
+   { ident: 'item_storage', icon: 'item_storage', text: '道具' },
+   { ident: 'shop', icon: 'shop', text: '商店' },
+   { ident: 'debug', icon: 'debug', text: '调试' }
 ]
+
+function emitMenuMessage(ident: string) {
+   emit('menu', ident)
+}
 
 </script>
 
