@@ -48,7 +48,8 @@ function onClick(e: Event) {
 
 .standard-button.disabled {
    background-color: #CCCCCC;
-   color: #808080
+   color: #808080;
+   cursor: not-allowed;
 }
 
 .standard-button.toggled {

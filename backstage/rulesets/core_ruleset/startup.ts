@@ -37,6 +37,12 @@ const startups: Startup[] = [
       events: ['common_setup', 'gifted_init']
    },
    {
+      ident: 'poor',
+      name: '$startup_poor',
+      description: '$startup_poor_desc',
+      events: ['poor_init']
+   },
+   {
       ident: 'detroit',
       name: '$startup_detroit',
       description: '$startup_detroit_desc',
@@ -51,21 +57,6 @@ const startups: Startup[] = [
          }
       },
       events: ['detroit_init']
-   },
-   {
-      ident: 'beauty',
-      name: '$startup_beauty',
-      description: '$startup_beauty_desc',
-
-      player: {
-         attributes: {
-            charisma: 500
-         },
-         talent: {
-            charisma: 25
-         }
-      },
-      events: ['beauty_init']
    }
 ]
 
