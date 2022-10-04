@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 
 import { IPlayerStatus } from '@protocol/index'
 import HUDVue from '@app/components/hud/hud.vue'
@@ -49,6 +49,16 @@ function handleMenuClick(ident: string) {
       showDebugView.value = !showDebugView.value
    }
 }
+
+function handleGlobalKeypress(event: KeyboardEvent) {
+   if (event.key === '~') {
+      showDebugView.value = !showDebugView.value
+   }
+}
+
+onMounted(() => {
+   document.addEventListener('keypress', handleGlobalKeypress)
+})
 
 </script>
 

@@ -11,13 +11,13 @@
              type="text"
              class="debugger-input"
              @keyup="checkSubmit"
-      />
+      >
    </div>
 </template>
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import {onActivated, ref} from 'vue'
 
 const props = defineProps<{ display: boolean }>()
 
