@@ -4,13 +4,35 @@ import { updatePlayerProperty } from '@app/executor/properties'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
+import { QResult } from '@app/executor/result'
 
-export function performActivity(gameContext: GameContext, activity: Ident) {
+export function addActivity(gameContext: GameContext, activity: Ident): QResult {
+   const scope = gameContext.scope!
+   const activityId = mActivityId(scope, activity)
+   const activityContent = gameContext.ruleSet.activities[activityId]
+   if (!activityContent) {
+      const errMessage = `${activityId} does not exist`
+      console.error(`[E] [addActivity] activity ${errMessage}`)
+      return [false, errMessage]
+   }
+
+   if (gameContext.state.player.activities[activityId]) {
+      const warnMessage = `activity ${activityId} already exists`
+      console.warn(`[W] [addActivity] ${warnMessage}`)
+      return [true, warnMessage]
+   }
+
+   gameContext.state.player.activities[activityId] = activityContent
+   return [true]
+}
+
+export function performActivity(gameContext: GameContext, activity: Ident): QResult {
    const scope = gameContext.scope!
    const activityId = mActivityId(scope, activity)
    if (!gameContext.state.player.activities[activityId]) {
-      console.error(`[E] [performActivity] activity '${activityId} is not available`)
-      return
+      const errMessage = `activity '${activityId} is not available`
+      console.error(`[E] [performActivity] ${errMessage}`)
+      return [false, errMessage]
    }
    const activityContent = gameContext.state.player.activities[activityId]
 
@@ -39,7 +61,7 @@ export function performActivity(gameContext: GameContext, activity: Ident) {
       }
 
       if (mentalHealth) {
-         updatePlayerProperty(gameContext, 'pressure', 'add', mentalHealth, propertySource)
+         updatePlayerProperty(gameContext, 'mentalHealth', 'sub', mentalHealth, propertySource)
       }
 
       if (satisfactory) {
@@ -54,9 +76,11 @@ export function performActivity(gameContext: GameContext, activity: Ident) {
    }
 
    triggerEventSeries(gameContext, activityContent.events, activityContent.scope)
+   return [true]
 }
 
 const activityFunctions = {
+   addActivity,
    performActivity
 }
 

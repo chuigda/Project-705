@@ -13,6 +13,7 @@ import epGetTranslation from '@app/server/endpoints/translation'
 import epActivateAscensionPerk from '@app/server/endpoints/ascension_perk'
 import epGetStartups from '@app/server/endpoints/startup'
 import { epPurchaseItem, epUseItem } from '@app/server/endpoints/store_item'
+import debugRouter from '@app/server/endpoints/debug'
 
 const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
 
@@ -83,6 +84,8 @@ function applicationStart() {
    app.get('/api/startups', epGetStartups)
 
    app.get('/api/translation', epGetTranslation)
+
+   app.use('/api/debug', debugRouter)
 
    app.listen(3000, 'localhost', () => console.info('application started'))
 }

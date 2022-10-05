@@ -13,7 +13,6 @@
     "clean": "npm-run-all clean:*",
     "clean:dts": "rm -f *.d.ts",
     "clean:dist": "rm -rf dist",
-
     "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
     "test_type_assert": "ts-node -r tsconfig-paths/register test/test_type_assert.ts"
   },
@@ -39,6 +38,6 @@
   },
   "dependencies": {
     "express": "^4.18.1",
-    "uuid": "^8.3.2"
+    "uuid": "^9.0.0"
   }
 }

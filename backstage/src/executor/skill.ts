@@ -1,11 +1,12 @@
 import { Ident, mActivityId, mSkillId } from '@app/base/uid'
 import { Skill } from '@app/ruleset/items/skill'
-import { pushScope, triggerEvent, popScope } from '@app/executor/events'
+import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 import { GameContext, PlayerAttributes } from '@app/executor/game_context'
 import { updatePlayerProperty } from '@app/executor/properties'
+import { concatMessage, QResult } from '@app/executor/result'
 
-function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
+function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QResult {
    const scope = gameContext.scope!
 
    gameContext.updateTracker.player.skills = true
@@ -33,35 +34,37 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill) {
       }
    }
 
-   if (skillContent.events) {
-      pushScope(gameContext, scope)
-      for (const event of skillContent.events) {
-         triggerEvent(gameContext, event)
-      }
-      popScope(gameContext)
-   }
+   let warnMessage
+   const [_s, message] = triggerEventSeries(gameContext, skillContent.events, scope)
+   warnMessage = concatMessage(warnMessage, message)
 
    for (const eventIds of Object.values(gameContext.state.events.skillLearnt)) {
-      for (const eventId of eventIds) {
-         triggerEvent(gameContext, eventId, skillContent.ident)
-      }
+      const [_s1, message1] = triggerEventSeries(gameContext, [...eventIds])
+      warnMessage = concatMessage(warnMessage, message1)
    }
 
    delete gameContext.skillPool[<string>skillContent.ident]
    recomputeSkillCosts(gameContext)
+
+   return [true, warnMessage]
 }
 
-export function learnSkill(gameContext: GameContext, skill: Ident) {
+export function learnSkill(gameContext: GameContext, skill: Ident): QResult {
    const scope = gameContext.scope!
    const skillId = mSkillId(scope, skill)
    if (!gameContext.state.computedSkills!.available[skillId]) {
-      console.error(`[E] [learnSkill] skill '${skillId}' is not available`)
-      return
+      const errMessage = `skill '${skillId}' is not available`
+      console.error(`[E] [learnSkill] ${errMessage}`)
+      return [false, errMessage]
    }
 
    console.info(`[I] [learnSkill] learning skill '${skillId}'`)
+
+   let warnMessage
    if (gameContext.state.player.skills[skillId]) {
-      console.warn(`[W] [learnSkill] skill '${skillId}' has already been learnt, re-learning`)
+      const message = `skill '${skillId}' has already been learnt, re-learning`
+      console.warn(`[W] [learnSkill] ${message}`)
+      warnMessage = concatMessage(warnMessage, message)
    }
 
    const { skill: skillContent, cost } = gameContext.state.computedSkills!.available[skillId]
@@ -70,27 +73,38 @@ export function learnSkill(gameContext: GameContext, skill: Ident) {
    gameContext.state.player.skills[skillId] = skillContent
    gameContext.updatePlayerProperty('skillPoints', 'sub', cost, '@learn_skill')
 
-   executeSkillEffects(gameContext, skillContent)
+   const [success, message] = executeSkillEffects(gameContext, skillContent)
+   warnMessage = concatMessage(warnMessage, message)
+
+   return [true, warnMessage]
 }
 
-export function grantSkill(gameContext: GameContext, skill: Ident) {
+export function grantSkill(gameContext: GameContext, skill: Ident): QResult {
    const scope = gameContext.scope!
    const skillId = mSkillId(scope, skill)
    const skillContent = gameContext.ruleSet.skills[skillId]
 
    if (!skillContent) {
-      console.error(`[E] [grantSkill] skill '${skillId}' does not exist`)
-      return
+      const errMessage = `skill '${skillId}' does not exist`
+      console.error(`[E] [grantSkill] ${errMessage}`)
+      return [false, errMessage]
    }
 
    console.info(`[I] [grantSkill] granting skill '${skillId}'`)
+
+   let warnMessage
    if (gameContext.state.player.skills[skillId]) {
-      console.warn(`[W] [grantSkill] skill '${skillId}' has already been learnt, re-granting`)
+      const message = `skill '${skillId}' has already been learnt, re-granting`
+      console.warn(`[W] [grantSkill] ${message}`)
+      warnMessage = concatMessage(warnMessage, message)
    }
 
    gameContext.state.player.skills[skillId] = skillContent
 
-   executeSkillEffects(gameContext, skillContent)
+   const [success, message] = executeSkillEffects(gameContext, skillContent)
+   warnMessage = concatMessage(warnMessage, message)
+
+   return [true, warnMessage]
 }
 
 export default {

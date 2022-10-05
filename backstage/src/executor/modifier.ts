@@ -1,12 +1,14 @@
 import { GameContext } from '@app/executor/game_context'
 import { Ident, mModifierId } from '@app/base/uid'
 import { computeModifier, recomputeSkillCosts } from '@app/executor/compute'
+import { QResult } from '@app/executor/result'
 
-export function addModifier(gameContext: GameContext, modifier: Ident) {
+export function addModifier(gameContext: GameContext, modifier: Ident): QResult {
    const modifierId = mModifierId(gameContext.scope!, modifier)
    if (!gameContext.ruleSet.modifiers[modifierId]) {
-      console.error(`[E] [addModifier] modifier '${modifierId}' does not exist`)
-      return
+      const errMessage = `modifier '${modifierId}' does not exist`
+      console.error(`[E] [addModifier] ${errMessage}`)
+      return [false, errMessage]
    }
 
    console.info(`[I] [addModifier] adding modifier '${modifierId}'`)
@@ -14,13 +16,16 @@ export function addModifier(gameContext: GameContext, modifier: Ident) {
    gameContext.updateTracker.modifiers = true
    computeModifier(gameContext)
    recomputeSkillCosts(gameContext)
+
+   return [true]
 }
 
-export function removeModifier(gameContext: GameContext, modifier: Ident) {
+export function removeModifier(gameContext: GameContext, modifier: Ident): QResult {
    const modifierId = mModifierId(gameContext.scope!, modifier)
    if (!gameContext.ruleSet.modifiers[modifierId]) {
-      console.error(`[E] [addModifier] modifier '${modifierId}' does not exist`)
-      return
+      const errMessage = `modifier '${modifierId}' does not exist`
+      console.error(`[E] [addModifier] ${errMessage}`)
+      return [false, errMessage]
    }
 
    console.info(`[I] [addModifier] removing modifier '${modifierId}'`)
@@ -28,6 +33,8 @@ export function removeModifier(gameContext: GameContext, modifier: Ident) {
    gameContext.updateTracker.modifiers = true
    computeModifier(gameContext)
    recomputeSkillCosts(gameContext)
+
+   return [true]
 }
 
 const modifierFunctions = { addModifier, removeModifier }

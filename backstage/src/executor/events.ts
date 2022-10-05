@@ -1,6 +1,7 @@
 import { mEventId, Scope } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
 import { EventFunction, MaybeInlineEvent } from '@app/ruleset/items/event'
+import { concatMessage, QResult } from '@app/executor/result'
 
 export function pushScope(gameContext: GameContext, scope: Scope) {
    if (gameContext.scope) {
@@ -18,7 +19,7 @@ export function popScope(gameContext: GameContext) {
    gameContext.scope = gameContext.scopeChain.pop()
 }
 
-export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]) {
+export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]): QResult {
    const scope = gameContext.scope!
 
    let unsetCounter = false
@@ -30,39 +31,45 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
    }
 
    if (gameContext.eventChainCounter > 512) {
-      console.warn('[W] [triggerEvent] one single event chain has triggered more than 512 event, killing')
+      const warnMessage = 'one single event chain has triggered more than 512 event, killing'
+      console.warn(`[W] [triggerEvent] ${warnMessage}`)
       if (unsetCounter) {
          gameContext.eventChainCounter = undefined
       } else {
          gameContext.eventChainCounter -= 1
       }
-      return
+      return [true, warnMessage]
    }
 
+   let warnMessage
    if (event instanceof Function) {
       console.debug('[D] [triggerEvent] triggered inline event')
       try {
          event(gameContext, ...args)
       } catch (e) {
-         console.error(`[E] [triggerEvent] error when executing inline event script: ${e}\n${e.stack}`)
+         const errMessage = `error when executing inline event script: ${e}`
+         console.error(`[E] [triggerEvent] ${errMessage}\n${e.stack}`)
+         return [false, errMessage]
       }
    } else {
       const eventId = mEventId(scope, event)
       const eventContent = gameContext.ruleSet.events[eventId]
       if (!eventContent) {
-         console.error(`[E] [triggerEvent] event '${eventId}' not found`)
+         const errMessage = `event '${eventId}' not found`
+         console.error(`[E] [triggerEvent] ${errMessage}`)
          if (unsetCounter) {
             gameContext.eventChainCounter = undefined
          } else {
             gameContext.eventChainCounter -= 1
          }
-         return
+         return [false, errMessage]
       }
 
       console.debug(`[D] [triggerEvent] triggered event '${eventId}'`)
       const hooks = gameContext.state.events.eventsTriggered[eventId]
       for (const hook in hooks) {
-         triggerEvent(gameContext, hook, event, [event, args])
+         const [success, message] = triggerEvent(gameContext, hook, event, [event, args])
+         warnMessage = concatMessage(warnMessage, message)
       }
 
       pushScope(gameContext, eventContent.scope!)
@@ -70,7 +77,10 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       try {
          eventFunction(gameContext, ...args)
       } catch (e) {
-         console.error(`[E] [triggerEvent] error when executing event script '${eventId}': ${e}\n${e.stack}`)
+         const errMessage = `error when executing event script '${eventId}': ${e}`
+         console.error(`[E] [triggerEvent] ${errMessage}\n${e.stack}`)
+
+         warnMessage = concatMessage(warnMessage, errMessage)
       }
       popScope(gameContext)
    }
@@ -80,22 +90,28 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
    } else {
       gameContext.eventChainCounter -= 1
    }
+
+   return [true, warnMessage]
 }
 
-export function triggerEventSeries(gameContext: GameContext, events?: MaybeInlineEvent[], scope?: Scope) {
+export function triggerEventSeries(gameContext: GameContext, events?: MaybeInlineEvent[], scope?: Scope): QResult {
    if (scope) {
       pushScope(gameContext, scope)
    }
 
+   let warnMessage
    if (events) {
       for (const event of events) {
-         triggerEvent(gameContext, event)
+         const [success, message] = triggerEvent(gameContext, event)
+         warnMessage = concatMessage(warnMessage, message)
       }
    }
 
    if (scope) {
       popScope(gameContext)
    }
+
+   return [true, warnMessage]
 }
 
 export default {

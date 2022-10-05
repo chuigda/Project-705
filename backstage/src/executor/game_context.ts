@@ -40,6 +40,7 @@ import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import modifierFunctions from '@app/executor/modifier'
 import storeItemFunctions from '@app/executor/store_item'
+import activityFunctions from '@app/executor/activity'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -330,6 +331,10 @@ export class GameContext {
 
    learnSkill(skill: Ident) {
       grantFunctions.learnSkill(this, skill)
+   }
+
+   addActivity(activity: Ident) {
+      activityFunctions.addActivity(this, activity)
    }
 
    addAscensionPerkSlot(count: number) {
