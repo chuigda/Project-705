@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {onMounted, onUnmounted, ref} from 'vue'
 
 import { IPlayerStatus } from '@protocol/index'
 import HUDVue from '@app/components/hud/hud.vue'
@@ -58,6 +58,10 @@ function handleGlobalKeypress(event: KeyboardEvent) {
 
 onMounted(() => {
    document.addEventListener('keypress', handleGlobalKeypress)
+})
+
+onUnmounted(() => {
+   document.removeEventListener('keypress', handleGlobalKeypress)
 })
 
 </script>

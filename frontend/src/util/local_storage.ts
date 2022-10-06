@@ -1,4 +1,4 @@
-export function setLocalStorage(key: string, value: string | null | undefined) {
+export function setLocalStorage(key: string, value?: string) {
    if (!value) {
       localStorage.removeItem(key)
    } else {

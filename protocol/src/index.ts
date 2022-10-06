@@ -46,9 +46,10 @@ export interface IResponseSuccess<R> {
    result: R
 }
 
-export interface IResponseFail<R> {
+export interface IResponseFail {
    success: false
    message: ITranslationKey
+   result?: any
 }
 
-export type IResponse<R> = IResponseSuccess<R> | IResponseFail<R>
+export type IResponse<R> = IResponseSuccess<R> | IResponseFail

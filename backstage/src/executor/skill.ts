@@ -79,22 +79,32 @@ export function learnSkill(gameContext: GameContext, skill: Ident): QResult {
    return [true, warnMessage]
 }
 
-export function grantSkill(gameContext: GameContext, skill: Ident): QResult {
+export function grantSkill(gameContext: GameContext, skill: Ident, force?: boolean): QResult {
    const scope = gameContext.scope!
    const skillId = mSkillId(scope, skill)
-   const skillContent = gameContext.ruleSet.skills[skillId]
-
-   if (!skillContent) {
-      const errMessage = `skill '${skillId}' does not exist`
-      console.error(`[E] [grantSkill] ${errMessage}`)
-      return [false, errMessage]
+   let skillContent
+   if (force) {
+      skillContent = gameContext.ruleSet.skills[skillId]
+      if (!skillContent) {
+         const errMessage = `skill '${skillId}' does not exist`
+         console.error(`[E] [grantSkill] ${errMessage}`)
+         return [false, errMessage]
+      }
+   } else {
+      const availableSkill = gameContext.state.computedSkills!.available[skillId]
+      if (!availableSkill) {
+         const errMessage = `skill '${skillId}' not available`
+         console.error(`[E] [grantSkill] ${errMessage}`)
+         return [false, errMessage]
+      }
+      skillContent = availableSkill.skill
    }
 
    console.info(`[I] [grantSkill] granting skill '${skillId}'`)
 
    let warnMessage
    if (gameContext.state.player.skills[skillId]) {
-      const message = `skill '${skillId}' has already been learnt, re-granting`
+      const message = `skill '${skillId}' has already been learnt or granted, re-granting`
       console.warn(`[W] [grantSkill] ${message}`)
       warnMessage = concatMessage(warnMessage, message)
    }

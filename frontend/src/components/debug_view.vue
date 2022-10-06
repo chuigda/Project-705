@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 
-import {onActivated, ref} from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps<{ display: boolean }>()
 
@@ -69,7 +69,7 @@ function checkSubmit(e: KeyboardEvent) {
 
    border-radius: 2px;
    padding: 0 2px;
-   line-height: 12px;
+   line-height: calc(1em + 2px);
 }
 
 .debugger-input {

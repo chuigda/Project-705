@@ -11,13 +11,24 @@ export function addAscensionPerkSlot(gameContext: GameContext, count: number): Q
    return [true]
 }
 
-export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: Ident): QResult {
+export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: Ident, force?: boolean): QResult {
    const scope = gameContext.scope!
    const ascensionPerkId = mAscensionPerkId(scope, ascensionPerk)
-   if (!(gameContext.state.computedAscensionPerks!.available[ascensionPerkId])) {
-      const errMessage = `ascension perk '${ascensionPerkId}' is not available`
-      console.error(`[E] [activateAscensionPerk] ${errMessage}`)
-      return [false, errMessage]
+   let apContent
+   if (force) {
+      apContent = gameContext.ruleSet.ascensionPerks[ascensionPerkId]
+      if (!apContent) {
+         const errMessage = `ascension perk '${ascensionPerkId}' does not exist`
+         console.error(`[E] [activateAscensionPerk] ${errMessage}`)
+         return [false, errMessage]
+      }
+   } else {
+      apContent = gameContext.state.computedAscensionPerks!.available[ascensionPerkId]
+      if (!apContent) {
+         const errMessage = `ascension perk '${ascensionPerkId}' is not available`
+         console.error(`[E] [activateAscensionPerk] ${errMessage}`)
+         return [false, errMessage]
+      }
    }
 
    console.info(`[I] [activateAscensionPerk] activating ascension perk '${ascensionPerkId}'`)
@@ -28,7 +39,6 @@ export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: I
       console.warn(`[W] [activateAscensionPerk] ${warnMessage}`)
    }
 
-   const apContent = gameContext.state.computedAscensionPerks!.available[ascensionPerkId]
    const { scope: apScope, events } = apContent
    delete gameContext.state.computedAscensionPerks!.available[ascensionPerkId]
 

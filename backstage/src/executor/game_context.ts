@@ -41,6 +41,7 @@ import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import modifierFunctions from '@app/executor/modifier'
 import storeItemFunctions from '@app/executor/store_item'
 import activityFunctions from '@app/executor/activity'
+import { QResult } from '@app/executor/result'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -317,32 +318,32 @@ export class GameContext {
       connectFunctions.disconnect(this, signal, event)
    }
 
-   triggerEvent(event: MaybeInlineEvent, ...args: any[]) {
-      eventFunctions.triggerEvent(this, event, ...args)
+   triggerEvent(event: MaybeInlineEvent, ...args: any[]): QResult {
+      return eventFunctions.triggerEvent(this, event, ...args)
    }
 
-   addModifier(modifier: Ident) {
-      modifierFunctions.addModifier(this, modifier)
+   addModifier(modifier: Ident): QResult {
+      return modifierFunctions.addModifier(this, modifier)
    }
 
-   removeModifier(modifier: Ident) {
-      modifierFunctions.removeModifier(this, modifier)
+   removeModifier(modifier: Ident): QResult {
+      return modifierFunctions.removeModifier(this, modifier)
    }
 
-   learnSkill(skill: Ident) {
-      grantFunctions.learnSkill(this, skill)
+   grantSkill(skill: Ident, force?: boolean): QResult {
+      return grantFunctions.grantSkill(this, skill, force)
    }
 
-   addActivity(activity: Ident) {
-      activityFunctions.addActivity(this, activity)
+   addActivity(activity: Ident): QResult {
+      return activityFunctions.addActivity(this, activity)
    }
 
-   addAscensionPerkSlot(count: number) {
-      ascensionPerkFunctions.addAscensionPerkSlot(this, count)
+   addAscensionPerkSlot(count: number): QResult {
+      return ascensionPerkFunctions.addAscensionPerkSlot(this, count)
    }
 
-   activateAscensionPerk(ascensionPerk: Ident) {
-      ascensionPerkFunctions.activateAscensionPerk(this, ascensionPerk)
+   activateAscensionPerk(ascensionPerk: Ident, force?: boolean): QResult {
+      return ascensionPerkFunctions.activateAscensionPerk(this, ascensionPerk, force)
    }
 
    giveConsumableItem(itemId: Ident, count?: number) {

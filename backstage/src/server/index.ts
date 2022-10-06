@@ -85,7 +85,7 @@ function applicationStart() {
 
    app.get('/api/translation', epGetTranslation)
 
-   app.use('/api/debug', debugRouter)
+   app.use('/api/debug', verifyGameContext, debugRouter)
 
    app.listen(3000, 'localhost', () => console.info('application started'))
 }

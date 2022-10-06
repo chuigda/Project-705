@@ -7,6 +7,7 @@ import { getLocalStorage } from '@app/util/local_storage'
 import makeI18nOption from '@app/i18n'
 
 import App from '@app/app.vue'
+import ErrorPage from '@app/views/error_page.vue'
 import Main from '@app/views/main.vue'
 import ChooseStartup from '@app/views/choose_startup.vue'
 
@@ -17,6 +18,7 @@ const preferredLang = getLocalStorage('lang') || 'zh_cn'
 const routes = [
    { path: '/', component: Main },
    { path: '/startup', component: ChooseStartup },
+   { path: '/error', component: ErrorPage }
 ]
 
 // Why there are tons of stack overflows in TSC created by fucking noob TypeScript kiddies?
