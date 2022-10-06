@@ -1,5 +1,9 @@
 import { IResponse, IStartup, ITranslation } from '@protocol/index'
-import { getJsonRequest } from '@app/util/mebius'
+import {getJsonRequest, setGlobalHeader} from '@app/util/mebius'
+
+export function setUserToken(token: string) {
+   setGlobalHeader('X-Access-Token', token)
+}
 
 export async function getStartups(): Promise<IStartup[]> {
    const { success, message, result } = await getJsonRequest<IResponse<IStartup[]>>('/api/startups')

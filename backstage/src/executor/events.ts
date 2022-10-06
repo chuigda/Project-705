@@ -1,4 +1,5 @@
 import { mEventId, Scope } from '@app/base/uid'
+import { ensureScope } from '@app/executor/base'
 import { GameContext } from '@app/executor/game_context'
 import { EventFunction, MaybeInlineEvent } from '@app/ruleset/items/event'
 import { concatMessage, QResult } from '@app/executor/result'
@@ -20,7 +21,7 @@ export function popScope(gameContext: GameContext) {
 }
 
 export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]): QResult {
-   const scope = gameContext.scope!
+   const scope = ensureScope(gameContext)
 
    let unsetCounter = false
    if (gameContext.eventChainCounter === undefined) {

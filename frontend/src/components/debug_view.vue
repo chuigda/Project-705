@@ -3,13 +3,15 @@
         class="debugger">
       <div class="debugger-output">
          <div v-for="(line, idx) in lines"
-              :key="`dbg-${idx}`">
-            {{ line }}
+              :key="`dbg-${idx}`"
+              :style="{ color: line.color || 'white' }">
+            {{ line.text }}
          </div>
       </div>
       <input v-model="inputText"
              type="text"
              class="debugger-input"
+             :disabled="inputDisabled"
              @keyup="checkSubmit"
       >
    </div>
@@ -17,30 +19,139 @@
 
 <script setup lang="ts">
 
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
+import {
+   debugAscension,
+   debugCrash,
+   debugInitGame,
+   setDebugToken
+} from '@app/api/debug'
+import { IResponse } from '@protocol/index'
+import { setUserToken } from '@app/api'
 
 const props = defineProps<{ display: boolean }>()
 
-const auth = ref(false)
+interface ConsoleLine { text: string, color?: string }
 
-const lines = ref(['Project-705 devtest console'])
-
+const lines: Ref<ConsoleLine[]> = ref([{ text: 'Project-705 devtest console' }])
 const inputText = ref('')
+const inputDisabled = ref(false)
 
 function checkSubmit(e: KeyboardEvent) {
    // noinspection JSDeprecatedSymbols
    if (e.key === 'Enter' || e.keyCode === 13) {
-      lines.value.push(`$ ${inputText.value}`)
-      inputText.value = ''
+      const command = inputText.value.trim()
+      if (command) {
+         lines.value.push({ text: `$ ${inputText.value}` })
+         inputText.value = ''
+
+         submit(command)
+      }
    }
+}
+
+interface CommandFlags {
+   force?: boolean
+}
+
+type CommandHandler = (args: string[], flags: CommandFlags) => Promise<void>
+
+function expectNoArg(f: CommandHandler): CommandHandler {
+   return async (args: string[], flags: CommandFlags) => {
+      if (args.length !== 0) {
+         lines.value.push({
+            text: `expected 0 arg, got ${args.length}`,
+            color: 'red'
+         })
+         return
+      }
+
+      await f(args, flags)
+   }
+}
+
+function expectOneArg(f: CommandHandler): CommandHandler {
+   return async (args: string[], flags: CommandFlags) => {
+      if (args.length !== 1) {
+         lines.value.push({
+            text: `expected 1 arg, got ${args.length}`,
+            color: 'red'
+         })
+         return
+      }
+
+      await f(args, flags)
+   }
+}
+
+function formatResponse(res: IResponse<any>) {
+   let color
+   if (res.success) {
+      if (res.message === 'success') {
+         // do nothing, no color == default color == white
+      } else {
+         color = 'yellow'
+      }
+   } else {
+      color = 'red'
+   }
+
+   lines.value.push({ text: res.message, color })
+}
+
+const commands: Record<string, CommandHandler> = {
+   'clear': expectNoArg(async () => { lines.value = [] }),
+   'set_token': expectOneArg(async ([token]) => setUserToken(token)),
+   'set_debug_token': expectOneArg(async ([token]) => setDebugToken(token)),
+   'init_game': expectOneArg(async ([startupId]) => {
+      inputDisabled.value = true
+      const result = await debugInitGame(startupId)
+      inputDisabled.value = false
+      formatResponse(result)
+   }),
+   'activate_ascension_perk': expectOneArg(async ([ascensionPerkId], flags) => {
+      inputDisabled.value = true
+      const result = await debugAscension(ascensionPerkId, flags.force)
+      inputDisabled.value = false
+      formatResponse(result)
+   }),
+   'crash': expectNoArg(async () => {
+      inputDisabled.value = true
+      const result = await debugCrash()
+
+      // theoretically this shouldn't be reachable
+      inputDisabled.value = false
+      formatResponse(result)
+   })
+}
+
+async function submit(inputCommand: string) {
+   const parts = inputCommand.split(' ', -1)
+   const command = parts[0]
+   const args = parts.slice(1).filter(x => !x.startsWith('-'))
+   const flags: CommandFlags = {}
+   if (parts.indexOf('-f', 1) !== -1) {
+      flags.force = true
+   }
+
+   const handler = commands[command]
+   if (handler) {
+      await handler(args, flags)
+      return
+   }
+
+   lines.value.push({
+      text: `'${command}' is not recognized as an internal or external command, operable program or batch file.`,
+      color: '#ff0000'
+   })
 }
 
 </script>
 
 <style>
 .debugger {
-   width: 320px;
-   height: 240px;
+   width: 480px;
+   height: 360px;
    position: absolute;
 
    left: 0;
@@ -56,7 +167,7 @@ function checkSubmit(e: KeyboardEvent) {
    row-gap: 4px;
 
    font-family: monospace;
-   font-size: 10px;
+   font-size: 12px;
    text-align: left;
 }
 
@@ -76,7 +187,7 @@ function checkSubmit(e: KeyboardEvent) {
    background-color: #846950AA;
    color: #FFFFFF;
    font-family: monospace;
-   font-size: 10px;
+   font-size: 12px;
    border-radius: 2px;
    border: 1px solid #6E665AAA;
 }

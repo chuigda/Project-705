@@ -1,5 +1,6 @@
 import { Ident, mActivityId, mSkillId } from '@app/base/uid'
 import { Skill } from '@app/ruleset/items/skill'
+import { ensureScope } from '@app/executor/base'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 import { GameContext, PlayerAttributes } from '@app/executor/game_context'
@@ -7,8 +8,7 @@ import { updatePlayerProperty } from '@app/executor/properties'
 import { concatMessage, QResult } from '@app/executor/result'
 
 function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QResult {
-   const scope = gameContext.scope!
-
+   const scope = ensureScope(gameContext)
    gameContext.updateTracker.player.skills = true
 
    if (skillContent.output) {
@@ -50,7 +50,7 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QRe
 }
 
 export function learnSkill(gameContext: GameContext, skill: Ident): QResult {
-   const scope = gameContext.scope!
+   const scope = ensureScope(gameContext)
    const skillId = mSkillId(scope, skill)
    if (!gameContext.state.computedSkills!.available[skillId]) {
       const errMessage = `skill '${skillId}' is not available`
@@ -80,7 +80,7 @@ export function learnSkill(gameContext: GameContext, skill: Ident): QResult {
 }
 
 export function grantSkill(gameContext: GameContext, skill: Ident, force?: boolean): QResult {
-   const scope = gameContext.scope!
+   const scope = ensureScope(gameContext)
    const skillId = mSkillId(scope, skill)
    let skillContent
    if (force) {

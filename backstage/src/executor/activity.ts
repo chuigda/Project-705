@@ -1,4 +1,5 @@
 import { Ident, mActivityId } from '@app/base/uid'
+import { ensureScope } from '@app/executor/base'
 import { GameContext } from '@app/executor/game_context'
 import { updatePlayerProperty } from '@app/executor/properties'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
@@ -7,7 +8,7 @@ import { recomputeSkillCosts } from '@app/executor/compute'
 import { QResult } from '@app/executor/result'
 
 export function addActivity(gameContext: GameContext, activity: Ident): QResult {
-   const scope = gameContext.scope!
+   const scope = ensureScope(gameContext)
    const activityId = mActivityId(scope, activity)
    const activityContent = gameContext.ruleSet.activities[activityId]
    if (!activityContent) {
@@ -27,7 +28,7 @@ export function addActivity(gameContext: GameContext, activity: Ident): QResult 
 }
 
 export function performActivity(gameContext: GameContext, activity: Ident): QResult {
-   const scope = gameContext.scope!
+   const scope = ensureScope(gameContext)
    const activityId = mActivityId(scope, activity)
    if (!gameContext.state.player.activities[activityId]) {
       const errMessage = `activity '${activityId} is not available`

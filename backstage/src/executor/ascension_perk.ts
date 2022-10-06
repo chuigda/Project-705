@@ -1,5 +1,6 @@
 import { GameContext } from '@app/executor/game_context'
 import { Ident, mAscensionPerkId } from '@app/base/uid'
+import { ensureScope } from '@app/executor/base'
 import { triggerEventSeries } from '@app/executor/events'
 import { addModifier } from '@app/executor/modifier'
 import { concatMessage, QResult } from '@app/executor/result'
@@ -12,7 +13,7 @@ export function addAscensionPerkSlot(gameContext: GameContext, count: number): Q
 }
 
 export function activateAscensionPerk(gameContext: GameContext, ascensionPerk: Ident, force?: boolean): QResult {
-   const scope = gameContext.scope!
+   const scope = ensureScope(gameContext)
    const ascensionPerkId = mAscensionPerkId(scope, ascensionPerk)
    let apContent
    if (force) {

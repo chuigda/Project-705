@@ -1,8 +1,7 @@
 import express = require('express')
 import { Request, Response } from 'express'
 import { v4 as uuid } from 'uuid'
-import { IGameState, IResponse } from '@protocol/index'
-import { validateBody } from '@app/util/type_assert_validate'
+import { IGameState, IResponse, IResponseFail } from '@protocol/index'
 import { GameContext } from '@app/executor/game_context'
 import { addActivity } from '@app/executor/activity'
 import { sendGameState } from '@app/server/mapping'
@@ -11,6 +10,10 @@ import { grantSkill } from '@app/executor/skill'
 import { nextTurn } from '@app/executor/turn'
 import { addModifier, removeModifier } from '@app/executor/modifier'
 import { abort } from '@app/util/emergency'
+import { validateAccessToken, validateBody, validateGameContext } from '@app/server/middleware'
+
+import epInitGame from '@app/server/endpoints/init'
+import serverStore from '@app/server/store'
 
 const authToken = uuid()
 console.info(`[I] [debug.ts] debugging interface uuid = '${authToken}'`)
@@ -18,8 +21,9 @@ console.info(`[I] [debug.ts] debugging interface uuid = '${authToken}'`)
 const debugRouter = express.Router()
 
 debugRouter.use((req: Request, res: Response<IResponse<any>>, next) => {
-   const token = req.headers['X-Debugger-Auth-Token']
+   const token = req.header('X-Debugger-Auth-Token')
    if (token !== authToken) {
+      console.warn(`[W] [api /api/debug] wrong token '${token}', expected '${authToken}'`)
       res.json({
          success: false,
          message: 'unauthenticated access to debugging console'
@@ -37,7 +41,32 @@ function ensureMessage(success: boolean, message?: string): string {
 type DebugResponse = Response<IResponse<IGameState>, { gameContext: GameContext }>
 
 debugRouter.post(
+   '/init',
+   validateAccessToken,
+   validateBody({ startupId: 'string' }),
+   (req, res: Response<IResponse<IGameState>, { accessToken: string }>) => {
+      const { startupId } = req.body
+      const { accessToken } = res.locals
+      const gameContext: GameContext | undefined = serverStore.initGame(accessToken, startupId)
+      if (!gameContext) {
+         res.json({
+            success: false,
+            message: 'wrong startupId'
+         })
+         return
+      }
+
+      res.json({
+         success: true,
+         message: 'success',
+         result: sendGameState(gameContext.state)
+      })
+   }
+)
+
+debugRouter.post(
    '/add_activity',
+   validateGameContext,
    validateBody({ activityId: 'string' }),
    (req, res: DebugResponse) => {
       const { activityId } = req.body
@@ -55,6 +84,7 @@ debugRouter.post(
 
 debugRouter.post(
    '/activate_ascension_perk',
+   validateGameContext,
    validateBody({ ascensionPerkId: 'string', force: 'boolean?' }),
    (req, res: DebugResponse) => {
       const { ascensionPerkId, force } = req.body
@@ -72,6 +102,7 @@ debugRouter.post(
 
 debugRouter.post(
    '/research_technology',
+   validateGameContext,
    validateBody({ techId: 'string', force: 'boolean?' }),
    (req, res: DebugResponse) => {
       const { techId, force } = req.body
@@ -89,6 +120,7 @@ debugRouter.post(
 
 debugRouter.post(
    '/next_turn',
+   validateGameContext,
    (req, res: DebugResponse) => {
       const { gameContext } = res.locals
 
@@ -104,6 +136,7 @@ debugRouter.post(
 
 debugRouter.post(
    '/add_modifier',
+   validateGameContext,
    validateBody({ modifierId: 'string' }),
    (req, res: DebugResponse) => {
       const { modifierId } = req.body
@@ -121,6 +154,7 @@ debugRouter.post(
 
 debugRouter.post(
    '/remove_modifier',
+   validateGameContext,
    validateBody({ modifierId: 'string' }),
    (req, res: DebugResponse) => {
       const { modifierId } = req.body
@@ -138,7 +172,7 @@ debugRouter.post(
 
 debugRouter.post(
    '/crash',
-   (req, res: DebugResponse) => {
+   (req, res: Response<IResponseFail>) => {
       console.error('[E] [api /api/debug/crash] server will crash in 5 seconds')
       res.status(500).json({
          success: false,

@@ -14,78 +14,32 @@ import epActivateAscensionPerk from '@app/server/endpoints/ascension_perk'
 import epGetStartups from '@app/server/endpoints/startup'
 import { epPurchaseItem, epUseItem } from '@app/server/endpoints/store_item'
 import debugRouter from '@app/server/endpoints/debug'
-
-const ACCESS_TOKEN_HEADER = 'X-Fe-Access-Token'
-
-function verifyAccessToken<R>(
-   req: Request,
-   res: Response<IResponse<R>, { accessToken: string }>,
-   next: NextFunction
-) {
-   const accessToken = req.header(ACCESS_TOKEN_HEADER)
-   if (!accessToken) {
-      res.status(401).json({
-         success: false,
-         message: 'not logged in', // TODO(chuigda): use translation keys
-      })
-      return
-   }
-
-   res.locals.accessToken = accessToken
-   next()
-}
-
-function verifyGameContext<R>(
-   req: Request,
-   res: Response<IResponse<R>, { accessToken: string, gameContext: GameContext }>,
-   next: NextFunction
-) {
-   const accessToken = req.header(ACCESS_TOKEN_HEADER)
-   if (!accessToken) {
-      res.status(401).json({
-         success: false,
-         message: 'not logged in', // TODO(chuigda): use translation keys
-      })
-      return
-   }
-
-   const gameContext = serverStore.getGame(accessToken)
-   if (!gameContext) {
-      res.status(401).json({
-         success: false,
-         message: 'game not found' // TODO(chuigda): use translation keys
-      })
-      return
-   }
-
-   res.locals.gameContext = gameContext
-   next()
-}
+import { validateAccessToken, validateGameContext } from '@app/server/middleware'
 
 function applicationStart() {
    const app = express()
 
    app.use(express.json())
 
-   app.post('/api/new_game', verifyAccessToken, epInitGame)
+   app.post('/api/new_game', validateAccessToken, epInitGame)
 
-   app.get('/api/snapshot', verifyGameContext, epSendSnapshot)
+   app.get('/api/snapshot', validateGameContext, epSendSnapshot)
 
-   app.post('/api/next_turn', verifyGameContext, epNextTurn)
+   app.post('/api/next_turn', validateGameContext, epNextTurn)
 
-   app.post('/api/learn_skill', verifyGameContext, epLearnSkill)
+   app.post('/api/learn_skill', validateGameContext, epLearnSkill)
 
-   app.post('/api/ascension', verifyGameContext, epActivateAscensionPerk)
+   app.post('/api/ascension', validateGameContext, epActivateAscensionPerk)
 
-   app.post('/api/purchase_item', verifyGameContext, epPurchaseItem)
+   app.post('/api/purchase_item', validateGameContext, epPurchaseItem)
 
-   app.post('/api/use_item', verifyGameContext, epUseItem)
+   app.post('/api/use_item', validateGameContext, epUseItem)
 
    app.get('/api/startups', epGetStartups)
 
    app.get('/api/translation', epGetTranslation)
 
-   app.use('/api/debug', verifyGameContext, debugRouter)
+   app.use('/api/debug', debugRouter)
 
    app.listen(3000, 'localhost', () => console.info('application started'))
 }
