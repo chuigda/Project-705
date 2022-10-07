@@ -36,7 +36,7 @@
 import { Ref, onMounted, ref } from 'vue'
 
 import { IStartup } from '@protocol/index'
-import { getStartups } from '@app/api'
+import {getStartups, startNewGame} from '@app/api'
 import { translate } from '@app/util/translation'
 import StandardButton from '@app/components/standard_button.vue'
 import SimpleTypography from '@app/components/simple_typography.vue'
@@ -50,7 +50,11 @@ function chooseStartup(startup: IStartup) {
    chosenStartupDesc.value = translate(startup.description)
 }
 
-function startGame() {
+async function startGame() {
+   const startupId = chosenStartup.value!.ident
+   await startNewGame(startupId)
+
+   window.location.replace('/#/gameplay')
 }
 
 onMounted(async () => {

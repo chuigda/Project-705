@@ -176,7 +176,7 @@ debugRouter.post(
       console.error('[E] [api /api/debug/crash] server will crash in 5 seconds')
       res.status(500).json({
          success: false,
-         message: 'manual crash via debugging interface'
+         message: 'MANUAL_CRASH'
       })
       setTimeout(abort, 5000)
    }

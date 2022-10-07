@@ -1,12 +1,11 @@
 import { GameContext } from '@app/executor/game_context'
 import serverStore from '@app/server/store'
 import { Request, Response } from 'express'
-import { IGameState, IResponse } from '@protocol/index'
-import { sendGameState } from '@app/server/mapping'
+import { IResponse } from '@protocol/index'
 
 export default function epInitGame(
    req: Request,
-   res: Response<IResponse<IGameState>, { accessToken: string }>
+   res: Response<IResponse<void>, { accessToken: string }>
 ): void {
    const { startupId } = req.body
    if (!startupId || typeof startupId !== 'string') {
@@ -29,6 +28,6 @@ export default function epInitGame(
    res.json({
       success: true,
       message: 'success',
-      result: sendGameState(gameContext.state)
+      result: undefined
    })
 }

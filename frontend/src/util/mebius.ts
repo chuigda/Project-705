@@ -1,4 +1,4 @@
-import {setLocalStorage} from '@app/util/local_storage'
+import { pullup } from '@app/util/emergency'
 
 const globalHeaders: Record<string, string> = {}
 
@@ -22,10 +22,7 @@ async function maybeHandleError(r: Response) {
          // do nothing, just fill empty detail
       }
 
-      setLocalStorage('errorReport:errCode', `${r.status}`)
-      setLocalStorage('errorReport:errMessage', r.statusText.toUpperCase().replaceAll(' ', '_'))
-      setLocalStorage('errorReport:errDetail', detail)
-      window.location.replace('/#/error')
+      pullup(r.status, r.statusText, detail)
    }
 }
 

@@ -51,7 +51,7 @@ export function validateAccessToken<R>(
    if (!accessToken) {
       res.status(401).json({
          success: false,
-         message: 'not logged in',
+         message: 'NOT_LOGGED_IN',
       })
       return
    }
@@ -69,7 +69,7 @@ export function validateGameContext<R>(
    if (!accessToken) {
       res.status(401).json({
          success: false,
-         message: 'not logged in', // TODO(chuigda): use translation keys
+         message: 'NOT_LOGGED_IN',
       })
       return
    }
@@ -78,7 +78,7 @@ export function validateGameContext<R>(
    if (!gameContext) {
       res.status(401).json({
          success: false,
-         message: 'game not found' // TODO(chuigda): use translation keys
+         message: 'GAME_NOT_FOUND'
       })
       return
    }
