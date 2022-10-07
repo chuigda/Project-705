@@ -106,7 +106,6 @@ const energyBarTitle = computed(() => `${props.playerStatus.mentalHealth} / ${pr
 
 const energyBarWidth = computed(() => {
    const percentage = rescale(props.playerStatus.mentalHealth!, props.playerStatus.mentalHealthMax!)
-   console.log(`recomputed percentage = ${percentage}%`)
    return `${percentage}%`
 })
 
