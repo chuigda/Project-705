@@ -58,8 +58,10 @@ export function updatePlayerProperty(
    }
    const lastPropertyPath = propertyPath[propertyPath.length - 1]
 
-   for (const event of Object.values(container)) {
-      triggerEvent(gameContext, event, opRef, source)
+   if (container) {
+      for (const event of Object.values(container)) {
+         triggerEvent(gameContext, event, opRef, source)
+      }
    }
 
    switch (opRef.operator) {

@@ -1,44 +1,40 @@
 import {IGameState, IResponse, IResponseFail} from '@protocol/index'
-import {postJsonRequest} from '@app/util/mebius'
-
-let debugToken: string | undefined = undefined
+import {postJsonRequest, setGlobalHeader} from '@app/util/mebius'
+import {setLocalStorage} from '@app/util/local_storage'
 
 export function setDebugToken(token: string) {
-   debugToken = token
-}
-
-function debugTokenHeader(): Record<string, string> {
-   return { 'X-Debugger-Auth-Token': debugToken! }
+   setLocalStorage('session:debugToken', token)
+   setGlobalHeader('X-Debugger-Auth-Token', token)
 }
 
 export async function debugInitGame(startupId: string): Promise<IResponse<IGameState>> {
    return await postJsonRequest<IResponse<IGameState>>(
       '/api/debug/init',
-      { startupId },
-      debugTokenHeader()
+      { startupId }
    )
 }
 
 export async function debugAddActivity(activityId: string): Promise<IResponse<IGameState>> {
    return await postJsonRequest<IResponse<IGameState>>(
       '/api/debug/add_activity',
-      { activityId },
-      debugTokenHeader()
+      { activityId }
    )
 }
 
 export async function debugAscension(ascensionPerkId: string, force?: boolean): Promise<IResponse<IGameState>> {
    return await postJsonRequest<IResponse<IGameState>>(
       '/api/debug/activate_ascension_perk',
-      { ascensionPerkId, force },
-      debugTokenHeader()
+      { ascensionPerkId, force }
+   )
+}
+
+export async function debugAddAttribute(attrName: string, value: number): Promise<IResponse<IGameState>> {
+   return await postJsonRequest<IResponse<IGameState>>(
+      '/api/debug/add_attribute',
+      { attrName, value }
    )
 }
 
 export async function debugCrash(): Promise<IResponseFail> {
-   return await postJsonRequest<IResponseFail>(
-      '/api/debug/crash',
-      undefined,
-      debugTokenHeader()
-   )
+   return await postJsonRequest<IResponseFail>('/api/debug/crash')
 }

@@ -62,7 +62,7 @@
 import { IPlayerAttributes, IPlayerStatus } from '@protocol/index'
 import AttrIcon from '@app/components/icon/attr_icon.vue'
 import menuIcons from '@app/assets/components/hud'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
 const expand = ref(false)
@@ -76,7 +76,7 @@ const itemKeys: [string, keyof IPlayerAttributes][] = [
    ['魅力', 'charisma']
 ]
 
-const attributeItems = itemKeys.map(itemKey => {
+const attributeItems = computed(() => itemKeys.map(itemKey => {
    const [displayName, field] = itemKey
    return [
       displayName,
@@ -84,7 +84,7 @@ const attributeItems = itemKeys.map(itemKey => {
       props.playerStatus.attributes![field],
       props.playerStatus.talent![field]
    ]
-})
+}))
 
 const otherItems = [
    ['还无法说出我爱你', 3141],

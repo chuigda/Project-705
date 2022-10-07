@@ -121,17 +121,19 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
       return {
          attributes: updateTracker.properties ? sendPlayerAttributes(ps.attributes) : undefined,
          talent: updateTracker.properties ? sendPlayerAttributes(ps.talent) : undefined,
+         energy: updateTracker.properties ? ps.energy : undefined,
+         energyMax: updateTracker.properties ? ps.energyMax : undefined,
          skillPoints: updateTracker.properties ? ps.skillPoints : undefined,
          mentalHealth: updateTracker.properties ? ps.mentalHealth : undefined,
          mentalHealthMax: updateTracker.properties ? ps.mentalHealthMax : undefined,
          satisfactory: updateTracker.properties ? ps.satisfactory : undefined,
          money: updateTracker.properties ? ps.money : undefined,
          moneyPerTurn: updateTracker.properties ? ps.moneyPerTurn : undefined,
+         ascensionPerkSlots: updateTracker.ascensionPerkSlots ? ps.ascensionPerkSlots : undefined,
 
          skills: updateTracker.skills ? sendSkills(ps.skills) : undefined,
          activities: updateTracker.activities ? sendActivities(ps.activities) : undefined,
          ascensionPerks: updateTracker.ascensionPerks ? sendAscensionPerks(ps.ascensionPerks) : undefined,
-         ascensionPerkSlots: ps.ascensionPerkSlots,
          items: updateTracker.items ? sendPlayerItems(ps.items) : undefined
       }
    }

@@ -12,8 +12,8 @@ import { addModifier, removeModifier } from '@app/executor/modifier'
 import { abort } from '@app/util/emergency'
 import { validateAccessToken, validateBody, validateGameContext } from '@app/server/middleware'
 
-import epInitGame from '@app/server/endpoints/init'
 import serverStore from '@app/server/store'
+import { updatePlayerProperty } from '@app/executor/properties'
 
 const authToken = uuid()
 console.info(`[I] [debug.ts] debugging interface uuid = '${authToken}'`)
@@ -165,6 +165,75 @@ debugRouter.post(
       res.json({
          success,
          message: ensureMessage(success, message),
+         result: sendGameState(gameContext.state, gameContext.updateTracker)
+      })
+   }
+)
+
+debugRouter.post(
+   '/add_attribute',
+   validateGameContext,
+   validateBody({ attrName: 'string', value: 'number' }),
+   (req, res: DebugResponse) => {
+      const { attrName, value } = req.body
+      const { gameContext } = res.locals
+
+      let propertyPath
+      switch (attrName) {
+         case 'strength':
+         case 'str':
+            propertyPath = 'attributes.strength'
+            break
+         case 'intelligence':
+         case 'iq':
+            propertyPath = 'attributes.intelligence'
+            break
+         case 'emotional_intelligence':
+         case 'eq':
+            propertyPath = 'attributes.emotionalIntelligence'
+            break
+         case 'memorization':
+         case 'mem':
+            propertyPath = 'attributes.memorization'
+            break
+         case 'imagination':
+         case 'img':
+            propertyPath = 'attributes.imagination'
+            break
+         case 'charisma':
+         case 'char':
+            propertyPath = 'attributes.charisma'
+            break
+
+         case 'energy': case 'satisfactory':
+            propertyPath = attrName
+            break
+
+         case 'sanity': case 'san': case 'mental_health':
+            propertyPath = 'mentalHealth'
+            break
+
+         case 'money': case 'cash':
+            propertyPath = 'money'
+            break
+
+         case 'skill_points': case 'skp':
+            propertyPath = 'skillPoints'
+            break
+
+         default:
+            res.json({
+               success: false,
+               message: `invalid attribute name ${attrName}`
+            })
+            return
+      }
+
+      gameContext.updateTracker.reset()
+      updatePlayerProperty(gameContext, propertyPath, 'add', value)
+      res.json({
+         success: true,
+         message: 'success',
          result: sendGameState(gameContext.state, gameContext.updateTracker)
       })
    }

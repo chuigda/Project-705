@@ -21,15 +21,18 @@
 
 import { ref, Ref } from 'vue'
 import {
+   debugAddAttribute,
    debugAscension,
    debugCrash,
    debugInitGame,
    setDebugToken
 } from '@app/api/debug'
-import { IResponse } from '@protocol/index'
-import { setUserToken } from '@app/api'
+import { IGameState, IResponse } from '@protocol/index'
+import {getSnapshot, setUserToken} from '@app/api'
 
 const props = defineProps<{ display: boolean }>()
+
+const emit = defineEmits<{ (event: 'state', state: IGameState): void }>()
 
 interface ConsoleLine { text: string, color?: string }
 
@@ -56,6 +59,8 @@ interface CommandFlags {
 
 type CommandHandler = (args: string[], flags: CommandFlags) => Promise<void>
 
+// One day I'll fuck up these bullshits
+
 function expectNoArg(f: CommandHandler): CommandHandler {
    return async (args: string[], flags: CommandFlags) => {
       if (args.length !== 0) {
@@ -75,6 +80,20 @@ function expectOneArg(f: CommandHandler): CommandHandler {
       if (args.length !== 1) {
          lines.value.push({
             text: `expected 1 arg, got ${args.length}`,
+            color: 'red'
+         })
+         return
+      }
+
+      await f(args, flags)
+   }
+}
+
+function expectTwoArgs(f: CommandHandler): CommandHandler {
+   return async (args: string[], flags: CommandFlags) => {
+      if (args.length !== 2) {
+         lines.value.push({
+            text: `expected 2 args, got ${args.length}`,
             color: 'red'
          })
          return
@@ -108,12 +127,33 @@ const commands: Record<string, CommandHandler> = {
       const result = await debugInitGame(startupId)
       inputDisabled.value = false
       formatResponse(result)
+      if (result.success) {
+         emit('state', result.result)
+      }
    }),
    'activate_ascension_perk': expectOneArg(async ([ascensionPerkId], flags) => {
       inputDisabled.value = true
       const result = await debugAscension(ascensionPerkId, flags.force)
       inputDisabled.value = false
       formatResponse(result)
+      if (result.success) {
+         emit('state', result.result)
+      }
+   }),
+   'attribute': expectTwoArgs(async ([attrName, value]) => {
+      inputDisabled.value = true
+      const result = await debugAddAttribute(attrName, parseInt(value) || 0)
+      inputDisabled.value = false
+      formatResponse(result)
+      if (result.success) {
+         emit('state', result.result)
+      }
+   }),
+   'refresh': expectNoArg(async () => {
+      inputDisabled.value = true
+      const result = await getSnapshot()
+      inputDisabled.value = false
+      emit('state', result)
    }),
    'crash': expectNoArg(async () => {
       inputDisabled.value = true
@@ -126,6 +166,10 @@ const commands: Record<string, CommandHandler> = {
 }
 
 async function submit(inputCommand: string) {
+   if (inputDisabled.value) {
+      return
+   }
+
    const parts = inputCommand.split(' ', -1)
    const command = parts[0]
    const args = parts.slice(1).filter(x => !x.startsWith('-'))
