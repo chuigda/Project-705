@@ -1,14 +1,17 @@
 <template>
    <div v-if="props.display"
         class="debugger">
-      <div class="debugger-output">
+      <div ref="outputContainer"
+           class="debugger-output">
          <div v-for="(line, idx) in lines"
               :key="`dbg-${idx}`"
               :style="{ color: line.color || 'white' }">
             {{ line.text }}
          </div>
+         <div ref="bottomEmptyDiv" />
       </div>
-      <input v-model="inputText"
+      <input ref="inputBox"
+             v-model="inputText"
              type="text"
              class="debugger-input"
              :disabled="inputDisabled"
@@ -19,7 +22,7 @@
 
 <script setup lang="ts">
 
-import { ref, Ref } from 'vue'
+import { ref, Ref, watch } from 'vue'
 import {
    debugAddAttribute,
    debugAscension,
@@ -28,13 +31,16 @@ import {
    setDebugToken
 } from '@app/api/debug'
 import { IGameState, IResponse } from '@protocol/index'
-import {getSnapshot, setUserToken} from '@app/api'
+import { getSnapshot, setUserToken } from '@app/api'
 
 const props = defineProps<{ display: boolean }>()
 
 const emit = defineEmits<{ (event: 'state', state: IGameState): void }>()
 
 interface ConsoleLine { text: string, color?: string }
+
+const outputContainer: Ref<any> = ref(null)
+const inputBox: Ref<any> = ref(null)
 
 const lines: Ref<ConsoleLine[]> = ref([{ text: 'Project-705 devtest console' }])
 const inputText = ref('')
@@ -166,29 +172,51 @@ const commands: Record<string, CommandHandler> = {
 }
 
 async function submit(inputCommand: string) {
-   if (inputDisabled.value) {
-      return
+   async function submitImpl() {
+      if (inputDisabled.value) {
+         return
+      }
+
+      const parts = inputCommand.split(' ', -1)
+      const command = parts[0]
+      const args = parts.slice(1).filter(x => !x.startsWith('-'))
+      const flags: CommandFlags = {}
+      if (parts.indexOf('-f', 1) !== -1) {
+         flags.force = true
+      }
+
+      if (command === 'eval') {
+         try {
+            const result = eval(args.join(' '))
+            lines.value.push({ text: `${result}` })
+         } catch (e) {
+            lines.value.push({ text: `${e}`, color: 'red' })
+         }
+         return
+      }
+
+      const handler = commands[command]
+      if (handler) {
+         await handler(args, flags)
+         return
+      }
+
+      lines.value.push({
+         text: `'${command}' is not recognized as an internal or external command, operable program or batch file.`,
+         color: '#ff0000'
+      })
    }
 
-   const parts = inputCommand.split(' ', -1)
-   const command = parts[0]
-   const args = parts.slice(1).filter(x => !x.startsWith('-'))
-   const flags: CommandFlags = {}
-   if (parts.indexOf('-f', 1) !== -1) {
-      flags.force = true
-   }
-
-   const handler = commands[command]
-   if (handler) {
-      await handler(args, flags)
-      return
-   }
-
-   lines.value.push({
-      text: `'${command}' is not recognized as an internal or external command, operable program or batch file.`,
-      color: '#ff0000'
-   })
+   await submitImpl()
+   console.log('scroll!')
+   outputContainer.value!.scrollTop = outputContainer.value!.scrollHeight;
 }
+
+watch(inputBox, () => {
+   if (inputBox.value) {
+      inputBox.value!.focus()
+   }
+})
 
 </script>
 
@@ -216,8 +244,8 @@ async function submit(inputCommand: string) {
 }
 
 .debugger-output {
-   flex-grow: 1;
-   flex-shrink: 0;
+   flex: 1 1 auto;
+   height: 0px;
    background-color: #846950AA;
    color: #FFFFFF;
    user-select: none;
@@ -225,6 +253,8 @@ async function submit(inputCommand: string) {
    border-radius: 2px;
    padding: 0 2px;
    line-height: calc(1em + 2px);
+
+   overflow-y: scroll;
 }
 
 .debugger-input {
