@@ -208,8 +208,7 @@ async function submit(inputCommand: string) {
    }
 
    await submitImpl()
-   console.log('scroll!')
-   outputContainer.value!.scrollTop = outputContainer.value!.scrollHeight;
+   outputContainer.value!.scrollTop = outputContainer.value!.scrollHeight
 }
 
 watch(inputBox, () => {

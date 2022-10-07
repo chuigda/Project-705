@@ -48,10 +48,10 @@
            title="你只能犯两次错误，再多一次你就寄了"
       />
       <div class="energy-bg"
-           :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`">
+           :title="energyBarTitle">
          <div class="energy-bar"
-              :style="`width: ${rescale(props.playerStatus.mentalHealth, props.playerStatus.mentalHealthMax)}%`"
-              :title="`${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`"
+              :style="{ width: energyBarWidth } "
+              :title="energyBarTitle"
          />
       </div>
    </div>
@@ -101,6 +101,14 @@ const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    const r = 0.4 * x ** 3 - 0.6 * x ** 2 + 1.2 * x
    return r * 100
 }
+
+const energyBarTitle = computed(() => `${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`)
+
+const energyBarWidth = computed(() => {
+   const percentage = rescale(props.playerStatus.mentalHealth!, props.playerStatus.mentalHealthMax!)
+   console.log(`recomputed percentage = ${percentage}%`)
+   return `${percentage}%`
+})
 
 </script>
 
