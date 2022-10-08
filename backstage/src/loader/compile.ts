@@ -11,7 +11,7 @@ import {
    mModifierId,
    mDisplayItemId,
    mVarName,
-   isTranslationKey, mStoreItemId
+   isTranslationKey, mStoreItemId, mMapSiteId
 } from '@app/base/uid'
 import {
    PotentialExpression,
@@ -24,6 +24,8 @@ import {
    Activity,
    AscensionPerk, ConsumableItem,
    Event,
+   MapBranch,
+   MapSite,
    MaybeInlineEvent,
    Modifier, PassiveRelicItem,
    PlayerModifier,
@@ -184,6 +186,22 @@ export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk)
       potential,
       modifier: modifier ? mModifierId(scope, modifier) : undefined,
       events
+   }
+}
+
+export function compileMapSite(scope: Scope, mapSite: MapSite): MapSite {
+   const itemBase = compileBase(scope, mapSite, mMapSiteId)
+   const potentials = mapSite.potentials?.map(mapPotential => compilePotentialExpression(scope, mapPotential))
+   const events = compileEventSeries(scope, mapSite.events)
+   const branches: [MapBranch, MapBranch?] = <any>mapSite.branches.map(
+      branch => (branch && { ...branch, description: mTranslationKey(scope, branch.description) })
+   )
+   return {
+      ...itemBase,
+
+      potentials,
+      events,
+      branches,
    }
 }
 

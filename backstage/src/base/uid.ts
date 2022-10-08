@@ -43,6 +43,7 @@ export const mStoreItemId = buildMangler('si')
 export const mTranslationKey = buildMangler('tr')
 export const mVarName = buildMangler('va')
 export const mDisplayItemId = buildMangler('ui')
+export const mMapSiteId = buildMangler('ms')
 
 export function isTranslationKey(key: string): boolean {
    return key.startsWith('$')

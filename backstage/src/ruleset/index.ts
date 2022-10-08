@@ -7,6 +7,7 @@ import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
 import { CustomUI } from '@app/ruleset/items/ui'
 import { Modifier } from '@app/ruleset/items/modifier'
+import { MapSite } from '@app/ruleset/items/map_site'
 import {
    ActiveRelicItem,
    ConsumableItem,
@@ -27,6 +28,7 @@ export * from '@app/ruleset/items/ascension_perk'
 export * from '@app/ruleset/items/store_item'
 export * from '@app/ruleset/items/event'
 export * from '@app/ruleset/items/ui'
+export * from '@app/ruleset/items/map_site'
 
 export interface RuleSetStoreItems {
    consumableItems?: ConsumableItem[]
@@ -48,6 +50,7 @@ export interface RuleSet {
    readonly activities?: Activity[]
    readonly ascensionPerks?: AscensionPerk[]
    readonly storeItems?: RuleSetStoreItems
+   readonly mapSites?: MapSite[]
    readonly events?: Event[]
    readonly translations?: Record<string, Record<string, string>>
    readonly ui?: CustomUI

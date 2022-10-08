@@ -7,6 +7,7 @@ import {
    compileAscensionPerk,
    compileBubbleMessageTemplate, compileConsumableItem,
    compileEvent,
+   compileMapSite,
    compileMenuItem,
    compileModifier, compilePassiveRelicItem, compileRechargeableItem,
    compileScoreBoard,
@@ -113,6 +114,8 @@ export const compileAscensionPerks = buildCompileSeries(
    'compileAscensionPerks',
    compileAscensionPerk
 )
+
+export const compileMapSites = buildCompileSeries('map site', 'mapSites', 'compileMapSites', compileMapSite)
 
 export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
 
@@ -345,6 +348,7 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
       activities,
       ascensionPerks,
       storeItems,
+      mapSites,
       events,
       modifiers,
       translations,
@@ -370,6 +374,10 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
 
    if (storeItems) {
       compileStoreItems(compilation, scope, storeItems)
+   }
+
+   if (mapSites) {
+      compileMapSites(compilation, scope, mapSites)
    }
 
    if (events) {

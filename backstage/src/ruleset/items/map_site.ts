@@ -1,18 +1,12 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
-import { Ident, MaybeInlineEvent, MaybeTranslationKey } from '@app/ruleset'
+import { PotentialExpression } from '@app/ruleset/items/potential'
+import { MaybeInlineEvent, MaybeTranslationKey } from '@app/ruleset'
 import { GameContext } from '@app/executor/game_context'
 
-type MapSiteType =
-   'normal'
-   | 'split'
-   | 'split_join'
-
-export interface MapSiteBase<MST extends MapSiteType> extends ItemBase {
-   readonly type: MST
-}
-
-export interface NormalMapSite extends MapSiteBase<'normal'> {
+export interface MapSite extends ItemBase {
    events?: MaybeInlineEvent[]
+   potentials?: PotentialExpression[]
+   branches: [MapBranch, MapBranch?]
 }
 
 type MapSiteSelectorType =
@@ -24,32 +18,19 @@ export interface MapSiteSelectorBase<MSST extends MapSiteSelectorType> {
    readonly type: MSST
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MapSiteRandomSelector extends MapSiteSelectorBase<'random'> {}
+export type MapSiteRandomSelector = MapSiteSelectorBase<'random'>
 
 export interface MapSiteIdentSelector extends MapSiteSelectorBase<'by_ident'> {
-   readonly ident: Ident[]
+   readonly idents: string[]
 }
 
 export interface MapSiteCustomFuncSelector extends MapSiteSelectorBase<'custom_func'> {
-   readonly func: (gameContext: GameContext, prevSite: MapSiteBase<MapSiteType>) => MapSiteBase<MapSiteType>
+   readonly func: (gameContext: GameContext, selectedSite: MapSite) => MapSite
 }
 
 export type MapSiteSelector = MapSiteRandomSelector | MapSiteIdentSelector | MapSiteCustomFuncSelector
 
 export interface MapBranch {
-   ident: string
    description: MaybeTranslationKey
-   path: MapSiteSelectorBase<MapSiteSelectorType>[]
+   selector: MapSiteSelectorBase<MapSiteSelectorType>
 }
-
-export interface SplitMapSite extends MapSiteBase<'split'> {
-   branches: MapBranch[]
-}
-
-export interface SplitJoinMapSite extends MapSiteBase<'split_join'> {
-   branches: MapBranch[]
-   joinNode: MapSiteSelector
-}
-
-export type MapSite = NormalMapSite | SplitMapSite | SplitJoinMapSite
