@@ -25,7 +25,7 @@ const routes = [
 
 // Why there are tons of stack overflows in TSC created by fucking noob TypeScript kiddies?
 // @ts-ignore
-const router = createRouter({ history: createWebHashHistory(), routes })
+export const router = createRouter({ history: createWebHashHistory(), routes })
 
 initTranslation(preferredLang).then(() => {
    const i18n = createI18n(makeI18nOption(preferredLang))

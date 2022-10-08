@@ -34,7 +34,12 @@ export async function debugAddAttribute(attrName: string, value: number): Promis
       { attrName, value }
    )
 }
-
+export async function debugTriggerEvent(event: string, args:any[]): Promise<IResponse<IGameState>> {
+   return await postJsonRequest<IResponse<IGameState>>(
+      '/api/debug/trigger_event',
+      { event, args }
+   )
+}
 export async function debugCrash(): Promise<IResponseFail> {
    return await postJsonRequest<IResponseFail>('/api/debug/crash')
 }

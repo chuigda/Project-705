@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { IGameState, IResponse, IResponseFail } from '@protocol/index'
 import { GameContext } from '@app/executor/game_context'
 import { addActivity } from '@app/executor/activity'
+import { triggerEvent } from '@app/executor/events';
 import { sendGameState } from '@app/server/mapping'
 import { activateAscensionPerk } from '@app/executor/ascension_perk'
 import { grantSkill } from '@app/executor/skill'
@@ -14,6 +15,7 @@ import { validateAccessToken, validateBody, validateGameContext } from '@app/ser
 
 import serverStore from '@app/server/store'
 import { updatePlayerProperty } from '@app/executor/properties'
+
 
 const authToken = uuid()
 console.info(`[I] [debug.ts] debugging interface uuid = '${authToken}'`)
@@ -238,7 +240,22 @@ debugRouter.post(
       })
    }
 )
-
+debugRouter.post(
+   '/trigger_event',
+   validateGameContext,
+   validateBody({event:'string',args:'object'}),
+   (req, res: DebugResponse) => {
+      const {event,args} = req.body
+      const {gameContext} = res.locals
+      gameContext.updateTracker.reset()
+      triggerEvent(gameContext,event,args)
+      res.json({
+         success: true,
+         message: 'success',
+         result: sendGameState(gameContext.state, gameContext.updateTracker)
+      })
+   }
+)
 debugRouter.post(
    '/crash',
    (req, res: Response<IResponseFail>) => {
@@ -250,5 +267,6 @@ debugRouter.post(
       setTimeout(abort, 5000)
    }
 )
+
 
 export default debugRouter
