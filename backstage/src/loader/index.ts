@@ -6,7 +6,7 @@ import {
    StoreItem,
    ConsumableItem,
    PassiveRelicItem,
-   RechargeableItem, ActiveRelicItem, TradableItem
+   RechargeableItem, ActiveRelicItem, TradableItem, MapSite
 } from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
 import { ruleSetAssertion } from '@app/loader/assertions'
@@ -69,6 +69,7 @@ export class CompiledRuleSet {
    activities: Record<string, Activity> = {}
    ascensionPerks: Record<string, AscensionPerk> = {}
    startups: Record<string, Startup> = {}
+   mapSites: Record<string, MapSite> = {}
    storeItems: CompiledStoreItems = new CompiledStoreItems()
    ui: CompiledCustomUI = new CompiledCustomUI()
 

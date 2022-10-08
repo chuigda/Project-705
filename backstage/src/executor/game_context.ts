@@ -42,6 +42,7 @@ import modifierFunctions from '@app/executor/modifier'
 import storeItemFunctions from '@app/executor/store_item'
 import activityFunctions from '@app/executor/activity'
 import { QResult } from '@app/executor/result'
+import { GeneratedSite } from '@app/executor/map_site'
 
 export class PlayerAttributes {
    strength: number = 0
@@ -187,6 +188,10 @@ export class ShopStatus {
    passiveRelicItems: Record<string, PassiveRelicItem> = {}
 }
 
+export class MapStatus {
+   rootSite: GeneratedSite
+}
+
 export class GameState {
    startup: string = ''
 
@@ -201,6 +206,8 @@ export class GameState {
    computedModifier?: ComputedModifier = undefined
    computedSkills?: ComputedSkills = undefined
    computedAscensionPerks?: ComputedAscensionPerks = undefined
+
+   map: MapStatus = new MapStatus()
 
    customButtons: Button[] = []
    customMenus: Menu[] = []
@@ -276,6 +283,7 @@ export class GameContext {
    scopeChain: Scope[] = []
    eventChainCounter?: number = undefined
    uiItemCounter: number = 0
+   mapSiteCounter: number = 0
 
    skillPool: Record<string, Skill> = {}
    ascensionPerkPool: Record<string, AscensionPerk> = {}
