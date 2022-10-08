@@ -8,9 +8,9 @@
 backstage/test/test_quick*.js
 backstage/test/test_quick*.ts
 backstage/*/dist*
-
+pnpm-lock.yaml
 */dist/
-*/pnpm-lock.yaml
+
 *.d.ts
 !env.d.ts
 */__pycache__/*
