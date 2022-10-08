@@ -247,7 +247,6 @@ debugRouter.post(
    (req, res: DebugResponse) => {
       const {event,args} = req.body
       const {gameContext} = res.locals
-      console.log(event,args)
       gameContext.updateTracker.reset()
       triggerEvent(gameContext,event,args)
       res.json({
