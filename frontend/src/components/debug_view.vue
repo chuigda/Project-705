@@ -28,6 +28,7 @@ import {
    debugAscension,
    debugCrash,
    debugInitGame,
+   debugTriggerEvent,
    setDebugToken
 } from '@app/api/debug'
 import { IGameState, IResponse } from '@protocol/index'
@@ -64,7 +65,7 @@ interface CommandFlags {
 }
 
 type CommandHandler = (args: string[], flags: CommandFlags) => Promise<void>
-
+type CommandHandler2 = (args: {event:Function,args:any[]}, flags: CommandFlags) => Promise<void>
 // One day I'll fuck up these bullshits
 
 function expectNoArg(f: CommandHandler): CommandHandler {
@@ -108,7 +109,6 @@ function expectTwoArgs(f: CommandHandler): CommandHandler {
       await f(args, flags)
    }
 }
-
 function formatResponse(res: IResponse<any>) {
    let color
    if (res.success) {
@@ -168,7 +168,16 @@ const commands: Record<string, CommandHandler> = {
       // theoretically this shouldn't be reachable
       inputDisabled.value = false
       formatResponse(result)
-   })
+   }),
+   'trigger_event': expectOneArg(async ([event,...args]) => {
+      inputDisabled.value = true
+      const result = await debugTriggerEvent(event,args)
+      inputDisabled.value = false
+      formatResponse(result)
+      if (result.success) {
+         emit('state', result.result)
+      }
+   }),
 }
 
 async function submit(inputCommand: string) {
