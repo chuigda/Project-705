@@ -1,6 +1,6 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
 import { PotentialExpression } from '@app/ruleset/items/potential'
-import { MaybeInlineEvent, MaybeTranslationKey } from '@app/ruleset'
+import { MaybeInlineEvent, MaybeTranslationKey, Ident } from '@app/ruleset'
 import { GameContext } from '@app/executor/game_context'
 
 export interface MapSite extends ItemBase {
@@ -21,7 +21,7 @@ export interface MapSiteSelectorBase<MSST extends MapSiteSelectorType> {
 export type MapSiteRandomSelector = MapSiteSelectorBase<'random'>
 
 export interface MapSiteIdentSelector extends MapSiteSelectorBase<'by_ident'> {
-   readonly idents: string[]
+   readonly idents: Ident[]
 }
 
 export interface MapSiteCustomFuncSelector extends MapSiteSelectorBase<'custom_func'> {

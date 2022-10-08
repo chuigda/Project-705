@@ -32,12 +32,11 @@ function randomSite(gameContext: GameContext): MapSite {
    return randPropValue(gameContext.ruleSet.mapSites)
 }
 
-function genSiteByBranch(gameContext: GameContext, br: MapBranch, selectedSite: GeneratedSite): MapSite {
+function genSiteByBranch(gameContext: GameContext, br: MapBranch, selectedSite: GeneratedSite): MapSite | undefined {
    switch (br.selector.type) {
       case 'by_ident': {
          const selector = <MapSiteIdentSelector>br.selector
-         // if site not found, then choose random
-         return gameContext.ruleSet.mapSites[randChoose(selector.idents)] || randomSite(gameContext)
+         return gameContext.ruleSet.mapSites[randChoose(<string[]>selector.idents)] // maybe undefined
       }
       case 'random': {
          return randomSite(gameContext)
@@ -54,18 +53,30 @@ function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, select
       return
    }
    const [brl, brr] = curr.site.branches
-   const newLeftSite = new GeneratedSite(genSiteByBranch(gameContext, brl, selectedSite))
+   let site = genSiteByBranch(gameContext, brl, selectedSite)
+   let desc = <string>brl.description
+   if (site === undefined) {
+      site = randomSite(gameContext)
+      desc = ''
+   }
+   const newLeftSite = new GeneratedSite(site)
    const newLeft: GeneratedBranch = {
-      desc: <string>brl.description,
+      desc,
       next: newLeftSite
    }
    curr.left = newLeft
    if (brr === undefined) {
       return
    }
-   const newRightSite = new GeneratedSite(genSiteByBranch(gameContext, brr, selectedSite))
+   site = genSiteByBranch(gameContext, brr, selectedSite)
+   desc = <string>brr.description
+   if (site === undefined) {
+      site = randomSite(gameContext)
+      desc = ''
+   }
+   const newRightSite = new GeneratedSite(site)
    const newRight: GeneratedBranch = {
-      desc: <string>brr.description,
+      desc,
       next: newRightSite
    }
    curr.right = newRight

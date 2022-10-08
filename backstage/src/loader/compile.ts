@@ -26,6 +26,7 @@ import {
    Event,
    MapBranch,
    MapSite,
+   MapSiteIdentSelector,
    MaybeInlineEvent,
    Modifier, PassiveRelicItem,
    PlayerModifier,
@@ -194,7 +195,24 @@ export function compileMapSite(scope: Scope, mapSite: MapSite): MapSite {
    const potentials = mapSite.potentials?.map(mapPotential => compilePotentialExpression(scope, mapPotential))
    const events = compileEventSeries(scope, mapSite.events)
    const branches: [MapBranch, MapBranch?] = <any>mapSite.branches.map(
-      branch => (branch && { ...branch, description: mTranslationKey(scope, branch.description) })
+      branch => {
+         if (branch === undefined) {
+            return undefined
+         }
+         const { selector } = branch
+         if (selector.type === 'by_ident') {
+            const the = <MapSiteIdentSelector>selector
+            const idents = the.idents.map(ident => mMapSiteId(scope, ident))
+            return <MapBranch>{
+               selector: <MapSiteIdentSelector>{
+                  type: selector.type,
+                  idents,
+               },
+               description: mTranslationKey(scope, branch.description)
+            }
+         }
+         return <MapBranch>{ ...branch, description: mTranslationKey(scope, branch.description) }
+      }
    )
    return {
       ...itemBase,
