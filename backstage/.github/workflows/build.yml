@@ -1,0 +1,50 @@
+name: build
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+jobs:
+  build-backstage:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.x, 16.x]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      working-directory: ./backstage
+      run: |
+        npm install
+    - working-directory: ./backstage
+      run: |
+        npm ci
+    - name: Build backstage
+      working-directory: ./backstage
+      run: npm run release_build --if-present
+    - name: Install lint dependencies
+      working-directory: ./backstage
+      run: |
+        npm install @microsoft/eslint-formatter-sarif
+    - name: Run ESLint
+      working-directory: ./backstage
+      run: npx eslint .
+        --config .eslintrc
+        --ext .ts
+        --format @microsoft/eslint-formatter-sarif 
+        --output-file ../eslint-results.sarif
+      continue-on-error: true
+    - name: Upload analysis results to GitHub
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: eslint-results.sarif
+        wait-for-processing: true
