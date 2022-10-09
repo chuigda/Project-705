@@ -11,6 +11,7 @@ export type ValueSource =
    | '@essay_competition'
    | '@election'
    | '@variety_show'
+   | '@explore'
    | string
 
 export interface ModifierValue {

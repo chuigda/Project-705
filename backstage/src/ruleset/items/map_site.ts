@@ -7,6 +7,7 @@ export interface MapSite extends ItemBase {
    events?: MaybeInlineEvent[]
    potentials?: PotentialExpression[]
    branches: [MapBranch, MapBranch?]
+   energyCost: number
 }
 
 type MapSiteSelectorType =

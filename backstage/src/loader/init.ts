@@ -3,6 +3,7 @@ import { CompiledRuleSet } from '@app/loader/index'
 import { triggerEvent } from '@app/executor/events'
 import { applyStartup } from '@app/executor/startup'
 import { computeModifier, computePotentialAscensionPerks, computePotentialSkills } from '@app/executor/compute'
+import { initMap } from '@app/executor/map_site'
 
 export default function initGame(ruleSet: CompiledRuleSet, startupId: string): GameContext | undefined {
    const startup = ruleSet.startups[startupId]
@@ -22,6 +23,8 @@ export default function initGame(ruleSet: CompiledRuleSet, startupId: string): G
    computeModifier(context)
    computePotentialSkills(context)
    computePotentialAscensionPerks(context)
+
+   initMap(context)
 
    return context
 }
