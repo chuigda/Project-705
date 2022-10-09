@@ -98,6 +98,7 @@ export function initMap(gameContext: GameContext) {
    const initialSite: GeneratedSite = new GeneratedSite(randomSite(gameContext))
    initMapDfsHelper(gameContext, initialSite, initialSite, 1)
    gameContext.state.map.rootSite = initialSite
+   gameContext.updateTracker.map = true
 }
 
 type PathDirection = 'left' | 'right'

@@ -15,7 +15,7 @@ import { validateAccessToken, validateBody, validateGameContext } from '@app/ser
 
 import serverStore from '@app/server/store'
 import { updatePlayerProperty } from '@app/executor/properties'
-
+import { initMap } from '@app/executor/map_site'
 
 const authToken = uuid()
 console.info(`[I] [debug.ts] debugging interface uuid = '${authToken}'`)
@@ -240,15 +240,16 @@ debugRouter.post(
       })
    }
 )
+
 debugRouter.post(
    '/trigger_event',
    validateGameContext,
-   validateBody({event:'string',args:'object'}),
+   validateBody({ event: 'string', args: 'object' }),
    (req, res: DebugResponse) => {
-      const {event,args} = req.body
-      const {gameContext} = res.locals
+      const { event, args } = req.body
+      const { gameContext } = res.locals
       gameContext.updateTracker.reset()
-      triggerEvent(gameContext,event,args)
+      triggerEvent(gameContext, event, args)
       res.json({
          success: true,
          message: 'success',
@@ -256,6 +257,43 @@ debugRouter.post(
       })
    }
 )
+
+debugRouter.post(
+   '/regen_map',
+   validateGameContext,
+   (req, res: DebugResponse) => {
+      const { gameContext } = res.locals
+
+      gameContext.updateTracker.reset()
+      initMap(gameContext)
+      res.json({
+         success: true,
+         message: 'success',
+         result: sendGameState(gameContext.state, gameContext.updateTracker)
+      })
+   }
+)
+
+debugRouter.post(
+   '/map_fast_foward',
+   validateGameContext,
+   validateBody({
+      paths: (<any>['string']).chainWith((x: any) => x === 'left' || x === 'right')
+   }),
+   (req, res: DebugResponse) => {
+      const { paths } = req.body
+      const { gameContext } = res.locals
+
+      gameContext.updateTracker.reset()
+      // initMap(gameContext)
+      res.status(501).json({
+         success: false,
+         message: 'not implemented',
+         // result: sendGameState(gameContext.state, gameContext.updateTracker)
+      })
+   }
+)
+
 debugRouter.post(
    '/crash',
    (req, res: Response<IResponseFail>) => {
@@ -267,6 +305,5 @@ debugRouter.post(
       setTimeout(abort, 5000)
    }
 )
-
 
 export default debugRouter
