@@ -286,6 +286,7 @@ debugRouter.post(
 
       gameContext.updateTracker.reset()
       // initMap(gameContext)
+      // TODO(rebuild)
       res.status(501).json({
          success: false,
          message: 'not implemented',

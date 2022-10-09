@@ -28,7 +28,7 @@ export function sendGeneratedBranch(b?: GeneratedBranch): IGeneratedBranch | und
       return undefined
    }
    return {
-      desc: sendTranslationKey(b.desc),
+      desc: b.desc && sendTranslationKey(b.desc),
       next: sendGeneratedSite(b.next),
    }
 }
