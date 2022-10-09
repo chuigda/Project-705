@@ -1,11 +1,9 @@
-import { GameContext, GameState } from '@app/executor/game_context'
+import { GameContext } from '@app/executor/game_context'
 import {
    MapBranch,
    MapSite,
    MapSiteCustomFuncSelector,
    MapSiteIdentSelector,
-   mMapSiteId,
-   mTranslationKey
 } from '@app/ruleset'
 import { randChoose, randPropValue } from '@app/util/rand'
 
@@ -18,7 +16,7 @@ export class GeneratedSite {
       this.site = site
    }
 
-   isNextHidden() {
+   isLeafSite() {
       return this.left === undefined
    }
 }
@@ -49,7 +47,7 @@ function genSiteByBranch(gameContext: GameContext, br: MapBranch, selectedSite: 
 }
 
 function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, selectedSite: GeneratedSite) {
-   if (!curr.isNextHidden()) {
+   if (!curr.isLeafSite()) {
       return
    }
    const [brl, brr] = curr.site.branches
@@ -84,19 +82,50 @@ function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, select
 
 const MAX_DEPTH = 4
 
-function initMapHelper(gameContext: GameContext, curr: GeneratedSite, selectedSite: GeneratedSite, depth: number) {
+// TODO: use iterative, avoid recursion
+function initMapDfsHelper(gameContext: GameContext, curr: GeneratedSite, selectedSite: GeneratedSite, depth: number) {
    if (depth >= MAX_DEPTH) {
       return
    }
    generateNextLevel(gameContext, curr, selectedSite)
-   initMapHelper(gameContext, curr.left!.next, selectedSite, depth + 1)
+   initMapDfsHelper(gameContext, curr.left!.next, selectedSite, depth + 1)
    if (curr.right) {
-      initMapHelper(gameContext, curr.right.next, selectedSite, depth + 1)
+      initMapDfsHelper(gameContext, curr.right.next, selectedSite, depth + 1)
    }
 }
 
 export function initMap(gameContext: GameContext) {
    const initialSite: GeneratedSite = new GeneratedSite(randomSite(gameContext))
-   initMapHelper(gameContext, initialSite, initialSite, 1)
+   initMapDfsHelper(gameContext, initialSite, initialSite, 1)
    gameContext.state.map.rootSite = initialSite
+}
+
+type PathDirection = 'left' | 'right'
+
+function choosePathDfsHelper(gameContext: GameContext, root: GeneratedSite) {
+   const stack = [root]
+   while (stack.length !== 0) {
+      const curr = stack.pop()!
+      if (curr.isLeafSite()) {
+         generateNextLevel(gameContext, curr, root)
+         continue
+      }
+      if (curr.right !== undefined) {
+         stack.push(curr.right.next)
+      }
+      stack.push(curr.left!.next)
+   }
+}
+
+export function choosePath(gameContext: GameContext, nextdir: PathDirection) {
+   const { rootSite } = gameContext.state.map
+   // if the current site has only one path, then ignore the choice
+   if (gameContext.state.map.rootSite.right === undefined) {
+      nextdir = 'left'
+   }
+   const { next } = rootSite[nextdir]!
+   gameContext.state.map.rootSite = next
+   gameContext.updatePlayerProperty('energy', 'sub', next.site.energyCost, '@map_move')
+   gameContext.updateTracker.map = true
+   choosePathDfsHelper(gameContext, next)
 }

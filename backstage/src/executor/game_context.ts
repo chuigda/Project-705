@@ -247,6 +247,8 @@ export class UpdateTracker {
    computedSkills: boolean = false
    computedAscensionPerks: boolean = false
 
+   map: boolean = false
+
    customButtons: boolean
    customMenus: boolean
    customScoreBoards: boolean
@@ -283,7 +285,6 @@ export class GameContext {
    scopeChain: Scope[] = []
    eventChainCounter?: number = undefined
    uiItemCounter: number = 0
-   mapSiteCounter: number = 0
 
    skillPool: Record<string, Skill> = {}
    ascensionPerkPool: Record<string, AscensionPerk> = {}

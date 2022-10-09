@@ -1,9 +1,4 @@
 import express = require('express')
-import { NextFunction, Request, Response } from 'express'
-
-import serverStore from '@app/server/store'
-import { GameContext } from '@app/executor/game_context'
-import { IResponse } from '@protocol/index'
 
 import epInitGame from '@app/server/endpoints/init'
 import epNextTurn from '@app/server/endpoints/next_turn'
@@ -12,6 +7,7 @@ import epSendSnapshot from '@app/server/endpoints/snapshot'
 import epGetTranslation from '@app/server/endpoints/translation'
 import epActivateAscensionPerk from '@app/server/endpoints/ascension_perk'
 import epGetStartups from '@app/server/endpoints/startup'
+import epMapMove from '@app/server/endpoints/map_move'
 import { epPurchaseItem, epUseItem } from '@app/server/endpoints/store_item'
 import debugRouter from '@app/server/endpoints/debug'
 import { validateAccessToken, validateGameContext } from '@app/server/middleware'
@@ -34,6 +30,8 @@ function applicationStart() {
    app.post('/api/purchase_item', validateGameContext, epPurchaseItem)
 
    app.post('/api/use_item', validateGameContext, epUseItem)
+
+   app.post('/api/map_move', validateGameContext, epMapMove)
 
    app.get('/api/startups', epGetStartups)
 
