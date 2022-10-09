@@ -15,7 +15,7 @@
     "clean:dist": "rm -rf dist",
     "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
     "test_type_assert": "ts-node -r tsconfig-paths/register test/test_type_assert.ts",
-    "lint": "eslint . --config .eslintrc --ext .ts"
+    "lint": "eslint src --config .eslintrc --ext .ts"
   },
   "author": "",
   "license": "ISC",
