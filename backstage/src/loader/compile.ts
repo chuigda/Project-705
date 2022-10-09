@@ -192,6 +192,7 @@ export function compileAscensionPerk(scope: Scope, ascensionPerk: AscensionPerk)
 
 export function compileMapSite(scope: Scope, mapSite: MapSite): MapSite {
    const itemBase = compileBase(scope, mapSite, mMapSiteId)
+   const { energyCost } = mapSite
    const potentials = mapSite.potentials?.map(mapPotential => compilePotentialExpression(scope, mapPotential))
    const events = compileEventSeries(scope, mapSite.events)
    const branches: [MapBranch, MapBranch?] = <any>mapSite.branches.map(
@@ -217,6 +218,7 @@ export function compileMapSite(scope: Scope, mapSite: MapSite): MapSite {
    return {
       ...itemBase,
 
+      energyCost,
       potentials,
       events,
       branches,
