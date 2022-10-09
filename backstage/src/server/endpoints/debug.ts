@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid'
 import { IGameState, IResponse, IResponseFail } from '@protocol/index'
 import { GameContext } from '@app/executor/game_context'
 import { addActivity } from '@app/executor/activity'
-import { triggerEvent } from '@app/executor/events';
+import { triggerEvent } from '@app/executor/events'
 import { sendGameState } from '@app/server/mapping'
 import { activateAscensionPerk } from '@app/executor/ascension_perk'
 import { grantSkill } from '@app/executor/skill'
@@ -278,7 +278,7 @@ debugRouter.post(
    '/map_fast_foward',
    validateGameContext,
    validateBody({
-      paths: (<any>['string']).chainWith((x: any) => x === 'left' || x === 'right')
+      paths: [(<any>'string').chainWith((x: any) => x === 'left' || x === 'right')]
    }),
    (req, res: DebugResponse) => {
       const { paths } = req.body
