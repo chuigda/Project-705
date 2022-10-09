@@ -4,6 +4,7 @@ import {
    MapSite,
    MapSiteCustomFuncSelector,
    MapSiteIdentSelector,
+   MaybeTranslationKey,
 } from '@app/ruleset'
 import { randChoose, randPropValue } from '@app/util/rand'
 
@@ -22,7 +23,7 @@ export class GeneratedSite {
 }
 
 export class GeneratedBranch {
-   desc: string
+   desc?: MaybeTranslationKey
    next: GeneratedSite
 }
 
@@ -52,10 +53,10 @@ function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, select
    }
    const [brl, brr] = curr.site.branches
    let site = genSiteByBranch(gameContext, brl, selectedSite)
-   let desc = <string>brl.description
+   let desc = <MaybeTranslationKey | undefined>brl.description
    if (site === undefined) {
       site = randomSite(gameContext)
-      desc = ''
+      desc = undefined
    }
    const newLeftSite = new GeneratedSite(site)
    const newLeft: GeneratedBranch = {
@@ -70,7 +71,7 @@ function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, select
    desc = <string>brr.description
    if (site === undefined) {
       site = randomSite(gameContext)
-      desc = ''
+      desc = undefined
    }
    const newRightSite = new GeneratedSite(site)
    const newRight: GeneratedBranch = {
@@ -82,7 +83,6 @@ function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, select
 
 const MAX_DEPTH = 4
 
-// TODO: use iterative, avoid recursion
 function initMapDfsHelper(gameContext: GameContext, curr: GeneratedSite, selectedSite: GeneratedSite, depth: number) {
    if (depth >= MAX_DEPTH) {
       return

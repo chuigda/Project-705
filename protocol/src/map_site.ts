@@ -24,6 +24,6 @@ export interface IGeneratedSite {
 }
 
 export interface IGeneratedBranch {
-   desc: ITranslationKey
+   desc?: ITranslationKey
    next: IGeneratedSite
 }
