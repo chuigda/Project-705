@@ -24,7 +24,7 @@
       </div>
       <div v-for="(choice,i) in choices"
            :key="i"
-           :class="['choice', {notme: selected>=0&&selected!=i}]"
+           :class="['choice', {notme: selected>=0&&selected!=i, danger: choice.danger}]"
            @click="onSelectWrapper($event, i, choice.action)">
          {{ choice.text }}
       </div>
@@ -157,5 +157,9 @@ const skip = () => {
 .tbd-dialog .choice.notme {
    background-color: #CCCCCC;
    color: #808080;
+}
+
+.tbd-dialog .choice.danger {
+   color: #CD0000;
 }
 </style>
