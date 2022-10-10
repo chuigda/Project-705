@@ -20,10 +20,7 @@ export function popScope(gameContext: GameContext) {
    gameContext.scope = gameContext.scopeChain.pop()
 }
 
-export function triggerEvent(
-   gameContext: GameContext, 
-   event: MaybeInlineEvent, 
-   ...args: any[]): QResult {
+export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]): QResult {
    const scope = ensureScope(gameContext)
 
    let unsetCounter = false
