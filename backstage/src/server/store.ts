@@ -1,5 +1,4 @@
 import { GameContext } from '@app/executor/game_context'
-import { triggerEvent } from '@app/executor/events'
 import ruleSet from '@app/server/ruleset'
 import initGame from '@app/loader/init'
 

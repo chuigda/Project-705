@@ -3,7 +3,6 @@ import {
    Modifier,
    SkillCategory,
    Scope,
-   StoreItem,
    ConsumableItem,
    PassiveRelicItem,
    RechargeableItem, ActiveRelicItem, TradableItem, MapSite
