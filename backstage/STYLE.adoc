@@ -1,0 +1,32 @@
+= Styling guide
+author: Chuigda<icey@icey.tech>
+
+== 0. Basic coding styles
+1. **Three spaces** indentation.
+2. UTF-8 **without BOM**, that's windows shit. Don't edit things with Windows notepad or write pad.
+3. Always use **LF**, not **CRLF**, unless necessary (like in HTTP).
+4. Swear words are allowed but only when talking about the badness of fucking 3rd party libraries.
+5. Name files in `snake_case` (so they would look like paradox things), unless certain naming is wanted by some auto tools.
+6. Enable `eslint` when possible. If you think some rule is annoying, confirm with Chuigda.
+
+== 1. Rules for protocol
+1. Always use `interface`, not `class`, and make sure everything serializable / deserializable via `JSON.stringify` / `JSON.parse`.
+2. Some `string | Ident` things will always be transformed into `string` during _mod compilation_, so you may simply use `string` under such circumstance.
+3. However, always use `ITranslationKey` or `ITranslatable`, to indicate that something is potentially a translatable item.
+
+== 2. Rules for backstage programming
+1. Always use `interface` for rule set things. Downstream mod manufacturers aren't able to construct our `class`.
+2. Under other circumstances, only use `class` if you find you need a method or you want something like a constructor.
+3. When some API needs to be exposed to downstream mod manufacturers, plug that API to `GameContext` so that it could be accessible.
+4. When designing a new module, if you find you need some user-defined executable code, think about event system first.
+5. Use `typeAssert` to validate mods and requests. When adding a new module, ensure relevant type assertions are added.
+
+== 3. Rules for frontend programming
+1. Though we're naming files with `snake_case`, components should still use `PascalCase` while variables should still use `camelCase`.
+2. Some eslint rules of backstage (mainly airbnb rules) was not ported to frontend `.eslintrc` due to some compatibility reason. But it's still expected to follow these rules.
+
+== 4. Collaboration
+1. **KEAL** (**K**eep **E**veryone **AL**ive), or **It will KEAL**, instead of traditional LGTM.
+2. Using poetry (nonsense) commit messages for trivial commits is acceptable.
+3. Using poetry (nonsense) pull request messages is acceptable.
+4. Don't talk about politics or current events all the time. Also, avoid such things in game contents.

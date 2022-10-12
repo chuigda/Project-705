@@ -1,0 +1,4 @@
+= Project-705
+author: chuigda<icey@icey.tech>, flaribbit, rebuild, lyra
+
+中国式家长 - 山寨版，但没有完全山寨
