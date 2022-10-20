@@ -23,7 +23,6 @@ export default function initGame(ruleSet: CompiledRuleSet, startupId: string): G
    computeModifier(context)
    computePotentialSkills(context)
    computePotentialAscensionPerks(context)
-
    initMap(context)
 
    return context

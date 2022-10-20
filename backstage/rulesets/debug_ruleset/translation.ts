@@ -1,13 +1,12 @@
 const translations: Record<string, Record<string, string>> = {
    'zh_cn': {
-      '$skill1_name': '天羽屠龙舞',
-      '$skill1_desc': '暴龙神你就是歌姬吧，你记住我说的话嗷，我现在就在能源之城骂你。',
+      '$startup_debug': '测试起源',
+      '$startup_debug_desc': '仅供测试使用的起源，如果你在正常游玩中遇到这玩意，多半是程序瓦特了',
 
-      '$skill2_name': '后备隐藏能源',
-      '$skill2_desc': '奶奶滴，给我玩阴滴是吧，直接来吧！',
+      '$ms_test_site': '测试节点',
+      '$ms_test_site_desc': '什么都不会发生',
 
-      '$skill3_name': '九天雷霆双脚蹬',
-      '$skill3_desc': '来风火轮给他整个活！艹，走，忽略！'
+      '$br_your_only_choice': '你没得选'
    }
 }
 
