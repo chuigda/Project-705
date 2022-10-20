@@ -13,7 +13,8 @@
     "clean": "npm-run-all clean:*",
     "clean:dts": "rm -f *.d.ts",
     "clean:dist": "rm -rf dist",
-    "test_quick_ts": "ts-node -r tsconfig-paths/register test/test_quick.ts",
+    "test_quick_ts": "env DEBUG=1 ts-node -r tsconfig-paths/register test/test_quick.ts",
+    "test": "npm-run-all test:*",
     "test:test_type_assert": "env DEBUG=1 ts-node -r tsconfig-paths/register test/test_type_assert.ts",
     "test:test_start_game": "env DEBUG=1 ts-node -r tsconfig-paths/register test/test_start_game.ts",
     "lint": "eslint src --config .eslintrc --ext .ts"
