@@ -150,5 +150,11 @@ export function load(): CompiledRuleSet {
       }
    }
 
+   if (Object.keys(ret.mapSites).length === 0) {
+      console.error('[E] [load] map generator will not work with no map sites defined, '
+                    + 'this should not happen in common case')
+      abort()
+   }
+
    return Object.freeze(ret)
 }

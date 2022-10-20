@@ -28,14 +28,14 @@ export class GeneratedBranch {
 }
 
 function randomSite(gameContext: GameContext): MapSite {
-   return randPropValue(gameContext.ruleSet.mapSites)
+   return randPropValue(gameContext.ruleSet.mapSites)!
 }
 
-function genSiteByBranch(gameContext: GameContext, br: MapBranch, selectedSite: GeneratedSite): MapSite | undefined {
+function genSiteByBranch(gameContext: GameContext, br: MapBranch, selectedSite: GeneratedSite): MapSite {
    switch (br.selector.type) {
       case 'by_ident': {
          const selector = <MapSiteIdentSelector>br.selector
-         return gameContext.ruleSet.mapSites[randChoose(<string[]>selector.idents)] // maybe undefined
+         return gameContext.ruleSet.mapSites[randChoose(<string[]>selector.idents)!] // maybe undefined
       }
       case 'random': {
          return randomSite(gameContext)
@@ -51,6 +51,7 @@ function generateNextLevel(gameContext: GameContext, curr: GeneratedSite, select
    if (!curr.isLeafSite()) {
       return
    }
+
    const [brl, brr] = curr.site.branches
    let site = genSiteByBranch(gameContext, brl, selectedSite)
    let desc = <MaybeTranslationKey | undefined>brl.description
