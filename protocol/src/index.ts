@@ -36,14 +36,6 @@ export interface IGameState {
    computedAscensionPerks?: IComputedAscensionPerks
 }
 
-export interface IStartupPlayerProperties {
-   attributes?: IPartialPlayerAttributes
-   talent?: IPartialPlayerAttributes
-   skillPoints?: number
-   money?: number
-   moneyPerTurn?: number
-}
-
 export interface IResponseSuccess<R> {
    success: true
    message: ITranslationKey

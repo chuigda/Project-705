@@ -66,7 +66,6 @@ export class GameState {
 
    customButtons: Button[] = []
    customMenus: Menu[] = []
-   customScoreBoards: CustomScoreBoard[] = []
 
    dialogs: SimpleDialog[] = []
    bubbleMessages: BubbleMessage[] = []
@@ -254,7 +253,7 @@ export class GameContext {
       return propertyFunctions.getPropertyValue(this, property)
    }
 
-   updateProperty(property: string, operator: PropertyOp, value: number, source?: ValueSource) {
+   updateProperty(property: PropertyId, operator: PropertyOp, value: number, source?: ValueSource) {
       propertyFunctions.updateProperty(this, property, operator, value, source)
    }
 

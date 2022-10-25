@@ -15,13 +15,11 @@ const ascensionPerkModifiers: Modifier[] = [
       name: '$md_dont_be_busy',
       description: '$md_dont_be_busy_desc',
       player: {
-         attributes: {
-            strength: { '@activity:all': { gain: -0.1 } },
-            intelligence: { '@activity:all': { gain: -0.1 } },
-            emotionalIntelligence: { '@activity:all': { gain: -0.1 } },
-            memorization: { '@activity:all': { gain: -0.1 } },
-            imagination: { '@activity:all': { gain: -0.1 } }
-         }
+         '@strength': { '@activity:all': { gain: -0.1 } },
+         '@intelligence': { '@activity:all': { gain: -0.1 } },
+         '@emotional_intelligence': { '@activity:all': { gain: -0.1 } },
+         '@memorization': { '@activity:all': { gain: -0.1 } },
+         '@imagination': { '@activity:all': { gain: -0.1 } }
       }
    },
    {
@@ -29,16 +27,12 @@ const ascensionPerkModifiers: Modifier[] = [
       name: '$md_dont_be_busy_boost',
       description: '$md_dont_be_busy_boot_desc',
       player: {
-         attributes: {
-            strength: { '@activity:all': { gain: 0.15 } },
-            intelligence: { '@activity:all': { gain: 0.15 } },
-            emotionalIntelligence: { '@activity:all': { gain: 0.15 } },
-            memorization: { '@activity:all': { gain: 0.15 } },
-            imagination: { '@activity:all': { gain: 0.15 } }
-         },
-         skillPoints: {
-            'all': { gain: 0.1 }
-         }
+         '@strength': { '@activity:all': { gain: 0.15 } },
+         '@intelligence': { '@activity:all': { gain: 0.15 } },
+         '@emotional_intelligence': { '@activity:all': { gain: 0.15 } },
+         '@memorization': { '@activity:all': { gain: 0.15 } },
+         '@imagination': { '@activity:all': { gain: 0.15 } },
+         '@skill_point': { 'all': { gain: 0.1 } }
       }
    },
    {
@@ -63,19 +57,15 @@ const ascensionPerkModifiers: Modifier[] = [
       description: '$md_king_of_involution_desc',
 
       player: {
-         attributes: {
-            charisma: {
-               'all': { gain: -0.3, loss: 0.3 }
-            }
-         },
-         skillPoints: {
+         '@charisma': { 'all': { gain: -0.3, loss: 0.3 } },
+         '@skill_points': {
             '@activity:@chinese': { gain: 0.3 },
             '@activity:@math': { gain: 0.3 },
             '@activity:@english': { gain: 0.3 },
             '@activity:@liberal': { gain: 0.3 },
             '@activity:@science': { gain: 0.3 }
          },
-         mentalHealth: {
+         '@mental_health': {
             '@activity:@chinese': { loss: -0.6 },
             '@activity:@math': { loss: -0.6 },
             '@activity:@english': { loss: -0.6 },
@@ -83,6 +73,8 @@ const ascensionPerkModifiers: Modifier[] = [
             '@activity:@science': { loss: -0.6 }
          }
       },
+      // TODO rework this
+      /*
       skillPointCost: compilation => {
          const r: Record<string, number> = Object.fromEntries(majorSubjects.map(subject => [subject, -0.5]))
          for (const skillCategory of compilation.skillCategories) {
@@ -93,6 +85,7 @@ const ascensionPerkModifiers: Modifier[] = [
          }
          return r
       }
+      */
    }
 ]
 

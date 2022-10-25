@@ -52,29 +52,28 @@ const detroitEvents: Event[] = [
    {
       ident: 'detroit_add_attr1',
       event: cx => {
-         // not using `updatePlayerProperties` here because we don't want to be hooked
-         cx.state.player.attributes.intelligence += 2000
-         cx.state.player.attributes.emotionalIntelligence += 500
-         cx.state.player.attributes.strength += 500
-         cx.state.player.attributes.imagination += 250
+         cx.updateProperty('@intelligence', 'add', 2000, '@detroit_add_attr')
+         cx.updateProperty('@emotional_intelligence', 'add', 500, '@detroit_add_attr')
+         cx.updateProperty('@strength', 'add', 500, '@detroit_add_attr')
+         cx.updateProperty('@imagination', 'add', 250, '@detroit_add_attr')
       }
    },
    {
       ident: 'detroit_add_attr2',
       event: cx => {
-         cx.state.player.attributes.intelligence += 4000
-         cx.state.player.attributes.emotionalIntelligence += 500
-         cx.state.player.attributes.strength += 1000
-         cx.state.player.attributes.imagination += 250
+         cx.updateProperty('@intelligence', 'add', 4000, '@detroit_add_attr')
+         cx.updateProperty('@emotional_intelligence', 'add', 500, '@detroit_add_attr')
+         cx.updateProperty('@strength', 'add', 1000, '@detroit_add_attr')
+         cx.updateProperty('@imagination', 'add', 250, '@detroit_add_attr')
       }
    },
    {
       ident: 'detroit_add_attr3',
       event: cx => {
-         cx.state.player.attributes.intelligence += 8000
-         cx.state.player.attributes.emotionalIntelligence += 500
-         cx.state.player.attributes.strength += 2000
-         cx.state.player.attributes.imagination += 250
+         cx.updateProperty('@intelligence', 'add', 8000, '@detroit_add_attr')
+         cx.updateProperty('@emotional_intelligence', 'add', 500, '@detroit_add_attr')
+         cx.updateProperty('@strength', 'add', 2000, '@detroit_add_attr')
+         cx.updateProperty('@imagination', 'add', 250, '@detroit_add_attr')
       }
    }
 ]

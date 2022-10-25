@@ -8,13 +8,9 @@ import {
 import { MaybeTranslationKey } from '@app/base/uid'
 import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
-import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import {
-   AttributeModifiers,
    Modifier,
    ModifierValue,
-   PlayerModifier,
-   PropertyModifier,
    SkillPointCostModifier,
    ValueSource
 } from '@app/ruleset/items/modifier'

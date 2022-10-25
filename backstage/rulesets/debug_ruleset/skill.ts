@@ -9,11 +9,6 @@ const skills: Skill[] = [
          base: 50
       },
       category: 'category1',
-      output: {
-         properties: {
-
-         }
-      },
       activities: ['activity1']
    },
 ]

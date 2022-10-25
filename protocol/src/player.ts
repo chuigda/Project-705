@@ -20,7 +20,7 @@ export type IBuiltinPropertyId =
    // 三相之力
    | '@energy'
    | '@money'
-   | '@skillPoints'
+   | '@skill_point'
    // 血条
    | '@mental_health'
    // 受伤状态
