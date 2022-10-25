@@ -10,7 +10,7 @@ const skills: Skill[] = [
       },
       category: 'category1',
       activities: ['activity1']
-   },
+   }
 ]
 
 export default skills

@@ -7,5 +7,4 @@ export interface IStartup {
    description: ITranslationKey,
 
    player?: Record<IBuiltinPropertyId, number>
-   modifier?: object
 }
