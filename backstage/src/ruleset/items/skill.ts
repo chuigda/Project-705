@@ -4,13 +4,11 @@ import { ItemBase } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
 import { SkillCategoryId } from '@app/ruleset'
 import { PropertyId } from '@app/executor/game_context/player'
+import { ISkillCost } from '@protocol/skill'
 
 export type SkillPotential = PotentialExpression | Ident
 
-export interface SkillCost {
-   readonly base: number
-   readonly properties?: Record<PropertyId, number>
-}
+export type SkillCost = ISkillCost
 
 export interface Skill extends ItemBase {
    readonly category?: SkillCategoryId

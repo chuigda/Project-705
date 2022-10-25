@@ -18,6 +18,7 @@ export class ShopItem<T extends StoreItem<any>> {
 }
 
 export class ShopStatus {
+   shopEnabled: boolean = false
    consumableItems: Record<string, ShopItem<ConsumableItem>> = {}
    tradableItems: Record<string, ShopItem<TradableItem>> = {}
 

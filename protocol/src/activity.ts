@@ -1,13 +1,5 @@
 import { ITranslationKey } from './translation'
-import { IPartialPlayerAttributes } from './player'
-
-export interface IActivityOutput {
-   attributes?: IPartialPlayerAttributes
-   skillPoints?: number
-   mentalHealth?: number
-   satisfactory?: number
-   money?: number
-}
+import { IPropertyId } from './player'
 
 export interface IActivity {
    ident: string
@@ -16,5 +8,5 @@ export interface IActivity {
 
    category: string
    level: number
-   output?: IActivityOutput
+   output?: Record<IPropertyId, number>
 }

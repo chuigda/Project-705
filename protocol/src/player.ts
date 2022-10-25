@@ -65,10 +65,8 @@ export interface IPlayerItems {
    tradableItems: IPlayerTradableItem[]
 }
 
-export type IPlayerProperties = Record<IPropertyId, IPlayerProperty>
-
 export interface IPlayerStatus {
-   properties: Record<IPropertyId, IPlayerProperty>
+   properties?: Record<IPropertyId, IPlayerProperty>
    ascensionPerkSlots?: number
 
    skills?: ISkill[]
