@@ -1,11 +1,11 @@
 import { ItemBase } from '@app/ruleset/items/item_base'
 import { SkillCategoryId } from '@app/ruleset'
-import { CompiledRuleSet } from '@app/loader'
 import { PropertyId } from '@app/executor/game_context/player'
 
 export type ValueSource =
    '@talent'
    | '@learn_skill'
+   | '@activity'
    | '@turn'
    | '@incident'
    | '@exam'
@@ -13,6 +13,7 @@ export type ValueSource =
    | '@election'
    | '@variety_show'
    | '@explore'
+   | '@purchase'
    | string
 
 export interface ModifierValue {

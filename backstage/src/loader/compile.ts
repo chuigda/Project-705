@@ -143,14 +143,7 @@ export function compileStartup(scope: Scope, startup: Startup): Startup {
    const itemBase = compileBase(scope, startup, mStartupId)
 
    const events = compileEventSeries(scope, startup.events)
-   const { player, modifier } = startup
-   return {
-      ...itemBase,
-
-      player,
-      modifier: modifier ? mModifierId(scope, modifier) : undefined,
-      events
-   }
+   return { ...itemBase, events }
 }
 
 export function compileActivity(scope: Scope, activity: Activity): Activity {

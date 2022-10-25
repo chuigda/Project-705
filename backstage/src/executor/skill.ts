@@ -4,7 +4,7 @@ import { ensureScope } from '@app/executor/base'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 import { GameContext } from '@app/executor/game_context'
-import { updateProperty } from '@app/executor/properties'
+import { updateProperty } from '@app/executor/property'
 import { concatMessage, QResult } from '@app/executor/result'
 
 function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QResult {

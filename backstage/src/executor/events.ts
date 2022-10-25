@@ -99,7 +99,12 @@ export function triggerEvent(
    return [true, warnMessage]
 }
 
-export function triggerEventSeries(gameContext: GameContext, events?: MaybeInlineEvent[], scope?: Scope): QResult {
+export function triggerEventSeries(
+   gameContext: GameContext,
+   events?: MaybeInlineEvent[],
+   scope?: Scope,
+   ...args: any[]
+): QResult {
    if (scope) {
       pushScope(gameContext, scope)
    }
@@ -107,7 +112,7 @@ export function triggerEventSeries(gameContext: GameContext, events?: MaybeInlin
    let warnMessage
    if (events) {
       for (const event of events) {
-         const [success, message] = triggerEvent(gameContext, event)
+         const [success, message] = triggerEvent(gameContext, event, ...args)
          warnMessage = concatMessage(warnMessage, message)
       }
    }

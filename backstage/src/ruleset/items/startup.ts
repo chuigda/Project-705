@@ -1,17 +1,9 @@
-import { ItemBase, PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
+import { ItemBase } from '@app/ruleset/items/item_base'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
-import { Ident } from '@app/base/uid'
+import { PlayerProperty, PropertyId } from '@app/executor/game_context'
 
-export interface StartupPlayerProperties {
-   readonly attributes?: PlayerAttributesUpdate
-   readonly talent?: PlayerAttributesUpdate
-   readonly skillPoints?: number
-   readonly money?: number
-   readonly moneyPerTurn?: number
-}
+export type StartupPlayerProperties = Record<PropertyId, PlayerProperty>
 
 export interface Startup extends ItemBase {
-   readonly player?: StartupPlayerProperties
    readonly events?: MaybeInlineEvent[]
-   readonly modifier?: Ident
 }

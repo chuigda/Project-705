@@ -1,5 +1,5 @@
 import { ITranslationKey } from './translation'
-import { IPartialPlayerAttributes } from './player'
+import { IPlayerProperty } from './player'
 
 export interface ISkillCost {
    base: number

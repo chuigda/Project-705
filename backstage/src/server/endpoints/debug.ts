@@ -14,7 +14,7 @@ import { abort } from '@app/util/emergency'
 import { validateAccessToken, validateBody, validateGameContext } from '@app/server/middleware'
 
 import serverStore from '@app/server/store'
-import { updateProperty } from '@app/executor/properties'
+import { updateProperty } from '@app/executor/property'
 import { initMap } from '@app/executor/map_site'
 
 const authToken = uuid()

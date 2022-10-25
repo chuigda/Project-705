@@ -1,8 +1,7 @@
 import { Ident, mActivityId } from '@app/base/uid'
 import { ensureScope } from '@app/executor/base'
 import { GameContext } from '@app/executor/game_context'
-import { updateProperty } from '@app/executor/properties'
-import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
+import { updateProperty } from '@app/executor/property'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 import { QResult } from '@app/executor/result'
@@ -46,31 +45,8 @@ export function performActivity(gameContext: GameContext, activity: Ident): QRes
    )
 
    if (activityContent.output) {
-      const { attributes, skillPoints, mentalHealth, satisfactory, money } = activityContent.output
-      const propertySource = `@activity:${activityContent.category}`
-      if (attributes) {
-         for (const attrName in attributes) {
-            const attrValue = attributes[<keyof PlayerAttributesUpdate>attrName]
-            if (attrValue) {
-               updateProperty(gameContext, `attributes.${attrName}`, 'add', attrValue, propertySource)
-            }
-         }
-      }
-
-      if (skillPoints) {
-         updateProperty(gameContext, 'skillPoints', 'add', skillPoints, propertySource)
-      }
-
-      if (mentalHealth) {
-         updateProperty(gameContext, 'mentalHealth', 'sub', mentalHealth, propertySource)
-      }
-
-      if (satisfactory) {
-         updateProperty(gameContext, 'satisfactory', 'add', satisfactory, propertySource)
-      }
-
-      if (money) {
-         updateProperty(gameContext, 'money', 'add', money, propertySource)
+      for (const propertyId in activityContent.output) {
+         updateProperty(gameContext, propertyId, 'add', activityContent.output[propertyId], '@activity')
       }
 
       recomputeSkillCosts(gameContext)
@@ -80,9 +56,6 @@ export function performActivity(gameContext: GameContext, activity: Ident): QRes
    return [true]
 }
 
-const activityFunctions = {
-   addActivity,
-   performActivity
-}
+const activityFunctions = { addActivity }
 
 export default activityFunctions

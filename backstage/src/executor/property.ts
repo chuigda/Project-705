@@ -1,9 +1,9 @@
 import { GameContext } from '@app/executor/game_context'
-import { triggerEvent } from '@app/executor/events'
+import { triggerEventSeries } from '@app/executor/events'
 import { PropertyOp } from '@app/ruleset/ops'
 import { ValueSource } from '@app/ruleset/items/modifier'
-import { ComputedPlayerModifier } from '@app/executor/compute'
 import { PlayerProperty, PropertyId } from '@app/executor/game_context/player'
+import { isDefined } from '@app/util/defined'
 
 export function initProperty(
    gameContext: GameContext,
@@ -38,9 +38,21 @@ export function updateProperty(
    gameContext: GameContext,
    propertyId: PropertyId,
    operator: PropertyOp,
-   value: number,
+   value?: number,
    source?: ValueSource
 ) {
+   if ((operator === 'add' || operator === 'sub') && !isDefined(value)) {
+      console.error('[E] [updateProperty] cannot use \'add\' or \'sub\' without a valid value')
+      return
+   }
+   value = value!
+
+   const property = getProperty(gameContext, propertyId)
+   if (!property) {
+      console.error(`[E] [updateProperty] property ${propertyId} does not exist yet`)
+      return
+   }
+
    // TODO finish this bullshit
    if (source && (operator === 'add' || operator === 'sub')) {
       const allModifier = gameContext.state.computedModifier!.getPlayerModifier('all', propertyId)
@@ -62,48 +74,62 @@ export function updateProperty(
    }
 
    const opRef = { operator, value }
-   const propertyPath = property.split('.')
-   let container: Record<string, any> = gameContext.state.events.propertyUpdated
-   let propertyContainer: Record<string, any> = gameContext.state.player
-   for (const pathPartIdx in propertyPath) {
-      const pathPart = propertyPath[pathPartIdx]
-      if (container.all) {
-         for (const event in container.all) {
-            triggerEvent(gameContext, event, opRef, source)
-         }
-      }
-      container = container[pathPart]
-      if (typeof propertyContainer[pathPart] === 'object') {
-         propertyContainer = propertyContainer[pathPart]
-      }
-   }
-   const lastPropertyPath = propertyPath[propertyPath.length - 1]
-
-   if (container) {
-      for (const event of Object.values(container)) {
-         triggerEvent(gameContext, event, opRef, source)
-      }
+   if (source) {
+      triggerEventSeries(
+         gameContext,
+         gameContext.state.events.propertyUpdated.all[source],
+         undefined,
+         opRef,
+         source
+      )
+      triggerEventSeries(
+         gameContext,
+         gameContext.state.events.propertyUpdated[propertyId][source],
+         undefined,
+         opRef,
+         source
+      )
    }
 
    switch (opRef.operator) {
       case 'add':
-         propertyContainer[lastPropertyPath] += opRef.value
+         property.value += opRef.value!
          break
       case 'sub':
-         propertyContainer[lastPropertyPath] -= opRef.value
+         property.value -= opRef.value!
          break
-      case 'set':
-         propertyContainer[lastPropertyPath] = opRef.value
+      case 'set_max':
+         property.max = opRef.value
          break
-      case 'mul':
-         propertyContainer[lastPropertyPath] *= opRef.value
+      case 'set_min':
+         property.min = opRef.value
          break
       default:
          console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
    }
 
-   if (propertyContainer[lastPropertyPath] < 0) {
-      propertyContainer[lastPropertyPath] = 0
+   if (isDefined(property.min) && property.value > property.max!) {
+      const diff = property.value - property.max!
+      triggerEventSeries(
+         gameContext,
+         gameContext.state.events.propertyOverflow[propertyId],
+         undefined,
+         opRef,
+         source,
+         diff
+      )
+      property.value = property.max!
+   } else if (isDefined(property.min) && property.value < property.min!) {
+      const diff = property.min! - property.value
+      triggerEventSeries(
+         gameContext,
+         gameContext.state.events.propertyUnderflow[propertyId],
+         undefined,
+         opRef,
+         source,
+         diff
+      )
+      property.value = property.min!
    }
 
    gameContext.updateTracker.player.properties = true

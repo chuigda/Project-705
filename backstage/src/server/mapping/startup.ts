@@ -17,6 +17,6 @@ export function sendStartup(startup: Startup): IStartup {
    return {
       ...sendItemBase(startup),
 
-      player: startup.player ? sendStartupPlayerProperties(startup.player) : undefined
+      player: startup.properties ? sendStartupPlayerProperties(startup.properties) : undefined
    }
 }

@@ -29,8 +29,8 @@ import computeFunctions, {
 import connectFunctions, { Signal } from '@app/executor/connect'
 import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/skill'
-import propertyFunctions from '@app/executor/properties'
-import variableFunctions from '@app/executor/variables'
+import propertyFunctions from '@app/executor/property'
+import variableFunctions from '@app/executor/variable'
 import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import modifierFunctions from '@app/executor/modifier'
@@ -42,6 +42,10 @@ import { GeneratedSite } from '@app/executor/map_site'
 import { PlayerProperty, PlayerStatus, PropertyId } from '@app/executor/game_context/player'
 import { ShopStatus } from '@app/executor/game_context/shop'
 import { EventHooks } from '@app/executor/game_context/event_hook'
+
+export * from '@app/executor/game_context/event_hook'
+export * from '@app/executor/game_context/player'
+export * from '@app/executor/game_context/shop'
 
 export class MapStatus {
    rootSite: GeneratedSite
