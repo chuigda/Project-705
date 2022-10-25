@@ -2,25 +2,19 @@
 
 import { Ident, Scope } from '@app/base/uid'
 import {
-   ActiveRelicItem,
    AscensionPerk,
    BubbleMessageTemplate,
    Button,
-   ConsumableItem,
-   CustomScoreBoard,
    MaybeInlineEvent,
-   Menu, PassiveRelicItem,
+   Menu,
    PotentialExpression,
    PropertyOp,
-   RechargeableItem,
    SimpleDialogTemplate,
    Skill,
    SkillCategoryId,
    SkillCost,
    SkillPotential,
-   StoreItem,
    StoreItemKind,
-   TradableItem,
    ValueSource
 } from '@app/ruleset'
 
@@ -45,7 +39,7 @@ import activityFunctions from '@app/executor/activity'
 import { QResult } from '@app/executor/result'
 import { GeneratedSite } from '@app/executor/map_site'
 
-import { PlayerStatus } from '@app/executor/game_context/player'
+import { PlayerProperty, PlayerStatus, PropertyId } from '@app/executor/game_context/player'
 import { ShopStatus } from '@app/executor/game_context/shop'
 import { EventHooks } from '@app/executor/game_context/event_hook'
 
@@ -248,8 +242,20 @@ export class GameContext {
       storeItemFunctions.removeItemFromShop(this, itemId, kind)
    }
 
-   updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: ValueSource) {
-      propertyFunctions.updatePlayerProperty(this, property, operator, value, source)
+   initProperty(propertyId: PropertyId, property: PlayerProperty | number) {
+      propertyFunctions.initProperty(this, propertyId, property)
+   }
+
+   getProperty(property: PropertyId): PlayerProperty | undefined {
+      return propertyFunctions.getProperty(this, property)
+   }
+
+   getPropertyValue(property: PropertyId): number | undefined {
+      return propertyFunctions.getPropertyValue(this, property)
+   }
+
+   updateProperty(property: string, operator: PropertyOp, value: number, source?: ValueSource) {
+      propertyFunctions.updateProperty(this, property, operator, value, source)
    }
 
    getV(varName: Ident): any {

@@ -9,12 +9,3 @@ export interface ItemBase {
    readonly patch?: PatchMode
    readonly scope?: Scope
 }
-
-export interface PlayerAttributesUpdate {
-   strength?: number
-   intelligence?: number
-   emotionalIntelligence?: number
-   memorization?: number
-   imagination?: number
-   charisma?: number
-}

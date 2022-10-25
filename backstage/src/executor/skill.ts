@@ -4,7 +4,7 @@ import { ensureScope } from '@app/executor/base'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 import { GameContext, PlayerAttributes } from '@app/executor/game_context'
-import { updatePlayerProperty } from '@app/executor/properties'
+import { updateProperty } from '@app/executor/properties'
 import { concatMessage, QResult } from '@app/executor/result'
 
 function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QResult {
@@ -13,13 +13,13 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QRe
 
    if (skillContent.output) {
       let dimension: keyof PlayerAttributes
-      if (skillContent.output && skillContent.output.attributes) {
-         for (dimension in skillContent.output.attributes) {
-            updatePlayerProperty(
+      if (skillContent.output && skillContent.output.properties) {
+         for (dimension in skillContent.output.properties) {
+            updateProperty(
                gameContext,
                `attributes.${dimension}`,
                'add',
-               skillContent.output.attributes[dimension] as number,
+               skillContent.output.properties[dimension] as number,
                '@learn_skill'
             )
          }
@@ -71,7 +71,7 @@ export function learnSkill(gameContext: GameContext, skill: Ident): QResult {
    delete gameContext.state.computedSkills!.available[skillId]
 
    gameContext.state.player.skills[skillId] = skillContent
-   gameContext.updatePlayerProperty('skillPoints', 'sub', cost, '@learn_skill')
+   gameContext.updateProperty('skillPoints', 'sub', cost, '@learn_skill')
 
    const [success, message] = executeSkillEffects(gameContext, skillContent)
    warnMessage = concatMessage(warnMessage, message)

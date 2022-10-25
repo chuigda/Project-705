@@ -9,10 +9,10 @@ import {
    ITradableItem
 } from './store_item'
 
-export type IBuiltinPropertyName =
+export type IBuiltinPropertyId =
    // 传统意义上的 attribute
    '@intelligence'
-   | '@emotionalIntelligence'
+   | '@emotional_intelligence'
    | '@memorization'
    | '@strength'
    | '@imagination'
@@ -22,13 +22,13 @@ export type IBuiltinPropertyName =
    | '@money'
    | '@skillPoints'
    // 血条
-   | '@mentalHealth'
+   | '@mental_health'
    // 受伤状态
    | '@injury'
    // 满意度
    | '@satisfactory'
 
-export type IPropertyName = IBuiltinPropertyName | string
+export type IPropertyId = IBuiltinPropertyId | string
 
 export interface IPlayerProperty {
    value: number

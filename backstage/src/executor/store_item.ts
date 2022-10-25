@@ -15,7 +15,7 @@ import {
    StoreItemKind, TradableItem
 } from '@app/ruleset'
 import { triggerEventSeries } from '@app/executor/events'
-import { updatePlayerProperty } from '@app/executor/properties'
+import { updateProperty } from '@app/executor/properties'
 
 const kindToFieldMapping: Record<StoreItemKind, keyof RuleSetStoreItems> = {
    'consumable': 'consumableItems',
@@ -389,7 +389,7 @@ export function sellTradableItem(gameContext: GameContext, itemId: Ident, count?
    gameContext.updateTracker.player.items = true
    playerItem.count -= count
    const sellValue = playerItem.item.sellValue * count
-   updatePlayerProperty(gameContext, 'money', 'add', Math.ceil(sellValue))
+   updateProperty(gameContext, 'money', 'add', Math.ceil(sellValue))
    if (playerItem.count === 0) {
       delete gameContext.state.player.items.tradableItems[identString]
    }

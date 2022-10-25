@@ -10,7 +10,7 @@ const skills: Skill[] = [
       },
       category: 'category1',
       output: {
-         attributes: {
+         properties: {
 
          }
       },

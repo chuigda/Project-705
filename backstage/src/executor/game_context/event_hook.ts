@@ -1,4 +1,4 @@
-import { PropertyName } from "./player"
+import { PropertyId } from "./player"
 
 export type PlayerPropertyEventHooks = Record<string /*source*/, string /*event id*/>
 
@@ -16,8 +16,8 @@ export class EventHooks {
    eventTriggered: Record<string, Set<string>> = {}
 
    timedEvents: TimedEvent[] = []
-   
-   propertyUpdated: Record<PropertyName | 'all', PlayerPropertyEventHooks>
-   propertyOverflow:  Record<PropertyName | 'all', PlayerPropertyEventHooks>
-   propertyUnderflow:  Record<PropertyName | 'all', PlayerPropertyEventHooks>
+
+   propertyUpdated: Record<PropertyId | 'all', PlayerPropertyEventHooks>
+   propertyOverflow:  Record<PropertyId | 'all', PlayerPropertyEventHooks>
+   propertyUnderflow:  Record<PropertyId | 'all', PlayerPropertyEventHooks>
 }

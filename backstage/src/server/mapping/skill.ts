@@ -13,7 +13,7 @@ export function sendSkillCost(sc: SkillCost): ISkillCost {
 
 export function sendSkillOutput(so: SkillOutput): ISkillOutput {
    return {
-      attributes: sendPartialPlayerAttributes(so.attributes)
+      attributes: sendPartialPlayerAttributes(so.properties)
    }
 }
 

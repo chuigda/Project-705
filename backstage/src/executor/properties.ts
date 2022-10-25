@@ -3,10 +3,40 @@ import { triggerEvent } from '@app/executor/events'
 import { PropertyOp } from '@app/ruleset/ops'
 import { ValueSource } from '@app/ruleset/items/modifier'
 import { ComputedPlayerModifier } from '@app/executor/compute'
+import { PlayerProperty, PropertyId } from '@app/executor/game_context/player'
 
-export function updatePlayerProperty(
+export function initProperty(
    gameContext: GameContext,
-   property: string,
+   propertyId: PropertyId,
+   property: PlayerProperty | number
+) {
+   if (gameContext.state.player.properties[propertyId]) {
+      console.warn(`[W] [setProperty] property ${property} already added, will reset it`)
+   }
+
+   if (typeof property === 'number') {
+      gameContext.state.player.properties[propertyId] = { value: 0, min: 0 }
+   } else {
+      gameContext.state.player.properties[propertyId] = property
+   }
+}
+
+export function getProperty(gameContext: GameContext, propertyId: PropertyId): PlayerProperty | undefined {
+   return gameContext.state.player.properties[propertyId]
+}
+
+export function getPropertyValue(gameContext: GameContext, propertyId: PropertyId): number | undefined {
+   const property = getProperty(gameContext, propertyId)
+   if (!property) {
+      return undefined
+   }
+
+   return property.value
+}
+
+export function updateProperty(
+   gameContext: GameContext,
+   propertyId: PropertyId,
    operator: PropertyOp,
    value: number,
    source?: ValueSource
@@ -89,5 +119,8 @@ export function updatePlayerProperty(
 }
 
 export default {
-   updatePlayerProperty
+   initProperty,
+   getProperty,
+   getPropertyValue,
+   updateProperty
 }

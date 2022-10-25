@@ -1,4 +1,4 @@
-import { IPlayerProperty, IPropertyName } from '@protocol/player'
+import { IPlayerProperty, IPropertyId } from '@protocol/player'
 import {
    Activity,
    Skill,
@@ -11,7 +11,7 @@ import {
    TradableItem
 } from '@app/ruleset'
 
-export type PropertyName = IPropertyName
+export type PropertyId = IPropertyId
 export type PlayerProperty = IPlayerProperty
 
 export class PlayerConsumableItem {
@@ -20,7 +20,7 @@ export class PlayerConsumableItem {
 
    constructor(item: ConsumableItem, count?: number) {
       this.item = item
-      this.totalChargeLevel = (count || 1) * item.initCharge!
+      this.totalChargeLevel = (count ?? 1) * item.initCharge!
    }
 }
 
@@ -75,7 +75,7 @@ export class PlayerItems {
 }
 
 export class PlayerStatus {
-   properties: Record<PropertyName, PlayerProperty>
+   properties: Record<PropertyId, PlayerProperty>
    ascensionPerkSlots: number = 0
 
    skills: Record<string, Skill> = {}

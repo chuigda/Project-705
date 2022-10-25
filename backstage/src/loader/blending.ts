@@ -10,7 +10,6 @@ import {
    compileMapSite,
    compileMenuItem,
    compileModifier, compilePassiveRelicItem, compileRechargeableItem,
-   compileScoreBoard,
    compileSimpleDialogTemplate,
    compileSkill,
    compileStartup, compileTradableItem,
@@ -212,7 +211,7 @@ export function compileStoreItems(compilation: CompiledRuleSet, scope: Scope, st
 
 function buildCompileUISeries<T extends HasIdent>(
    itemName: string,
-   seriesName: 'scoreBoards' | 'dialogTemplates' | 'bubbleMessageTemplates',
+   seriesName: 'dialogTemplates' | 'bubbleMessageTemplates',
    fnName: string,
    compileSingleFn: CompileSingleFunction<T>
 ): CompileFunction<T> {
@@ -233,13 +232,6 @@ function buildCompileUISeries<T extends HasIdent>(
       }
    }
 }
-
-export const compileScoreBoards = buildCompileUISeries(
-   'score board',
-   'scoreBoards',
-   'compileScoreBoard',
-   compileScoreBoard
-)
 
 export const compileDialogTemplates = buildCompileUISeries(
    'dialog template',
@@ -282,10 +274,6 @@ export function compileUI(compilation: CompiledRuleSet, scope: Scope, ui: Custom
          }
          compilation.ui.buttons[ident] = compiledButton
       }
-   }
-
-   if (ui.scoreBoards) {
-      compileScoreBoards(compilation, scope, ui.scoreBoards)
    }
 
    if (ui.dialogTemplates) {

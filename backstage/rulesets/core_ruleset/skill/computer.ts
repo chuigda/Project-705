@@ -15,40 +15,18 @@ const computerSkills: Skill[] = [
       ],
       cost: {
          base: 400,
-         attributes: {
-            intelligence: 2500,
-            memorization: 1000,
-            imagination: 1000
+         properties: {
+            '@intelligence': 2500,
+            '@memorization': 1000,
+            '@imagination': 1000
          }
       },
       output: {
-         attributes: {
-            intelligence: 200,
-            memorization: 100,
-            imagination: 100
-         }
+         '@intelligence': 200,
+         '@memorization': 100,
+         '@imagination': 100
       },
       activities: ['guess_number']
-   },
-   {
-      ident: 'http_basis',
-      name: '$skill_http_basis',
-      description: '$skill_http_basis_desc',
-      category: '@computer',
-
-      potential: ['rust_lang'],
-      cost: {
-         base: 400,
-         attributes: {
-            intelligence: 3500
-         }
-      },
-      output: {
-         attributes: {
-            intelligence: 200
-         }
-      },
-      activities: ['backend_dev']
    }
 ]
 

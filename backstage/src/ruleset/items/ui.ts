@@ -74,19 +74,9 @@ export interface BubbleMessageTemplate {
    readonly linkedDialog: Ident | SimpleDialogTemplate
 }
 
-export interface CustomScoreBoard {
-   readonly ident: Ident
-   readonly tooltip: MaybeTranslatable
-   readonly color: string
-
-   readonly value?: MaybeTranslatable
-   readonly bind?: Ident
-}
-
 export interface CustomUI {
    menus?: Menu[]
    buttons?: Button[]
-   scoreBoards?: CustomScoreBoard[]
 
    dialogTemplates?: SimpleDialogTemplate[]
    bubbleMessageTemplates?: BubbleMessageTemplate[]

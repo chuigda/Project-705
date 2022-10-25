@@ -127,7 +127,7 @@ export function choosePath(gameContext: GameContext, nextdir: PathDirection) {
    }
    const { next } = rootSite[nextdir]!
    gameContext.state.map.rootSite = next
-   gameContext.updatePlayerProperty('energy', 'sub', next.site.energyCost, '@map_move')
+   gameContext.updateProperty('energy', 'sub', next.site.energyCost, '@map_move')
    gameContext.updateTracker.map = true
    choosePathDfsHelper(gameContext, next)
 }

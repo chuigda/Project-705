@@ -1,7 +1,7 @@
 import { Ident, mActivityId } from '@app/base/uid'
 import { ensureScope } from '@app/executor/base'
 import { GameContext } from '@app/executor/game_context'
-import { updatePlayerProperty } from '@app/executor/properties'
+import { updateProperty } from '@app/executor/properties'
 import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
@@ -37,7 +37,7 @@ export function performActivity(gameContext: GameContext, activity: Ident): QRes
    }
    const activityContent = gameContext.state.player.activities[activityId]
 
-   updatePlayerProperty(
+   updateProperty(
       gameContext,
       'energy',
       'sub',
@@ -52,25 +52,25 @@ export function performActivity(gameContext: GameContext, activity: Ident): QRes
          for (const attrName in attributes) {
             const attrValue = attributes[<keyof PlayerAttributesUpdate>attrName]
             if (attrValue) {
-               updatePlayerProperty(gameContext, `attributes.${attrName}`, 'add', attrValue, propertySource)
+               updateProperty(gameContext, `attributes.${attrName}`, 'add', attrValue, propertySource)
             }
          }
       }
 
       if (skillPoints) {
-         updatePlayerProperty(gameContext, 'skillPoints', 'add', skillPoints, propertySource)
+         updateProperty(gameContext, 'skillPoints', 'add', skillPoints, propertySource)
       }
 
       if (mentalHealth) {
-         updatePlayerProperty(gameContext, 'mentalHealth', 'sub', mentalHealth, propertySource)
+         updateProperty(gameContext, 'mentalHealth', 'sub', mentalHealth, propertySource)
       }
 
       if (satisfactory) {
-         updatePlayerProperty(gameContext, 'satisfactory', 'add', satisfactory, propertySource)
+         updateProperty(gameContext, 'satisfactory', 'add', satisfactory, propertySource)
       }
 
       if (money) {
-         updatePlayerProperty(gameContext, 'money', 'add', money, propertySource)
+         updateProperty(gameContext, 'money', 'add', money, propertySource)
       }
 
       recomputeSkillCosts(gameContext)
