@@ -51,8 +51,8 @@ export function updateProperty(
          playerModifier = undefined
       }
 
-      const allModifier = playerModifierAll ? playerModifierAll.getModifier(property)! : undefined
-      const specificModifier = playerModifier ? playerModifier.getModifier(property)! : undefined
+      const allModifier = gameContext.state.computedModifier!.getPlayerModifier('all', propertyId)
+      const specificModifier = playerModifier ? playerModifier[propertyId]! : undefined
       const gainOrLoss = operator === 'add' ? 'gain' : 'loss'
 
       let sumUpModifier = 1.0
@@ -72,7 +72,7 @@ export function updateProperty(
    // TODO(chuigda): I almost forgot the logic of these things
    const opRef = { operator, value }
    const propertyPath = property.split('.')
-   let container: Record<string, any> = gameContext.state.events.playerPropertyUpdated
+   let container: Record<string, any> = gameContext.state.events.propertyUpdated
    let propertyContainer: Record<string, any> = gameContext.state.player
    for (const pathPartIdx in propertyPath) {
       const pathPart = propertyPath[pathPartIdx]

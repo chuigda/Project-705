@@ -84,7 +84,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       case 'property': {
          const sig = <PropertyUpdatedSignal>signal
          const propertyPath = sig.property.split('.')
-         let container: any = gameContext.state.events.playerPropertyUpdated
+         let container: any = gameContext.state.events.propertyUpdated
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
@@ -116,10 +116,10 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       case 'event': {
          const sig = <EventSignal>signal
          const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
-         if (!gameContext.state.events.eventsTriggered[sourceEventId]) {
-            gameContext.state.events.eventsTriggered[sourceEventId] = new Set()
+         if (!gameContext.state.events.eventTriggered[sourceEventId]) {
+            gameContext.state.events.eventTriggered[sourceEventId] = new Set()
          }
-         gameContext.state.events.eventsTriggered[sourceEventId].add(eventId)
+         gameContext.state.events.eventTriggered[sourceEventId].add(eventId)
          break
       }
       default:
@@ -159,7 +159,7 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
       case 'player': {
          const sig = <PropertyUpdatedSignal>signal
          const propertyPath = sig.property.split('.')
-         let container: any = gameContext.state.events.playerPropertyUpdated
+         let container: any = gameContext.state.events.propertyUpdated
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
@@ -187,8 +187,8 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
       case 'event': {
          const sig = <EventSignal>signal
          const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
-         if (gameContext.state.events.eventsTriggered[sourceEventId]) {
-            gameContext.state.events.eventsTriggered[sourceEventId].delete(eventId)
+         if (gameContext.state.events.eventTriggered[sourceEventId]) {
+            gameContext.state.events.eventTriggered[sourceEventId].delete(eventId)
          }
          break
       }

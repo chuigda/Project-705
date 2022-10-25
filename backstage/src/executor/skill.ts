@@ -3,7 +3,7 @@ import { Skill } from '@app/ruleset/items/skill'
 import { ensureScope } from '@app/executor/base'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
-import { GameContext, PlayerAttributes } from '@app/executor/game_context'
+import { GameContext } from '@app/executor/game_context'
 import { updateProperty } from '@app/executor/properties'
 import { concatMessage, QResult } from '@app/executor/result'
 
@@ -12,17 +12,14 @@ function executeSkillEffects(gameContext: GameContext, skillContent: Skill): QRe
    gameContext.updateTracker.player.skills = true
 
    if (skillContent.output) {
-      let dimension: keyof PlayerAttributes
-      if (skillContent.output && skillContent.output.properties) {
-         for (dimension in skillContent.output.properties) {
-            updateProperty(
-               gameContext,
-               `attributes.${dimension}`,
-               'add',
-               skillContent.output.properties[dimension] as number,
-               '@learn_skill'
-            )
-         }
+      for (const propertyId in skillContent.output) {
+         updateProperty(
+            gameContext,
+            propertyId,
+            'add',
+            skillContent.output[propertyId],
+            '@learn_skill'
+         )
       }
    }
 

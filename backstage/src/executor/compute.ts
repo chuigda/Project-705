@@ -350,8 +350,16 @@ export class ComputedSkillPointCostModifier {
 }
 
 export class ComputedModifier {
-   player: Record<ValueSource, ComputedPlayerModifier> = {}
+   player: Record<'all' | ValueSource, ComputedPlayerModifier> = {}
    skillPointCost: Record<'all' | SkillCategoryId, ComputedSkillPointCostModifier> = {}
+
+   getPlayerModifier(valueSource: 'all' | ValueSource, propertyId: PropertyId): ComputedModifier | undefined {
+      return undefined
+   }
+
+   getSkillPointCostModifier(skillCategoryId: 'all' | SkillCategoryId): ComputedSkillPointCostModifier | undefined {
+      return undefined
+   }
 }
 
 export function computeModifier(gameContext: GameContext) {

@@ -1,6 +1,6 @@
-import { PropertyId } from "./player"
+import { PropertyId } from './player'
 
-export type PlayerPropertyEventHooks = Record<string /*source*/, string /*event id*/>
+export type PlayerPropertyEventHooks = Record</* source */string, /* event id */string>
 
 export class TimedEvent {
    turn: number
@@ -18,6 +18,6 @@ export class EventHooks {
    timedEvents: TimedEvent[] = []
 
    propertyUpdated: Record<PropertyId | 'all', PlayerPropertyEventHooks>
-   propertyOverflow:  Record<PropertyId | 'all', PlayerPropertyEventHooks>
-   propertyUnderflow:  Record<PropertyId | 'all', PlayerPropertyEventHooks>
+   propertyOverflow: Record<PropertyId | 'all', PlayerPropertyEventHooks>
+   propertyUnderflow: Record<PropertyId | 'all', PlayerPropertyEventHooks>
 }

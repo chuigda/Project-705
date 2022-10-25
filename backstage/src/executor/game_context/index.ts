@@ -54,7 +54,7 @@ export class GameState {
    player: PlayerStatus = new PlayerStatus()
    shop: ShopStatus = new ShopStatus()
 
-   eventHooks: EventHooks = new EventHooks()
+   events: EventHooks = new EventHooks()
    modifiers: Set<string> = new Set()
    variables: Record<string, any> = {}
 

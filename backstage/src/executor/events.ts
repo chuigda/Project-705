@@ -20,7 +20,11 @@ export function popScope(gameContext: GameContext) {
    gameContext.scope = gameContext.scopeChain.pop()
 }
 
-export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, ...args: any[]): QResult {
+export function triggerEvent(
+   gameContext: GameContext,
+   event: MaybeInlineEvent,
+   ...args: any[]
+): QResult {
    const scope = ensureScope(gameContext)
 
    let unsetCounter = false
@@ -67,7 +71,7 @@ export function triggerEvent(gameContext: GameContext, event: MaybeInlineEvent, 
       }
 
       console.debug(`[D] [triggerEvent] triggered event '${eventId}'`)
-      const hooks = gameContext.state.events.eventsTriggered[eventId]
+      const hooks = gameContext.state.events.eventTriggered[eventId]
       for (const hook in hooks) {
          const [success, message] = triggerEvent(gameContext, hook, event, [event, args])
          warnMessage = concatMessage(warnMessage, message)
