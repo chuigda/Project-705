@@ -3,7 +3,6 @@ import {
    PlayerActiveRelicItem,
    PlayerConsumableItem,
    PlayerRechargeableItem,
-   PlayerStatus,
    PlayerTradableItem,
    ShopItem
 } from '@app/executor/game_context'

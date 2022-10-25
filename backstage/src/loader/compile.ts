@@ -10,8 +10,9 @@ import {
    mAscensionPerkId,
    mModifierId,
    mDisplayItemId,
-   mVarName,
-   isTranslationKey, mStoreItemId, mMapSiteId
+   isTranslationKey,
+   mStoreItemId,
+   mMapSiteId
 } from '@app/base/uid'
 import {
    PotentialExpression,
@@ -28,11 +29,10 @@ import {
    MapSite,
    MapSiteIdentSelector,
    MaybeInlineEvent,
-   Modifier, PassiveRelicItem,
-   PlayerModifier,
+   Modifier,
+   PassiveRelicItem,
    RechargeableItem,
    Skill,
-   SkillPointCostModifier,
    Startup,
    StoreItem,
    StoreItemKind,

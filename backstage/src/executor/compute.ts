@@ -365,10 +365,8 @@ export class ComputedModifier {
       return playerModifier[propertyId]
    }
 
-   getSkillPointCostModifier(
-      skillCategoryId: 'all' | SkillCategoryId
-   ): ComputedSkillPointCostModifier | undefined {
-      return undefined
+   getSkillPointCostModifier(skillCategoryId: 'all' | SkillCategoryId): ComputedSkillPointCostModifier | undefined {
+      return this.skillPointCost[skillCategoryId]
    }
 }
 

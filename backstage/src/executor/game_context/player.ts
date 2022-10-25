@@ -75,7 +75,7 @@ export class PlayerItems {
 }
 
 export class PlayerStatus {
-   properties: Record<PropertyId, PlayerProperty>
+   properties: Record<PropertyId, PlayerProperty> = {}
    ascensionPerkSlots: number = 0
 
    skills: Record<string, Skill> = {}
