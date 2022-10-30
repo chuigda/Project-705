@@ -27,11 +27,11 @@ export const signals: Record<string, (...args: any[]) => Signal> = {
       property,
    }),
    propertyOverflow: (property: PropertyId): PropertyUpdatedSignal => ({
-      signalType: 'propertyOverflow',
+      signalType: 'property_overflow',
       property
    }),
    propertyUnderflow: (property: PropertyId): PropertyUpdatedSignal => ({
-      signalType: 'propertyUnderflow',
+      signalType: 'property_underflow',
       property
    }),
    timer: (turns: number, trigger: TurnsSignalTrigger): TurnsSignal => ({
@@ -83,16 +83,32 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'property': {
          const sig = <PropertyUpdatedSignal>signal
-         const propertyPath = sig.property.split('.')
-         let container: any = gameContext.state.events.propertyUpdated
-         for (const pathPart of propertyPath) {
-            container = container[pathPart]
-         }
-         if (!(container instanceof Set<string>)) {
-            console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${sig.property}'`)
+         const container = gameContext.state.events.propertyUpdated[sig.property]
+         if (!(container && container instanceof Set<string>)) {
+            console.warn(`[W] [connect] playerPropertyUpdated: property not defined: '${sig.property}'`)
             return
          }
          (<Set<string>>container).add(eventId)
+         break
+      }
+      case 'property_overflow': {
+         const sig = <PropertyUpdatedSignal>signal
+         const container = gameContext.state.events.propertyOverflow[sig.property]
+         if (!(container && container instanceof Set<string>)) {
+            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${sig.property}'`)
+            return
+         }
+         container.push()
+         break
+      }
+      case 'property_underflow': {
+         const sig = <PropertyUpdatedSignal>signal
+         const container = gameContext.state.events.propertyUnderflow[sig.property]
+         if (!(container && container instanceof Set<string>)) {
+            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${sig.property}'`)
+            return
+         }
+         container.push()
          break
       }
       case 'turns': {

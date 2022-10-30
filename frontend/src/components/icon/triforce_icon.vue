@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import triforceIcons from '@app/assets/common/triforce'
-const props = defineProps<{ type: 'energy' | 'money' | 'skillPoints' }>()
+const props = defineProps<{ type: 'energy' | 'money' | 'skill_point' }>()
 const imageUrl = triforceIcons[props.type]
 </script>
 

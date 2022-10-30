@@ -10,10 +10,10 @@
 
 <script setup lang="ts">
 
-import { IPlayerAttributes } from '@protocol/index'
 import attributeIcons from '@app/assets/common/attribute'
+import { IPropertyId } from '@protocol/player'
 
-const props = defineProps<{ type: keyof IPlayerAttributes | 'satisfactory' }>()
+const props = defineProps<{ type: IPropertyId }>()
 const imageUrl = attributeIcons[props.type]
 
 </script>
@@ -66,7 +66,7 @@ const imageUrl = attributeIcons[props.type]
    max-height: var(--size-iq);
 }
 
-.attr-icon-emotionalIntelligence {
+.attr-icon-emotional_intelligence {
    width: var(--size-eq);
    height: var(--size-eq);
    max-width: var(--size-eq);

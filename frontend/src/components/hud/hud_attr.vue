@@ -13,7 +13,9 @@
          <AttrIcon class="icon"
                    type="satisfactory" />
          <span class="label">评价</span>
-         <span class="value"> {{ props.playerStatus.satisfactory }} </span>
+         <span class="value">
+            {{ props.playerStatus.properties['@satisfactory'].value }}
+         </span>
       </div>
 
       <div class="status-item"
@@ -59,7 +61,7 @@
 
 <script setup lang="ts">
 
-import { IPlayerAttributes, IPlayerStatus } from '@protocol/index'
+import { IPlayerStatus, IBuiltinPropertyId } from '@protocol/index'
 import AttrIcon from '@app/components/icon/attr_icon.vue'
 import menuIcons from '@app/assets/components/hud'
 import { computed, ref } from 'vue'
@@ -67,24 +69,29 @@ import { computed, ref } from 'vue'
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
 const expand = ref(false)
 
-const itemKeys: [string, keyof IPlayerAttributes][] = [
+const itemKeys: [string, string][] = [
    ['智商', 'intelligence'],
-   ['情商', 'emotionalIntelligence'],
+   ['情商', 'emotional_intelligence'],
    ['记忆力', 'memorization'],
    ['想象力', 'imagination'],
    ['体魄', 'strength'],
    ['魅力', 'charisma']
 ]
 
-const attributeItems = computed(() => itemKeys.map(itemKey => {
-   const [displayName, field] = itemKey
-   return [
-      displayName,
-      field,
-      props.playerStatus.attributes![field],
-      props.playerStatus.talent![field]
-   ]
-}))
+console.log(itemKeys)
+const attributeItems = computed(() => {
+   console.log(props.playerStatus.properties)
+   return itemKeys.map(itemKey => {
+      const [displayName, propertyId] = itemKey
+      console.log(propertyId)
+      return [
+         displayName,
+         propertyId,
+         props.playerStatus.properties![`@${propertyId}`].value,
+         props.playerStatus.properties![`@${propertyId}`].increment ?? 0
+      ]
+   })
+})
 
 const otherItems = [
    ['还无法说出我爱你', 3141],
@@ -102,10 +109,14 @@ const rescale = (mentalHealth: number, mentalHealthMax: number) => {
    return r * 100
 }
 
-const energyBarTitle = computed(() => `${props.playerStatus.mentalHealth} / ${props.playerStatus.mentalHealthMax}`)
+const energyBarTitle = computed(() => {
+   const property = props.playerStatus.properties!['@mental_health']
+   return `${property.value} / ${property.max}`
+})
 
 const energyBarWidth = computed(() => {
-   const percentage = rescale(props.playerStatus.mentalHealth!, props.playerStatus.mentalHealthMax!)
+   const property = props.playerStatus.properties!['@mental_health']
+   const percentage = rescale(property.value, property.max!)
    return `${percentage}%`
 })
 

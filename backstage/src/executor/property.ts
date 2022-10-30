@@ -19,6 +19,10 @@ export function initProperty(
    } else {
       gameContext.state.player.properties[propertyId] = property
    }
+
+   gameContext.state.events.propertyUpdated[propertyId] = []
+   gameContext.state.events.propertyOverflow[propertyId] = []
+   gameContext.state.events.propertyUnderflow[propertyId] = []
 }
 
 export function getProperty(gameContext: GameContext, propertyId: PropertyId): PlayerProperty | undefined {
@@ -77,14 +81,14 @@ export function updateProperty(
    if (source) {
       triggerEventSeries(
          gameContext,
-         gameContext.state.events.propertyUpdated.all[source],
+         gameContext.state.events.propertyUpdated.all,
          undefined,
          opRef,
          source
       )
       triggerEventSeries(
          gameContext,
-         gameContext.state.events.propertyUpdated[propertyId][source],
+         gameContext.state.events.propertyUpdated[propertyId],
          undefined,
          opRef,
          source
