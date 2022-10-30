@@ -10,11 +10,14 @@ const sportsActivities: Activity[] = [
 
       energyCost: 10,
       output: {
+         // TODO(chuigda): rewrite all these values
+         /*
          satisfactory: 5,
          skillPoints: 5,
          attributes: {
             strength: 6
          }
+         */
       }
    }
 ]

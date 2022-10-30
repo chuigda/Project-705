@@ -10,10 +10,8 @@ const chineseActivities: Activity[] = [
 
       energyCost: 10,
       output: {
-         attributes: {
-            emotionalIntelligence: 5
-         },
-         skillPoints: 5
+         '@emotional_intelligence': 5,
+         '@skill_point': 5
       }
    },
    {
@@ -25,11 +23,9 @@ const chineseActivities: Activity[] = [
 
       energyCost: 10,
       output: {
-         attributes: {
-            emotionalIntelligence: 8,
-            memorization: 8
-         },
-         skillPoints: 5
+         '@emotional_intelligence': 8,
+         '@memorization': 8,
+         '@skill_point': 5
       }
    },
    {
@@ -41,11 +37,9 @@ const chineseActivities: Activity[] = [
 
       energyCost: 15,
       output: {
-         attributes: {
-            emotionalIntelligence: 25,
-         },
-         skillPoints: 10,
-         mentalHealth: -3
+         '@emotional_intelligence': 25,
+         '@skill_point': 10,
+         '@mental_health': -3,
       }
    },
    {
@@ -57,11 +51,14 @@ const chineseActivities: Activity[] = [
 
       energyCost: 15,
       output: {
+         // TODO(chuigda): rewrite all these values
+         /*
          attributes: {
             memorization: 20,
          },
          skillPoints: 15,
          mentalHealth: -5
+         */
       }
    },
    {
@@ -73,11 +70,14 @@ const chineseActivities: Activity[] = [
 
       energyCost: 20,
       output: {
+         // TODO(chuigda): rewrite all these values
+         /*
          attributes: {
             emotionalIntelligence: 40
          },
          skillPoints: 20,
          mentalHealth: -5
+         */
       }
    },
    {
@@ -89,6 +89,8 @@ const chineseActivities: Activity[] = [
 
       energyCost: 20,
       output: {
+         // TODO(chuigda): rewrite all these values
+         /*
          attributes: {
             emotionalIntelligence: 50,
             imagination: 20,
@@ -97,6 +99,7 @@ const chineseActivities: Activity[] = [
          skillPoints: 25,
          money: 3,
          mentalHealth: -5
+         */
       }
    }
 ]

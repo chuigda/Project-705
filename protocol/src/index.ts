@@ -1,7 +1,7 @@
 import {
    ITranslationKey
 } from './translation'
-import { IPartialPlayerAttributes, IPlayerStatus } from './player'
+import { IPlayerStatus } from './player'
 import { IComputedAscensionPerks, IComputedSkills } from './computed'
 import { IShopStatus } from './shop'
 import { IMapStatus } from './map_site'
