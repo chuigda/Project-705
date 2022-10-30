@@ -78,12 +78,9 @@ const itemKeys: [string, string][] = [
    ['魅力', 'charisma']
 ]
 
-console.log(itemKeys)
 const attributeItems = computed(() => {
-   console.log(props.playerStatus.properties)
    return itemKeys.map(itemKey => {
       const [displayName, propertyId] = itemKey
-      console.log(propertyId)
       return [
          displayName,
          propertyId,
