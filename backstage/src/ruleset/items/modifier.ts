@@ -3,7 +3,7 @@ import { SkillCategoryId } from '@app/ruleset'
 import { PropertyId } from '@app/executor/game_context/player'
 
 export type ValueSource =
-   '@talent'
+   '@turn_incr'
    | '@learn_skill'
    | '@activity'
    | '@turn'

@@ -26,6 +26,13 @@ export function nextTurn(gameContext: GameContext): QResult {
    const energy = getProperty(gameContext, '@energy')
    energy!.value = energy!.max!
 
+   for (const propertyId in gameContext.state.player.properties) {
+      const property = gameContext.state.player.properties[propertyId]
+      if (property.increment) {
+         gameContext.updateProperty(propertyId, 'add', property.increment, '@turn_incr')
+      }
+   }
+
    computePotentialSkills(gameContext)
    if (gameContext.state.player.ascensionPerkSlots > Object.keys(gameContext.state.player.ascensionPerks).length) {
       computePotentialAscensionPerks(gameContext)
