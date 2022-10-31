@@ -6,7 +6,7 @@ const startups: Startup[] = [
       name: '$startup_normal',
       description: '$startup_normal_desc',
 
-      events: ['common_setup']
+      events: ['common_setup', 'normal_init']
    },
    {
       ident: 'gifted',

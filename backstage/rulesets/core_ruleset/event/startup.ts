@@ -1,7 +1,25 @@
 import { PropertyOp } from '@app/ruleset/ops'
 import { Event } from '@app/ruleset'
+import { attributeIdList } from '@protocol/player'
 
 const detroitEvents: Event[] = [
+   {
+      ident: 'normal_init',
+      event: cx => {
+         for (const attributeId in attributeIdList) {
+            cx.updateProperty(attributeId, 'set_incr', 20, '@init')
+         }
+      }
+   },
+   {
+      ident: 'gifted_init',
+      event: cx => {
+         for (const attributeId in attributeIdList) {
+            cx.updateProperty(attributeId, 'set_incr', 50, '@init')
+         }
+         cx.updateProperty('@skill_point', 'add', 500, '@init')
+      }
+   },
    {
       ident: 'detroit_init',
       event: cx => {

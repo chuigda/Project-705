@@ -9,18 +9,25 @@ import {
    ITradableItem
 } from './store_item'
 
+/// 传统意义上的 attribute
+export const attributeIdList = [
+   '@intelligence',
+   '@emotional_intelligence',
+   'memorization',
+   '@strength',
+   '@imagination',
+   '@charisma'  
+] as const
+export type IAttributeId = (typeof attributeIdList)[number]
+
+/// 三相之力
+export const triforceIdList = ['@energy', '@money', '@skill_point'] as const
+export type ITriforceId = (typeof triforceIdList)[number]
+
+/// 所有内建属性
 export type IBuiltinPropertyId =
-   // 传统意义上的 attribute
-   '@intelligence'
-   | '@emotional_intelligence'
-   | '@memorization'
-   | '@strength'
-   | '@imagination'
-   | '@charisma'
-   // 三相之力
-   | '@energy'
-   | '@money'
-   | '@skill_point'
+   IAttributeId
+   | ITriforceId
    // 血条
    | '@mental_health'
    // 受伤状态
