@@ -58,7 +58,7 @@ const ascensionPerkModifiers: Modifier[] = [
 
       player: {
          '@charisma': { 'all': { gain: -0.3, loss: 0.3 } },
-         '@skill_points': {
+         '@skill_point': {
             '@activity:@chinese': { gain: 0.3 },
             '@activity:@math': { gain: 0.3 },
             '@activity:@english': { gain: 0.3 },

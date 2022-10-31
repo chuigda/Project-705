@@ -1,4 +1,4 @@
-import {ITranslatable, ITranslationKey} from "./translation";
+import {ITranslatable, ITranslationKey} from './translation'
 
 export interface IPotentialFunctionResult {
    type: 'fn'

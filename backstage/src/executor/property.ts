@@ -51,13 +51,20 @@ export function updateProperty(
    }
    value = value!
 
+   if (value < 0 && operator === 'add') {
+      operator = 'sub'
+      value = -value
+   } else if (value < 0 && operator === 'sub') {
+      operator = 'add'
+      value = -value
+   }
+
    const property = getProperty(gameContext, propertyId)
    if (!property) {
       console.error(`[E] [updateProperty] property ${propertyId} does not exist yet`)
       return
    }
 
-   // TODO finish this bullshit
    if (source && (operator === 'add' || operator === 'sub')) {
       const allModifier = gameContext.state.computedModifier!.getPlayerModifier('all', propertyId)
       const specificModifier = gameContext.state.computedModifier!.getPlayerModifier(source, propertyId)
@@ -107,6 +114,15 @@ export function updateProperty(
          break
       case 'set_min':
          property.min = opRef.value
+         break
+      case 'set_incr':
+         property.increment = opRef.value
+         break
+      case 'add_incr':
+         property.increment = (property.increment ?? 0) + opRef.value
+         break
+      case 'sub_incr':
+         property.increment = (property.increment ?? 0) - opRef.value
          break
       default:
          console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)

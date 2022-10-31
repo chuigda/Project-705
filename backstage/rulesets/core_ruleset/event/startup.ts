@@ -9,13 +9,15 @@ const detroitEvents: Event[] = [
          cx.connect(cx.signals.timer(24), 'detroit_add_attr2')
          cx.connect(cx.signals.timer(40), 'detroit_add_attr3')
 
-         cx.connect(cx.signals.propertyUpdated('attributes.intelligence'), 'detroit_collect_data1')
-         cx.connect(cx.signals.propertyUpdated('attributes.memorization'), 'detroit_collect_data1')
-         cx.connect(cx.signals.propertyUpdated('attributes.strength'), 'detroit_collect_data1')
-         cx.connect(cx.signals.propertyUpdated('attributes.emotionalIntelligence'), 'detroit_collect_data2')
-         cx.connect(cx.signals.propertyUpdated('attributes.imagination'), 'detroit_collect_data2')
+         cx.connect(cx.signals.propertyUpdated('@intelligence'), 'detroit_collect_data1')
+         cx.connect(cx.signals.propertyUpdated('@memorization'), 'detroit_collect_data1')
+         cx.connect(cx.signals.propertyUpdated('@strength'), 'detroit_collect_data1')
+         cx.connect(cx.signals.propertyUpdated('@emotional_intelligence'), 'detroit_collect_data2')
+         cx.connect(cx.signals.propertyUpdated('@imagination'), 'detroit_collect_data2')
          cx.connect(cx.signals.turnStart(), 'detroit_pressure_check')
          cx.connect(cx.signals.turnOver(), 'detroit_pressure_check')
+
+         cx.connect(cx.signals.propertyUnderflow('@mental_health'), 'detroit_add_program_error')
 
          cx.initProperty('data_collected', 0)
          cx.initProperty('software_unstable', 0)
@@ -26,7 +28,7 @@ const detroitEvents: Event[] = [
       ident: 'detroit_collect_data1',
       event: (cx, opRef: { operator: PropertyOp, value: number }) => {
          if (opRef.operator === 'add') {
-            cx.updateV('data_collected', value0 => value0 + opRef.value / 2)
+            cx.updateProperty('data_collected', 'add', Math.ceil(opRef.value / 2), '@detroit_data_collect')
             opRef.value = 0
          }
       }
@@ -35,18 +37,16 @@ const detroitEvents: Event[] = [
       ident: 'detroit_collect_data2',
       event: (cx, opRef: { operator: PropertyOp, value: number }) => {
          if (opRef.operator === 'add') {
-            cx.updateV('data_collected', value0 => value0 + opRef.value)
-            cx.updateV('software_unstable', value0 => value0 + 1)
+            cx.updateProperty('data_collected', 'add', Math.ceil(opRef.value / 2), '@detroit_data_collect')
+            cx.updateProperty('software_unstable', 'add', 1, '@detroit_data_collect')
             opRef.value = 0
          }
       }
    },
    {
-      ident: 'detroit_pressure_check',
+      ident: 'detroit_add_program_error',
       event: cx => {
-         if (cx.getPropertyValue('@mental_health')! <= 0) {
-            cx.updateV('program_error', value0 => value0 + 1)
-         }
+         cx.updateV('program_error', value0 => value0 + 1)
       }
    },
    {
