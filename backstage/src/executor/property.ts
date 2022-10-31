@@ -66,8 +66,8 @@ export function updateProperty(
    }
 
    if (source && (operator === 'add' || operator === 'sub')) {
-      const allModifier = gameContext.state.computedModifier!.getPlayerModifier('all', propertyId)
-      const specificModifier = gameContext.state.computedModifier!.getPlayerModifier(source, propertyId)
+      const allModifier = gameContext.state.computedModifier.getPlayerModifier('all', propertyId)
+      const specificModifier = gameContext.state.computedModifier.getPlayerModifier(source, propertyId)
       const gainOrLoss = operator === 'add' ? 'gain' : 'loss'
 
       let sumUpModifier = 1.0

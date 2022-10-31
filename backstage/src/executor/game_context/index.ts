@@ -62,9 +62,9 @@ export class GameState {
    modifiers: Set<string> = new Set()
    variables: Record<string, any> = {}
 
-   computedModifier?: ComputedModifier = undefined
-   computedSkills?: ComputedSkills = undefined
-   computedAscensionPerks?: ComputedAscensionPerks = undefined
+   computedModifier: ComputedModifier = new ComputedModifier()
+   computedSkills: ComputedSkills = new ComputedSkills()
+   computedAscensionPerks: ComputedAscensionPerks = new ComputedAscensionPerks()
 
    map: MapStatus = new MapStatus()
 

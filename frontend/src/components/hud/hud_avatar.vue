@@ -1,6 +1,6 @@
 <template>
    <div class="avatar-box">
-      <div class="avatar"></div>
+      <div class="avatar" />
    </div>
 </template>
 

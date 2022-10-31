@@ -6,7 +6,7 @@ const detroitEvents: Event[] = [
    {
       ident: 'normal_init',
       event: cx => {
-         for (const attributeId in attributeIdList) {
+         for (const attributeId of attributeIdList) {
             cx.updateProperty(attributeId, 'set_incr', 20, '@init')
          }
       }
@@ -14,7 +14,7 @@ const detroitEvents: Event[] = [
    {
       ident: 'gifted_init',
       event: cx => {
-         for (const attributeId in attributeIdList) {
+         for (const attributeId of attributeIdList) {
             cx.updateProperty(attributeId, 'set_incr', 50, '@init')
          }
          cx.updateProperty('@skill_point', 'add', 500, '@init')
