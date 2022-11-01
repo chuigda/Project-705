@@ -93,7 +93,7 @@ export function updateProperty(
       if (sumUpModifier < 0) {
          sumUpModifier = 0
       }
-      value = Math.ceil(value * sumUpModifier)
+      value = Math.round(value * sumUpModifier)
    }
 
    const opRef = { operator, value }

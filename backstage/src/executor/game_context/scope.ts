@@ -29,7 +29,6 @@ export function ensureScope(gameContext: GameContext, inputScope?: Scope): Scope
    return { author: 'cnpr', moduleName: 'core' }
 }
 
-
 const scopeFunctions = {
    pushScope,
    popScope

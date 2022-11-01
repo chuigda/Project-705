@@ -15,7 +15,7 @@ export function generateAscensionPerkModifiers(summary: RuleSetDescriptor[]): Mo
          ident: 'dont_be_busy',
          name: '$md_dont_be_busy',
          description: '$md_dont_be_busy_desc',
-         player: {
+         playerProperty: {
             '@strength': { '@activity:all': { gain: -0.1 } },
             '@intelligence': { '@activity:all': { gain: -0.1 } },
             '@emotional_intelligence': { '@activity:all': { gain: -0.1 } },
@@ -27,7 +27,7 @@ export function generateAscensionPerkModifiers(summary: RuleSetDescriptor[]): Mo
          ident: 'dont_be_busy_boost',
          name: '$md_dont_be_busy_boost',
          description: '$md_dont_be_busy_boot_desc',
-         player: {
+         playerProperty: {
             '@strength': { '@activity:all': { gain: 0.15 } },
             '@intelligence': { '@activity:all': { gain: 0.15 } },
             '@emotional_intelligence': { '@activity:all': { gain: 0.15 } },
@@ -41,7 +41,7 @@ export function generateAscensionPerkModifiers(summary: RuleSetDescriptor[]): Mo
          name: '$md_town_swot',
          description: '$md_town_swot_desc',
 
-         player: {
+         playerProperty: {
             mentalHealth: {
                '@activity:@chinese': { loss: -0.25 },
                '@activity:@math': { loss: -0.25 },
@@ -57,7 +57,7 @@ export function generateAscensionPerkModifiers(summary: RuleSetDescriptor[]): Mo
          name: '$md_king_of_involution',
          description: '$md_king_of_involution_desc',
 
-         player: {
+         playerProperty: {
             '@charisma': { 'all': { gain: -0.3, loss: 0.3 } },
             '@skill_point': {
                '@activity:@chinese': { gain: 0.3 },

@@ -22,15 +22,15 @@ export interface ModifierValue {
    loss?: number
 }
 
-export type PropertyModifier = Record<ValueSource, ModifierValue>
+export type PropertyModifier = Record<'all' | ValueSource, ModifierValue>
 
-export type PlayerModifier = Record<PropertyId, PropertyModifier>
+export type PlayerPropertyModifier = Record<PropertyId, PropertyModifier>
 
 export type SkillPointCostModifier = Record<'all' | SkillCategoryId, number>
 
 export interface Modifier extends ItemBase {
    icon?: string // TODO(chuigda): gfx features
 
-   player?: PlayerModifier
+   playerProperty?: PlayerPropertyModifier
    skillPointCost?: SkillPointCostModifier
 }

@@ -169,7 +169,7 @@ export function computeSkillCost(
       totalDiffRatio = 10.0
    }
 
-   let cost = Math.ceil(base * (1.0 + totalDiffRatio) * modifier)
+   let cost = Math.round(base * (1.0 + totalDiffRatio) * modifier)
    if (cost > 999) {
       cost = 999
    }
@@ -381,14 +381,18 @@ export function computeModifier(gameContext: GameContext) {
          continue
       }
 
-      const { name, icon, player, skillPointCost } = modifier
+      const { name, icon, playerProperty: playerModifier, skillPointCost } = modifier
 
-      if (player) {
-         for (const propertyId in player) {
-            const propertyModifier = player[propertyId]
+      if (playerModifier) {
+         for (const propertyId in playerModifier) {
+            const propertyModifier = playerModifier[propertyId]
             for (const valueSource in propertyModifier) {
                if (!computed.player[valueSource]) {
                   computed.player[valueSource] = {}
+               }
+
+               if (!computed.player[valueSource][propertyId]) {
+                  computed.player[valueSource][propertyId] = new ComputedPropertyModifier()
                }
 
                const value = propertyModifier[valueSource]

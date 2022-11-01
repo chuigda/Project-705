@@ -6,6 +6,7 @@ import activityCategories from './activity_categories'
 import skills from './skill'
 import mapSites from './map_site'
 import translations from './translation'
+import modifiers from './modifier'
 
 const ruleSet: RuleSet = {
    descriptor: {
@@ -21,6 +22,7 @@ const ruleSet: RuleSet = {
       skills,
       mapSites,
       translations,
+      modifiers,
       events
    }
 }
