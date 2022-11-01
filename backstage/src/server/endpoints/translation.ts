@@ -7,7 +7,7 @@ export default function epGetTranslation(req: Request, res: Response<IResponse<I
    if (lang && typeof lang === 'string') {
       res.json({
          success: true,
-         message: 'success', // TODO(chuigda): use translation keys
+         message: 'success',
          result: ruleSet.translations[lang] || {}
       })
    } else {

@@ -14,7 +14,7 @@ export default function epMapMove(
    if (direction !== 'left' || direction !== 'right') {
       res.status(400).json({
          success: false,
-         message: 'missing or invalid direction' // TODO(chuigda): use translation keys
+         message: 'missing or invalid direction'
       })
       return
    }
