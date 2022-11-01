@@ -1,8 +1,7 @@
 import { Modifier, RuleSetDescriptor } from '@app/ruleset'
 import { majorSubjects } from '@rulesets/core_ruleset/definition'
 
-export function generateAscensionPerkModifiers(summary: RuleSetDescriptor[]): Modifier[]
-{
+export function generateAscensionPerkModifiers(summary: RuleSetDescriptor[]): Modifier[] {
    return [
       {
          ident: 'well_prepared',
