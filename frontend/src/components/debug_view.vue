@@ -65,50 +65,28 @@ interface CommandFlags {
 }
 
 type CommandHandler = (args: string[], flags: CommandFlags) => Promise<void>
-type CommandHandler2 = (args: {event:Function,args:any[]}, flags: CommandFlags) => Promise<void>
 // One day I'll fuck up these bullshits
 
-function expectNoArg(f: CommandHandler): CommandHandler {
-   return async (args: string[], flags: CommandFlags) => {
-      if (args.length !== 0) {
-         lines.value.push({
-            text: `expected 0 arg, got ${args.length}`,
-            color: 'red'
-         })
-         return
-      }
+function expectNArgs(count: number): (f: CommandHandler) => CommandHandler {
+   return (f: CommandHandler) => {
+      return async (args: string[], flags: CommandFlags) => {
+         if (args.length !== count) {
+            lines.value.push({
+               text: `expected ${count} arg(s), got ${args.length}`,
+               color: 'red'
+            })
+            return
+         }
 
-      await f(args, flags)
+         await f(args, flags)
+      }
    }
 }
 
-function expectOneArg(f: CommandHandler): CommandHandler {
-   return async (args: string[], flags: CommandFlags) => {
-      if (args.length !== 1) {
-         lines.value.push({
-            text: `expected 1 arg, got ${args.length}`,
-            color: 'red'
-         })
-         return
-      }
+const expectNoArg = expectNArgs(0)
+const expectOneArg = expectNArgs(1)
+const expectTwoArgs = expectNArgs(2)
 
-      await f(args, flags)
-   }
-}
-
-function expectTwoArgs(f: CommandHandler): CommandHandler {
-   return async (args: string[], flags: CommandFlags) => {
-      if (args.length !== 2) {
-         lines.value.push({
-            text: `expected 2 args, got ${args.length}`,
-            color: 'red'
-         })
-         return
-      }
-
-      await f(args, flags)
-   }
-}
 function formatResponse(res: IResponse<any>) {
    let color
    if (res.success) {
@@ -171,13 +149,13 @@ const commands: Record<string, CommandHandler> = {
    }),
    'trigger_event': expectOneArg(async ([event,...args]) => {
       inputDisabled.value = true
-      const result = await debugTriggerEvent(event,args)
+      const result = await debugTriggerEvent(event, args)
       inputDisabled.value = false
       formatResponse(result)
       if (result.success) {
          emit('state', result.result)
       }
-   }),
+   })
 }
 
 async function submit(inputCommand: string) {
@@ -253,7 +231,7 @@ watch(inputBox, () => {
 
 .debugger-output {
    flex: 1 1 auto;
-   height: 0px;
+   height: 0;
    background-color: #846950AA;
    color: #FFFFFF;
    user-select: none;

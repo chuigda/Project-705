@@ -13,6 +13,12 @@ import GamePlay from '@app/views/game_play.vue'
 import ChooseStartup from '@app/views/choose_startup.vue'
 
 import '@app/style.css'
+import {dontSink} from '@app/util/emergency'
+
+window.onerror = (message, source, lineno, colno, error) => {
+   console.error(`[E] [window.onerror] at file ${source}, line ${source}, col ${colno}: ${message}\n`, error)
+   dontSink(`${message}`)
+}
 
 const preferredLang = getLocalStorage('lang') || 'zh_cn'
 

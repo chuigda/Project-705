@@ -1,7 +1,6 @@
 import { nextTurn } from '@app/executor/turn'
 import { CompiledRuleSet, load } from '@app/loader'
 import initGame from '@app/loader/init'
-import { perfectStringify } from '@app/util/stringify'
 
 const ruleSet: CompiledRuleSet = load()
 
