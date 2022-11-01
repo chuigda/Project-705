@@ -8,18 +8,22 @@ import translations from '@rulesets/core_ruleset/translation'
 import storeItems from '@rulesets/core_ruleset/store_item'
 import modifiers from '@rulesets/core_ruleset/modifier'
 
-const ruleSet: RuleSet = {
-   ident: {
-      author: 'cnpr',
-      moduleName: 'core'
+const mod: RuleSet = {
+   descriptor: {
+      ident: {
+         author: 'cnpr',
+         moduleName: 'core'
+      }
    },
-   skills,
-   events,
-   startups,
-   ascensionPerks,
-   modifiers,
-   storeItems,
-   translations
+   content: {
+      skills,
+      events,
+      startups,
+      ascensionPerks,
+      modifiers,
+      storeItems,
+      translations
+   }
 }
 
-export default ruleSet
+export default mod

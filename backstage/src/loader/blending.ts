@@ -15,7 +15,7 @@ import {
    compileStartup, compileTradableItem,
    compileTranslation
 } from '@app/loader/compile'
-import { RuleSet, RuleSetStoreItems, StoreItem, StoreItemKind } from '@app/ruleset'
+import { RuleSet, RuleSetContent, RuleSetDescriptor, RuleSetStoreItems, StoreItem, StoreItemKind } from '@app/ruleset'
 import { Button, CustomUI, Menu } from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
@@ -307,14 +307,14 @@ export function compileTranslations(
    }
 }
 
-export function preCompileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
-   const { ident, skillCategories, activityCategories } = ruleSet
+export function preloadRulesetDescriptor(compilation: CompiledRuleSet, descriptor: RuleSetDescriptor) {
+   const { ident, skillCategories, activityCategories } = descriptor
 
    if (compilation.loadedRuleSets.find(
       thatIdent => thatIdent.moduleName === ident.moduleName
          && thatIdent.author === ident.author
    )) {
-      console.warn(`[W] [preCompileRuleSet] duplicate mod identifier: '${ident.author}:${ident.moduleName}'`)
+      console.warn(`[W] [loadRulesetDescriptor] duplicate mod identifier: '${ident.author}:${ident.moduleName}'`)
    }
 
    compilation.loadedRuleSets.push(ident)
@@ -328,9 +328,9 @@ export function preCompileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet
    }
 }
 
-export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
+export function compileRuleSet(compilation: CompiledRuleSet, descriptor: RuleSetDescriptor, ruleSet: RuleSetContent) {
+   const scope = descriptor.ident
    const {
-      ident: scope,
       skills,
       startups,
       activities,
