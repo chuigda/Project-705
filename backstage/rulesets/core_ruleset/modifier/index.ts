@@ -1,8 +1,10 @@
-import { Modifier } from '@app/ruleset'
-import ascensionPerkModifiers from '@rulesets/core_ruleset/modifier/ascension_perk'
+import { Modifier, RuleSetDescriptor } from '@app/ruleset'
+import { generateAscensionPerkModifiers } from '@rulesets/core_ruleset/modifier/ascension_perk'
 
-const modifiers: Modifier[] = [
-   ...ascensionPerkModifiers
-]
+function generateModifiers(summary: RuleSetDescriptor[]): Modifier[] {
+   return [
+      ...generateAscensionPerkModifiers(summary)
+   ]
+}
 
-export default modifiers
+export default generateModifiers

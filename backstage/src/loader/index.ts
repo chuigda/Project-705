@@ -122,7 +122,7 @@ export function load(): CompiledRuleSet {
    if (process.env.SKIP_CORE_RULESET !== '1') {
       console.info('[I] [load] loading core ruleset')
       try {
-         compileRuleSet(ret, coreRuleSet.descriptor, coreRuleSet.content)
+         compileRuleSet(ret, coreRuleSet.descriptor, coreRuleSet.generator(ruleSetSummary))
       } catch (e) {
          console.error(`[E] [load] error compiling core ruleset: ${e}\n${e.stack}`)
          abort()
