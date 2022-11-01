@@ -16,7 +16,7 @@ import { ITranslationKey } from './translation'
 export const attributeIdList = [
    '@intelligence',
    '@emotional_intelligence',
-   'memorization',
+   '@memorization',
    '@strength',
    '@imagination',
    '@charisma'
