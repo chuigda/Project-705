@@ -161,15 +161,17 @@ const storeItemsAssertion = {
    tradableItems: [tradableItemAssertion].orNull()
 }
 
-const ruleSetAssertion = {
+const ruleSetDescriptorAssertion = {
    ident: {
       author: 'string',
       moduleName: 'string'
    },
    description: 'string?',
-
    skillCategories: [].orNull(),
    activityCategories: ['string'].orNull(),
+}
+
+const ruleSetContentAssertion = {
    skills: [skillAssertion].orNull(),
    startups: [startupAssertion].orNull(),
    activities: [activityAssertion].orNull(),
@@ -180,6 +182,20 @@ const ruleSetAssertion = {
    translations: {}.orNull()
 }
 
+const ruleSetAssertion = {
+   highOrder: 'boolean'.assertValue(false).orNull(),
+   descriptor: ruleSetDescriptorAssertion,
+   content: ruleSetContentAssertion
+}
+
+const highOrderRuleSetAssertion = {
+   highOrder: 'boolean'.assertValue(true),
+   descriptor: ruleSetDescriptorAssertion,
+   generator: 'function'
+}
+
+const moduleAssertion = ruleSetAssertion.sumWith(highOrderRuleSetAssertion)
+
 module.exports = {
    activityAssertion,
    ascensionPerkAssertion,
@@ -188,5 +204,9 @@ module.exports = {
    eventAssertion,
    modifierAssertion,
 
-   ruleSetAssertion
+   ruleSetDescriptorAssertion,
+   ruleSetContentAssertion,
+   ruleSetAssertion,
+   highOrderRuleSetAssertion,
+   moduleAssertion
 }

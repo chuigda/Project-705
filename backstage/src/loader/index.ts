@@ -8,7 +8,7 @@ import {
    RechargeableItem, ActiveRelicItem, TradableItem, MapSite, Module, RuleSetDescriptor
 } from '@app/ruleset'
 import { typeAssert } from '@app/util/type_assert'
-import { ruleSetAssertion } from '@app/loader/assertions'
+import { moduleAssertion, ruleSetContentAssertion } from '@app/loader/assertions'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
 import { Skill } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
@@ -30,7 +30,7 @@ export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {
       const mod = require(`${process.cwd()}/mods/${modName}`)
 
-      typeAssert(mod, ruleSetAssertion)
+      typeAssert(mod, moduleAssertion)
       return [mod as RuleSet, null]
    } catch (e) {
       return [null, e]
@@ -147,6 +147,7 @@ export function load(): CompiledRuleSet {
          let ruleSetContent
          if (mod.highOrder) {
             ruleSetContent = mod.generator(ruleSetSummary)
+            typeAssert(ruleSetContent, ruleSetContentAssertion)
          } else {
             ruleSetContent = mod.content
          }
