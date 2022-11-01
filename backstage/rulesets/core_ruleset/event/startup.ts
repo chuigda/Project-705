@@ -1,6 +1,7 @@
 import { PropertyOp } from '@app/ruleset/ops'
 import { Event } from '@app/ruleset'
 import { attributeIdList } from '@protocol/player'
+import { initProperty } from '@app/executor/property'
 
 const detroitEvents: Event[] = [
    {
@@ -18,6 +19,12 @@ const detroitEvents: Event[] = [
             cx.updateProperty(attributeId, 'set_incr', 50, '@init')
          }
          cx.updateProperty('@skill_point', 'add', 500, '@init')
+      }
+   },
+   {
+      ident: 'poor_init',
+      event: cx => {
+         initProperty(cx, '@mental_health', { name: '@', value: 75, min: 0, max: 150 })
       }
    },
    {

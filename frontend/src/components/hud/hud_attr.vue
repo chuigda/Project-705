@@ -113,7 +113,6 @@ const otherItems = computed(() => {
    for (const propertyId in properties) {
       if (!builtinPropertyIdSet.has(propertyId)) {
          const property = properties[propertyId]
-         console.log(propertyId, property)
          items.push([translate(property.name), property.value])
          sum += property.value
       }
