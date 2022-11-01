@@ -17,6 +17,7 @@ import {
 } from '@app/ruleset'
 import { triggerEventSeries } from '@app/executor/events'
 import { getPropertyValue, updateProperty } from '@app/executor/property'
+import { ensureScope } from '@app/executor/game_context/scope'
 
 const kindToFieldMapping: Record<StoreItemKind, keyof RuleSetStoreItems> = {
    'consumable': 'consumableItems',
@@ -86,7 +87,7 @@ function addTradableItemImpl(gameContext: GameContext, item: TradableItem, ident
 export function giveConsumableItem(gameContext: GameContext, itemId: Ident, count?: number) {
    count = count || 1
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.ruleSet.storeItems.consumableItems[identString]
    if (!item) {
       console.error(`[E] [giveConsumableItem] item '${identString}' does not exist`)
@@ -97,7 +98,7 @@ export function giveConsumableItem(gameContext: GameContext, itemId: Ident, coun
 }
 
 export function giveRechargeableItem(gameContext: GameContext, itemId: Ident, chargeLevel?: number) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.ruleSet.storeItems.rechargeableItems[identString]
    if (!item) {
       console.error(`[E] [giveRechargeableItem] item '${identString}' does not exist`)
@@ -109,7 +110,7 @@ export function giveRechargeableItem(gameContext: GameContext, itemId: Ident, ch
 }
 
 export function giveActiveRelicItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.ruleSet.storeItems.activeRelicItems[identString]
    if (!item) {
       console.error(`[E] [giveActiveRelicItem] item '${identString}' does not exist`)
@@ -120,7 +121,7 @@ export function giveActiveRelicItem(gameContext: GameContext, itemId: Ident) {
 }
 
 export function givePassiveRelicItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.ruleSet.storeItems.passiveRelicItems[identString]
    if (!item) {
       console.error(`[E] [givePassiveRelicItem] item '${identString}' does not exist`)
@@ -133,7 +134,7 @@ export function givePassiveRelicItem(gameContext: GameContext, itemId: Ident) {
 export function giveTradableItem(gameContext: GameContext, itemId: Ident, count?: number) {
    count = count || 1
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.ruleSet.storeItems.tradableItems[identString]
    if (!item) {
       console.error(`[E] [giveTradableItem] item '${identString}' does not exist`)
@@ -144,7 +145,7 @@ export function giveTradableItem(gameContext: GameContext, itemId: Ident, count?
 }
 
 export function useConsumableItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const playerItem = gameContext.state.player.items.consumableItems[identString]
    if (!playerItem) {
       console.error(`[E] [useConsumableItem] item '${identString}' does not exist`)
@@ -160,7 +161,7 @@ export function useConsumableItem(gameContext: GameContext, itemId: Ident) {
 }
 
 export function useRechargeableItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const playerItem = gameContext.state.player.items.rechargeableItems[identString]
    if (!playerItem) {
       console.error(`[E] [useRechargeableItem] item '${identString}' does not exist`)
@@ -178,7 +179,7 @@ export function useRechargeableItem(gameContext: GameContext, itemId: Ident) {
 }
 
 export function useActiveRelicItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const playerItem = gameContext.state.player.items.activeRelicItems[identString]
    if (!playerItem) {
       console.error(`[E] [useActiveRelicItem] item '${identString} does not exist'`)
@@ -198,7 +199,7 @@ export function useActiveRelicItem(gameContext: GameContext, itemId: Ident) {
 export function rechargeItem(gameContext: GameContext, itemId: Ident, chargeLevel?: number) {
    chargeLevel = chargeLevel || 1
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const playerItem = gameContext.state.player.items.rechargeableItems[identString]
    if (!playerItem) {
       console.error(`[E] [useRechargeableItem] item '${identString}' does not exist`)
@@ -215,7 +216,7 @@ export function rechargeItem(gameContext: GameContext, itemId: Ident, chargeLeve
 export function addItemToShop(gameContext: GameContext, itemId: Ident, kind: StoreItemKind, count?: number) {
    const k = kindToFieldMapping[kind]
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.ruleSet.storeItems[k][identString]
    if (!item) {
       console.error(`[E] [addItemToShop] shop item '${identString}' of kind '${kind}' does not exist`)
@@ -253,7 +254,7 @@ export function addItemToShop(gameContext: GameContext, itemId: Ident, kind: Sto
 export function removeItemFromShop(gameContext: GameContext, itemId: Ident, kind: StoreItemKind) {
    const k = kindToFieldMapping[kind]
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    if (!gameContext.ruleSet.storeItems[k][identString]) {
       console.error(`[E] [removeItemFromShop] shop item '${identString}' of kind '${kind}' does not exist`)
       return
@@ -278,7 +279,7 @@ function checkPrice<IKS extends StoreItemKind>(gameContext: GameContext, item: S
 export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, count?: number) {
    count = count || 1
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const shopItemCount = gameContext.state.shop.consumableItems[identString].count
    if (!shopItemCount) {
       console.error(`[E] [purchaseConsumableItem] item '${identString}' does not exist`)
@@ -300,7 +301,7 @@ export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, 
 }
 
 export function purchaseRechargeableItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.state.shop.rechargeableItems[identString]
    if (!item) {
       console.error(`[E] [purchaseRechargeableItem] item '${identString}' does not exist`)
@@ -316,7 +317,7 @@ export function purchaseRechargeableItem(gameContext: GameContext, itemId: Ident
 }
 
 export function purchaseActiveRelicItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.state.shop.activeRelicItems[identString]
 
    if (!item) {
@@ -333,7 +334,7 @@ export function purchaseActiveRelicItem(gameContext: GameContext, itemId: Ident)
 }
 
 export function purchasePassiveRelicItem(gameContext: GameContext, itemId: Ident) {
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const item = gameContext.state.shop.passiveRelicItems[identString]
    if (!item) {
       console.error(`[E] [purchasePassiveRelicItem] item '${identString}' does not exist`)
@@ -351,7 +352,7 @@ export function purchasePassiveRelicItem(gameContext: GameContext, itemId: Ident
 export function purchaseTradableItem(gameContext: GameContext, itemId: Ident, count?: number) {
    count = count || 1
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const shopItemCount = gameContext.state.shop.tradableItems[identString].count
    if (!shopItemCount) {
       console.error(`[E] [purchaseTradableItem] item '${identString}' does not exist`)
@@ -375,7 +376,7 @@ export function purchaseTradableItem(gameContext: GameContext, itemId: Ident, co
 export function sellTradableItem(gameContext: GameContext, itemId: Ident, count?: number) {
    count = count || 1
 
-   const identString = mStoreItemId(gameContext.scope!, itemId)
+   const identString = mStoreItemId(ensureScope(gameContext), itemId)
    const playerItem = gameContext.state.player.items.tradableItems[identString]
    if (!playerItem) {
       console.error(`[E] [sellTradableItem] item '${identString}' does not exist`)

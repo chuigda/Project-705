@@ -1,13 +1,14 @@
 import { GameContext } from '@app/executor/game_context'
-import { Ident, Scope, mVarName } from '@app/base/uid'
+import { Ident, mVarName } from '@app/base/uid'
+import { ensureScope } from '@app/executor/game_context/scope'
 
 export function getVar(gameContext: GameContext, varName: Ident): any {
-   const absoluteVarName = mVarName(<Scope>gameContext.scope, varName)
+   const absoluteVarName = mVarName(ensureScope(gameContext), varName)
    return gameContext.state.variables[absoluteVarName]
 }
 
 export function setVar(gameContext: GameContext, varName: Ident, value: any): any {
-   const absoluteVarName = mVarName(<Scope>gameContext.scope, varName)
+   const absoluteVarName = mVarName(ensureScope(gameContext), varName)
    const oldValue = gameContext.state.variables[absoluteVarName]
    if (value === undefined) {
       delete gameContext.state.variables[absoluteVarName]
@@ -19,7 +20,7 @@ export function setVar(gameContext: GameContext, varName: Ident, value: any): an
 }
 
 export function updateVar(gameContext: GameContext, varName: Ident, updater: (v: any) => any): any {
-   const absoluteVarName = mVarName(<Scope>gameContext.scope, varName)
+   const absoluteVarName = mVarName(ensureScope(gameContext), varName)
    const oldValue = gameContext.state.variables[absoluteVarName]
    const newValue = updater(oldValue)
    if (newValue === undefined) {

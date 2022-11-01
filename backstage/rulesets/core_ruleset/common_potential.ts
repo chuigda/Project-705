@@ -70,7 +70,7 @@ export function requireNoAscensionPerk(ascensionPerk: ComposedId): PotentialExpr
 
 export function requireSoftwareUnstable(unstable: number): PotentialExpressionFunctionOp {
    return {
-      op: cx => cx.getV('software_unstable') >= 500,
+      op: cx => (cx.getPropertyValue('@software_unstable') ?? 0) >= 500,
       description: {
          template: '@tr:$potential_require_software_unstable',
          args: { unstable: `${unstable}` }

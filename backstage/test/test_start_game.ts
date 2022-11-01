@@ -1,18 +1,10 @@
 import { nextTurn } from '@app/executor/turn'
-import { CompiledRuleSet, load } from '@app/loader'
-import initGame from '@app/loader/init'
-import { perfectStringify } from '@app/util/stringify'
+import startGame from '@test/base/start_game'
+import { assert } from '@app/util/emergency'
 
-const ruleSet: CompiledRuleSet = load()
-
-const gameContext = initGame(ruleSet, '@cnpr:dbg:st:debug')
-if (!gameContext) {
-   throw new Error('gameContext == null')
-}
+const gameContext = startGame()
 
 const [success] = nextTurn(gameContext)
-if(!success) {
-   throw new Error('nextTurn failed')
-}
+assert(success, 'nextTurn failed')
 
 console.info('Start game test OK')

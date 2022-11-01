@@ -1,5 +1,5 @@
 import { Ident, mActivityId } from '@app/base/uid'
-import { ensureScope } from '@app/executor/base'
+import { ensureScope } from '@app/executor/game_context/scope'
 import { GameContext } from '@app/executor/game_context'
 import { updateProperty } from '@app/executor/property'
 import { triggerEventSeries } from '@app/executor/events'

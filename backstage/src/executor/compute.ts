@@ -15,7 +15,7 @@ import {
    ValueSource
 } from '@app/ruleset/items/modifier'
 import { SkillCategoryId } from '@app/ruleset'
-import { popScope, pushScope } from '@app/executor/events'
+import { popScope, pushScope } from '@app/executor/game_context/scope'
 import { MaybeTranslatable } from '@app/base/translation'
 import { PropertyId } from '@app/executor/game_context/player'
 
