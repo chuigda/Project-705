@@ -14,7 +14,7 @@ import { abort } from '@app/util/emergency'
 import { validateAccessToken, validateBody, validateGameContext } from '@app/server/middleware'
 
 import serverStore from '@app/server/store'
-import { updatePlayerProperty } from '@app/executor/properties'
+import { updateProperty } from '@app/executor/property'
 import { initMap } from '@app/executor/map_site'
 
 const authToken = uuid()
@@ -232,7 +232,7 @@ debugRouter.post(
       }
 
       gameContext.updateTracker.reset()
-      updatePlayerProperty(gameContext, propertyPath, 'add', value)
+      updateProperty(gameContext, propertyPath, 'add', value)
       res.json({
          success: true,
          message: 'success',

@@ -1,12 +1,13 @@
-import { Scope, Ident, mEventId } from '@app/base/uid'
+import { Scope, Ident, mEventId, mPropertyId } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
+import { PropertyId } from '@app/executor/game_context/player'
 
 export type TurnsSignalTrigger = 'turn_start' | 'turn_over'
 
 export type Signal = { signalType: string }
 export type SkillSignal = Signal & { skillId: string }
 export type ActivitySignal = Signal & { activityId: string }
-export type PlayerPropertyUpdatedSignal = Signal & { property: string }
+export type PropertyUpdatedSignal = Signal & { property: PropertyId }
 export type TurnsSignal = Signal & { turns: number, trigger: 'turn_start' | 'turn_over' }
 export type EventSignal = Signal & { eventId: string }
 
@@ -21,9 +22,17 @@ export const signals: Record<string, (...args: any[]) => Signal> = {
       signalType: 'activity',
       activityId
    }),
-   playerPropertyUpdated: (property: string): PlayerPropertyUpdatedSignal => ({
-      signalType: 'player',
+   propertyUpdated: (property: PropertyId): PropertyUpdatedSignal => ({
+      signalType: 'property',
       property,
+   }),
+   propertyOverflow: (property: PropertyId): PropertyUpdatedSignal => ({
+      signalType: 'property_overflow',
+      property
+   }),
+   propertyUnderflow: (property: PropertyId): PropertyUpdatedSignal => ({
+      signalType: 'property_underflow',
+      property
    }),
    timer: (turns: number, trigger: TurnsSignalTrigger): TurnsSignal => ({
       signalType: 'turns',
@@ -72,18 +81,37 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          gameContext.state.events.activityPerformed[sig.activityId].add(eventId)
          break
       }
-      case 'player': {
-         const sig = <PlayerPropertyUpdatedSignal>signal
-         const propertyPath = sig.property.split('.')
-         let container: any = gameContext.state.events.playerPropertyUpdated
-         for (const pathPart of propertyPath) {
-            container = container[pathPart]
-         }
-         if (!(container instanceof Set<string>)) {
-            console.warn(`[W] [connect] playerPropertyUpdated: invalid property path: '${sig.property}'`)
+      case 'property': {
+         const sig = <PropertyUpdatedSignal>signal
+         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const container = gameContext.state.events.propertyUpdated[propertyId]
+         if (!(container && container instanceof Set<string>)) {
+            console.warn(`[W] [connect] playerPropertyUpdated: property not defined: '${propertyId}'`)
             return
          }
          (<Set<string>>container).add(eventId)
+         break
+      }
+      case 'property_overflow': {
+         const sig = <PropertyUpdatedSignal>signal
+         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const container = gameContext.state.events.propertyOverflow[propertyId]
+         if (!(container && container instanceof Set<string>)) {
+            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
+            return
+         }
+         container.push()
+         break
+      }
+      case 'property_underflow': {
+         const sig = <PropertyUpdatedSignal>signal
+         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const container = gameContext.state.events.propertyUnderflow[propertyId]
+         if (!(container && container instanceof Set<string>)) {
+            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
+            return
+         }
+         container.push()
          break
       }
       case 'turns': {
@@ -107,10 +135,10 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       case 'event': {
          const sig = <EventSignal>signal
          const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
-         if (!gameContext.state.events.eventsTriggered[sourceEventId]) {
-            gameContext.state.events.eventsTriggered[sourceEventId] = new Set()
+         if (!gameContext.state.events.eventTriggered[sourceEventId]) {
+            gameContext.state.events.eventTriggered[sourceEventId] = new Set()
          }
-         gameContext.state.events.eventsTriggered[sourceEventId].add(eventId)
+         gameContext.state.events.eventTriggered[sourceEventId].add(eventId)
          break
       }
       default:
@@ -148,9 +176,9 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
          break
       }
       case 'player': {
-         const sig = <PlayerPropertyUpdatedSignal>signal
+         const sig = <PropertyUpdatedSignal>signal
          const propertyPath = sig.property.split('.')
-         let container: any = gameContext.state.events.playerPropertyUpdated
+         let container: any = gameContext.state.events.propertyUpdated
          for (const pathPart of propertyPath) {
             container = container[pathPart]
          }
@@ -178,8 +206,8 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
       case 'event': {
          const sig = <EventSignal>signal
          const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
-         if (gameContext.state.events.eventsTriggered[sourceEventId]) {
-            gameContext.state.events.eventsTriggered[sourceEventId].delete(eventId)
+         if (gameContext.state.events.eventTriggered[sourceEventId]) {
+            gameContext.state.events.eventTriggered[sourceEventId].delete(eventId)
          }
          break
       }

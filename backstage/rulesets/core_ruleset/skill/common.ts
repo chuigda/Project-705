@@ -11,9 +11,7 @@ const commonSkills: Skill[] = [
          base: 20
       },
       output: {
-         attributes: {
-            strength: 50
-         }
+         '@strength': 50
       },
       activities: ['walk']
    },
@@ -25,14 +23,12 @@ const commonSkills: Skill[] = [
 
       cost: {
          base: 50,
-         attributes: {
-            emotionalIntelligence: 100
+         properties: {
+            '@emotional_intelligence': 100
          }
       },
       output: {
-         attributes: {
-            emotionalIntelligence: 50
-         }
+         '@emotional_intelligence': 50
       },
       activities: ['speak']
    }

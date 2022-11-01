@@ -2,24 +2,19 @@
 
 import { Ident, Scope } from '@app/base/uid'
 import {
-   ActiveRelicItem,
-   Activity,
    AscensionPerk,
    BubbleMessageTemplate,
    Button,
-   ConsumableItem,
-   CustomScoreBoard,
    MaybeInlineEvent,
-   Menu, PassiveRelicItem,
+   Menu,
    PotentialExpression,
    PropertyOp,
-   RechargeableItem,
    SimpleDialogTemplate,
    Skill,
    SkillCategoryId,
    SkillCost,
-   SkillPotential, StoreItem, StoreItemKind,
-   TradableItem,
+   SkillPotential,
+   StoreItemKind,
    ValueSource
 } from '@app/ruleset'
 
@@ -34,8 +29,8 @@ import computeFunctions, {
 import connectFunctions, { Signal } from '@app/executor/connect'
 import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/skill'
-import propertyFunctions from '@app/executor/properties'
-import variableFunctions from '@app/executor/variables'
+import propertyFunctions from '@app/executor/property'
+import variableFunctions from '@app/executor/variable'
 import uiFunctions, { BubbleMessage, SimpleDialog } from '@app/executor/ui'
 import ascensionPerkFunctions from '@app/executor/ascension_perk'
 import modifierFunctions from '@app/executor/modifier'
@@ -44,149 +39,13 @@ import activityFunctions from '@app/executor/activity'
 import { QResult } from '@app/executor/result'
 import { GeneratedSite } from '@app/executor/map_site'
 
-export class PlayerAttributes {
-   strength: number = 0
-   intelligence: number = 0
-   emotionalIntelligence: number = 0
-   memorization: number = 0
-   imagination: number = 0
-   charisma: number = 0
-}
+import { PlayerProperty, PlayerStatus, PropertyId } from '@app/executor/game_context/player'
+import { ShopStatus } from '@app/executor/game_context/shop'
+import { EventHooks } from '@app/executor/game_context/event_hook'
 
-export class PlayerConsumableItem {
-   readonly item: ConsumableItem
-   totalChargeLevel: number
-
-   constructor(item: ConsumableItem, count?: number) {
-      this.item = item
-      this.totalChargeLevel = (count || 1) * item.initCharge!
-   }
-}
-
-export class PlayerRechargeableItem {
-   readonly item: RechargeableItem
-   chargeLevel: number
-
-   constructor(item: RechargeableItem, chargeLevel: number) {
-      this.item = item
-      this.chargeLevel = chargeLevel
-   }
-
-   recharge(chargeLevel?: number) {
-      chargeLevel = chargeLevel || 1
-      this.chargeLevel = Math.max(this.chargeLevel + chargeLevel, this.item.maxCharge!)
-   }
-}
-
-export class PlayerActiveRelicItem {
-   readonly item: ActiveRelicItem
-   cooldown: number
-
-   constructor(item: ActiveRelicItem) {
-      this.item = item
-      this.cooldown = 0
-   }
-
-   reload() {
-      this.cooldown -= 1
-      if (this.cooldown <= 0) {
-         this.cooldown = 0
-      }
-   }
-}
-
-export class PlayerTradableItem {
-   readonly item: TradableItem
-   count: number
-
-   constructor(item: TradableItem, count?: number) {
-      this.item = item
-      this.count = count || 1
-   }
-}
-
-export class PlayerItems {
-   consumableItems: Record<string, PlayerConsumableItem> = {}
-   rechargeableItems: Record<string, PlayerRechargeableItem> = {}
-   activeRelicItems: Record<string, PlayerActiveRelicItem> = {}
-   passiveRelicItems: Record<string, PassiveRelicItem> = {}
-   tradableItems: Record<string, PlayerTradableItem> = {}
-}
-
-export class PlayerStatus {
-   attributes: PlayerAttributes = new PlayerAttributes()
-   talent: PlayerAttributes = new PlayerAttributes()
-
-   skillPoints: number = 0
-   skills: Record<string, Skill> = {}
-   activities: Record<string, Activity> = {}
-   ascensionPerks: Record<string, AscensionPerk> = {}
-   ascensionPerkSlots: number = 0
-   items: PlayerItems = new PlayerItems()
-
-   energy: number = 0
-   energyMax: number = 150
-   mentalHealth: number = 0
-   mentalHealthMax: number = 100
-   satisfactory: number = 50
-   money: number = 0
-   moneyPerTurn: number = 0
-}
-
-export class AttributeEvents {
-   all: Set<string> = new Set()
-   strength: Set<string> = new Set()
-   intelligence: Set<string> = new Set()
-   emotionalIntelligence: Set<string> = new Set()
-   memorization: Set<string> = new Set()
-   imagination: Set<string> = new Set()
-   charisma: Set<string> = new Set()
-}
-
-export class PlayerPropertyUpdatedEvents {
-   all: Set<string> = new Set()
-   skillPoints: Set<string> = new Set()
-   attributes: AttributeEvents = new AttributeEvents()
-   talent: AttributeEvents = new AttributeEvents()
-   mentalHealth: Set<string> = new Set()
-}
-
-export class TimedEvent {
-   turn: number
-   eventId: string
-   trigger: 'turn_start' | 'turn_over'
-}
-
-export class GameContextEvents {
-   turnStart: Set<string> = new Set()
-   turnOver: Set<string> = new Set()
-   playerPropertyUpdated: PlayerPropertyUpdatedEvents = new PlayerPropertyUpdatedEvents()
-   skillLearnt: Record<string, Set<string>> = {}
-   activityPerformed: Record<string, Set<string>> = {}
-   eventsTriggered: Record<string, Set<string>> = {}
-
-   timedEvents: TimedEvent[] = []
-}
-
-export class ShopItem<T extends StoreItem<any>> {
-   readonly item: T
-   count: number
-
-   constructor(item: T, count?: number) {
-      this.item = item
-      this.count = count || 1
-   }
-}
-
-export class ShopStatus {
-   shopEnabled: boolean = false
-
-   consumableItems: Record<string, ShopItem<ConsumableItem>> = {}
-   tradableItems: Record<string, ShopItem<TradableItem>> = {}
-   rechargeableItems: Record<string, RechargeableItem> = {}
-   activeRelicItems: Record<string, ActiveRelicItem> = {}
-   passiveRelicItems: Record<string, PassiveRelicItem> = {}
-}
+export * from '@app/executor/game_context/event_hook'
+export * from '@app/executor/game_context/player'
+export * from '@app/executor/game_context/shop'
 
 export class MapStatus {
    rootSite: GeneratedSite
@@ -199,19 +58,18 @@ export class GameState {
    player: PlayerStatus = new PlayerStatus()
    shop: ShopStatus = new ShopStatus()
 
-   events: GameContextEvents = new GameContextEvents()
+   events: EventHooks = new EventHooks()
    modifiers: Set<string> = new Set()
    variables: Record<string, any> = {}
 
-   computedModifier?: ComputedModifier = undefined
-   computedSkills?: ComputedSkills = undefined
-   computedAscensionPerks?: ComputedAscensionPerks = undefined
+   computedModifier: ComputedModifier = new ComputedModifier()
+   computedSkills: ComputedSkills = new ComputedSkills()
+   computedAscensionPerks: ComputedAscensionPerks = new ComputedAscensionPerks()
 
    map: MapStatus = new MapStatus()
 
    customButtons: Button[] = []
    customMenus: Menu[] = []
-   customScoreBoards: CustomScoreBoard[] = []
 
    dialogs: SimpleDialog[] = []
    bubbleMessages: BubbleMessage[] = []
@@ -387,8 +245,20 @@ export class GameContext {
       storeItemFunctions.removeItemFromShop(this, itemId, kind)
    }
 
-   updatePlayerProperty(property: string, operator: PropertyOp, value: number, source?: ValueSource) {
-      propertyFunctions.updatePlayerProperty(this, property, operator, value, source)
+   initProperty(propertyId: PropertyId, property: PlayerProperty | number) {
+      propertyFunctions.initProperty(this, propertyId, property)
+   }
+
+   getProperty(property: PropertyId): PlayerProperty | undefined {
+      return propertyFunctions.getProperty(this, property)
+   }
+
+   getPropertyValue(property: PropertyId): number | undefined {
+      return propertyFunctions.getPropertyValue(this, property)
+   }
+
+   updateProperty(property: PropertyId, operator: PropertyOp, value: number, source?: ValueSource) {
+      propertyFunctions.updateProperty(this, property, operator, value, source)
    }
 
    getV(varName: Ident): any {

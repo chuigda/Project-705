@@ -3,16 +3,18 @@
       <div>
          <TriforceIcon type="energy" />
          <div>
-            {{ props.playerStatus.energy }} / {{ props.playerStatus.energyMax }}
+            {{ props.playerStatus.properties!['@energy']!.value }}
+            /
+            {{ props.playerStatus.properties!['@energy']!.max }}
          </div>
       </div>
       <div>
-         <TriforceIcon type="skillPoints" />
-         <div> {{ props.playerStatus.skillPoints }} </div>
+         <TriforceIcon type="skill_point" />
+         <div> {{ props.playerStatus.properties!['@skill_point']!.value }} </div>
       </div>
       <div>
          <TriforceIcon type="money" />
-         <div> {{ props.playerStatus.money }} </div>
+         <div> {{ props.playerStatus.properties!['@energy']!.value }} </div>
       </div>
    </div>
 </template>

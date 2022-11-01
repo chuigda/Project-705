@@ -1,15 +1,19 @@
-import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import {
-   IPartialPlayerAttributes,
-   IPlayerAttributes,
    IPlayerStatus,
-   IPlayerItems, IPlayerConsumableItem, IPlayerRechargeableItem, IPlayerActiveRelicItem, IPlayerTradableItem
+   IPlayerItems,
+   IPlayerConsumableItem,
+   IPlayerRechargeableItem,
+   IPlayerActiveRelicItem,
+   IPlayerTradableItem
 } from '@protocol/player'
 import {
-   PlayerAttributes,
    PlayerStatus,
    PlayerStatusUpdateTracker,
-   PlayerItems, PlayerConsumableItem, PlayerRechargeableItem, PlayerActiveRelicItem, PlayerTradableItem
+   PlayerItems,
+   PlayerConsumableItem,
+   PlayerRechargeableItem,
+   PlayerActiveRelicItem,
+   PlayerTradableItem
 } from '@app/executor/game_context'
 
 import { sendActivity } from './activity'
@@ -21,28 +25,6 @@ import {
    sendRechargeableItem,
    sendTradableItem
 } from './store_item'
-
-export function sendPartialPlayerAttributes(pa: PlayerAttributesUpdate): IPartialPlayerAttributes {
-   return {
-      strength: pa.strength,
-      intelligence: pa.intelligence,
-      emotionalIntelligence: pa.emotionalIntelligence,
-      memorization: pa.memorization,
-      imagination: pa.imagination,
-      charisma: pa.charisma
-   }
-}
-
-export function sendPlayerAttributes(pa: PlayerAttributes): IPlayerAttributes {
-   return {
-      strength: pa.strength,
-      intelligence: pa.intelligence,
-      emotionalIntelligence: pa.emotionalIntelligence,
-      memorization: pa.memorization,
-      imagination: pa.imagination,
-      charisma: pa.charisma
-   }
-}
 
 export function sendPlayerConsumableItem(playerItem: PlayerConsumableItem): IPlayerConsumableItem {
    const { item, totalChargeLevel } = playerItem
@@ -101,34 +83,16 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
 
    if (!updateTracker) {
       return {
-         attributes: sendPlayerAttributes(ps.attributes),
-         talent: sendPlayerAttributes(ps.talent),
-         energy: ps.energy,
-         energyMax: ps.energyMax,
-         skillPoints: ps.skillPoints,
+         properties: ps.properties,
          skills: sendSkills(ps.skills),
          activities: sendActivities(ps.activities),
          ascensionPerks: sendAscensionPerks(ps.ascensionPerks),
          ascensionPerkSlots: ps.ascensionPerkSlots,
-         mentalHealth: ps.mentalHealth,
-         mentalHealthMax: ps.mentalHealthMax,
-         satisfactory: ps.satisfactory,
-         money: ps.money,
-         moneyPerTurn: ps.moneyPerTurn,
          items: sendPlayerItems(ps.items)
       }
    } else {
       return {
-         attributes: updateTracker.properties ? sendPlayerAttributes(ps.attributes) : undefined,
-         talent: updateTracker.properties ? sendPlayerAttributes(ps.talent) : undefined,
-         energy: updateTracker.properties ? ps.energy : undefined,
-         energyMax: updateTracker.properties ? ps.energyMax : undefined,
-         skillPoints: updateTracker.properties ? ps.skillPoints : undefined,
-         mentalHealth: updateTracker.properties ? ps.mentalHealth : undefined,
-         mentalHealthMax: updateTracker.properties ? ps.mentalHealthMax : undefined,
-         satisfactory: updateTracker.properties ? ps.satisfactory : undefined,
-         money: updateTracker.properties ? ps.money : undefined,
-         moneyPerTurn: updateTracker.properties ? ps.moneyPerTurn : undefined,
+         properties: updateTracker.properties ? ps.properties : undefined,
          ascensionPerkSlots: updateTracker.ascensionPerkSlots ? ps.ascensionPerkSlots : undefined,
 
          skills: updateTracker.skills ? sendSkills(ps.skills) : undefined,

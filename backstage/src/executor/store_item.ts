@@ -2,8 +2,9 @@ import {
    GameContext,
    PlayerActiveRelicItem,
    PlayerConsumableItem,
-   PlayerRechargeableItem, PlayerStatus,
-   PlayerTradableItem, ShopItem
+   PlayerRechargeableItem,
+   PlayerTradableItem,
+   ShopItem
 } from '@app/executor/game_context'
 import { Ident, mStoreItemId } from '@app/base/uid'
 import {
@@ -15,7 +16,7 @@ import {
    StoreItemKind, TradableItem
 } from '@app/ruleset'
 import { triggerEventSeries } from '@app/executor/events'
-import { updatePlayerProperty } from '@app/executor/properties'
+import { getPropertyValue, updateProperty } from '@app/executor/property'
 
 const kindToFieldMapping: Record<StoreItemKind, keyof RuleSetStoreItems> = {
    'consumable': 'consumableItems',
@@ -263,14 +264,14 @@ export function removeItemFromShop(gameContext: GameContext, itemId: Ident, kind
    delete shop[identString]
 }
 
-function checkPrice<IKS extends StoreItemKind>(player: PlayerStatus, item: StoreItem<IKS>, count?: number) {
+function checkPrice<IKS extends StoreItemKind>(gameContext: GameContext, item: StoreItem<IKS>, count?: number) {
    const totalPrice = (item.price || 0) * (count || 1)
-   if (totalPrice > player.money) {
+   if (totalPrice > getPropertyValue(gameContext, '@money')!) {
       console.error('[E] [checkPrice] not enough money')
       return false
    }
 
-   player.money -= totalPrice
+   updateProperty(gameContext, '@money', 'sub', totalPrice, '@purchase')
    return true
 }
 
@@ -290,7 +291,7 @@ export function purchaseConsumableItem(gameContext: GameContext, itemId: Ident, 
    }
 
    const item = gameContext.ruleSet.storeItems.consumableItems[identString]
-   if (!checkPrice(gameContext.state.player, item, count)) {
+   if (!checkPrice(gameContext, item, count)) {
       return
    }
 
@@ -306,7 +307,7 @@ export function purchaseRechargeableItem(gameContext: GameContext, itemId: Ident
       return
    }
 
-   if (!checkPrice(gameContext.state.player, item)) {
+   if (!checkPrice(gameContext, item)) {
       return
    }
 
@@ -323,7 +324,7 @@ export function purchaseActiveRelicItem(gameContext: GameContext, itemId: Ident)
       return
    }
 
-   if (!checkPrice(gameContext.state.player, item)) {
+   if (!checkPrice(gameContext, item)) {
       return
    }
 
@@ -339,7 +340,7 @@ export function purchasePassiveRelicItem(gameContext: GameContext, itemId: Ident
       return
    }
 
-   if (!checkPrice(gameContext.state.player, item)) {
+   if (!checkPrice(gameContext, item)) {
       return
    }
 
@@ -363,7 +364,7 @@ export function purchaseTradableItem(gameContext: GameContext, itemId: Ident, co
    }
 
    const item = gameContext.ruleSet.storeItems.tradableItems[identString]
-   if (!checkPrice(gameContext.state.player, item, count)) {
+   if (!checkPrice(gameContext, item, count)) {
       return
    }
 
@@ -389,7 +390,7 @@ export function sellTradableItem(gameContext: GameContext, itemId: Ident, count?
    gameContext.updateTracker.player.items = true
    playerItem.count -= count
    const sellValue = playerItem.item.sellValue * count
-   updatePlayerProperty(gameContext, 'money', 'add', Math.ceil(sellValue))
+   updateProperty(gameContext, 'money', 'add', Math.ceil(sellValue))
    if (playerItem.count === 0) {
       delete gameContext.state.player.items.tradableItems[identString]
    }

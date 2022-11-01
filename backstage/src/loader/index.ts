@@ -22,7 +22,6 @@ import debugRuleSet from '@rulesets/debug_ruleset'
 import {
    BubbleMessageTemplate,
    Button,
-   CustomScoreBoard,
    Menu,
    SimpleDialogTemplate
 } from '@app/ruleset/items/ui'
@@ -51,7 +50,6 @@ export class CompiledStoreItems {
 export class CompiledCustomUI {
    menus: Record<string, Menu> = {}
    buttons: Record<string, Button> = {}
-   scoreBoards: Record<string, CustomScoreBoard> = {}
 
    dialogTemplates: Record<string, SimpleDialogTemplate> = {}
    bubbleMessageTemplates: Record<string, BubbleMessageTemplate> = {}

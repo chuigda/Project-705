@@ -1,11 +1,10 @@
-import {ITranslationKey} from "./translation";
-import {IStartupPlayerProperties} from "./index";
+import {ITranslationKey} from './translation'
+import {IBuiltinPropertyId} from "./player";
 
 export interface IStartup {
    ident: string,
    name: ITranslationKey,
    description: ITranslationKey,
 
-   player?: IStartupPlayerProperties
-   modifier?: object
+   player?: Record<IBuiltinPropertyId, number>
 }

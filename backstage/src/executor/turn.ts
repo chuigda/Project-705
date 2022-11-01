@@ -2,6 +2,7 @@ import { GameContext } from '@app/executor/game_context'
 import { triggerEvent, triggerEventSeries } from '@app/executor/events'
 import { computePotentialAscensionPerks, computePotentialSkills } from '@app/executor/compute'
 import { concatMessage, QResult } from '@app/executor/result'
+import { getProperty } from '@app/executor/property'
 
 export function nextTurn(gameContext: GameContext): QResult {
    console.info('[I] [nextTurn] proceeding to the next turn')
@@ -22,7 +23,15 @@ export function nextTurn(gameContext: GameContext): QResult {
    })
 
    gameContext.state.turns += 1
-   gameContext.state.player.energy = gameContext.state.player.energyMax
+   const energy = getProperty(gameContext, '@energy')
+   energy!.value = energy!.max!
+
+   for (const propertyId in gameContext.state.player.properties) {
+      const property = gameContext.state.player.properties[propertyId]
+      if (property.increment) {
+         gameContext.updateProperty(propertyId, 'add', property.increment, '@turn_incr')
+      }
+   }
 
    computePotentialSkills(gameContext)
    if (gameContext.state.player.ascensionPerkSlots > Object.keys(gameContext.state.player.ascensionPerks).length) {

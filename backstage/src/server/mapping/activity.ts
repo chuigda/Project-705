@@ -1,17 +1,6 @@
-import { Activity, ActivityOutput } from '@app/ruleset'
-import { IActivity, IActivityOutput } from '@protocol/activity'
-import { sendPartialPlayerAttributes } from '@app/server/mapping/player'
+import { Activity } from '@app/ruleset'
+import { IActivity } from '@protocol/activity'
 import { sendItemBase } from '@app/server/mapping/item_base'
-
-export function sendActivityOutput(ao: ActivityOutput): IActivityOutput {
-   return {
-      attributes: ao.attributes && sendPartialPlayerAttributes(ao.attributes),
-      skillPoints: ao.skillPoints,
-      mentalHealth: ao.mentalHealth,
-      satisfactory: ao.satisfactory,
-      money: ao.money
-   }
-}
 
 export function sendActivity(a: Activity): IActivity {
    return {
@@ -19,6 +8,6 @@ export function sendActivity(a: Activity): IActivity {
 
       category: a.category,
       level: a.level,
-      output: a.output && sendActivityOutput(a.output)
+      output: a.output
    }
 }

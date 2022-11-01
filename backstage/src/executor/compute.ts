@@ -1,5 +1,5 @@
 import { LogicOp } from '@app/ruleset/ops'
-import { GameContext, PlayerAttributes } from '@app/executor/game_context'
+import { GameContext } from '@app/executor/game_context'
 import {
    PotentialExpression,
    PotentialExpressionFunctionOp,
@@ -8,19 +8,16 @@ import {
 import { MaybeTranslationKey } from '@app/base/uid'
 import { Skill, SkillCost, SkillPotential } from '@app/ruleset/items/skill'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
-import { PlayerAttributesUpdate } from '@app/ruleset/items/item_base'
 import {
-   AttributeModifiers,
    Modifier,
    ModifierValue,
-   PlayerModifier,
-   PropertyModifier,
    SkillPointCostModifier,
    ValueSource
 } from '@app/ruleset/items/modifier'
 import { SkillCategoryId } from '@app/ruleset'
 import { popScope, pushScope } from '@app/executor/events'
 import { MaybeTranslatable } from '@app/base/translation'
+import { PropertyId } from '@app/executor/game_context/player'
 
 export interface PotentialResultBase {
    readonly result: boolean
@@ -145,24 +142,24 @@ export function computeSkillCost(
       return 0
    }
 
-   const { base, attributes } = skillCost
-   console.debug(`[D] [computeSkillCost] base cost = ${base}, attributes = ${attributes}`)
+   const { base, properties } = skillCost
+   console.debug(`[D] [computeSkillCost] base cost = ${base}, properties = ${properties}`)
    let totalDiffRatio = 0.0
-   if (attributes) {
-      for (const attrName in attributes) {
-         const attribute = gameContext.state.player.attributes[<keyof PlayerAttributes>attrName]
-         const requiredAttribute = attributes[<keyof PlayerAttributesUpdate>attrName]
+   if (properties) {
+      for (const propertyId in properties) {
+         const propertyValue = gameContext.getPropertyValue(propertyId) ?? 0
+         const expectedPropertyValue = properties[propertyId]
 
-         if (requiredAttribute) {
-            const diff = attribute - requiredAttribute
+         if (expectedPropertyValue) {
+            const diff = propertyValue - expectedPropertyValue
             console.debug(
-               `[D] [computeSkillCost] gameContext.player.attributes[${attrName}] = ${attribute}` +
-               `, attributes[${attrName}] = ${requiredAttribute}` +
+               `[D] [computeSkillCost] gameContext.player.attributes[${propertyId}] = ${propertyValue}` +
+               `, attributes[${propertyId}] = ${expectedPropertyValue}` +
                `, diff = ${diff}`
             )
             if (diff < 0) {
-               totalDiffRatio += -(diff / requiredAttribute)
-               console.debug(`[D] [computeSkillCost] diff contribution = ${-(diff / requiredAttribute)}`)
+               totalDiffRatio += -(diff / expectedPropertyValue)
+               console.debug(`[D] [computeSkillCost] diff contribution = ${-(diff / expectedPropertyValue)}`)
             }
          }
       }
@@ -311,6 +308,8 @@ export interface IContribution {
    icon?: string
 }
 
+// note: gain/loss values may exceed, but that does not matter.
+// normalization will be done when property modifier get applied.
 export class ComputedPropertyModifier {
    gain: number = 0.0
    gainContributions: IContribution[] = []
@@ -338,54 +337,7 @@ export class ComputedPropertyModifier {
    }
 }
 
-export class ComputedAttributeModifiers {
-   strength: ComputedPropertyModifier = new ComputedPropertyModifier()
-   intelligence: ComputedPropertyModifier = new ComputedPropertyModifier()
-   emotionalIntelligence: ComputedPropertyModifier = new ComputedPropertyModifier()
-   memorization: ComputedPropertyModifier = new ComputedPropertyModifier()
-   imagination: ComputedPropertyModifier = new ComputedPropertyModifier()
-   charisma: ComputedPropertyModifier = new ComputedPropertyModifier()
-}
-
-export class ComputedPlayerModifier {
-   attributes: ComputedAttributeModifiers = new ComputedAttributeModifiers()
-   talent: ComputedAttributeModifiers = new ComputedAttributeModifiers()
-
-   skillPoints: ComputedPropertyModifier = new ComputedPropertyModifier()
-   energy: ComputedPropertyModifier = new ComputedPropertyModifier()
-   mentalHealth: ComputedPropertyModifier = new ComputedPropertyModifier()
-   satisfactory: ComputedPropertyModifier = new ComputedPropertyModifier()
-   money: ComputedPropertyModifier = new ComputedPropertyModifier()
-   moneyPerTurn: ComputedPropertyModifier = new ComputedPropertyModifier()
-
-   getModifier(propertyPath: string): ComputedPropertyModifier | undefined {
-      const pathParts: string[] = propertyPath.split('.')
-      // eslint-disable-next-line @typescript-eslint/no-this-alias
-      let that: ComputedPlayerModifier | ComputedAttributeModifiers | ComputedPropertyModifier = this
-      for (const pathPart of pathParts) {
-         if (that instanceof ComputedPropertyModifier) {
-            console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
-            return undefined
-         }
-
-         // @ts-ignore
-         const part: ComputedAttributeModifiers | ComputedPropertyModifier | undefined = that[pathPart]
-         if (!part) {
-            console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
-            return undefined
-         }
-
-         that = part
-      }
-
-      if (!(that instanceof ComputedPropertyModifier)) {
-         console.warn(`[W] [getModifier] invalid property path: '${propertyPath}'`)
-         return undefined
-      }
-
-      return that
-   }
-}
+export type ComputedPlayerModifier = Record<PropertyId, ComputedPropertyModifier>
 
 export class ComputedSkillPointCostModifier {
    computedValue: number = 0.0
@@ -398,41 +350,23 @@ export class ComputedSkillPointCostModifier {
 }
 
 export class ComputedModifier {
-   player: Record<ValueSource, ComputedPlayerModifier> = {}
+   player: Record<'all' | ValueSource, ComputedPlayerModifier> = {}
    skillPointCost: Record<'all' | SkillCategoryId, ComputedSkillPointCostModifier> = {}
-}
 
-function computeAttributeModifiers(
-   computed: ComputedModifier,
-   property: 'attributes' | 'talent',
-   input: AttributeModifiers,
-   name: MaybeTranslationKey,
-   icon: string | undefined
-) {
-   // TODO: poor hard-coded bullshit, would break if we add more properties. needs improvement.
-   for (const attrName in [
-      'strength',
-      'intelligence',
-      'emotionalIntelligence',
-      'memorization',
-      'imagination',
-      'charisma'
-   ]) {
-      const attrModifiers = input[<keyof AttributeModifiers>attrName]
-      if (!attrModifiers) {
-         continue
+   getPlayerModifier(
+      valueSource: 'all' | ValueSource,
+      propertyId: PropertyId
+   ): ComputedPropertyModifier | undefined {
+      const playerModifier = this.player[valueSource]
+      if (!playerModifier) {
+         return undefined
       }
 
-      for (const valueSource in attrModifiers) {
-         if (!computed.player[valueSource]) {
-            computed.player[valueSource] = new ComputedPlayerModifier()
-         }
+      return playerModifier[propertyId]
+   }
 
-         const value = (<PropertyModifier>attrModifiers)[valueSource]
-         const dest =
-            <ComputedPropertyModifier>computed.player[valueSource][property][<keyof ComputedAttributeModifiers>attrName]
-         dest.addContribution(name, value, icon)
-      }
+   getSkillPointCostModifier(skillCategoryId: 'all' | SkillCategoryId): ComputedSkillPointCostModifier | undefined {
+      return this.skillPointCost[skillCategoryId]
    }
 }
 
@@ -450,40 +384,15 @@ export function computeModifier(gameContext: GameContext) {
       const { name, icon, player, skillPointCost } = modifier
 
       if (player) {
-         const { attributes, talent } = <PlayerModifier>player
-
-         if (attributes) {
-            computeAttributeModifiers(computed, 'attributes', attributes, name, icon)
-         }
-
-         if (talent) {
-            computeAttributeModifiers(computed, 'talent', talent, name, icon)
-         }
-
-         // TODO: poor hard-coded bullshit, would break if we add more properties. needs improvement.
-         for (const field of [
-            'skillPoints',
-            'energy',
-            'mentalHealth',
-            'satisfactory',
-            'money',
-            'moneyPerTurn'
-         ]) {
-            const propertyModifier = <PropertyModifier | undefined>(
-               (<PlayerModifier>player)[<keyof PlayerModifier>field]
-            )
-            if (!propertyModifier) {
-               continue
-            }
-
+         for (const propertyId in player) {
+            const propertyModifier = player[propertyId]
             for (const valueSource in propertyModifier) {
                if (!computed.player[valueSource]) {
-                  computed.player[valueSource] = new ComputedPlayerModifier()
+                  computed.player[valueSource] = {}
                }
 
                const value = propertyModifier[valueSource]
-               const dest =
-                  <ComputedPropertyModifier>computed.player[valueSource][<keyof ComputedPlayerModifier>field]
+               const dest = computed.player[valueSource][propertyId]
                dest.addContribution(name, value, icon)
             }
          }

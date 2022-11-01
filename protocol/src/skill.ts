@@ -1,13 +1,9 @@
 import { ITranslationKey } from './translation'
-import { IPartialPlayerAttributes } from './player'
+import { IPlayerProperty, IPropertyId } from './player'
 
 export interface ISkillCost {
    base: number
-   attributes?: IPartialPlayerAttributes
-}
-
-export interface ISkillOutput {
-   attributes: IPartialPlayerAttributes
+   properties?: Record<IPropertyId, number>
 }
 
 export interface ISkill {
@@ -17,6 +13,6 @@ export interface ISkill {
 
    category?: string
    cost: ISkillCost
-   output?: ISkillOutput
+   output?: Record<IPropertyId, number>
    activities?: string[]
 }
