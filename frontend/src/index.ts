@@ -29,17 +29,13 @@ const routes = [
    { path: '/error', component: ErrorPage }
 ]
 
-// Why there are tons of stack overflows in TSC created by fucking noob TypeScript kiddies?
-// @ts-ignore
 export const router = createRouter({ history: createWebHashHistory(), routes })
 
 initTranslation(preferredLang).then(() => {
    const i18n = createI18n(makeI18nOption(preferredLang))
    const app = createApp(App)
 
-   // @ts-ignore
    app.use(i18n)
-   // @ts-ignore
    app.use(router)
    app.mount('#app')
 })
