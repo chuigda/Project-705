@@ -12,7 +12,7 @@ import {
    mDisplayItemId,
    isTranslationKey,
    mStoreItemId,
-   mMapSiteId
+   mMapSiteId, mPropertyId
 } from '@app/base/uid'
 import {
    PotentialExpression,
@@ -30,7 +30,7 @@ import {
    MapSiteIdentSelector,
    MaybeInlineEvent,
    Modifier,
-   PassiveRelicItem,
+   PassiveRelicItem, PlayerPropertyModifier,
    RechargeableItem,
    Skill,
    Startup,
@@ -50,6 +50,7 @@ import {
    isButton,
    isDivider
 } from '@app/ruleset/items/ui'
+import { PlayerProperty } from '@app/executor/game_context'
 
 export function compileTranslatable(scope: Scope, item: MaybeTranslatable): MaybeTranslatable {
    if (typeof item === 'string') {
@@ -290,11 +291,23 @@ export function compileTradableItem(scope: Scope, tradable: TradableItem): Trada
    }
 }
 
+function compilePlayerPropertyModifier(scope: Scope, modifier: PlayerPropertyModifier): PlayerPropertyModifier {
+   const ret: PlayerPropertyModifier = {}
+   for (const propertyId in modifier) {
+      ret[mPropertyId(scope, propertyId)] = modifier[propertyId]
+   }
+   return ret
+}
+
 export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modifier: Modifier): Modifier {
    const itemBase = compileBase(scope, modifier, mModifierId)
-   const { player, skillPointCost } = modifier
+   const { playerProperty, skillPointCost } = modifier
 
-   return { ...itemBase, player, skillPointCost }
+   return {
+      ...itemBase,
+      playerProperty: playerProperty ? compilePlayerPropertyModifier(scope, playerProperty) : undefined,
+      skillPointCost
+   }
 }
 
 export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {

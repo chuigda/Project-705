@@ -3,10 +3,10 @@ import { assert } from '@app/util/emergency'
 import { debugScope } from '@test/base/debug_scope'
 import { mPropertyId } from '@app/base/uid'
 import { PropertyOp, ValueSource } from '@app/ruleset'
+import { nextTurn } from '@app/executor/turn'
 
 function testSimple() {
    const cx = startDebugGame()
-
    cx.pushScope(debugScope)
 
    cx.initProperty('simple_property', 114)
@@ -14,7 +14,6 @@ function testSimple() {
    const property = cx.state.player.properties[mPropertyId(debugScope, 'simple_property')]
    assert(!!property)
 
-   console.log(property)
    assert(property.value === 114)
    assert(property.min === 0)
    assert(property.max === undefined)
@@ -26,7 +25,6 @@ function testSimple() {
 
 function testHook() {
    const cx = startDebugGame()
-
    cx.pushScope(debugScope)
 
    const updateRecord: { opRef: { op: PropertyOp, value: number }, source: ValueSource }[] = []
@@ -93,9 +91,40 @@ function testHook() {
    console.info('Test executor:property:hook OK')
 }
 
+function testIncrement() {
+   const cx = startDebugGame()
+   cx.pushScope(debugScope)
+
+   const updateRecord: { opRef: { op: PropertyOp, value: number }, source: ValueSource }[] = []
+   cx.setV(
+      'update_detected_fn',
+      (opRef: { op: PropertyOp, value: number }, source: ValueSource) => {
+         updateRecord.push({ opRef, source })
+      }
+   )
+
+   const property = cx.initProperty('simple_property', { value: 50, min: 0, max: 100, increment: 10 })
+   cx.connect(cx.signals.propertyUpdated('simple_property'), 'property_update_detect')
+
+   nextTurn(cx)
+   assert(property.value === 60)
+
+   nextTurn(cx)
+   assert(property.value === 70)
+
+   const expectedUpdateRecord = [
+      { opRef: { operator: 'add', value: 10 }, source: '@turn_incr' },
+      { opRef: { operator: 'add', value: 10 }, source: '@turn_incr' }
+   ]
+
+   assert(JSON.stringify(expectedUpdateRecord) === JSON.stringify(updateRecord))
+   console.info('Test executor:property:increment OK')
+}
+
 function testProperty() {
    testSimple()
    testHook()
+   testIncrement()
 }
 
 export default testProperty
