@@ -38,12 +38,8 @@ export interface RuleSetStoreItems {
    tradableItems?: TradableItem[]
 }
 
-export interface RuleSet {
-   readonly ident: Scope
+export interface RuleSetContent {
    readonly description?: MaybeTranslationKey
-
-   readonly skillCategories?: SkillCategory[]
-   readonly activityCategories?: ActivityCategoryId[]
    readonly skills?: Skill[]
    readonly startups?: Startup[]
    readonly modifiers?: Modifier[]
@@ -54,6 +50,26 @@ export interface RuleSet {
    readonly events?: Event[]
    readonly translations?: Record<string, Record<string, string>>
    readonly ui?: CustomUI
-
    readonly onRuleSetLoaded?: MaybeInlineEvent[]
 }
+
+export interface RuleSetDescriptor {
+   readonly ident: Scope
+   readonly descriptor?: RuleSetDescriptor
+   readonly skillCategories?: SkillCategory[]
+   readonly activityCategories?: ActivityCategoryId[]
+}
+
+export interface RuleSet {
+   readonly highOrder?: false
+   readonly descriptor: RuleSetDescriptor
+   readonly content: RuleSetContent
+}
+
+export interface HighOrderRuleset {
+   readonly highOrder: true
+   readonly descriptor: RuleSetDescriptor
+   readonly generator: (ruleSetSummary: RuleSetDescriptor[]) => RuleSetContent
+}
+
+export type Module = RuleSet | HighOrderRuleset

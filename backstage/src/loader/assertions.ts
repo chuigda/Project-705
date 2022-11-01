@@ -12,7 +12,12 @@ const {
    skillAssertion,
    startupAssertion,
    eventAssertion,
-   ruleSetAssertion
+
+   ruleSetDescriptorAssertion,
+   ruleSetContentAssertion,
+   ruleSetAssertion,
+   highOrderRuleSetAssertion,
+   moduleAssertion
 }: any = Assertions
 
 export {
@@ -26,5 +31,10 @@ export {
    skillAssertion,
    startupAssertion,
    eventAssertion,
-   ruleSetAssertion
+
+   ruleSetDescriptorAssertion,
+   ruleSetContentAssertion,
+   ruleSetAssertion,
+   highOrderRuleSetAssertion,
+   moduleAssertion
 }

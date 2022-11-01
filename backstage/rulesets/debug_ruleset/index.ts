@@ -7,16 +7,20 @@ import mapSites from './map_site'
 import translations from './translation'
 
 const ruleSet: RuleSet = {
-   ident: {
-      author: 'cnpr',
-      moduleName: 'dbg'
+   descriptor: {
+      ident: {
+         author: 'cnpr',
+         moduleName: 'dbg'
+      },
+      skillCategories,
+      activityCategories,
    },
-   startups,
-   skillCategories,
-   activityCategories,
-   skills,
-   mapSites,
-   translations
+   content: {
+      startups,
+      skills,
+      mapSites,
+      translations
+   }
 }
 
 export default ruleSet
