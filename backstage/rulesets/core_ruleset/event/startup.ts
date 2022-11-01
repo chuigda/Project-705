@@ -37,9 +37,9 @@ const detroitEvents: Event[] = [
 
          cx.connect(cx.signals.propertyUnderflow('@mental_health'), 'detroit_add_program_error')
 
-         cx.initProperty('data_collected', 0)
-         cx.initProperty('software_unstable', 0)
-         cx.initProperty('program_error', 0)
+         cx.initPropertySimple('data_collected', '$pr_data_collected', 0)
+         cx.initPropertySimple('software_unstable', '$pr_software_unstable', 0)
+         cx.initPropertySimple('program_error', '$pr_program_error', 0)
       }
    },
    {

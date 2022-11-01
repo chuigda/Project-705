@@ -4,7 +4,7 @@ import {
    IPlayerConsumableItem,
    IPlayerRechargeableItem,
    IPlayerActiveRelicItem,
-   IPlayerTradableItem
+   IPlayerTradableItem, IPlayerProperty
 } from '@protocol/player'
 import {
    PlayerStatus,
@@ -13,8 +13,9 @@ import {
    PlayerConsumableItem,
    PlayerRechargeableItem,
    PlayerActiveRelicItem,
-   PlayerTradableItem
+   PlayerTradableItem, PropertyId, PlayerProperty
 } from '@app/executor/game_context'
+import { ITranslationKey } from '@protocol/translation'
 
 import { sendActivity } from './activity'
 import { sendAscensionPerk } from './ascension_perk'
@@ -72,6 +73,20 @@ export function sendPlayerItems(items: PlayerItems): IPlayerItems {
    }
 }
 
+export function sendPlayerProperties(
+   properties: Record<PropertyId, PlayerProperty>
+): Record<PropertyId, IPlayerProperty> {
+   const ret: Record<PropertyId, IPlayerProperty> = {}
+   for (const propertyId in properties) {
+      const property = properties[propertyId]
+      ret[propertyId] = {
+         ...property,
+         name: <ITranslationKey>property.name
+      }
+   }
+   return ret
+}
+
 export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusUpdateTracker): IPlayerStatus {
    function makeSendTs<T, V>(sender: (t: T) => V): (ts: Record<string, T>) => V[] {
       return (ts: Record<string, T>) => Object.values(ts).map(sender)
@@ -83,7 +98,7 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
 
    if (!updateTracker) {
       return {
-         properties: ps.properties,
+         properties: sendPlayerProperties(ps.properties),
          skills: sendSkills(ps.skills),
          activities: sendActivities(ps.activities),
          ascensionPerks: sendAscensionPerks(ps.ascensionPerks),
@@ -92,7 +107,7 @@ export function sendPlayerStatus(ps: PlayerStatus, updateTracker?: PlayerStatusU
       }
    } else {
       return {
-         properties: updateTracker.properties ? ps.properties : undefined,
+         properties: updateTracker.properties ? sendPlayerProperties(ps.properties) : undefined,
          ascensionPerkSlots: updateTracker.ascensionPerkSlots ? ps.ascensionPerkSlots : undefined,
 
          skills: updateTracker.skills ? sendSkills(ps.skills) : undefined,

@@ -50,7 +50,6 @@ import {
    isButton,
    isDivider
 } from '@app/ruleset/items/ui'
-import { PlayerProperty } from '@app/executor/game_context'
 
 export function compileTranslatable(scope: Scope, item: MaybeTranslatable): MaybeTranslatable {
    if (typeof item === 'string') {

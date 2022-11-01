@@ -6,7 +6,7 @@ function testSimple() {
    const cx = startDebugGame()
    cx.pushScope(debugScope)
 
-   const property = cx.initProperty('property', { value: 50, min: 0, max: 100 })
+   const property = cx.initProperty('property', { name: '测试属性', value: 50, min: 0, max: 100 })
    cx.addModifier('test_property_modifier')
 
    cx.updateProperty('property', 'add', 10, '@test')
@@ -27,7 +27,7 @@ function testSimple() {
 function testComposition() {
    const cx = startDebugGame()
    cx.pushScope(debugScope)
-   const property = cx.initProperty('property', { value: 100, min: 0, max: 200 })
+   const property = cx.initProperty('property', { name: '测试属性', value: 100, min: 0, max: 200 })
    cx.addModifier('test_property_modifier') // all: { gain: 0.2, loss: 0.2 }
    cx.addModifier('test_property_modifier1') // @test: { gain: 0.1, loss: -0.1 }
    cx.addModifier('test_property_modifier2') // @test: { gain: 0.1, loss: -0.2 }

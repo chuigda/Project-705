@@ -1,4 +1,4 @@
-import { IPlayerProperty, IPropertyId } from '@protocol/player'
+import { IPropertyId } from '@protocol/player'
 import {
    Activity,
    Skill,
@@ -8,11 +8,19 @@ import {
    RechargeableItem,
    ActiveRelicItem,
    PassiveRelicItem,
-   TradableItem
+   TradableItem,
+   MaybeTranslationKey
 } from '@app/ruleset'
 
 export type PropertyId = IPropertyId
-export type PlayerProperty = IPlayerProperty
+export interface PlayerProperty {
+   name: MaybeTranslationKey
+
+   value: number
+   increment?: number
+   min?: number
+   max?: number
+}
 
 export class PlayerConsumableItem {
    readonly item: ConsumableItem

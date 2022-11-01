@@ -1,3 +1,9 @@
+const propertyTranslation: Record<string, string> = {
+   '$pr_data_collected': '数据收集',
+   '$pr_software_unstable': '软件不稳定',
+   '$pr_program_error': '程序错误'
+}
+
 const commonPotentialTranslation: Record<string, string> = {
    '@tr:$potential_after_turns': '回合数大于或者等于 :turns:',
    '@tr:$potential_before_turns': '回合数小于或者等于 :turns:',
@@ -191,6 +197,7 @@ const storeItemTranslation: Record<string, string> = {
 }
 
 export default {
+   ...propertyTranslation,
    ...commonPotentialTranslation,
    ...startupTranslation,
    ...modifierTranslation,

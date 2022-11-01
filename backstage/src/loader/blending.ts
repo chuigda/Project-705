@@ -15,7 +15,7 @@ import {
    compileStartup, compileTradableItem,
    compileTranslation
 } from '@app/loader/compile'
-import { RuleSet, RuleSetContent, RuleSetDescriptor, RuleSetStoreItems, StoreItem, StoreItemKind } from '@app/ruleset'
+import { RuleSetContent, RuleSetDescriptor, RuleSetStoreItems, StoreItem, StoreItemKind } from '@app/ruleset'
 import { Button, CustomUI, Menu } from '@app/ruleset/items/ui'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {

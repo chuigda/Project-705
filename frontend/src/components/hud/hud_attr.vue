@@ -26,13 +26,13 @@
               alt="icon"
          >
          <span class="label">其他</span>
-         <span class="value"> {{ 114514 }} </span>
+         <span class="value"> {{ otherItems[0] }} </span>
       </div>
 
       <Transition>
          <div v-if="expand"
               class="other-items">
-            <div v-for="(item, idx) in otherItems"
+            <div v-for="(item, idx) in otherItems[1]"
                  :key="idx">
                {{ item[0] }}
                <div class="value">
@@ -61,10 +61,26 @@
 
 <script setup lang="ts">
 
-import { IPlayerStatus, IBuiltinPropertyId } from '@protocol/index'
+import { IPlayerStatus } from '@protocol/index'
 import AttrIcon from '@app/components/icon/attr_icon.vue'
 import menuIcons from '@app/assets/components/hud'
 import { computed, ref } from 'vue'
+import {translate} from '@app/util/translation'
+
+const builtinPropertyIdSet = new Set([
+   '@intelligence',
+   '@emotional_intelligence',
+   '@memorization',
+   '@strength',
+   '@imagination',
+   '@charisma',
+   '@energy',
+   '@money',
+   '@skill_point',
+   '@mental_health',
+   '@injury',
+   '@satisfactory'
+])
 
 const props = defineProps<{ playerStatus: IPlayerStatus }>()
 const expand = ref(false)
@@ -90,13 +106,20 @@ const attributeItems = computed(() => {
    })
 })
 
-const otherItems = [
-   ['还无法说出我爱你', 3141],
-   ['因为我还不敢确定', 5926],
-   ['山盟海誓的重力', 5358],
-   ['是不是会拖垮我', 9793],
-   ['濒临透明的身躯', 2384],
-]
+const otherItems = computed(() => {
+   let sum = 0
+   const items = []
+   const properties = props.playerStatus.properties!
+   for (const propertyId in properties) {
+      if (!builtinPropertyIdSet.has(propertyId)) {
+         const property = properties[propertyId]
+         console.log(propertyId, property)
+         items.push([translate(property.name), property.value])
+         sum += property.value
+      }
+   }
+   return [sum, items]
+})
 
 const injured = Array(3).fill(true)
 

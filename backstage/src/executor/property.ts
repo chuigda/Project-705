@@ -4,33 +4,40 @@ import { PropertyOp } from '@app/ruleset/ops'
 import { ValueSource } from '@app/ruleset/items/modifier'
 import { PlayerProperty, PropertyId } from '@app/executor/game_context/player'
 import { isDefined } from '@app/util/defined'
-import { mPropertyId } from '@app/base/uid'
+import { MaybeTranslationKey, mPropertyId, mTranslationKey } from '@app/base/uid'
 import { ensureScope } from '@app/executor/game_context/scope'
+
+export function initPropertySimple(
+   gameContext: GameContext,
+   propertyId: PropertyId,
+   propertyName: MaybeTranslationKey,
+   property: number
+): PlayerProperty {
+   return initProperty(gameContext, propertyId, {
+      name: propertyName,
+      value: property,
+      min: 0
+   })
+}
 
 export function initProperty(
    gameContext: GameContext,
    propertyId: PropertyId,
-   property: PlayerProperty | number
+   property: PlayerProperty
 ): PlayerProperty {
    propertyId = mPropertyId(ensureScope(gameContext), propertyId)
+   property.name = mTranslationKey(ensureScope(gameContext), property.name)
 
    if (gameContext.state.player.properties[propertyId]) {
       console.warn(`[W] [setProperty] property ${property} already initialised, will reset it`)
    }
 
-   let playerProperty: PlayerProperty
-   if (typeof property === 'number') {
-      playerProperty = { value: property, min: 0 }
-   } else {
-      playerProperty = property
-   }
-   gameContext.state.player.properties[propertyId] = playerProperty
-
+   gameContext.state.player.properties[propertyId] = property
    gameContext.state.events.propertyUpdated[propertyId] = []
    gameContext.state.events.propertyOverflow[propertyId] = []
    gameContext.state.events.propertyUnderflow[propertyId] = []
 
-   return playerProperty
+   return property
 }
 
 export function getProperty(gameContext: GameContext, propertyId: PropertyId): PlayerProperty | undefined {
@@ -167,9 +174,12 @@ export function updateProperty(
    gameContext.updateTracker.player.properties = true
 }
 
-export default {
+const propertyFunctions = {
+   initPropertySimple,
    initProperty,
    getProperty,
    getPropertyValue,
    updateProperty
 }
+
+export default propertyFunctions

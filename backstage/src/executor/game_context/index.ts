@@ -1,6 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 
-import { Ident, Scope } from '@app/base/uid'
+import { Ident, MaybeTranslationKey, Scope } from '@app/base/uid'
 import {
    AscensionPerk,
    BubbleMessageTemplate,
@@ -254,7 +254,11 @@ export class GameContext {
       storeItemFunctions.removeItemFromShop(this, itemId, kind)
    }
 
-   initProperty(propertyId: PropertyId, property: PlayerProperty | number): PlayerProperty {
+   initPropertySimple(propertyId: PropertyId, propertyName: MaybeTranslationKey, property: number): PlayerProperty {
+      return propertyFunctions.initPropertySimple(this, propertyId, propertyName, property)
+   }
+
+   initProperty(propertyId: PropertyId, property: PlayerProperty): PlayerProperty {
       return propertyFunctions.initProperty(this, propertyId, property)
    }
 

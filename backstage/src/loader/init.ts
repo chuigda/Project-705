@@ -8,21 +8,21 @@ import {
    computePotentialSkills
 } from '@app/executor/compute'
 import { initMap } from '@app/executor/map_site'
-import { initProperty } from '@app/executor/property'
+import { initProperty, initPropertySimple } from '@app/executor/property'
 
 function setupCommonProperties(gameContext: GameContext) {
-   initProperty(gameContext, '@intelligence', 0)
-   initProperty(gameContext, '@emotional_intelligence', 0)
-   initProperty(gameContext, '@memorization', 0)
-   initProperty(gameContext, '@strength', 0)
-   initProperty(gameContext, '@imagination', 0)
-   initProperty(gameContext, '@charisma', 0)
-   initProperty(gameContext, '@energy', { value: 0, min: 0, max: 150 })
-   initProperty(gameContext, '@money', 0)
-   initProperty(gameContext, '@skill_point', 0)
-   initProperty(gameContext, '@mental_health', { value: 0, min: 0, max: 100 })
-   initProperty(gameContext, '@injury', { value: 3, min: 0, max: 3 })
-   initProperty(gameContext, '@satisfactory', 50)
+   initPropertySimple(gameContext, '@intelligence', '', 0)
+   initPropertySimple(gameContext, '@emotional_intelligence', '', 0)
+   initPropertySimple(gameContext, '@memorization', '', 0)
+   initPropertySimple(gameContext, '@strength', '', 0)
+   initPropertySimple(gameContext, '@imagination', '', 0)
+   initPropertySimple(gameContext, '@charisma', '', 0)
+   initProperty(gameContext, '@energy', { name: '', value: 0, min: 0, max: 150 })
+   initPropertySimple(gameContext, '@money', '', 0)
+   initPropertySimple(gameContext, '@skill_point', '', 0)
+   initProperty(gameContext, '@mental_health', { name: '', value: 0, min: 0, max: 100 })
+   initProperty(gameContext, '@injury', { name: '', value: 3, min: 0, max: 3 })
+   initPropertySimple(gameContext, '@satisfactory', '', 50)
 }
 
 export default function initGame(ruleSet: CompiledRuleSet, startupId: string): GameContext | undefined {

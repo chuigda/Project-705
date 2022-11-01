@@ -9,7 +9,7 @@ function testSimple() {
    const cx = startDebugGame()
    cx.pushScope(debugScope)
 
-   cx.initProperty('simple_property', 114)
+   cx.initPropertySimple('simple_property', '测试属性', 114)
 
    const property = cx.state.player.properties[mPropertyId(debugScope, 'simple_property')]
    assert(!!property)
@@ -41,7 +41,7 @@ function testHook() {
    let propertyUnderflown = false
    cx.setV('underflow_detected_fn', () => { propertyUnderflown = true })
 
-   const property = cx.initProperty('simple_property', { value: 50, min: 0, max: 100 })
+   const property = cx.initProperty('simple_property', { name: '测试属性', value: 50, min: 0, max: 100 })
    cx.connect(cx.signals.propertyUpdated('simple_property'), 'property_update_detect')
    cx.connect(cx.signals.propertyOverflow('simple_property'), 'property_overflow_detect')
    cx.connect(cx.signals.propertyUnderflow('simple_property'), 'property_underflow_detect')
@@ -103,7 +103,7 @@ function testIncrement() {
       }
    )
 
-   const property = cx.initProperty('simple_property', { value: 50, min: 0, max: 100, increment: 10 })
+   const property = cx.initProperty('simple_property', { name: '测试属性', value: 50, min: 0, max: 100, increment: 10 })
    cx.connect(cx.signals.propertyUpdated('simple_property'), 'property_update_detect')
 
    nextTurn(cx)
