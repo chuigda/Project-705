@@ -1,7 +1,6 @@
 import startDebugGame from '@test/base/start_game'
 import { debugScope } from '@test/base/debug_scope'
 import { assert } from '@app/util/emergency'
-import { perfectStringify } from '@app/util/stringify'
 
 function testSimple() {
    const cx = startDebugGame()
