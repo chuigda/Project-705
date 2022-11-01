@@ -13,6 +13,12 @@ import GamePlay from '@app/views/game_play.vue'
 import ChooseStartup from '@app/views/choose_startup.vue'
 
 import '@app/style.css'
+import {dontSink} from '@app/util/emergency'
+
+window.onerror = (message, source, lineno, colno, error) => {
+   console.error(`[E] [window.onerror] at file ${source}, line ${source}, col ${colno}: ${message}\n`, error)
+   dontSink(`${message}`)
+}
 
 const preferredLang = getLocalStorage('lang') || 'zh_cn'
 
@@ -23,17 +29,13 @@ const routes = [
    { path: '/error', component: ErrorPage }
 ]
 
-// Why there are tons of stack overflows in TSC created by fucking noob TypeScript kiddies?
-// @ts-ignore
 export const router = createRouter({ history: createWebHashHistory(), routes })
 
 initTranslation(preferredLang).then(() => {
    const i18n = createI18n(makeI18nOption(preferredLang))
    const app = createApp(App)
 
-   // @ts-ignore
    app.use(i18n)
-   // @ts-ignore
    app.use(router)
    app.mount('#app')
 })
