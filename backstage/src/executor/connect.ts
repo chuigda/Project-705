@@ -1,6 +1,7 @@
-import { Scope, Ident, mEventId, mPropertyId } from '@app/base/uid'
+import { Ident, mEventId, mPropertyId } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
 import { PropertyId } from '@app/executor/game_context/player'
+import { ensureScope } from '@app/executor/game_context/scope'
 
 export type TurnsSignalTrigger = 'turn_start' | 'turn_over'
 
@@ -51,7 +52,7 @@ export const signals: Record<string, (...args: any[]) => Signal> = {
 }
 
 export function connect(gameContext: GameContext, signal: Signal, event: Ident) {
-   const eventId = mEventId(<Scope>(gameContext.scope), event)
+   const eventId = mEventId(ensureScope(gameContext), event)
 
    if (!(eventId in gameContext.ruleSet.events)) {
       console.warn(`[W] [connect] event '${event}(${eventId})' not found`)
@@ -83,35 +84,35 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'property': {
          const sig = <PropertyUpdatedSignal>signal
-         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const propertyId = mPropertyId(ensureScope(gameContext), sig.property)
          const container = gameContext.state.events.propertyUpdated[propertyId]
-         if (!(container && container instanceof Set<string>)) {
+         if (!container) {
             console.warn(`[W] [connect] playerPropertyUpdated: property not defined: '${propertyId}'`)
             return
          }
-         (<Set<string>>container).add(eventId)
+         container.push(eventId)
          break
       }
       case 'property_overflow': {
          const sig = <PropertyUpdatedSignal>signal
-         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const propertyId = mPropertyId(ensureScope(gameContext), sig.property)
          const container = gameContext.state.events.propertyOverflow[propertyId]
-         if (!(container && container instanceof Set<string>)) {
+         if (!container) {
             console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
             return
          }
-         container.push()
+         container.push(eventId)
          break
       }
       case 'property_underflow': {
          const sig = <PropertyUpdatedSignal>signal
-         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const propertyId = mPropertyId(ensureScope(gameContext), sig.property)
          const container = gameContext.state.events.propertyUnderflow[propertyId]
-         if (!(container && container instanceof Set<string>)) {
+         if (!container) {
             console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
             return
          }
-         container.push()
+         container.push(eventId)
          break
       }
       case 'turns': {
@@ -134,7 +135,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'event': {
          const sig = <EventSignal>signal
-         const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
+         const sourceEventId = mEventId(ensureScope(gameContext), sig.eventId)
          if (!gameContext.state.events.eventTriggered[sourceEventId]) {
             gameContext.state.events.eventTriggered[sourceEventId] = new Set()
          }
@@ -147,7 +148,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
 }
 
 export function disconnect(gameContext: GameContext, signal: Signal, event: Ident) {
-   const eventId = mEventId(<Scope>(gameContext.scope), event)
+   const eventId = mEventId(ensureScope(gameContext), event)
 
    if (!(eventId in gameContext.ruleSet.events)) {
       console.warn(`[W] [connect] event '${event}(${eventId})' not found`)
@@ -205,7 +206,7 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
       }
       case 'event': {
          const sig = <EventSignal>signal
-         const sourceEventId = mEventId(<Scope>gameContext.scope, sig.eventId)
+         const sourceEventId = mEventId(ensureScope(gameContext), sig.eventId)
          if (gameContext.state.events.eventTriggered[sourceEventId]) {
             gameContext.state.events.eventTriggered[sourceEventId].delete(eventId)
          }

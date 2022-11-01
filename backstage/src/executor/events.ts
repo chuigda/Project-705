@@ -1,24 +1,8 @@
 import { mEventId, Scope } from '@app/base/uid'
-import { ensureScope } from '@app/executor/base'
 import { GameContext } from '@app/executor/game_context'
 import { EventFunction, MaybeInlineEvent } from '@app/ruleset/items/event'
 import { concatMessage, QResult } from '@app/executor/result'
-
-export function pushScope(gameContext: GameContext, scope: Scope) {
-   if (gameContext.scope) {
-      gameContext.scopeChain.push(gameContext.scope)
-   }
-   gameContext.scope = scope
-}
-
-export function popScope(gameContext: GameContext) {
-   if (gameContext.scopeChain.length === 0) {
-      gameContext.scope = undefined
-      return
-   }
-
-   gameContext.scope = gameContext.scopeChain.pop()
-}
+import { ensureScope, popScope, pushScope } from '@app/executor/game_context/scope'
 
 export function triggerEvent(
    gameContext: GameContext,

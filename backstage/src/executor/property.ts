@@ -5,32 +5,41 @@ import { ValueSource } from '@app/ruleset/items/modifier'
 import { PlayerProperty, PropertyId } from '@app/executor/game_context/player'
 import { isDefined } from '@app/util/defined'
 import { mPropertyId } from '@app/base/uid'
+import { ensureScope } from '@app/executor/game_context/scope'
 
 export function initProperty(
    gameContext: GameContext,
    propertyId: PropertyId,
    property: PlayerProperty | number
-) {
+): PlayerProperty {
+   propertyId = mPropertyId(ensureScope(gameContext), propertyId)
+
    if (gameContext.state.player.properties[propertyId]) {
-      console.warn(`[W] [setProperty] property ${property} already added, will reset it`)
+      console.warn(`[W] [setProperty] property ${property} already initialised, will reset it`)
    }
 
+   let playerProperty: PlayerProperty
    if (typeof property === 'number') {
-      gameContext.state.player.properties[propertyId] = { value: 0, min: 0 }
+      playerProperty = { value: property, min: 0 }
    } else {
-      gameContext.state.player.properties[propertyId] = property
+      playerProperty = property
    }
+   gameContext.state.player.properties[propertyId] = playerProperty
 
    gameContext.state.events.propertyUpdated[propertyId] = []
    gameContext.state.events.propertyOverflow[propertyId] = []
    gameContext.state.events.propertyUnderflow[propertyId] = []
+
+   return playerProperty
 }
 
 export function getProperty(gameContext: GameContext, propertyId: PropertyId): PlayerProperty | undefined {
+   propertyId = mPropertyId(ensureScope(gameContext), propertyId)
    return gameContext.state.player.properties[propertyId]
 }
 
 export function getPropertyValue(gameContext: GameContext, propertyId: PropertyId): number | undefined {
+   propertyId = mPropertyId(ensureScope(gameContext), propertyId)
    const property = getProperty(gameContext, propertyId)
    if (!property) {
       return undefined
@@ -46,7 +55,7 @@ export function updateProperty(
    value?: number,
    source?: ValueSource
 ) {
-   propertyId = mPropertyId(gameContext.scope!, propertyId)
+   propertyId = mPropertyId(ensureScope(gameContext), propertyId)
 
    if ((operator === 'add' || operator === 'sub') && !isDefined(value)) {
       console.error('[E] [updateProperty] cannot use \'add\' or \'sub\' without a valid value')

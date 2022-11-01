@@ -1,6 +1,6 @@
 import { Ident, mActivityId, mSkillId } from '@app/base/uid'
 import { Skill } from '@app/ruleset/items/skill'
-import { ensureScope } from '@app/executor/base'
+import { ensureScope } from '@app/executor/game_context/scope'
 import { triggerEventSeries } from '@app/executor/events'
 import { recomputeSkillCosts } from '@app/executor/compute'
 import { GameContext } from '@app/executor/game_context'

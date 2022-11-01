@@ -17,6 +17,7 @@
     "test": "npm-run-all test:*",
     "test:test_type_assert": "env DEBUG=1 ts-node -r tsconfig-paths/register test/test_type_assert.ts",
     "test:test_start_game": "env DEBUG=1 ts-node -r tsconfig-paths/register test/test_start_game.ts",
+    "test:test_executor": "env DEBUG=1 ts-node -r tsconfig-paths/register test/executor/index.ts",
     "lint": "eslint src --config .eslintrc --ext .ts"
   },
   "author": "",

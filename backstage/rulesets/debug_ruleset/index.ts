@@ -1,4 +1,5 @@
 import { RuleSet } from '@app/ruleset'
+import events from './event'
 import startups from './startup'
 import skillCategories from './skill_categories'
 import activityCategories from './activity_categories'
@@ -19,7 +20,8 @@ const ruleSet: RuleSet = {
       startups,
       skills,
       mapSites,
-      translations
+      translations,
+      events
    }
 }
 

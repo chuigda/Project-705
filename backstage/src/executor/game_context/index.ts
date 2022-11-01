@@ -26,6 +26,7 @@ import computeFunctions, {
    PotentialResult,
    SkillPotentialResult
 } from '@app/executor/compute'
+import scopeFunctions from '@app/executor/game_context/scope'
 import connectFunctions, { Signal } from '@app/executor/connect'
 import eventFunctions from '@app/executor/events'
 import grantFunctions from '@app/executor/skill'
@@ -157,6 +158,14 @@ export class GameContext {
    // functions exported for ruleset uses
    // ----------------------------------------------------------------------------------------------
 
+   pushScope(scope: Scope) {
+      scopeFunctions.pushScope(this, scope)
+   }
+
+   popScope() {
+      scopeFunctions.popScope(this)
+   }
+
    computePotential(potential: PotentialExpression): PotentialResult {
       return computeFunctions.computePotential(this, potential)
    }
@@ -245,8 +254,8 @@ export class GameContext {
       storeItemFunctions.removeItemFromShop(this, itemId, kind)
    }
 
-   initProperty(propertyId: PropertyId, property: PlayerProperty | number) {
-      propertyFunctions.initProperty(this, propertyId, property)
+   initProperty(propertyId: PropertyId, property: PlayerProperty | number): PlayerProperty {
+      return propertyFunctions.initProperty(this, propertyId, property)
    }
 
    getProperty(property: PropertyId): PlayerProperty | undefined {

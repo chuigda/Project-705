@@ -1,6 +1,6 @@
 import { GameContext } from '@app/executor/game_context'
 import { Ident, mAscensionPerkId } from '@app/base/uid'
-import { ensureScope } from '@app/executor/base'
+import { ensureScope } from '@app/executor/game_context/scope'
 import { triggerEventSeries } from '@app/executor/events'
 import { addModifier } from '@app/executor/modifier'
 import { concatMessage, QResult } from '@app/executor/result'

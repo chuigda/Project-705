@@ -2,6 +2,7 @@ import { Ident, mDisplayItemId } from '@app/base/uid'
 import { BubbleMessageIcon, BubbleMessageTemplate, SimpleDialogTemplate } from '@app/ruleset/items/ui'
 import { GameContext } from '@app/executor/game_context'
 import { MaybeTranslatable } from '@app/base/translation'
+import { ensureScope } from '@app/executor/game_context/scope'
 
 export interface SimpleDialog extends SimpleDialogTemplate {
    readonly uid: string
@@ -29,7 +30,7 @@ export function createDialog(gameContext: GameContext, template: Ident | SimpleD
    if (typeof template === 'object' && 'ident' in template) {
       inlineTemplate = template
    } else {
-      const templateId = mDisplayItemId(gameContext.scope!, template)
+      const templateId = mDisplayItemId(ensureScope(gameContext), template)
       inlineTemplate = gameContext.ruleSet.ui.dialogTemplates[templateId]
       if (!inlineTemplate) {
          console.error(`[E] [createDialog] bad dialog template '${template}'`)
@@ -58,7 +59,7 @@ export function createBubbleMessage(
    if (/* BubbleMessageTemplate */ typeof template === 'object' && 'ident' in template) {
       inlineTemplate = template
    } /* Ident */ else {
-      const templateId = mDisplayItemId(gameContext.scope!, template)
+      const templateId = mDisplayItemId(ensureScope(gameContext), template)
       inlineTemplate = gameContext.ruleSet.ui.bubbleMessageTemplates[templateId]
       if (!inlineTemplate) {
          console.error(`[E] [createBubbleMessage] bad bubble message template '${template}'`)
@@ -73,7 +74,7 @@ export function createBubbleMessage(
    ) {
       dialog = createDialog(gameContext, inlineTemplate.linkedDialog)
    } /* Ident */ else {
-      const linkedDialogId: string = mDisplayItemId(gameContext.scope!, inlineTemplate.linkedDialog)
+      const linkedDialogId: string = mDisplayItemId(ensureScope(gameContext), inlineTemplate.linkedDialog)
       dialog = createDialog(gameContext, linkedDialogId)
    }
    if (!dialog) {
