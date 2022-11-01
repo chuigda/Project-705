@@ -61,7 +61,7 @@ const ascensionPerkEvents: Event[] = [
       ident: 'defrag_turnover',
       event: cx => {
          const defragCounter = cx.setV('defrag_counter', 0)
-         cx.updateProperty('skill_point', 'add', Math.ceil(defragCounter / 5))
+         cx.updateProperty('@skill_point', 'add', Math.ceil(defragCounter / 5))
       }
    },
    {
