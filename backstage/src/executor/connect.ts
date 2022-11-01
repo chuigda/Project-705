@@ -1,4 +1,4 @@
-import { Scope, Ident, mEventId } from '@app/base/uid'
+import { Scope, Ident, mEventId, mPropertyId } from '@app/base/uid'
 import { GameContext } from '@app/executor/game_context'
 import { PropertyId } from '@app/executor/game_context/player'
 
@@ -83,9 +83,10 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'property': {
          const sig = <PropertyUpdatedSignal>signal
-         const container = gameContext.state.events.propertyUpdated[sig.property]
+         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const container = gameContext.state.events.propertyUpdated[propertyId]
          if (!(container && container instanceof Set<string>)) {
-            console.warn(`[W] [connect] playerPropertyUpdated: property not defined: '${sig.property}'`)
+            console.warn(`[W] [connect] playerPropertyUpdated: property not defined: '${propertyId}'`)
             return
          }
          (<Set<string>>container).add(eventId)
@@ -93,9 +94,10 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'property_overflow': {
          const sig = <PropertyUpdatedSignal>signal
-         const container = gameContext.state.events.propertyOverflow[sig.property]
+         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const container = gameContext.state.events.propertyOverflow[propertyId]
          if (!(container && container instanceof Set<string>)) {
-            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${sig.property}'`)
+            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
             return
          }
          container.push()
@@ -103,9 +105,10 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
       }
       case 'property_underflow': {
          const sig = <PropertyUpdatedSignal>signal
-         const container = gameContext.state.events.propertyUnderflow[sig.property]
+         const propertyId = mPropertyId(gameContext.scope!, sig.property)
+         const container = gameContext.state.events.propertyUnderflow[propertyId]
          if (!(container && container instanceof Set<string>)) {
-            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${sig.property}'`)
+            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
             return
          }
          container.push()

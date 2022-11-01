@@ -4,6 +4,7 @@ import { PropertyOp } from '@app/ruleset/ops'
 import { ValueSource } from '@app/ruleset/items/modifier'
 import { PlayerProperty, PropertyId } from '@app/executor/game_context/player'
 import { isDefined } from '@app/util/defined'
+import { mPropertyId } from '@app/base/uid'
 
 export function initProperty(
    gameContext: GameContext,
@@ -45,6 +46,8 @@ export function updateProperty(
    value?: number,
    source?: ValueSource
 ) {
+   propertyId = mPropertyId(gameContext.scope!, propertyId)
+
    if ((operator === 'add' || operator === 'sub') && !isDefined(value)) {
       console.error('[E] [updateProperty] cannot use \'add\' or \'sub\' without a valid value')
       return
