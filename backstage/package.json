@@ -8,7 +8,7 @@
     "launch_debug": "env DEBUG=1 ts-node -r tsconfig-paths/register src/index.ts",
     "release_build": "tsc --project tsconfig.build.json && resolve-tspaths --project tsconfig.build.json",
     "make_dts": "npm-run-all make_dts:*",
-    "make_dts:game_context": "dts-bundle-generator src/executor/game_context.ts -o game_context.d.ts",
+    "make_dts:game_context": "dts-bundle-generator src/executor/game_context/index.ts -o game_context.d.ts",
     "make_dts:ruleset": "dts-bundle-generator src/ruleset/index.ts -o ruleset.d.ts",
     "clean": "npm-run-all clean:*",
     "clean:dts": "rm -f *.d.ts",
