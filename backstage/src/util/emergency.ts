@@ -8,6 +8,10 @@ export function panic(reason: string): never {
    abort()
 }
 
+export function unreachable(): never {
+   return panic('this location should be unreachable')
+}
+
 export function assert(condition: boolean, failText?: string) {
    if (!condition) {
       panic(failText ?? 'assertion failed')

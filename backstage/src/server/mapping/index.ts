@@ -5,6 +5,7 @@ import { sendMap } from '@app/server/mapping/map_site'
 import { sendComputedAscensionPerks, sendComputedSkills } from '@app/server/mapping/computed'
 import { sendPlayerStatus } from '@app/server/mapping/player'
 import { sendShopStatus } from '@app/server/mapping/shop'
+import { sendBubbleMessage } from '@app/server/mapping/ui'
 
 export { sendStartup } from '@app/server/mapping/startup'
 
@@ -24,9 +25,9 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          // TODO(chuigda): transpile ComputedModifier
          // computedModifiers: gs.computedModifier,
          computedSkills: sendComputedSkills(gs.computedSkills!),
-         computedAscensionPerks: sendComputedAscensionPerks(gs.computedAscensionPerks!)
+         computedAscensionPerks: sendComputedAscensionPerks(gs.computedAscensionPerks!),
 
-         // TODO(chuigda): transpile custom UI items
+         bubbleMessages: gs.bubbleMessages.map(sendBubbleMessage)
       }
    } else {
       return {
@@ -44,6 +45,10 @@ export function sendGameState(gs: GameState, updateTracker?: UpdateTracker): IGa
          computedSkills: updateTracker.computedSkills ? sendComputedSkills(gs.computedSkills!) : undefined,
          computedAscensionPerks: updateTracker.computedAscensionPerks
             ? sendComputedAscensionPerks(gs.computedAscensionPerks!)
+            : undefined,
+
+         bubbleMessages: updateTracker.bubbleMessages
+            ? gs.bubbleMessages.map(sendBubbleMessage)
             : undefined
       }
    }

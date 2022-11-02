@@ -5,6 +5,7 @@ import { IPlayerStatus } from './player'
 import { IComputedAscensionPerks, IComputedSkills } from './computed'
 import { IShopStatus } from './shop'
 import { IMapStatus } from './map_site'
+import { IBubbleMessage } from './ui'
 
 export * from './activity'
 export * from './ascension_perk'
@@ -34,6 +35,8 @@ export interface IGameState {
    computedModifier?: object
    computedSkills?: IComputedSkills
    computedAscensionPerks?: IComputedAscensionPerks
+
+   bubbleMessages?: IBubbleMessage[]
 }
 
 export interface IResponseSuccess<R> {

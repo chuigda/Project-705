@@ -21,8 +21,6 @@ import coreRuleSet from '@rulesets/core_ruleset'
 import debugRuleSet from '@rulesets/debug_ruleset'
 import {
    BubbleMessageTemplate,
-   Button,
-   Menu,
    SimpleDialogTemplate
 } from '@app/ruleset/items/ui'
 
@@ -47,14 +45,6 @@ export class CompiledStoreItems {
    tradableItems: Record<string, TradableItem> = {}
 }
 
-export class CompiledCustomUI {
-   menus: Record<string, Menu> = {}
-   buttons: Record<string, Button> = {}
-
-   dialogTemplates: Record<string, SimpleDialogTemplate> = {}
-   bubbleMessageTemplates: Record<string, BubbleMessageTemplate> = {}
-}
-
 export class CompiledRuleSet {
    loadedRuleSets: Scope[] = []
    skillCategories: SkillCategory[] = []
@@ -68,7 +58,6 @@ export class CompiledRuleSet {
    startups: Record<string, Startup> = {}
    mapSites: Record<string, MapSite> = {}
    storeItems: CompiledStoreItems = new CompiledStoreItems()
-   ui: CompiledCustomUI = new CompiledCustomUI()
 
    translations: Record<string, Translation> = {}
 
