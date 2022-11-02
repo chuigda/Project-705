@@ -5,7 +5,7 @@ author: Chuigda<icey@icey.tech>
 1. **Three spaces** indentation.
 2. UTF-8 **without BOM**, that's windows shit. Don't edit things with Windows notepad or write pad.
 3. Always use **LF**, not **CRLF**, unless necessary (like in HTTP).
-4. Swear words are allowed but only when talking about the badness of fucking 3rd party libraries.
+4. Swear words are allowed but only when talking about the badness of fucking 3rd party libraries, or the badness of Chuigda.
 5. Name files in `snake_case` (so they would look like paradox things), unless certain naming is wanted by some auto tools.
 6. Enable `eslint` when possible. If you think some rule is annoying, confirm with Chuigda.
 
@@ -29,4 +29,4 @@ author: Chuigda<icey@icey.tech>
 1. **KEAL** (**K**eep **E**veryone **AL**ive), or **It will KEAL**, instead of traditional LGTM.
 2. Using poetry (nonsense) commit messages for trivial commits is acceptable.
 3. Using poetry (nonsense) pull request messages is acceptable.
-4. Don't talk about politics or current events all the time. Also, avoid such things in game contents.
+4. Don't talk about politics or current events all the time. Also, avoid such things in game contents. However, if you're so yygq or abstract that nobody else could understand your true meaning, you may do that.
