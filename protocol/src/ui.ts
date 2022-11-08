@@ -8,6 +8,7 @@ export interface IDialogOption {
 }
 
 export interface ISimpleDialog {
+   uid: string,
    title: ITranslatable
    // TODO(chuigda, flaribbit): properly handle this when we have gfx features
    picture?: string
@@ -34,7 +35,7 @@ export interface IBubbleMessageBase<MessageKindString extends IBubbleMessageKind
 export type IPromptBubbleMessage = IBubbleMessageBase<'prompt'>
 
 export interface IDialogBubbleMessage extends IBubbleMessageBase<'user_dialog'> {
-   dialog: ISimpleDialog
+   dialog: string
 }
 
 export type IBubbleMessage = IPromptBubbleMessage | IDialogBubbleMessage

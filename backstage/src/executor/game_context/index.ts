@@ -65,6 +65,7 @@ export class GameState {
    computedAscensionPerks: ComputedAscensionPerks = new ComputedAscensionPerks()
 
    map: MapStatus = new MapStatus()
+   dialogs: Record<string, SimpleDialog> = {}
    bubbleMessages: BubbleMessage[] = []
 }
 

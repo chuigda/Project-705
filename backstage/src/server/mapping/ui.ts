@@ -22,8 +22,7 @@ export function sendPromptBubbleMessage(message: PromptBubbleMessage): IPromptBu
 export function sendDialogBubbleMessage(message: DialogBubbleMessage): IDialogBubbleMessage {
    return {
       ...message,
-      tooltip: sendTranslatable(message.tooltip),
-      dialog: sendSimpleDialog(message.dialog)
+      tooltip: sendTranslatable(message.tooltip)
    }
 }
 

@@ -9,16 +9,18 @@ import { ensureScope } from '@app/executor/game_context/scope'
 import { unreachable } from '@app/util/emergency'
 import { compileTranslatable } from '@app/loader/compile'
 
+export interface SimpleDialog extends SimpleDialogTemplate {
+   readonly uid: string
+}
+
 export interface BubbleMessageBase {
    readonly uid: string
 }
 
-export type SimpleDialog = SimpleDialogTemplate
-
 export interface PromptBubbleMessage extends PromptBubbleMessageTemplate, BubbleMessageBase {}
 
 export interface DialogBubbleMessage extends DialogBubbleMessageTemplate, BubbleMessageBase {
-   readonly dialog: SimpleDialog
+   readonly dialog: string
 }
 
 export type BubbleMessage = PromptBubbleMessage | DialogBubbleMessage
@@ -46,8 +48,10 @@ export function createPromptBubbleMessage(
 
 export function createDialog(gameContext: GameContext, template: SimpleDialogTemplate): SimpleDialog {
    const scope = ensureScope(gameContext)
-   return {
+   const uid = nextItemID(gameContext, 'dlg')
+   const dialog = {
       ...template,
+      uid,
       title: compileTranslatable(scope, template.title),
       text: compileTranslatable(scope, template.text),
       options: template.options.map(option => ({
@@ -56,6 +60,17 @@ export function createDialog(gameContext: GameContext, template: SimpleDialogTem
          tooltip: compileTranslatable(scope, option.text)
       }))
    }
+
+   gameContext.state.dialogs[uid] = dialog
+   return dialog
+}
+
+export function destroyDialog(gameContext: GameContext, uid: string) {
+   if (!gameContext.state.dialogs[uid]) {
+      console.warn(`[W] [destroyDialog] dialog '${uid}' does not exist`)
+      return
+   }
+   delete gameContext.state.dialogs[uid]
 }
 
 export function createDialogBubbleMessage(
@@ -68,7 +83,7 @@ export function createDialogBubbleMessage(
       ...template,
       uid: nextItemID(gameContext, 'bm'),
       tooltip: compileTranslatable(ensureScope(gameContext), template.tooltip),
-      dialog
+      dialog: dialog.uid
    }
 
    gameContext.state.bubbleMessages.push(bubbleMessage)
@@ -89,11 +104,23 @@ export function createBubbleMessage(
 }
 
 export function closeBubbleMessage(gameContext: GameContext, uid: string) {
+   const toBeClosed = gameContext.state.bubbleMessages.find(bm => bm.uid === uid)
+   if (!toBeClosed) {
+      console.warn(`[W] [closeBubbleMessage] bubble message '${uid}' does not exist`)
+      return
+   }
+
+   if (toBeClosed.kind === 'user_dialog') {
+      destroyDialog(gameContext, toBeClosed.dialog)
+   }
+
    gameContext.state.bubbleMessages = gameContext.state.bubbleMessages.filter(bm => bm.uid !== uid)
    gameContext.updateTracker.bubbleMessages = true
 }
 
 const uiFunctions = {
+   createDialog,
+   destroyDialog,
    createBubbleMessage,
    closeBubbleMessage
 }
