@@ -5,18 +5,24 @@ import {
    compileActiveRelicItem,
    compileActivity,
    compileAscensionPerk,
-   compileBubbleMessageTemplate, compileConsumableItem,
+   compileConsumableItem,
    compileEvent,
    compileMapSite,
-   compileMenuItem,
-   compileModifier, compilePassiveRelicItem, compileRechargeableItem,
-   compileSimpleDialogTemplate,
+   compileModifier,
+   compilePassiveRelicItem,
+   compileRechargeableItem,
    compileSkill,
-   compileStartup, compileTradableItem,
+   compileStartup,
+   compileTradableItem,
    compileTranslation
 } from '@app/loader/compile'
-import { RuleSetContent, RuleSetDescriptor, RuleSetStoreItems, StoreItem, StoreItemKind } from '@app/ruleset'
-import { Button, CustomUI, Menu } from '@app/ruleset/items/ui'
+import {
+   RuleSetContent,
+   RuleSetDescriptor,
+   RuleSetStoreItems,
+   StoreItem,
+   StoreItemKind
+} from '@app/ruleset'
 
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
@@ -209,82 +215,6 @@ export function compileStoreItems(compilation: CompiledRuleSet, scope: Scope, st
    }
 }
 
-function buildCompileUISeries<T extends HasIdent>(
-   itemName: string,
-   seriesName: 'dialogTemplates' | 'bubbleMessageTemplates',
-   fnName: string,
-   compileSingleFn: CompileSingleFunction<T>
-): CompileFunction<T> {
-   return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
-      for (const item of series) {
-         const compiledItem = compileSingleFn(scope, item)
-         const ident = <string>compiledItem.ident
-
-         const dest = <Record<string, T>>(<unknown>compilation.ui[seriesName])
-         if (dest[ident]) {
-            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
-         } else {
-            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
-         }
-
-         // TODO(chuigda): implement "blending"
-         dest[ident] = item
-      }
-   }
-}
-
-export const compileDialogTemplates = buildCompileUISeries(
-   'dialog template',
-   'dialogTemplates',
-   'compileSimpleDialogTemplate',
-   compileSimpleDialogTemplate
-)
-
-export const compileBubbleMessageTemplates = buildCompileUISeries(
-   'bubble message template',
-   'bubbleMessageTemplates',
-   'compileBubbleMessageTemplate',
-   compileBubbleMessageTemplate
-)
-
-export function compileUI(compilation: CompiledRuleSet, scope: Scope, ui: CustomUI) {
-   if (ui.menus) {
-      for (const menu of ui.menus) {
-         const compiledMenu = <Menu>compileMenuItem(scope, menu)
-         const ident = <string>compiledMenu.ident
-
-         if (compilation.ui.menus[ident]) {
-            console.warn(`[W] [compileUI] overwriting existing menu '${ident}'`)
-         } else {
-            console.warn(`[I] [compileUI] compiled '${ident}'`)
-         }
-         compilation.ui.menus[ident] = compiledMenu
-      }
-   }
-
-   if (ui.buttons) {
-      for (const button of ui.buttons) {
-         const compiledButton = <Button>compileMenuItem(scope, button)
-         const ident = <string>compiledButton.ident
-
-         if (compilation.ui.buttons[ident]) {
-            console.warn(`[W] [compileUI] overwriting existing button '${ident}'`)
-         } else {
-            console.warn(`[I] [compileUI] compiled '${ident}'`)
-         }
-         compilation.ui.buttons[ident] = compiledButton
-      }
-   }
-
-   if (ui.dialogTemplates) {
-      compileDialogTemplates(compilation, scope, ui.dialogTemplates)
-   }
-
-   if (ui.bubbleMessageTemplates) {
-      compileBubbleMessageTemplates(compilation, scope, ui.bubbleMessageTemplates)
-   }
-}
-
 export function compileTranslations(
    compilation: CompiledRuleSet,
    scope: Scope,
@@ -340,7 +270,6 @@ export function compileRuleSet(compilation: CompiledRuleSet, descriptor: RuleSet
       events,
       modifiers,
       translations,
-      ui,
       onRuleSetLoaded
    } = ruleSet
 
@@ -378,10 +307,6 @@ export function compileRuleSet(compilation: CompiledRuleSet, descriptor: RuleSet
 
    if (translations) {
       compileTranslations(compilation, scope, translations)
-   }
-
-   if (ui) {
-      compileUI(compilation, scope, ui)
    }
 
    if (onRuleSetLoaded) {

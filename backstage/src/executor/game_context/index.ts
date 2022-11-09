@@ -4,12 +4,9 @@ import { Ident, MaybeTranslationKey, Scope } from '@app/base/uid'
 import {
    AscensionPerk,
    BubbleMessageTemplate,
-   Button,
    MaybeInlineEvent,
-   Menu,
    PotentialExpression,
    PropertyOp,
-   SimpleDialogTemplate,
    Skill,
    SkillCategoryId,
    SkillCost,
@@ -68,11 +65,7 @@ export class GameState {
    computedAscensionPerks: ComputedAscensionPerks = new ComputedAscensionPerks()
 
    map: MapStatus = new MapStatus()
-
-   customButtons: Button[] = []
-   customMenus: Menu[] = []
-
-   dialogs: SimpleDialog[] = []
+   dialogs: Record<string, SimpleDialog> = {}
    bubbleMessages: BubbleMessage[] = []
 }
 
@@ -107,12 +100,6 @@ export class UpdateTracker {
    computedAscensionPerks: boolean = false
 
    map: boolean = false
-
-   customButtons: boolean
-   customMenus: boolean
-   customScoreBoards: boolean
-
-   dialogs: boolean
    bubbleMessages: boolean
 
    reset(): void {
@@ -126,11 +113,7 @@ export class UpdateTracker {
       this.computedSkills = false
       this.computedAscensionPerks = false
 
-      this.customButtons = false
-      this.customMenus = false
-      this.customScoreBoards = false
-
-      this.dialogs = false
+      this.map = false
       this.bubbleMessages = false
    }
 }
@@ -286,11 +269,11 @@ export class GameContext {
       return variableFunctions.updateVar(this, varName, updater)
    }
 
-   createDialog(template: Ident | SimpleDialogTemplate): SimpleDialog | null {
-      return uiFunctions.createDialog(this, template)
+   createBubbleMessage(template: BubbleMessageTemplate): BubbleMessage {
+      return uiFunctions.createBubbleMessage(this, template)
    }
 
-   createBubbleMessage(template: Ident | BubbleMessageTemplate): BubbleMessage | null {
-      return uiFunctions.createBubbleMessage(this, template)
+   closeBubbleMessage(uid: string) {
+      return uiFunctions.closeBubbleMessage(this, uid)
    }
 }

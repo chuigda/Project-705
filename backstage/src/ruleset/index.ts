@@ -5,7 +5,6 @@ import { Startup } from '@app/ruleset/items/startup'
 import { Activity } from '@app/ruleset/items/activity'
 import { AscensionPerk } from '@app/ruleset/items/ascension_perk'
 import { Event, MaybeInlineEvent } from '@app/ruleset/items/event'
-import { CustomUI } from '@app/ruleset/items/ui'
 import { Modifier } from '@app/ruleset/items/modifier'
 import { MapSite } from '@app/ruleset/items/map_site'
 import {
@@ -49,7 +48,6 @@ export interface RuleSetContent {
    readonly mapSites?: MapSite[]
    readonly events?: Event[]
    readonly translations?: Record<string, Record<string, string>>
-   readonly ui?: CustomUI
    readonly onRuleSetLoaded?: MaybeInlineEvent[]
 }
 

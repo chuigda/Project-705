@@ -11,6 +11,7 @@ import epMapMove from '@app/server/endpoints/map_move'
 import { epPurchaseItem, epUseItem } from '@app/server/endpoints/store_item'
 import debugRouter from '@app/server/endpoints/debug'
 import { validateAccessToken, validateGameContext } from '@app/server/middleware'
+import { epCloseBubbleMessage, epDestroyDialog, epGetDialog, epUseDialogOption } from '@app/server/endpoints/ui'
 
 function applicationStart() {
    const app = express()
@@ -36,6 +37,14 @@ function applicationStart() {
    app.get('/api/startups', epGetStartups)
 
    app.get('/api/translation', epGetTranslation)
+
+   app.get('/api/ui/dialog', epGetDialog)
+
+   app.post('/api/ui/useDialogOption', epUseDialogOption)
+
+   app.post('/api/ui/destroyDialog', epDestroyDialog)
+
+   app.post('/api/ui/closeBubbleMessage', epCloseBubbleMessage)
 
    app.use('/api/debug', debugRouter)
 

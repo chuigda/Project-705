@@ -9,8 +9,6 @@ import {
    mStartupId,
    mAscensionPerkId,
    mModifierId,
-   mDisplayItemId,
-   isTranslationKey,
    mStoreItemId,
    mMapSiteId, mPropertyId
 } from '@app/base/uid'
@@ -40,25 +38,10 @@ import {
 } from '@app/ruleset'
 import { CompiledRuleSet } from '@app/loader/index'
 import { MaybeTranslatable } from '@app/base/translation'
-import {
-   BubbleMessageTemplate,
-   Button,
-   DialogOption,
-   Menu,
-   MenuItem,
-   SimpleDialogTemplate,
-   isButton,
-   isDivider
-} from '@app/ruleset/items/ui'
+import { ITranslatable } from '@protocol/translation'
 
-export function compileTranslatable(scope: Scope, item: MaybeTranslatable): MaybeTranslatable {
-   if (typeof item === 'string') {
-      if (isTranslationKey(item)) {
-         return mTranslationKey(scope, item)
-      } else {
-         return item
-      }
-   } else if ('id' in item) {
+export function compileTranslatable(scope: Scope, item: MaybeTranslatable): ITranslatable {
+   if (typeof item === 'string' || 'id' in item) {
       return mTranslationKey(scope, item)
    } else {
       return {
@@ -306,60 +289,6 @@ export function compileModifier(compilation: CompiledRuleSet, scope: Scope, modi
       ...itemBase,
       playerProperty: playerProperty ? compilePlayerPropertyModifier(scope, playerProperty) : undefined,
       skillPointCost
-   }
-}
-
-export function compileMenuItem(scope: Scope, item: MenuItem): MenuItem {
-   if (isDivider(item)) {
-      return item
-   } else if (isButton(item)) {
-      item = <Button>item
-      return {
-         type: 'button',
-         ident: mDisplayItemId(scope, item.ident),
-         text: compileTranslatable(scope, item.text),
-         tooltip: compileTranslatable(scope, item.tooltip),
-         events: compileEventSeries(scope, item.events)!
-      }
-   } else /* if (isMenu(item)) */ {
-      const menu = <Menu>item
-      return {
-         type: 'menu',
-         ident: mDisplayItemId(scope, menu.ident),
-         text: compileTranslatable(scope, menu.text),
-         tooltip: compileTranslatable(scope, menu.tooltip),
-
-         children: menu.children.map(child => compileMenuItem(scope, child))
-      }
-   }
-}
-
-export function compileSimpleDialogTemplate(scope: Scope, template: SimpleDialogTemplate): SimpleDialogTemplate {
-   function compileDialogOption(option: DialogOption): DialogOption {
-      return {
-         ...option,
-
-         text: compileTranslatable(scope, option.text),
-         tooltip: compileTranslatable(scope, option.tooltip),
-         onClickEvents: compileEventSeries(scope, option.onClickEvents)!
-      }
-   }
-
-   return {
-      ident: mDisplayItemId(scope, template.ident),
-      title: compileTranslatable(scope, template.title),
-      text: compileTranslatable(scope, template.text),
-      options: template.options.map(compileDialogOption)
-   }
-}
-
-export function compileBubbleMessageTemplate(scope: Scope, template: BubbleMessageTemplate): BubbleMessageTemplate {
-   return {
-      ident: mDisplayItemId(scope, template.ident),
-      icon: template.icon,
-      tooltip: compileTranslatable(scope, template.tooltip),
-      // TODO(chuigda): linked dialog
-      linkedDialog: ''
    }
 }
 

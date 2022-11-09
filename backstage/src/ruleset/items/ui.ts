@@ -1,83 +1,36 @@
-import { Ident } from '@app/base/uid'
 import { MaybeInlineEvent } from '@app/ruleset/items/event'
 import { MaybeTranslatable } from '@app/base/translation'
-
-export interface Label {
-   readonly type: 'label'
-
-   readonly text: MaybeTranslatable
-}
-
-export interface Button {
-   readonly type: 'button'
-
-   readonly ident: Ident
-   readonly text: MaybeTranslatable
-   readonly tooltip: MaybeTranslatable
-
-   readonly events: MaybeInlineEvent[]
-}
-
-export interface Divider {
-   readonly type: 'divider'
-}
-
-export type MenuItem = Button | Menu | Divider
-
-export interface Menu {
-   readonly type: 'menu'
-
-   readonly ident: Ident
-   readonly text: MaybeTranslatable
-   readonly tooltip: MaybeTranslatable
-
-   readonly children: MenuItem[]
-}
-
-export function isDivider(menuItem: MenuItem): boolean {
-   return menuItem.type === 'divider'
-}
-
-export function isButton(menuItem: MenuItem): boolean {
-   return menuItem.type === 'button'
-}
-
-export function isMenu(menuItem: MenuItem): boolean {
-   return menuItem.type === 'menu'
-}
+import { IBubbleMessageIcon, IBubbleMessageKind } from '@protocol/ui'
 
 export interface DialogOption {
-   readonly optionKey: string
-
-   readonly text: MaybeTranslatable
-   readonly tooltip: MaybeTranslatable
-   readonly danger: boolean
+   optionKey: string
+   text: MaybeTranslatable
+   tooltip: MaybeTranslatable
    readonly onClickEvents: MaybeInlineEvent[]
 }
 
 export interface SimpleDialogTemplate {
-   readonly ident: Ident
-
    readonly title: MaybeTranslatable
+   // TODO(chuigda, flaribbit): properly handle this when we have gfx features
+   readonly picture?: string
    readonly text: MaybeTranslatable
    readonly options: DialogOption[]
 }
 
-// TODO(chuigda): add more when we have gfx features
-export type BubbleMessageIcon = 'normal' | 'important'
+export type BubbleMessageIcon = IBubbleMessageIcon
+export type BubbleMessageKind = IBubbleMessageKind
 
-export interface BubbleMessageTemplate {
-   readonly ident: Ident
+export interface BubbleMessageTemplateBase<MessageKindString extends BubbleMessageKind> {
+   readonly kind: MessageKindString
 
    readonly icon: BubbleMessageIcon
    readonly tooltip: MaybeTranslatable
-   readonly linkedDialog: Ident | SimpleDialogTemplate
 }
 
-export interface CustomUI {
-   menus?: Menu[]
-   buttons?: Button[]
+export type PromptBubbleMessageTemplate = BubbleMessageTemplateBase<'prompt'>
 
-   dialogTemplates?: SimpleDialogTemplate[]
-   bubbleMessageTemplates?: BubbleMessageTemplate[]
+export interface DialogBubbleMessageTemplate extends BubbleMessageTemplateBase<'user_dialog'> {
+   readonly dialogTemplate: SimpleDialogTemplate
 }
+
+export type BubbleMessageTemplate = PromptBubbleMessageTemplate | DialogBubbleMessageTemplate

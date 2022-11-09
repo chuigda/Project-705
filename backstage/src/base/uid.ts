@@ -1,3 +1,5 @@
+import { ITranslationKey } from '@protocol/translation'
+
 export function uniqueId(author: string, moduleName: string, category: string, id: string): string {
    return `@${author}:${moduleName}:${category}:${id}`
 }
@@ -42,7 +44,6 @@ export const mModifierId = buildMangler('md')
 export const mStoreItemId = buildMangler('si')
 export const mPropertyId = buildMangler('pr')
 export const mVarName = buildMangler('va')
-export const mDisplayItemId = buildMangler('ui')
 export const mMapSiteId = buildMangler('ms')
 
 const mTranslationKeyImpl = buildMangler('tr')
@@ -53,12 +54,12 @@ export function isTranslationKey(key: string): boolean {
       || (key.startsWith('@') && key.includes(':tr:$'))
 }
 
-export function mTranslationKey(scope: Scope, key: MaybeTranslationKey): string {
+export function mTranslationKey(scope: Scope, key: MaybeTranslationKey): ITranslationKey {
    if ((typeof key === 'string' && isTranslationKey(key))
        || typeof key === 'object') {
       return mTranslationKeyImpl(scope, key)
    } else {
-      return <string>key
+      return <ITranslationKey>key
    }
 }
 
