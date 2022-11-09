@@ -8,6 +8,8 @@ import { GameContext } from '@app/executor/game_context'
 import { ensureScope } from '@app/executor/game_context/scope'
 import { unreachable } from '@app/util/emergency'
 import { compileTranslatable } from '@app/loader/compile'
+import { QResult } from '@app/executor/result'
+import { triggerEventSeries } from '@app/executor/events'
 
 export interface SimpleDialog extends SimpleDialogTemplate {
    readonly uid: string
@@ -65,12 +67,32 @@ export function createDialog(gameContext: GameContext, template: SimpleDialogTem
    return dialog
 }
 
-export function destroyDialog(gameContext: GameContext, uid: string) {
+export function useDialogOption(gameContext: GameContext, dialogId: string, optionKey: string): QResult {
+   const dialog = gameContext.state.dialogs[dialogId]
+   if (!dialog) {
+      const errMessage = `dialog '${dialogId}' does not exist`
+      console.error(`[E] [useDialogOption] ${errMessage}`)
+      return [false, errMessage]
+   }
+
+   const option = dialog.options.find(opt => opt.optionKey === optionKey)
+   if (!option) {
+      const errMessage = `dialog '${dialogId}' does not have option '${optionKey}'`
+      console.error(`[E] [useDialogOption] ${errMessage}`)
+      return [false, errMessage]
+   }
+
+   return triggerEventSeries(gameContext, option.onClickEvents)
+}
+
+export function destroyDialog(gameContext: GameContext, uid: string): QResult {
    if (!gameContext.state.dialogs[uid]) {
-      console.warn(`[W] [destroyDialog] dialog '${uid}' does not exist`)
-      return
+      const errMessage = `dialog '${uid}' does not exist`
+      console.error(`[E] [destroyDialog] ${errMessage}`)
+      return [false, errMessage]
    }
    delete gameContext.state.dialogs[uid]
+   return [true]
 }
 
 export function createDialogBubbleMessage(
@@ -103,19 +125,24 @@ export function createBubbleMessage(
    return unreachable()
 }
 
-export function closeBubbleMessage(gameContext: GameContext, uid: string) {
+export function closeBubbleMessage(gameContext: GameContext, uid: string): QResult {
    const toBeClosed = gameContext.state.bubbleMessages.find(bm => bm.uid === uid)
    if (!toBeClosed) {
-      console.warn(`[W] [closeBubbleMessage] bubble message '${uid}' does not exist`)
-      return
+      const errMessage = `bubble message '${uid}' does not exist`
+      console.error(`[E] [closeBubbleMessage] ${errMessage}`)
+      return [false, errMessage]
    }
 
    if (toBeClosed.kind === 'user_dialog') {
-      destroyDialog(gameContext, toBeClosed.dialog)
+      const [success, message] = destroyDialog(gameContext, toBeClosed.dialog)
+      if (!success) {
+         console.warn(`[W] [closeBubbleMessage] error closing linked dialog: ${message}`)
+      }
    }
 
    gameContext.state.bubbleMessages = gameContext.state.bubbleMessages.filter(bm => bm.uid !== uid)
    gameContext.updateTracker.bubbleMessages = true
+   return [true]
 }
 
 const uiFunctions = {
