@@ -11,6 +11,7 @@ import LoginPage from '@app/views/login.vue'
 import ErrorPage from '@app/views/error_page.vue'
 import GamePlay from '@app/views/game_play.vue'
 import ChooseStartup from '@app/views/choose_startup.vue'
+import TestPage from '@app/views/test_page.vue'
 
 import '@app/style.css'
 import {dontSink} from '@app/util/emergency'
@@ -26,7 +27,8 @@ const routes = [
    { path: '/login', component: LoginPage },
    { path: '/gameplay', component: GamePlay },
    { path: '/startup', component: ChooseStartup },
-   { path: '/error', component: ErrorPage }
+   { path: '/error', component: ErrorPage },
+   { path: '/test_page', component:TestPage }
 ]
 
 export const router = createRouter({ history: createWebHashHistory(), routes })

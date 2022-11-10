@@ -10,6 +10,10 @@
       <button @click="chooseStartup">
          去选开局吧
       </button>
+      &nbsp;&nbsp;
+      <button @click="gotoTestPage">
+         前往测试页面
+      </button>
    </div>
 </template>
 
@@ -36,6 +40,10 @@ function chooseStartup() {
 
    setUserToken(token)
    window.location.replace('/#/startup')
+}
+
+function gotoTestPage() {
+   window.location.replace('/#/test_page')
 }
 
 </script>
