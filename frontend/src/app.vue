@@ -1,5 +1,4 @@
 <template>
-
    <router-view />
 </template>
 
@@ -20,8 +19,8 @@ const savedDebugToken = getLocalStorage('session:debugToken')
 if (savedDebugToken) {
    setDebugToken(savedDebugToken)
 }
-onMounted(()=>{
-  router.push({path: '/login'});
+onMounted(() => {
+   router.push({ path: '/login' })
 })
 
 </script>
