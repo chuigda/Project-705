@@ -197,6 +197,9 @@ const storeItemTranslation: Record<string, string> = {
 }
 
 export default {
+   '$core_ruleset': '核心规则集',
+   '$core_ruleset_desc': 'Project-705 的核心规则集，提供标准的游戏体验',
+
    ...propertyTranslation,
    ...commonPotentialTranslation,
    ...startupTranslation,

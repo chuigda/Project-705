@@ -18,6 +18,9 @@ const ruleSet: RuleSet = {
       activityCategories,
    },
    content: {
+      name: '$debug_ruleset',
+      description: '$debug_ruleset_desc',
+
       startups,
       skills,
       mapSites,
