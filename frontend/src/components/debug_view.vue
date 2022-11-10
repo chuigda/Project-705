@@ -28,8 +28,7 @@ import {
    debugAscension,
    debugCrash,
    debugInitGame,
-   debugTriggerEvent,
-   setDebugToken
+   debugTriggerEvent
 } from '@app/api/debug'
 import { IGameState, IResponse } from '@protocol/index'
 import { getSnapshot, setUserToken } from '@app/api'
@@ -105,7 +104,6 @@ function formatResponse(res: IResponse<any>) {
 const commands: Record<string, CommandHandler> = {
    'clear': expectNoArg(async () => { lines.value = [] }),
    'set_token': expectOneArg(async ([token]) => setUserToken(token)),
-   'set_debug_token': expectOneArg(async ([token]) => setDebugToken(token)),
    'init_game': expectOneArg(async ([startupId]) => {
       inputDisabled.value = true
       const result = await debugInitGame(startupId)

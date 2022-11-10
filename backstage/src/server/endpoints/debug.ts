@@ -1,6 +1,5 @@
 import express = require('express')
-import { Request, Response } from 'express'
-import { v4 as uuid } from 'uuid'
+import { Response } from 'express'
 import { IGameState, IResponse, IResponseFail } from '@protocol/index'
 import { GameContext } from '@app/executor/game_context'
 import { addActivity } from '@app/executor/activity'
@@ -17,24 +16,7 @@ import serverStore from '@app/server/store'
 import { updateProperty } from '@app/executor/property'
 import { initMap } from '@app/executor/map_site'
 
-const authToken = uuid()
-console.info(`[I] [debug.ts] debugging interface uuid = '${authToken}'`)
-
 const debugRouter = express.Router()
-
-debugRouter.use((req: Request, res: Response<IResponse<any>>, next) => {
-   const token = req.header('X-Debugger-Auth-Token')
-   if (token !== authToken) {
-      console.warn(`[W] [api /api/debug] wrong token '${token}', expected '${authToken}'`)
-      res.json({
-         success: false,
-         message: 'unauthenticated access to debugging console'
-      })
-      return
-   }
-
-   next()
-})
 
 function ensureMessage(success: boolean, message?: string): string {
    return message || (success ? 'success' : 'error')

@@ -1,11 +1,5 @@
-import {IGameState, IResponse, IResponseFail} from '@protocol/index'
-import {postJsonRequest, setGlobalHeader} from '@app/util/mebius'
-import {setLocalStorage} from '@app/util/local_storage'
-
-export function setDebugToken(token: string) {
-   setLocalStorage('session:debugToken', token)
-   setGlobalHeader('X-Debugger-Auth-Token', token)
-}
+import { IGameState, IResponse, IResponseFail } from '@protocol/index'
+import { postJsonRequest } from '@app/util/mebius'
 
 export async function debugInitGame(startupId: string): Promise<IResponse<IGameState>> {
    return await postJsonRequest<IResponse<IGameState>>(
