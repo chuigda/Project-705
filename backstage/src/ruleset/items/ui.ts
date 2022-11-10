@@ -7,13 +7,19 @@ export interface DialogOption {
    /// 选项的标识符
    ///
    /// 这个值不需要是全局唯一的，只需在对话框内唯一即可
-   optionKey: string
+   readonly optionKey: string
 
    /// 选项文本
-   text: MaybeTranslatable
+   readonly text: MaybeTranslatable
 
    /// 鼠标悬浮在选项上时显示的提示文本
-   tooltip: MaybeTranslatable
+   readonly tooltip: MaybeTranslatable
+
+   /// 是否显示为危险选项
+   readonly danger?: boolean
+
+   /// 选项反馈
+   readonly textResponse: MaybeTranslatable
 
    /// 点击选项所触发的事件
    readonly onClickEvents: MaybeInlineEvent[]
