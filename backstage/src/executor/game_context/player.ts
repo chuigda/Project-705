@@ -13,12 +13,22 @@ import {
 } from '@app/ruleset'
 
 export type PropertyId = IPropertyId
+
+/// 玩家属性
 export interface PlayerProperty {
+   /// 属性名
    name: MaybeTranslationKey
 
+   /// 当前的属性值
    value: number
+
+   /// 属性每回合的增量
    increment?: number
+
+   /// 最小值
    min?: number
+
+   /// 最大值
    max?: number
 }
 
