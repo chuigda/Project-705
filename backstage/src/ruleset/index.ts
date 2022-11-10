@@ -41,7 +41,7 @@ export interface RuleSetStoreItems {
 /// 规则集内容
 export interface RuleSetContent {
    /// 规则集名称
-   readonly name?: MaybeTranslationKey,
+   readonly name: MaybeTranslationKey,
 
    /// 规则集描述文本
    readonly description?: MaybeTranslationKey

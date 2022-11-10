@@ -17,6 +17,9 @@ const mod: HighOrderRuleset = {
       }
    },
    generator: (summary: RuleSetDescriptor[]) => ({
+      name: '$core_ruleset',
+      description: '$core_ruleset_desc',
+
       skills,
       events,
       startups,

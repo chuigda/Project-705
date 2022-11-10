@@ -45,30 +45,59 @@ export * from '@app/executor/game_context/event_hook'
 export * from '@app/executor/game_context/player'
 export * from '@app/executor/game_context/shop'
 
+/// 游戏地图状态
 export class MapStatus {
+   /// 地图根节点，也就是玩家当前所处的节点
    rootSite: GeneratedSite
 }
 
+/// 游戏状态
+///
+/// **注意：**在编写 mod/dlc 时，应该尽量使用 `GameContext` 中提供的函数，而非直接操作 `GameState` 中的字段。
 export class GameState {
+   /// 玩家选择的起源
    startup: string = ''
 
+   /// 当前回合数
    turns: number = 0
+
+   /// 玩家状态
    player: PlayerStatus = new PlayerStatus()
+
+   /// 商店状态
    shop: ShopStatus = new ShopStatus()
 
+   /// 事件钩子
    events: EventHooks = new EventHooks()
+
+   /// 玩家获得的静态修正
    modifiers: Set<string> = new Set()
+
+   /// 变量表
    variables: Record<string, any> = {}
 
+   /// 经过计算的静态修正
    computedModifier: ComputedModifier = new ComputedModifier()
+
+   /// 经过计算的可学习/不可学习技能列表
    computedSkills: ComputedSkills = new ComputedSkills()
+
+   /// 经过计算的可用/不可用飞升项目列表
    computedAscensionPerks: ComputedAscensionPerks = new ComputedAscensionPerks()
 
+   /// 地图状态
    map: MapStatus = new MapStatus()
+
+   /// 对话框
    dialogs: Record<string, SimpleDialog> = {}
+
+   /// 气泡消息列表
    bubbleMessages: BubbleMessage[] = []
 }
 
+/// 玩家状态更新追踪器
+///
+/// 用于追踪 `PlayerStatus` 的更新状况，从而选择性地将有更新的内容发送给前端。
 export class PlayerStatusUpdateTracker {
    properties: boolean = false
 
@@ -88,6 +117,9 @@ export class PlayerStatusUpdateTracker {
    }
 }
 
+/// 游戏状态更新追踪器
+///
+/// 用于追踪 `GameState` 的更新状况，从而选择性地将有更新的内容发送给前端。
 export class UpdateTracker {
    player: PlayerStatusUpdateTracker = new PlayerStatusUpdateTracker()
    shop: boolean = false
@@ -118,11 +150,17 @@ export class UpdateTracker {
    }
 }
 
+/// 游戏上下文
 export class GameContext {
+   /// 进行游戏时加载的规则集
    readonly ruleSet: CompiledRuleSet
+
+   /// 游戏状态
    state: GameState = new GameState()
 
+   /// 更新追踪器
    updateTracker: UpdateTracker = new UpdateTracker()
+
    scope?: Scope = undefined
    scopeChain: Scope[] = []
    eventChainCounter?: number = undefined
@@ -138,142 +176,146 @@ export class GameContext {
    }
 
    // ----------------------------------------------------------------------------------------------
-   // functions exported for ruleset uses
+   // 供 mod/dlc 使用的公开函数
    // ----------------------------------------------------------------------------------------------
 
-   pushScope(scope: Scope) {
+   public pushScope(scope: Scope) {
       scopeFunctions.pushScope(this, scope)
    }
 
-   popScope() {
+   public popScope() {
       scopeFunctions.popScope(this)
    }
 
-   computePotential(potential: PotentialExpression): PotentialResult {
+   public computePotential(potential: PotentialExpression): PotentialResult {
       return computeFunctions.computePotential(this, potential)
    }
 
-   computeSkillPotential(skillPotential: SkillPotential): SkillPotentialResult {
+   public computeSkillPotential(skillPotential: SkillPotential): SkillPotentialResult {
       return computeFunctions.computeSkillPotential(this, skillPotential)
    }
 
-   computeSkillCost(skillCost: SkillCost, skillCategory?: SkillCategoryId): number {
+   public computeSkillCost(skillCost: SkillCost, skillCategory?: SkillCategoryId): number {
       return computeFunctions.computeSkillCost(this, skillCost, skillCategory)
    }
 
-   recomputeSkillCosts(): void {
+   public recomputeSkillCosts(): void {
       computeFunctions.recomputeSkillCosts(this)
    }
 
-   get signals(): Record<string, (...args: any) => Signal> {
+   public get signals(): Record<string, (...args: any) => Signal> {
       return connectFunctions.signals
    }
 
-   connect(signal: Signal, event: Ident) {
+   public connect(signal: Signal, event: Ident) {
       connectFunctions.connect(this, signal, event)
    }
 
-   disconnect(signal: Signal, event: Ident) {
+   public disconnect(signal: Signal, event: Ident) {
       connectFunctions.disconnect(this, signal, event)
    }
 
-   triggerEvent(event: MaybeInlineEvent, ...args: any[]): QResult {
+   public triggerEvent(event: MaybeInlineEvent, ...args: any[]): QResult {
       return eventFunctions.triggerEvent(this, event, ...args)
    }
 
-   addModifier(modifier: Ident): QResult {
+   public addModifier(modifier: Ident): QResult {
       return modifierFunctions.addModifier(this, modifier)
    }
 
-   removeModifier(modifier: Ident): QResult {
+   public removeModifier(modifier: Ident): QResult {
       return modifierFunctions.removeModifier(this, modifier)
    }
 
-   grantSkill(skill: Ident, force?: boolean): QResult {
+   public grantSkill(skill: Ident, force?: boolean): QResult {
       return grantFunctions.grantSkill(this, skill, force)
    }
 
-   addActivity(activity: Ident): QResult {
+   public addActivity(activity: Ident): QResult {
       return activityFunctions.addActivity(this, activity)
    }
 
-   addAscensionPerkSlot(count: number): QResult {
+   public addAscensionPerkSlot(count: number): QResult {
       return ascensionPerkFunctions.addAscensionPerkSlot(this, count)
    }
 
-   activateAscensionPerk(ascensionPerk: Ident, force?: boolean): QResult {
+   public activateAscensionPerk(ascensionPerk: Ident, force?: boolean): QResult {
       return ascensionPerkFunctions.activateAscensionPerk(this, ascensionPerk, force)
    }
 
-   giveConsumableItem(itemId: Ident, count?: number) {
+   public giveConsumableItem(itemId: Ident, count?: number) {
       storeItemFunctions.giveConsumableItem(this, itemId, count)
    }
 
-   giveRechargeableItem(itemId: Ident, chargeLevel?: number) {
+   public giveRechargeableItem(itemId: Ident, chargeLevel?: number) {
       storeItemFunctions.giveRechargeableItem(this, itemId, chargeLevel)
    }
 
-   giveActiveRelicItem(itemId: Ident) {
+   public giveActiveRelicItem(itemId: Ident) {
       storeItemFunctions.giveActiveRelicItem(this, itemId)
    }
 
-   givePassiveRelicItem(itemId: Ident) {
+   public givePassiveRelicItem(itemId: Ident) {
       storeItemFunctions.givePassiveRelicItem(this, itemId)
    }
 
-   giveTradableItem(itemId: Ident, count?: number) {
+   public giveTradableItem(itemId: Ident, count?: number) {
       storeItemFunctions.giveTradableItem(this, itemId, count)
    }
 
-   rechargeItem(itemId: Ident, chargeLevel?: number) {
+   public rechargeItem(itemId: Ident, chargeLevel?: number) {
       storeItemFunctions.rechargeItem(this, itemId, chargeLevel)
    }
 
-   addItemToShop(itemId: Ident, kind: StoreItemKind, count?: number) {
+   public addItemToShop(itemId: Ident, kind: StoreItemKind, count?: number) {
       storeItemFunctions.addItemToShop(this, itemId, kind, count)
    }
 
-   removeItemFromShop(itemId: Ident, kind: StoreItemKind) {
+   public removeItemFromShop(itemId: Ident, kind: StoreItemKind) {
       storeItemFunctions.removeItemFromShop(this, itemId, kind)
    }
 
-   initPropertySimple(propertyId: PropertyId, propertyName: MaybeTranslationKey, property: number): PlayerProperty {
+   public initPropertySimple(
+      propertyId: PropertyId,
+      propertyName: MaybeTranslationKey,
+      property: number
+   ): PlayerProperty {
       return propertyFunctions.initPropertySimple(this, propertyId, propertyName, property)
    }
 
-   initProperty(propertyId: PropertyId, property: PlayerProperty): PlayerProperty {
+   public initProperty(propertyId: PropertyId, property: PlayerProperty): PlayerProperty {
       return propertyFunctions.initProperty(this, propertyId, property)
    }
 
-   getProperty(property: PropertyId): PlayerProperty | undefined {
+   public getProperty(property: PropertyId): PlayerProperty | undefined {
       return propertyFunctions.getProperty(this, property)
    }
 
-   getPropertyValue(property: PropertyId): number | undefined {
+   public getPropertyValue(property: PropertyId): number | undefined {
       return propertyFunctions.getPropertyValue(this, property)
    }
 
-   updateProperty(property: PropertyId, operator: PropertyOp, value: number, source?: ValueSource) {
+   public updateProperty(property: PropertyId, operator: PropertyOp, value: number, source?: ValueSource) {
       propertyFunctions.updateProperty(this, property, operator, value, source)
    }
 
-   getV(varName: Ident): any {
+   public getV(varName: Ident): any {
       return variableFunctions.getVar(this, varName)
    }
 
-   setV(varName: Ident, value: any): any {
+   public setV(varName: Ident, value: any): any {
       return variableFunctions.setVar(this, varName, value)
    }
 
-   updateV(varName: Ident, updater: (v: any) => any): any {
+   public updateV(varName: Ident, updater: (v: any) => any): any {
       return variableFunctions.updateVar(this, varName, updater)
    }
 
-   createBubbleMessage(template: BubbleMessageTemplate): BubbleMessage {
+   public createBubbleMessage(template: BubbleMessageTemplate): BubbleMessage {
       return uiFunctions.createBubbleMessage(this, template)
    }
 
-   closeBubbleMessage(uid: string) {
+   public closeBubbleMessage(uid: string) {
       return uiFunctions.closeBubbleMessage(this, uid)
    }
 }
