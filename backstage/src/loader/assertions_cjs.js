@@ -172,6 +172,9 @@ const ruleSetDescriptorAssertion = {
 }
 
 const ruleSetContentAssertion = {
+   name: translationKeyAssertion,
+   description: translationKeyAssertion.orNull(),
+
    skills: [skillAssertion].orNull(),
    startups: [startupAssertion].orNull(),
    activities: [activityAssertion].orNull(),
