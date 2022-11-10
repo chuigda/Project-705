@@ -1,32 +1,32 @@
-= Styling guide
+= 代码风格指引
 author: Chuigda<icey@icey.tech>
 
-== 0. Basic coding styles
-1. **Three spaces** indentation.
-2. UTF-8 **without BOM**, that's windows shit. Don't edit things with Windows notepad or write pad.
-3. Always use **LF**, not **CRLF**, unless necessary (like in HTTP).
-4. Swear words are allowed but only when talking about the badness of fucking 3rd party libraries, or the badness of Chuigda.
-5. Name files in `snake_case` (so they would look like paradox things), unless certain naming is wanted by some auto tools.
-6. Enable `eslint` when possible. If you think some rule is annoying, confirm with Chuigda.
+== 0. 基本要求
+1. **三空格** 缩进.
+2. 使用 **不带BOM** 的 UTF-8 编码。避免使用 Windows 记事本编辑文件，以防引入 BOM。
+3. 总是使用 **LF** 而非 **CRLF**，除了某些必要的情况（例如在 HTTP 协议的处理中）。
+4. 可以说<del>藏</del>脏话，但只能用于谴责第三方库或者 Chuigda。
+5. 用 `snake_case` 命名文件（这样看起来就很 P 社），除非特定的第三方工具有所要求。
+6. 尽量启用 `eslint` 。如果你觉得某条规则非常恼人，找 Chuigda 确认一下。
 
-== 1. Rules for protocol
-1. Always use `interface`, not `class`, and make sure everything serializable / deserializable via `JSON.stringify` / `JSON.parse`.
-2. Some `string | Ident` things will always be transformed into `string` during _mod compilation_, so you may simply use `string` under such circumstance.
-3. However, always use `ITranslationKey` or `ITranslatable`, to indicate that something is potentially a translatable item.
+== 1. `protocol` 模块所遵循的规则
+1. 总是用 `interface`，禁止 `class`，并且确保所有内容都可以通过 `JSON.stringify` / `JSON.parse` 进行序列化和反序列化。
+2. 有些 `string | Ident` 类型的对象会在 _规则集编译_ 的时候被转换为单纯的 `string`，这种情况下 `protocol` 模块可以只用 `string`。
+3. 但无论会不会进行转译，总是应该使用 `ITranslationKey` 和 `ITranslatable` 来表示某项内容是可以翻译的。
 
-== 2. Rules for backstage programming
-1. Always use `interface` for rule set things. Downstream mod manufacturers aren't able to construct our `class`.
-2. Under other circumstances, only use `class` if you find you need a method or you want something like a constructor.
-3. When some API needs to be exposed to downstream mod manufacturers, plug that API to `GameContext` so that it could be accessible.
-4. When designing a new module, if you find you need some user-defined executable code, think about event system first.
-5. Use `typeAssert` to validate mods and requests. When adding a new module, ensure relevant type assertions are added.
+== 2. `backstage` 模块所遵循的规则
+1. 对于规则集中的东西，总是使用 `interface`。下游是没法调用我们的 `class` 构造器的。
+2. 在其他情况下，只有你觉得你需要个构造器或者需要加点方法的时候，才应该使用 `class`。
+3. 需要暴露给下游的 API 应该挂在 `GameContext` 上。
+4. 设计新模块的时候，如果你觉得 modder 可能需要插入可执行的代码，请先考虑事件系统。
+5. 使用 `typeAssert` 校验动态加载的模块和 HTTP 请求。当添加一个新模块的时候，记得也添加对应的类型断言。
 
-== 3. Rules for frontend programming
-1. Though we're naming files with `snake_case`, components should still use `PascalCase` while variables should still use `camelCase`.
-2. Some eslint rules of backstage (mainly airbnb rules) was not ported to frontend `.eslintrc` due to some compatibility reason. But it's still expected to follow these rules.
+== 3. `frontend` 模块所遵循的规则
+1. 尽管文件是以 `snake_case` 命名，Vue 组件仍然应该使用 `PascalCase`，而变量仍然应该使用 `camelCase`。
+2. `backstage` 模块中的一些规则（主要是 airbnb 那些）出于兼容性原因没有被移植到 `frontend` 的 `.eslintrc` 里，但还是尽量遵守这些规则。
 
-== 4. Collaboration
-1. **KEAL** (**K**eep **E**veryone **AL**ive), or **It will KEAL**, instead of traditional LGTM.
-2. Using poetry (nonsense) commit messages for trivial commits is acceptable.
-3. Using poetry (nonsense) pull request messages is acceptable.
-4. Don't talk about politics or current events all the time. Also, avoid such things in game contents. However, if you're so yygq or abstract that nobody else could understand your true meaning, you may do that.
+== 4. 合作
+1. 我们讲 **KEAL** (**K**eep **E**veryone **AL**ive) 或者 **It will KEAL**，而不是传统的 LGTM。
+2. 无意义的提交消息是可以的。
+3. 无意义 PR 消息是可以的。
+4. 不要讨论时事和政治，无论是在游戏内容里还是在沟通过程中。当然如果你觉得自己足够阴阳怪气且没人看得出来那就无所谓。
