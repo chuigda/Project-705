@@ -89,12 +89,12 @@ export function compileEventSeries(scope: Scope, eventSeries?: MaybeInlineEvent[
 }
 
 export function compileBase(scope: Scope, item: ItemBase, mangler: IdMangler): ItemBase {
-   const { ident, name, description, scope: itemScope, patch } = item
+   const { ident, name, description, patch } = item
    return {
       ident: mangler(scope, ident),
       name: mTranslationKey(scope, name),
       description: mTranslationKey(scope, description),
-      scope: itemScope || scope,
+      scope,
       patch
    }
 }
