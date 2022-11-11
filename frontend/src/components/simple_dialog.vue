@@ -1,5 +1,6 @@
 <template>
-   <div class="tbd-dialog"
+   <div class="overlay" />
+   <div class="popup tbd-dialog"
         @click="skip">
       <div class="header">
          <img v-if="closeable"

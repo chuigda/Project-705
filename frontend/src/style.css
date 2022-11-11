@@ -50,3 +50,27 @@ body {
   color: black;
   font-size: 14px;
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background-color: rgba(0, 0, 0, 50%);
+  z-index: 114000;
+}
+
+.popup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  border-radius: 4px;
+  border: 1px solid #6E665A;
+  background-color: #E5BF92;
+  z-index: 514000;
+  box-sizing: border-box;
+}

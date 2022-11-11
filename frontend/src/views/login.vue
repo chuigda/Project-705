@@ -7,21 +7,27 @@
                 type="text"
                 placeholder="随便输入什么都行">
       </div>
-      <button @click="chooseStartup">
-         去选开局吧
-      </button>
+
+      <div style="width: 100%; display: flex; justify-content: space-between">
+         <button @click="chooseStartup">
+            去选开局
+         </button>
+         <button @click="gotoTestPage">
+            前往测试页
+         </button>
+      </div>
    </div>
 </template>
 
 <script setup lang="ts">
 
 import { ref } from 'vue'
-import { getLocalStorage, setLocalStorage} from '@app/util/local_storage'
+import { getLocalStorage, setLocalStorage } from '@app/util/local_storage'
 import { setUserToken } from '@app/api'
 
 const inputText = ref('')
 
-function chooseStartup() {
+function ensureUserToken(): string | undefined {
    const token = inputText.value.trim()
    if (token.length === 0) {
       const alerted = getLocalStorage('access:alerted')
@@ -33,9 +39,27 @@ function chooseStartup() {
       inputText.value = '1145141919810'
       return
    }
+   return token
+}
+
+function chooseStartup() {
+   const token = ensureUserToken()
+   if (!token) {
+      return
+   }
 
    setUserToken(token)
    window.location.replace('/#/startup')
+}
+
+function gotoTestPage() {
+   const token = ensureUserToken()
+   if (!token) {
+      return
+   }
+
+   setUserToken(token)
+   window.location.replace('/#/test_page')
 }
 
 </script>
