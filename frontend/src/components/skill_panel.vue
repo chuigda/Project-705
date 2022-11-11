@@ -75,7 +75,7 @@
 
 .card {
    border: 1px solid var(--color-brown);
-   background-color: var(--color-interactive);
+   background-color: var(--color-common-bg);
 
    height: 80px;
    width: 100%;
