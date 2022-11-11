@@ -45,8 +45,8 @@ body {
   opacity: 1;
   z-index: 1919810;
 
-  background: var(--color-hud-bg);
-  border: 1px solid var(--color-hud-border);
+  background: var(--color-common-bg);
+  border: 1px solid var(--color-brown);
   color: black;
   font-size: 14px;
 }
@@ -69,9 +69,9 @@ body {
   transform: translate(-50%, -50%);
 
   border-radius: 4px;
-  border: 1px solid #6E665A;
+  border: 1px solid var(--color-brown);
   padding: 4px;
-  background-color: #E5BF92;
+  background-color: var(--color-common-bg);
   z-index: 514000;
   box-sizing: border-box;
 }
@@ -83,10 +83,10 @@ body {
   transform: translate(-100%, -50%);
 
   border-radius: 4px 0 0 4px;
-  border: 1px solid #6E665A;
+  border: 1px solid var(--color-brown);
   border-right: none;
   padding: 4px;
-  background-color: #E5BF92;
+  background-color: var(--color-common-bg);
   z-index: 514000;
   box-sizing: border-box;
 

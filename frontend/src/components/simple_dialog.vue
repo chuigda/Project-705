@@ -97,8 +97,8 @@ const skip = () => {
    flex-direction: column;
    gap: 4px;
    width: 360px;
-   border: 1px solid #6E665A;
-   background-color: #E5BF92;
+   border: 1px solid var(--color-gray);
+   background-color: var(--color-common-bg);
    border-radius: 4px;
    padding: 4px;
    font-size: 14px;
@@ -117,8 +117,8 @@ const skip = () => {
    width: 18px;
    height: 18px;
    border-radius: 2px;
-   border: 1px solid #6E665A;
-   background-color: #F26161;
+   border: 1px solid var(--color-gray);
+   background-color: var(--color-red);
 }
 
 .tbd-dialog .title {
@@ -129,7 +129,7 @@ const skip = () => {
    display: block;
    box-sizing: border-box;
    width: 100%;
-   border: 1px solid #6E665A;
+   border: 1px solid var(--color-gray);
    border-radius: 2px;
 }
 
@@ -137,30 +137,30 @@ const skip = () => {
    text-align: left;
    min-height: 56px;
    color: white;
-   background-color: #846950;
-   border: 1px solid #6E665A;
+   background-color: var(--color-brown);
+   border: 1px solid var(--color-gray);
    border-radius: 2px;
    padding: 4px;
 }
 
 .tbd-dialog .choice {
    cursor: pointer;
-   border: 1px solid #6E665A;
+   border: 1px solid var(--color-gray);
    border-radius: 2px;
-   background-color: #FED7AC;
+   background-color: var(--color-interactive);
    padding: 4px;
 }
 
 .tbd-dialog .choice:hover {
-   background-color: #FFE7CC;
+   background-color: var(--color-interact);
 }
 
 .tbd-dialog .choice.notme {
-   background-color: #CCCCCC;
-   color: #808080;
+   background-color: var(--color-disabled-fill);
+   color: var(--color-disabled-text);
 }
 
 .tbd-dialog .choice.danger {
-   color: #CD0000;
+   color: var(--color-danger);
 }
 </style>

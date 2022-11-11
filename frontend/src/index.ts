@@ -14,6 +14,7 @@ import ChooseStartup from '@app/views/choose_startup.vue'
 import TestPage from '@app/views/test_page.vue'
 
 import '@app/style.css'
+import '@app/color.css'
 import {dontSink} from '@app/util/emergency'
 
 window.onerror = (message, source, lineno, colno, error) => {

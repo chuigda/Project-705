@@ -153,13 +153,13 @@ const energyBarWidth = computed(() => {
    gap: 6px 6px;
    justify-content: center;
    align-content: center;
-   border: 1px solid var(--color-hud-border);
-   background-color: var(--color-hud-bg);
+   border: 1px solid var(--color-brown);
+   background-color: var(--color-common-bg);
 }
 
 .status-item {
-   background-color: var(--color-hud-border);
-   border: 1px solid var(--color-hud-bg-dark);
+   background-color: var(--color-brown);
+   border: 1px solid var(--color-gray);
    border-radius: 2px;
    color: white;
    font-size: 13px;
@@ -186,8 +186,8 @@ const energyBarWidth = computed(() => {
 .other-items {
    position: absolute;
    width: 156px;
-   border: 1px solid var(--color-hud-border);
-   background-color: var(--color-hud-bg);
+   border: 1px solid var(--color-brown);
+   background-color: var(--color-common-bg);
    color: black;
    border-radius: 2px;
    font-size: 13px;
@@ -230,8 +230,8 @@ const energyBarWidth = computed(() => {
    left: 95px;
    width: 480px;
    height: 14px;
-   border: 1px solid var(--color-hud-border);
-   background-color: var(--color-hud-bg);
+   border: 1px solid var(--color-brown);
+   background-color: var(--color-common-bg);
    border-radius: 0 0 4px 0;
 }
 
@@ -240,13 +240,13 @@ const energyBarWidth = computed(() => {
    width: 24px;
    height: 6px;
    top: 3px;
-   background-color: var(--color-hud-border);
-   border: 1px solid var(--color-hud-bg-dark);
+   background-color: var(--color-brown);
+   border: 1px solid var(--color-gray);
    border-radius: 2px;
 }
 
 .status-bar .record.injured {
-   background-color: var(--color-hud-red);
+   background-color: var(--color-red);
 }
 
 .status-bar .energy-bg {
@@ -255,14 +255,14 @@ const energyBarWidth = computed(() => {
    left: 94px;
    height: 6px;
    width: 380px;
-   background-color: var(--color-hud-border);
-   border: 1px solid var(--color-hud-bg-dark);
+   background-color: var(--color-brown);
+   border: 1px solid var(--color-gray);
    border-radius: 2px;
 }
 
 .status-bar .energy-bar {
    height: 6px;
-   background-color: var(--color-hud-red);
+   background-color: var(--color-red);
    border-radius: 2px;
 }
 </style>

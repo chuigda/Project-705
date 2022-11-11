@@ -40,15 +40,15 @@
    align-items: center;
    justify-content: center;
 
-   border: 1px solid var(--color-hud-border);
+   border: 1px solid var(--color-brown);
    border-left: none;
    border-radius: 0 2px 2px 0;
-   background-color: #FED7AC;
+   background-color: var(--color-interactive);
 }
 
 .close-button:hover {
    cursor: pointer;
-   background-color: #FFE7CC;
+   background-color: var(--color-interact);
 }
 
 .close-triangle-icon {
@@ -62,8 +62,8 @@
 .skill-content {
    height: calc(100% - 10px);
 
-   border: 1px solid var(--color-hud-bg-dark);
-   background-color: var(--color-hud-border);
+   border: 1px solid var(--color-gray);
+   background-color: var(--color-brown);
    border-radius: 4px 0 0 4px;
    border-right: none;
 
@@ -74,8 +74,8 @@
 }
 
 .card {
-   border: 1px solid var(--color-hud-border);
-   background-color: #FED7AC;
+   border: 1px solid var(--color-brown);
+   background-color: var(--color-interactive);
 
    height: 80px;
    width: 100%;

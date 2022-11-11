@@ -188,7 +188,7 @@ async function submit(inputCommand: string) {
 
       lines.value.push({
          text: `'${command}' is not recognized as an internal or external command, operable program or batch file.`,
-         color: '#ff0000'
+         color: '#cd0000'
       })
    }
 

@@ -14,9 +14,9 @@
    left: 0;
    width: 94px;
    height: 94px;
-   border: 1px solid var(--color-hud-border);
+   border: 1px solid var(--color-brown);
    border-radius: 0 0 4px 0;
-   background-color: var(--color-hud-bg);
+   background-color: var(--color-common-bg);
 }
 
 .avatar {

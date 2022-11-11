@@ -1,6 +1,6 @@
 :root {
     /* 各种组件常用的浅色背景色 */
-    --color-common-background: #E5BF92;
+    --color-common-bg: #E5BF92;
 
     /* 用作浅色背景物体的边框颜色，以及深色容器的颜色 */
     --color-brown: #846950;
@@ -20,8 +20,8 @@
     /* 可交互物体被无效化时的文本颜色 */
     --color-disabled-text: #808080;
 
-    /* 只用于血条 */
-    --color-hud-red: #F26161;
+    /* 通用红色 */
+    --color-red: #F26161;
 
     /* 危险色 */
     --color-danger: #cd0000;

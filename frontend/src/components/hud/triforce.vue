@@ -39,9 +39,9 @@ const props = defineProps<{ playerStatus: IPlayerStatus }>()
 
 .triforce>div {
    border-width: 1px 1px 1px 0;
-   border-color: var(--color-hud-border);
+   border-color: var(--color-brown);
    border-style: solid;
-   background-color: var(--color-hud-bg);
+   background-color: var(--color-common-bg);
    width: 64px;
    height: 64px;
 

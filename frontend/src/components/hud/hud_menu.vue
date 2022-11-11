@@ -78,8 +78,8 @@ function emitMenuMessage(ident: string) {
    color: white;
    font-size: 13px;
    border-radius: 0 0 4px 0;
-   border: 1px solid var(--color-hud-border);
-   background-color: var(--color-hud-bg);
+   border: 1px solid var(--color-brown);
+   background-color: var(--color-common-bg);
    overflow: hidden;
    transition: width 0.15s ease-in-out;
 
@@ -116,7 +116,7 @@ function emitMenuMessage(ident: string) {
 }
 
 .menu .item:hover {
-   background: #FFE7CC;
+   background: var(--color-interact);
 }
 
 </style>
