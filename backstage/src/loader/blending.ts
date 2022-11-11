@@ -81,6 +81,10 @@ function buildCompileSeries<T extends HasIdent>(
    }
 }
 
+function precompileSelectScope(scope: Scope, item: /* { scope?: Scope } */ any): Scope {
+   return item.scope ?? scope
+}
+
 type CompileSingleFunction2<T extends HasIdent> = (compilation: CompiledRuleSet, scope: Scope, item: T) => T
 
 function buildCompileSeries2<T extends HasIdent>(
@@ -91,6 +95,7 @@ function buildCompileSeries2<T extends HasIdent>(
 ): CompileFunction<T> {
    return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
       for (const item of series) {
+         scope = precompileSelectScope(scope, item)
          const compiledItem = compileSingleFn(compilation, scope, item)
          const ident = <string>compiledItem.ident
 
@@ -134,6 +139,7 @@ function buildCompileStoreItemSeries<IKS extends StoreItemKind, T extends StoreI
 ): CompileFunction<T> {
    return (compilation: CompiledRuleSet, scope: Scope, series: T[]) => {
       for (const item of series) {
+         scope = precompileSelectScope(scope, item)
          const compiledItem = compileSingleFn(scope, item)
          const ident = <string>compiledItem.ident
 
