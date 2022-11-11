@@ -47,13 +47,11 @@
            :key="i"
            :class="['record', {'injured': e}]"
            :style="`left: ${4+30*i}px`"
-           title="你只能犯两次错误，再多一次你就寄了"
       />
       <div class="energy-bg"
-           :title="energyBarTitle">
+           :data-tooltip="energyBarTitle">
          <div class="energy-bar"
-              :style="{ width: energyBarWidth } "
-              :title="energyBarTitle"
+              :style="{ width: energyBarWidth }"
          />
       </div>
    </div>
