@@ -22,7 +22,7 @@
    padding-right: 0;
 
    width: 320px;
-   height: 600px;
+   height: max(600px, calc(100vh - 320px));
 }
 
 .close-button {

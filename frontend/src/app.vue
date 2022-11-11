@@ -15,7 +15,9 @@ if (savedUserToken) {
 }
 
 onMounted(() => {
-   router.push({ path: '/login' })
+   if (window.location.pathname === '/' || window.location.pathname === '/#/') {
+      router.push({path: '/login'})
+   }
 })
 
 </script>
