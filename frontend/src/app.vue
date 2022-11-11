@@ -7,7 +7,7 @@
 import { getLocalStorage } from '@app/util/local_storage'
 import { setUserToken } from '@app/api'
 import { onMounted } from 'vue'
-import { router } from './index'
+import { useRouter } from 'vue-router'
 
 const savedUserToken = getLocalStorage('session:userToken')
 if (savedUserToken) {
@@ -15,8 +15,9 @@ if (savedUserToken) {
 }
 
 onMounted(() => {
-   if (window.location.pathname === '/' || window.location.pathname === '/#/') {
-      router.push({path: '/login'})
+   const currentRoute = window.location
+   if (currentRoute.hash === '' || currentRoute.hash === '#/') {
+      useRouter().push({ path: '/login' })
    }
 })
 
