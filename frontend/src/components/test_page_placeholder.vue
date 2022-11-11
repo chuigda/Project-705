@@ -1,5 +1,5 @@
 <template>
-   <div style="color: black; height: 100vh; overflow: hidden">
+   <div style="color: black; height: 100vh; overflow: hidden; user-select: none">
       在这种困难的抉择下，本人思来想去，寝食难安。 我们不得不面对一个非常尴尬的事实，那就是， 总结的来说， 这样看来，
       现在，解决意大利面应该拌42号混凝土和W1高碳钢的问题，是非常非常重要的。 所以，
       莎士比亚说过一句富有哲理的话，意志命运往往背道而驰，决心到最后会全部推倒。我希望诸位也能好好地体会这句话。

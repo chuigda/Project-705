@@ -1,6 +1,6 @@
 <template>
    <Placeholder />
-   <SimpleDialog />
+   <SkillPanel />
 </template>
 
 <script setup lang="ts">
