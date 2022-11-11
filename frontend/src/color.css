@@ -1,0 +1,28 @@
+:root {
+    /* 各种组件常用的浅色背景色 */
+    --color-common-background: #E5BF92;
+
+    /* 用作浅色背景物体的边框颜色，以及深色容器的颜色 */
+    --color-brown: #846950;
+
+    /* 用作深色深色容器的边框颜色，以及可交互物体的边框颜色 */
+    --color-gray: #6E665A;
+
+    /* 可交互物体（例如按钮）的颜色 */
+    --color-interactive: #FED7AC;
+
+    /* 可交互物体在进行交互时的颜色 */
+    --color-interact: #FFE7CC;
+
+    /* 可交互物体被无效化时的填充色 */
+    --color-disabled-fill: #CCCCCC;
+
+    /* 可交互物体被无效化时的文本颜色 */
+    --color-disabled-text: #808080;
+
+    /* 只用于血条 */
+    --color-hud-red: #F26161;
+
+    /* 危险色 */
+    --color-danger: #cd0000;
+}
