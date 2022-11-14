@@ -10,9 +10,10 @@ on:
 
 jobs:
   build-backstage:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         node-version: [16.x, 18.x]
     steps:
       - name: Checkout code
