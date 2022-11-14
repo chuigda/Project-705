@@ -16,6 +16,11 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         node-version: [16.x, 18.x]
     steps:
+      - name: Set git to use LF (WINDOWS L)
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+        if: runner.os == 'Windows'
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
