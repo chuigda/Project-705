@@ -24,7 +24,7 @@
 
 import { ref, Ref, watch } from 'vue'
 import {
-   debugAddAttribute,
+   debugUpdateProperty,
    debugAscension,
    debugCrash,
    debugInitGame,
@@ -85,6 +85,7 @@ function expectNArgs(count: number): (f: CommandHandler) => CommandHandler {
 const expectNoArg = expectNArgs(0)
 const expectOneArg = expectNArgs(1)
 const expectTwoArgs = expectNArgs(2)
+const expect3Args = expectNArgs(3)
 
 function formatResponse(res: IResponse<any>) {
    let color
@@ -122,9 +123,9 @@ const commands: Record<string, CommandHandler> = {
          emit('state', result.result)
       }
    }),
-   'attribute': expectTwoArgs(async ([attrName, value]) => {
+   'property': expect3Args(async ([property, op, value]) => {
       inputDisabled.value = true
-      const result = await debugAddAttribute(attrName, parseInt(value) || 0)
+      const result = await debugUpdateProperty(property, op, parseInt(value) || 0)
       inputDisabled.value = false
       formatResponse(result)
       if (result.success) {

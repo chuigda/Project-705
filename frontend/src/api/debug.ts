@@ -22,10 +22,10 @@ export async function debugAscension(ascensionPerkId: string, force?: boolean): 
    )
 }
 
-export async function debugAddAttribute(attrName: string, value: number): Promise<IResponse<IGameState>> {
+export async function debugUpdateProperty(property: string, op: string, value: number): Promise<IResponse<IGameState>> {
    return await postJsonRequest<IResponse<IGameState>>(
-      '/api/debug/add_attribute',
-      { attrName, value }
+      '/api/debug/property',
+      { property, op, value }
    )
 }
 export async function debugTriggerEvent(event: string, args:any[]): Promise<IResponse<IGameState>> {

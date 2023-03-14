@@ -6,6 +6,7 @@ import { PlayerProperty, PropertyId } from '@app/executor/game_context/player'
 import { isDefined } from '@app/util/defined'
 import { MaybeTranslationKey, mPropertyId, mTranslationKey } from '@app/base/uid'
 import { ensureScope } from '@app/executor/game_context/scope'
+import { QResult } from './result'
 
 export function initPropertySimple(
    gameContext: GameContext,
@@ -61,12 +62,13 @@ export function updateProperty(
    operator: PropertyOp,
    value?: number,
    source?: ValueSource
-) {
+): QResult {
    propertyId = mPropertyId(ensureScope(gameContext), propertyId)
 
    if ((operator === 'add' || operator === 'sub') && !isDefined(value)) {
-      console.error('[E] [updateProperty] cannot use \'add\' or \'sub\' without a valid value')
-      return
+      const message = `cannot use \'add\' or \'sub\' without a valid value`
+      console.error(`[E] [updateProperty] ${message}`)
+      return [false, message]
    }
    value = value!
 
@@ -80,8 +82,9 @@ export function updateProperty(
 
    const property = getProperty(gameContext, propertyId)
    if (!property) {
-      console.error(`[E] [updateProperty] property ${propertyId} does not exist yet`)
-      return
+      const message = `property ${propertyId} does not exist yet`
+      console.error(`[E] [updateProperty] ${message}`)
+      return [false, message]
    }
 
    if (source && (operator === 'add' || operator === 'sub')) {
@@ -103,22 +106,31 @@ export function updateProperty(
       value = Math.round(value * sumUpModifier)
    }
 
+   let message = ''
+
    const opRef = { operator, value }
    if (source) {
-      triggerEventSeries(
+      const [_1, message1] = triggerEventSeries(
          gameContext,
          gameContext.state.events.propertyUpdated.all,
          undefined,
          opRef,
          source
       )
-      triggerEventSeries(
+      if (message1) {
+         message = `${message}\n${message1}`
+      }
+
+      const [_2, message2] = triggerEventSeries(
          gameContext,
          gameContext.state.events.propertyUpdated[propertyId],
          undefined,
          opRef,
          source
       )
+      if (message2) {
+         message = `${message}\n${message2}`
+      }
    }
 
    switch (opRef.operator) {
@@ -143,13 +155,16 @@ export function updateProperty(
       case 'sub_incr':
          property.increment = (property.increment ?? 0) - opRef.value
          break
-      default:
-         console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
+      default: {
+         const message1 = `invalid operator '${opRef.operator}'`
+         console.warn(`[W] [updatePlayerProperty] ${message1}`)
+         message = `${message}\n${message1}`
+      }
    }
 
    if (isDefined(property.min) && property.value > property.max!) {
       const diff = property.value - property.max!
-      triggerEventSeries(
+      const [_, message1] = triggerEventSeries(
          gameContext,
          gameContext.state.events.propertyOverflow[propertyId],
          undefined,
@@ -158,9 +173,12 @@ export function updateProperty(
          diff
       )
       property.value = property.max!
+      if (message1) {
+         message = `${message}\n${message1}`
+      }
    } else if (isDefined(property.min) && property.value < property.min!) {
       const diff = property.min! - property.value
-      triggerEventSeries(
+      const [_, message1] = triggerEventSeries(
          gameContext,
          gameContext.state.events.propertyUnderflow[propertyId],
          undefined,
@@ -168,10 +186,14 @@ export function updateProperty(
          source,
          diff
       )
+      if (message1) {
+         message = `${message}\n${message1}`
+      }
       property.value = property.min!
    }
 
    gameContext.updateTracker.player.properties = true
+   return [true, message]
 }
 
 const propertyFunctions = {
