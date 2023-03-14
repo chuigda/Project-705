@@ -14,7 +14,7 @@ export default function epLearnSkill(
    if (!skillId || typeof skillId !== 'string') {
       res.status(400).json({
          success: false,
-         message: 'missing skillId' // TODO(chuigda): use translation keys
+         message: 'missing skillId'
       })
       return
    }

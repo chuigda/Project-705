@@ -9,6 +9,7 @@ const commonPotentialTranslation: Record<string, string> = {
    '@tr:$potential_before_turns': '回合数小于或者等于 :turns:',
    '@tr:$potential_require_startup': '具有 :startup: 起源',
    '@tr:$potential_require_no_startup': '没有 :startup: 起源',
+   '@tr:$potential_require_ap_count': '已经至少激活了 :count: 个飞升项目',
    '@tr:$potential_require_ap': '已经激活了 :ap: 飞升',
    '@tr:$potential_require_no_ap': '没有激活 :ap: 飞升',
    '@tr:$potential_require_software_unstable': '软件不稳定大于等于 :unstable:'

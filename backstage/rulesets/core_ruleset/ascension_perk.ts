@@ -1,6 +1,7 @@
 import { AscensionPerk } from '@app/ruleset'
 import {
    afterTurns,
+   requireAscensionPerkCount,
    requireAscensionPerk,
    requireNoAscensionPerk,
    requireStartup,
@@ -83,10 +84,22 @@ const ascensionPerks: AscensionPerk[] = [
       name: '$ap_king_of_involution',
       description: '$ap_king_of_involution_desc',
       potential: [
-         requireAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'town_swot' })
+         requireAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'town_swot' }),
+         // 与“统筹兼顾”冲突
+         requireNoAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'omnifire' })
       ],
       modifier: 'king_of_involution',
       events: ['king_of_involution_activation']
+   },
+   // 统筹兼顾
+   {
+      ident: 'omnifire',
+      name: '$ap_omnifire',
+      description: '$ap_omnifire_desc',
+      potential: [
+         // 与“卷王”冲突
+         requireNoAscensionPerk({ author: 'cnpr', moduleName: 'core', id: 'king_of_involution' })
+      ]
    },
    // 人造情感
    {

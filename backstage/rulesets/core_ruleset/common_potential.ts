@@ -46,6 +46,16 @@ export function requireStartupNot(startup: ComposedId): PotentialExpressionFunct
    }
 }
 
+export function requireAscensionPerkCount(count: number): PotentialExpressionFunctionOp {
+   return {
+      op: cx => Object.values(cx.state.player.ascensionPerks).length >= count,
+      description: {
+         template: '@tr:$potential_require_ap_count',
+         args: { count: `${count}` }
+      }
+   }
+}
+
 export function requireAscensionPerk(ascensionPerk: ComposedId): PotentialExpressionFunctionOp {
    const ascensionPerkId = mAscensionPerkId(ascensionPerk, ascensionPerk)
    return {
