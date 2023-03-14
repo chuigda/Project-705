@@ -66,7 +66,7 @@ export function updateProperty(
    propertyId = mPropertyId(ensureScope(gameContext), propertyId)
 
    if ((operator === 'add' || operator === 'sub') && !isDefined(value)) {
-      const message = `cannot use \'add\' or \'sub\' without a valid value`
+      const message = `cannot use 'add' or 'sub' without a valid value`
       console.error(`[E] [updateProperty] ${message}`)
       return [false, message]
    }
