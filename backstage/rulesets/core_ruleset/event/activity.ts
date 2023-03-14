@@ -21,3 +21,5 @@ const activityEvents: Event[] = [
         }
     }
 ]
+
+export default activityEvents
