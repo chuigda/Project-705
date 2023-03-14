@@ -10,17 +10,12 @@ const computerActivities: Activity[] = [
 
       energyCost: 25,
       output: {
-         // TODO(chuigda): rewrite all these values
-         /*
-         mentalHealth: -5,
-         satisfactory: 5,
-         skillPoints: 15,
-         attributes: {
-            intelligence: 20,
-            memorization: 10,
-            imagination: 10
-         }
-         */
+         '@mental_health': -5,
+         '@satisfactory': 5,
+         '@skill_point': 15,
+         '@intelligence': 20,
+         '@memorization': 10,
+         '@imagination': 10
       }
    },
    {
@@ -32,17 +27,12 @@ const computerActivities: Activity[] = [
 
       energyCost: 40,
       output: {
-         // TODO(chuigda): rewrite all these values
-         /*
-         mentalHealth: -6,
-         satisfactory: 8,
-         skillPoints: 20,
-         attributes: {
-            intelligence: 30,
-            imagination: 20
-         },
-         money: 20
-         */
+         '@mental_health': -6,
+         '@satisfactory': 8,
+         '@skill_point': 20,
+         '@intelligence': 30,
+         '@imagination': 20,
+         '@money': 20
       }
    }
 ]

@@ -51,14 +51,9 @@ const chineseActivities: Activity[] = [
 
       energyCost: 15,
       output: {
-         // TODO(chuigda): rewrite all these values
-         /*
-         attributes: {
-            memorization: 20,
-         },
-         skillPoints: 15,
-         mentalHealth: -5
-         */
+         '@memorization': 20,
+         '@skill_point': 15,
+         '@mental_health': -5
       }
    },
    {
@@ -70,14 +65,9 @@ const chineseActivities: Activity[] = [
 
       energyCost: 20,
       output: {
-         // TODO(chuigda): rewrite all these values
-         /*
-         attributes: {
-            emotionalIntelligence: 40
-         },
-         skillPoints: 20,
-         mentalHealth: -5
-         */
+         '@emotional_intelligence': 40,
+         '@skill_point': 20,
+         '@mental_health': -5
       }
    },
    {
@@ -89,18 +79,15 @@ const chineseActivities: Activity[] = [
 
       energyCost: 20,
       output: {
-         // TODO(chuigda): rewrite all these values
-         /*
-         attributes: {
-            emotionalIntelligence: 50,
-            imagination: 20,
-            charisma: 10
-         },
-         skillPoints: 25,
-         money: 3,
-         mentalHealth: -5
-         */
-      }
+         '@emotional_intelligence': 50,
+         '@imagination': 20,
+         '@charisma': 10,
+         '@skill_point': 25,
+         '@money': 3,
+         '@mental_health': -5
+      },
+
+      events: ['novel_writing_progress']
    }
 ]
 
