@@ -54,7 +54,7 @@ caps=probe,module,save";
     );
 
     minhttpd.route_fn(
-        "/api/module/list",
+        "/api/mod/list",
         |_, _, _, _| {
             let mut modules = Vec::new();
             for entry in std::fs::read_dir("mod")? {
@@ -96,11 +96,22 @@ caps=probe,module,save";
     );
 
     minhttpd.route_fn(
-        "/api/module/get",
+        "/api/mod",
         |uri, _, _, _| {
-            let entry = uri.trim_start_matches("/api/module/get/");
-
-            let path = format!("mod/{}/index.js", entry);
+            let file_path = uri.trim_start_matches("/api/mod/");
+            let (entry, path) = if let Some((entry, entry_item_path)) = file_path.split_once('/') {
+                if entry_item_path.trim().len() != 0 {
+                    if !file_path.ends_with(".js") {
+                        (entry, format!("mod/{}.js", file_path))
+                    } else {
+                        (entry, format!("mod/{}", file_path))
+                    }
+                } else {
+                    (entry, format!("mod/{}/index.js", entry))
+                }
+            } else {
+                (file_path, format!("mod/{}/index.js", file_path))
+            };
             let Ok(payload) = std::fs::read_to_string(path) else {
                 return Ok(HttpResponse::new(
                     404,
@@ -109,6 +120,7 @@ caps=probe,module,save";
                 ));
             };
 
+            let payload = payload.replace("@mod/", &format!("/api/mod/{}/", entry));
             Ok(HttpResponse::new(
                 200,
                 vec![("Content-Type".to_string(), "application/javascript; charset=utf-8".to_string())],
@@ -118,7 +130,7 @@ caps=probe,module,save";
     );
 
     minhttpd.route_fn(
-        "/api/module/asset",
+        "/api/asset",
         |_, params, _, _| {
             let module_entry = params.get("entry").ok_or("缺少参数 module")?;
             let asset_path = params.get("path").ok_or("缺少参数 path")?;
