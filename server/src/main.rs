@@ -95,6 +95,51 @@ caps=probe,module,save";
         }
     );
 
+    minhttpd.route_fn(
+        "/api/module/get",
+        |uri, _, _, _| {
+            let entry = uri.trim_start_matches("/api/module/get/");
+
+            let path = format!("mod/{}/index.js", entry);
+            let Ok(payload) = std::fs::read_to_string(path) else {
+                return Ok(HttpResponse::new(
+                    404,
+                    vec![("Content-Type".to_string(), "text/plain; charset=utf-8".to_string())],
+                    Some("404 Not Found".to_string())
+                ));
+            };
+
+            Ok(HttpResponse::new(
+                200,
+                vec![("Content-Type".to_string(), "application/javascript; charset=utf-8".to_string())],
+                Some(payload)
+            ))
+        }
+    );
+
+    minhttpd.route_fn(
+        "/api/module/asset",
+        |_, params, _, _| {
+            let module_entry = params.get("entry").ok_or("缺少参数 module")?;
+            let asset_path = params.get("path").ok_or("缺少参数 path")?;
+
+            let path = format!("mod/{}/assets/{}", module_entry, asset_path);
+            let Ok(payload) = std::fs::read(path) else {
+                return Ok(HttpResponse::new(
+                    404,
+                    vec![("Content-Type".to_string(), "text/plain; charset=utf-8".to_string())],
+                    Some("404 Not Found".to_string())
+                ));
+            };
+
+            Ok(HttpResponse::new_raw(
+                200,
+                vec![("Content-Type".to_string(), "application/octet-stream".to_string())],
+                Some(payload)
+            ))
+        }
+    );
+
     log::info!("在 http://127.0.0.1:3000 启动了服务器");
     minhttpd.serve(SocketAddrV4::from_str("127.0.0.1:3000").unwrap()).unwrap();
 }
