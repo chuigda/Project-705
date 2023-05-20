@@ -4,10 +4,8 @@ author: chuigda<icey@icey.tech>, flaribbit, rebuild, lyra
 中国式家长 - 山寨版，但没有完全山寨
 
 == 文件系统结构
-* `backstage`: 项目后端
-** `backstage/rulesets/core_ruleset`: 核心规则集
-** `backstage/rulesets/debug_ruleset`: 测试规则集
 * `frontend`: 项目前端
-* `protocol`: 定义前后端通信所用的协议
+** `frontend/rulesets/core_ruleset`: 核心规则集
+** `frontend/rulesets/debug_ruleset`: 测试规则集
 * `dlcpacks`: “官方” mod
 * `planner`: 策划人员工具

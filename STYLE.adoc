@@ -9,21 +9,13 @@ author: Chuigda<icey@icey.tech>
 5. 用 `snake_case` 命名文件（这样看起来就很 P 社），除非特定的第三方工具有所要求。
 6. 尽量启用 `eslint` 。如果你觉得某条规则非常恼人，找 Chuigda 确认一下。
 
-== 1. `protocol` 模块所遵循的规则
-1. 总是用 `interface`，禁止 `class`，并且确保所有内容都可以通过 `JSON.stringify` / `JSON.parse` 进行序列化和反序列化。
-2. 有些 `string | Ident` 类型的对象会在 _规则集编译_ 的时候被转换为单纯的 `string`，这种情况下 `protocol` 模块可以只用 `string`。
-3. 但无论会不会进行转译，总是应该使用 `ITranslationKey` 和 `ITranslatable` 来表示某项内容是可以翻译的。
-
-== 2. `backstage` 模块所遵循的规则
+== 1. `frontend` 模块所遵循的规则
 1. 对于规则集中的东西，总是使用 `interface`。下游是没法调用我们的 `class` 构造器的。
 2. 在其他情况下，只有你觉得你需要个构造器或者需要加点方法的时候，才应该使用 `class`。
 3. 需要暴露给下游的 API 应该挂在 `GameContext` 上。
 4. 设计新模块的时候，如果你觉得 modder 可能需要插入可执行的代码，请先考虑事件系统。
-5. 使用 `typeAssert` 校验动态加载的模块和 HTTP 请求。当添加一个新模块的时候，记得也添加对应的类型断言。
-
-== 3. `frontend` 模块所遵循的规则
-1. 尽管文件是以 `snake_case` 命名，Vue 组件仍然应该使用 `PascalCase`，而变量仍然应该使用 `camelCase`。
-2. `backstage` 模块中的一些规则（主要是 airbnb 那些）出于兼容性原因没有被移植到 `frontend` 的 `.eslintrc` 里，但还是尽量遵守这些规则。
+5. 尽管文件是以 `snake_case` 命名, Vue 组件仍然应该使用 `PascalCase`，而变量仍然应该使用 `camelCase`。
+6. 一些规则（主要是 airbnb 那些）出于兼容性原因没有被移植到 `frontend` 的 `.eslintrc` 里，但还是尽量遵守这些规则。
 
 == 4. 合作
 1. 我们讲 **KEAL** (**K**eep **E**veryone **AL**ive) 或者 **It will KEAL**，而不是传统的 LGTM。
