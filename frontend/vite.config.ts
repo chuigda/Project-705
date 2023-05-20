@@ -1,21 +1,12 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import vueI18n from '@intlify/vite-plugin-vue-i18n'
 import { resolve } from 'path'
 
 export default defineConfig({
-   plugins: [
-      vue(),
-      // @ts-ignore
-      vueI18n({
-         include: resolve(__dirname, 'src/i18n')
-      })
-   ],
+   plugins: [vue()],
    resolve: {
       alias: {
          '@app': resolve(__dirname, 'src'),
-         '@assets': resolve(__dirname, 'src/assets'),
-         '@protocol': resolve(__dirname, '../protocol')
       }
    },
    server: {

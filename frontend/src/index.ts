@@ -15,14 +15,14 @@ import TestPage from '@app/views/test_page.vue'
 
 import '@app/style.css'
 import '@app/color.css'
-import {dontSink} from '@app/util/emergency'
+import { dontSink } from '@app/util/emergency'
 
 window.onerror = (message, source, lineno, colno, error) => {
    console.error(`[E] [window.onerror] at file ${source}, line ${source}, col ${colno}: ${message}\n`, error)
    dontSink(`${message}`)
 }
 
-const preferredLang = getLocalStorage('lang') || 'zh_cn'
+const preferredLang = getLocalStorage('preferred_lang') || 'zh_cn'
 
 const routes = [
    { path: '/login', component: LoginPage },

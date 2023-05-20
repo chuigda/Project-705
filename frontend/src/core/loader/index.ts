@@ -21,10 +21,6 @@ import { compileRuleSet } from '@app/core/loader/blending'
 
 import coreRuleSet from '@rulesets/core_ruleset'
 import debugRuleSet from '@rulesets/debug_ruleset'
-import {
-   BubbleMessageTemplate,
-   SimpleDialogTemplate
-} from '@app/core/ruleset/items/ui'
 
 export function loadDynamicMod(modName: string): [RuleSet | null, any] {
    try {
