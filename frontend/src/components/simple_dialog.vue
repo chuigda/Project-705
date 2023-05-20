@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import closeIcon from '@app/assets/common/close.png'
-import { Ref, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 interface Choice {
    text: string,

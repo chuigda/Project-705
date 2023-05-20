@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref, watch } from 'vue'
 
+
 const props = defineProps<{ display: boolean }>()
 
 interface ConsoleLine { text: string, color?: string }
@@ -30,22 +31,6 @@ interface CommandFlags {
 }
 
 type CommandHandler = (args: string[], flags: CommandFlags) => Promise<void>
-
-function expectNArgs(count: number): (f: CommandHandler) => CommandHandler {
-   return (f: CommandHandler) => {
-      return async (args: string[], flags: CommandFlags) => {
-         if (args.length !== count) {
-            lines.value.push({
-               text: `expected ${count} arg(s), got ${args.length}`,
-               color: 'red'
-            })
-            return
-         }
-
-         await f(args, flags)
-      }
-   }
-}
 
 const commands: Record<string, CommandHandler> = {}
 

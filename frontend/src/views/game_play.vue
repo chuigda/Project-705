@@ -37,7 +37,6 @@ onMounted(() => {
 onUnmounted(() => {
    document.removeEventListener('keypress', handleGlobalKeypress)
 })
-
 </script>
 
 <style>

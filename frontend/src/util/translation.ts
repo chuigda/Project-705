@@ -1,16 +1,17 @@
 import { MaybeTranslationKey } from '@app/core/base/uid'
 import { ComposedTranslation, MaybeTranslatable } from '@app/core/base/translation'
+import { Translation } from '@app/core/loader'
 
-let gTranslation: Record<string, string> | null = null
+let gTranslation: Record<string, Translation> | undefined = undefined
 
-export async function initTranslation(translation: Record<string, string>) {
+export async function initTranslation(translation: Record<string, Translation>) {
    gTranslation = translation
 }
 
 export function translate(item: MaybeTranslationKey): string {
    item = <string>item
    if (item.startsWith('$') || item.startsWith('@$') || (item.startsWith('@') && item.includes(':tr:$'))) {
-      return gTranslation![item] || item
+      return gTranslation!['zh_cn'][item] || item
    } else {
       return item
    }
@@ -18,7 +19,7 @@ export function translate(item: MaybeTranslationKey): string {
 
 export function translate2(item: MaybeTranslatable): string {
    if (typeof item === 'string') {
-      return gTranslation![item] || item
+      return gTranslation!['zh_cn'][item] || item
    } else {
       const { template, args } = <ComposedTranslation>item
 

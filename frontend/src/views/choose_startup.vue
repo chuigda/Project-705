@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { Ref, onMounted, ref } from 'vue'
+import { inject, Ref, ref } from 'vue'
 
 import { translate } from '@app/util/translation'
+import {mStartupId, Startup} from '@app/core/ruleset'
 import StandardButton from '@app/components/standard_button.vue'
 import SimpleTypography from '@app/components/simple_typography.vue'
-import { Startup } from '@app/core/ruleset'
+import { CompiledRuleSet } from '@app/core/loader'
+import { GameContext } from '@app/core/game_context'
+import initGame from '@app/core/game_context/init'
 
-const startups: Ref<Startup[]> = ref([])
+
+const ruleSet = inject<Ref<CompiledRuleSet>>('ruleSet')!
+const gameContext = inject<Ref<GameContext>>('gameContext')!
 const chosenStartup: Ref<Startup | undefined> = ref(undefined)
 const chosenStartupDesc: Ref<string> = ref('')
 
@@ -18,8 +23,10 @@ function chooseStartup(startup: Startup) {
 async function startGame() {
    const startupId = chosenStartup.value!.ident
 
-   // TODO
-
+   gameContext.value = initGame(
+      ruleSet.value,
+      mStartupId(chosenStartup.value?.scope || { author: 'cnpr', moduleName: 'core' }, startupId)
+   )!
    window.location.replace('/#/gameplay')
 }
 </script>
@@ -28,7 +35,7 @@ async function startGame() {
    <div class="choose-startup-container">
       <div class="left">
          <div class="startup-button-list">
-            <StandardButton v-for="startup in startups"
+            <StandardButton v-for="startup in ruleSet.startups"
                             class="startup-button"
                             :text="translate(startup.name)"
                             :toggled="chosenStartup === startup"

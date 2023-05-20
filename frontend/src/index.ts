@@ -1,10 +1,5 @@
 import { createApp } from 'vue'
-import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHashHistory } from 'vue-router'
-
-import { initTranslation } from '@app/util/translation'
-import { getLocalStorage } from '@app/util/local_storage'
-import makeI18nOption from '@app/i18n'
 
 import App from '@app/app.vue'
 import ErrorPage from '@app/views/error_page.vue'
@@ -16,12 +11,11 @@ import '@app/style.css'
 import '@app/color.css'
 import { dontSink } from '@app/util/emergency'
 
+
 window.onerror = (message, source, lineno, colno, error) => {
    console.error(`[E] [window.onerror] at file ${source}, line ${source}, col ${colno}: ${message}\n`, error)
    dontSink(`${message}`)
 }
-
-const preferredLang = getLocalStorage('preferred_lang') || 'zh_cn'
 
 const routes = [
    { path: '/gameplay', component: GamePlay },
@@ -30,13 +24,11 @@ const routes = [
    { path: '/test_page', component: TestPage }
 ]
 
-export const router = createRouter({ history: createWebHashHistory(), routes })
+export const router = createRouter({
+   history: createWebHashHistory(),
+   routes
+   })
 
-initTranslation({}).then(() => {
-   const i18n = createI18n(makeI18nOption(preferredLang))
-   const app = createApp(App)
-
-   app.use(i18n)
-   app.use(router)
-   app.mount('#app')
-})
+createApp(App)
+   .use(router)
+   .mount('#app')
