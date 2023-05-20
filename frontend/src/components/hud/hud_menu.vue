@@ -1,29 +1,3 @@
-<template>
-   <div :class="['menu',{'expand':expand}]">
-      <div v-for="(item, idx) in items"
-           :key="idx"
-           class="item"
-           @click="emitMenuMessage(item.ident)">
-         <img class="menu-icon"
-              :src="menuIcons[item.icon]"
-              :alt="item.text"
-              draggable="false"
-         >
-         <span class="menu-text">
-            {{ item.text }}
-         </span>
-      </div>
-      <div class="item no-text">
-         <img class="menu-icon"
-              :src="menuIcons[expand ? 'expand_menu' : 'retract_menu']"
-              alt="icon"
-              draggable="false"
-              @click="expand_menu"
-         >
-      </div>
-   </div>
-</template>
-
 <script setup lang="ts">
 
 import menuIcons from '@app/assets/components/hud'
@@ -66,6 +40,32 @@ function emitMenuMessage(ident: string) {
 }
 
 </script>
+
+<template>
+   <div :class="['menu',{'expand':expand}]">
+      <div v-for="(item, idx) in items"
+           :key="idx"
+           class="item"
+           @click="emitMenuMessage(item.ident)">
+         <img class="menu-icon"
+              :src="menuIcons[item.icon]"
+              :alt="item.text"
+              draggable="false"
+         >
+         <span class="menu-text">
+            {{ item.text }}
+         </span>
+      </div>
+      <div class="item no-text">
+         <img class="menu-icon"
+              :src="menuIcons[expand ? 'expand_menu' : 'retract_menu']"
+              alt="icon"
+              draggable="false"
+              @click="expand_menu"
+         >
+      </div>
+   </div>
+</template>
 
 <style>
 .menu {

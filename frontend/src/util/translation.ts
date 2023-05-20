@@ -1,27 +1,26 @@
-import { ITranslatable, ITranslationKey } from '@protocol/index'
-import { getTranslation } from '@app/api'
+import { MaybeTranslationKey } from '@app/core/base/uid'
+import { ComposedTranslation, MaybeTranslatable } from '@app/core/base/translation'
 
-let translation: Record<string, string> | null = null
+let gTranslation: Record<string, string> | null = null
 
-export async function initTranslation(lang: string) {
-   if (!translation) {
-      translation = await getTranslation(lang)
-   }
+export async function initTranslation(translation: Record<string, string>) {
+   gTranslation = translation
 }
 
-export function translate(item: ITranslationKey): string {
+export function translate(item: MaybeTranslationKey): string {
+   item = <string>item
    if (item.startsWith('$') || item.startsWith('@$') || (item.startsWith('@') && item.includes(':tr:$'))) {
-      return translation![item] || item
+      return gTranslation![item] || item
    } else {
       return item
    }
 }
 
-export function translate2(item: ITranslatable): string {
+export function translate2(item: MaybeTranslatable): string {
    if (typeof item === 'string') {
-      return translation![item] || item
+      return gTranslation![item] || item
    } else {
-      const { template, args } = item
+      const { template, args } = <ComposedTranslation>item
 
       let ret = translate(template)
       for (const argName in args) {

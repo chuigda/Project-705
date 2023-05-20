@@ -1,3 +1,85 @@
+<script setup lang="ts">
+import { ComputedRef, computed, ref } from 'vue'
+
+import { PlayerStatus } from '@app/core/game_context'
+import AttrIcon from '@app/components/icon/attr_icon.vue'
+import menuIcons from '@app/assets/components/hud'
+import { translate } from '@app/util/translation'
+
+const builtinPropertyIdSet = new Set([
+   '@intelligence',
+   '@emotional_intelligence',
+   '@memorization',
+   '@strength',
+   '@imagination',
+   '@charisma',
+   '@energy',
+   '@money',
+   '@skill_point',
+   '@mental_health',
+   '@injury',
+   '@satisfactory'
+])
+
+const props = defineProps<{ playerStatus: PlayerStatus }>()
+const expand = ref(false)
+
+const itemKeys: [string, string][] = [
+   ['智商', 'intelligence'],
+   ['情商', 'emotional_intelligence'],
+   ['记忆力', 'memorization'],
+   ['想象力', 'imagination'],
+   ['体魄', 'strength'],
+   ['魅力', 'charisma']
+]
+
+const attributeItems = computed(() => {
+   return itemKeys.map(itemKey => {
+      const [displayName, propertyId] = itemKey
+      return [
+         displayName,
+         propertyId,
+         props.playerStatus.properties![`@${propertyId}`].value,
+         props.playerStatus.properties![`@${propertyId}`].increment ?? 0
+      ]
+   })
+})
+
+const otherItems: ComputedRef<[number, (string | number)[][]]> = computed(() => {
+   let sum = 0
+   const items = []
+   const properties = props.playerStatus.properties!
+   for (const propertyId in properties) {
+      if (!builtinPropertyIdSet.has(propertyId)) {
+         const property = properties[propertyId]
+         items.push([translate(property.name), property.value])
+         sum += property.value
+      }
+   }
+   return [sum, items]
+})
+
+const injured = Array(3).fill(true)
+
+const rescale = (mentalHealth: number, mentalHealthMax: number) => {
+   const x = mentalHealth / mentalHealthMax
+   const r = 0.4 * x ** 3 - 0.6 * x ** 2 + 1.2 * x
+   return r * 100
+}
+
+const energyBarTitle = computed(() => {
+   const property = props.playerStatus.properties!['@mental_health']
+   return `${property.value} / ${property.max}`
+})
+
+const energyBarWidth = computed(() => {
+   const property = props.playerStatus.properties!['@mental_health']
+   const percentage = rescale(property.value, property.max!)
+   return `${percentage}%`
+})
+
+</script>
+
 <template>
    <div class="status-box">
       <div v-for="(item, idx) in attributeItems"
@@ -56,88 +138,6 @@
       </div>
    </div>
 </template>
-
-<script setup lang="ts">
-
-import { IPlayerStatus } from '@protocol/index'
-import AttrIcon from '@app/components/icon/attr_icon.vue'
-import menuIcons from '@app/assets/components/hud'
-import { computed, ref } from 'vue'
-import {translate} from '@app/util/translation'
-
-const builtinPropertyIdSet = new Set([
-   '@intelligence',
-   '@emotional_intelligence',
-   '@memorization',
-   '@strength',
-   '@imagination',
-   '@charisma',
-   '@energy',
-   '@money',
-   '@skill_point',
-   '@mental_health',
-   '@injury',
-   '@satisfactory'
-])
-
-const props = defineProps<{ playerStatus: IPlayerStatus }>()
-const expand = ref(false)
-
-const itemKeys: [string, string][] = [
-   ['智商', 'intelligence'],
-   ['情商', 'emotional_intelligence'],
-   ['记忆力', 'memorization'],
-   ['想象力', 'imagination'],
-   ['体魄', 'strength'],
-   ['魅力', 'charisma']
-]
-
-const attributeItems = computed(() => {
-   return itemKeys.map(itemKey => {
-      const [displayName, propertyId] = itemKey
-      return [
-         displayName,
-         propertyId,
-         props.playerStatus.properties![`@${propertyId}`].value,
-         props.playerStatus.properties![`@${propertyId}`].increment ?? 0
-      ]
-   })
-})
-
-const otherItems = computed(() => {
-   let sum = 0
-   const items = []
-   const properties = props.playerStatus.properties!
-   for (const propertyId in properties) {
-      if (!builtinPropertyIdSet.has(propertyId)) {
-         const property = properties[propertyId]
-         items.push([translate(property.name), property.value])
-         sum += property.value
-      }
-   }
-   return [sum, items]
-})
-
-const injured = Array(3).fill(true)
-
-const rescale = (mentalHealth: number, mentalHealthMax: number) => {
-   const x = mentalHealth / mentalHealthMax
-   const r = 0.4 * x ** 3 - 0.6 * x ** 2 + 1.2 * x
-   return r * 100
-}
-
-const energyBarTitle = computed(() => {
-   const property = props.playerStatus.properties!['@mental_health']
-   return `${property.value} / ${property.max}`
-})
-
-const energyBarWidth = computed(() => {
-   const property = props.playerStatus.properties!['@mental_health']
-   const percentage = rescale(property.value, property.max!)
-   return `${percentage}%`
-})
-
-</script>
 
 <style>
 .status-box {

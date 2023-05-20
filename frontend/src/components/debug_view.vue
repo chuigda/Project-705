@@ -1,41 +1,7 @@
-<template>
-   <div v-if="props.display"
-        class="debugger">
-      <div ref="outputContainer"
-           class="debugger-output">
-         <div v-for="(line, idx) in lines"
-              :key="`dbg-${idx}`"
-              :style="{ color: line.color || 'white' }">
-            {{ line.text }}
-         </div>
-         <div ref="bottomEmptyDiv" />
-      </div>
-      <input ref="inputBox"
-             v-model="inputText"
-             type="text"
-             class="debugger-input"
-             :disabled="inputDisabled"
-             @keyup="checkSubmit"
-      >
-   </div>
-</template>
-
 <script setup lang="ts">
-
 import { ref, Ref, watch } from 'vue'
-import {
-   debugUpdateProperty,
-   debugAscension,
-   debugCrash,
-   debugInitGame,
-   debugTriggerEvent
-} from '@app/api/debug'
-import { IGameState, IResponse } from '@protocol/index'
-import { getSnapshot, setUserToken } from '@app/api'
 
 const props = defineProps<{ display: boolean }>()
-
-const emit = defineEmits<{ (event: 'state', state: IGameState): void }>()
 
 interface ConsoleLine { text: string, color?: string }
 
@@ -64,7 +30,6 @@ interface CommandFlags {
 }
 
 type CommandHandler = (args: string[], flags: CommandFlags) => Promise<void>
-// One day I'll fuck up these bullshits
 
 function expectNArgs(count: number): (f: CommandHandler) => CommandHandler {
    return (f: CommandHandler) => {
@@ -82,80 +47,7 @@ function expectNArgs(count: number): (f: CommandHandler) => CommandHandler {
    }
 }
 
-const expectNoArg = expectNArgs(0)
-const expectOneArg = expectNArgs(1)
-const expectTwoArgs = expectNArgs(2)
-const expect3Args = expectNArgs(3)
-
-function formatResponse(res: IResponse<any>) {
-   let color
-   if (res.success) {
-      if (res.message === 'success') {
-         // do nothing, no color == default color == white
-      } else {
-         color = 'yellow'
-      }
-   } else {
-      color = 'red'
-   }
-
-   lines.value.push({ text: res.message, color })
-}
-
-const commands: Record<string, CommandHandler> = {
-   'clear': expectNoArg(async () => { lines.value = [] }),
-   'set_token': expectOneArg(async ([token]) => setUserToken(token)),
-   'init_game': expectOneArg(async ([startupId]) => {
-      inputDisabled.value = true
-      const result = await debugInitGame(startupId)
-      inputDisabled.value = false
-      formatResponse(result)
-      if (result.success) {
-         emit('state', result.result)
-      }
-   }),
-   'activate_ascension_perk': expectOneArg(async ([ascensionPerkId], flags) => {
-      inputDisabled.value = true
-      const result = await debugAscension(ascensionPerkId, flags.force)
-      inputDisabled.value = false
-      formatResponse(result)
-      if (result.success) {
-         emit('state', result.result)
-      }
-   }),
-   'property': expect3Args(async ([property, op, value]) => {
-      inputDisabled.value = true
-      const result = await debugUpdateProperty(property, op, parseInt(value) || 0)
-      inputDisabled.value = false
-      formatResponse(result)
-      if (result.success) {
-         emit('state', result.result)
-      }
-   }),
-   'refresh': expectNoArg(async () => {
-      inputDisabled.value = true
-      const result = await getSnapshot()
-      inputDisabled.value = false
-      emit('state', result)
-   }),
-   'crash': expectNoArg(async () => {
-      inputDisabled.value = true
-      const result = await debugCrash()
-
-      // theoretically this shouldn't be reachable
-      inputDisabled.value = false
-      formatResponse(result)
-   }),
-   'trigger_event': expectOneArg(async ([event,...args]) => {
-      inputDisabled.value = true
-      const result = await debugTriggerEvent(event, args)
-      inputDisabled.value = false
-      formatResponse(result)
-      if (result.success) {
-         emit('state', result.result)
-      }
-   })
-}
+const commands: Record<string, CommandHandler> = {}
 
 async function submit(inputCommand: string) {
    async function submitImpl() {
@@ -202,8 +94,29 @@ watch(inputBox, () => {
       inputBox.value!.focus()
    }
 })
-
 </script>
+
+<template>
+   <div v-if="props.display"
+        class="debugger">
+      <div ref="outputContainer"
+           class="debugger-output">
+         <div v-for="(line, idx) in lines"
+              :key="`dbg-${idx}`"
+              :style="{ color: line.color || 'white' }">
+            {{ line.text }}
+         </div>
+         <div ref="bottomEmptyDiv" />
+      </div>
+      <input ref="inputBox"
+             v-model="inputText"
+             type="text"
+             class="debugger-input"
+             :disabled="inputDisabled"
+             @keyup="checkSubmit"
+      >
+   </div>
+</template>
 
 <style>
 .debugger {

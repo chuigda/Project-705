@@ -1,3 +1,60 @@
+<script setup lang="ts">
+import closeIcon from '@app/assets/common/close.png'
+import { Ref, ref, watch } from 'vue'
+
+interface Choice {
+   text: string,
+   disabled?: boolean,
+   danger?: boolean,
+   action: () => void,
+}
+
+const props = withDefaults(defineProps<{
+   title: string,
+   closeable?: boolean,
+   image?: string,
+   text: string,
+   result?: string,
+   choices: Choice[],
+}>(), {
+   closeable: true,
+})
+
+const emit = defineEmits<{
+   (event: 'close'): void
+}>()
+
+const timer = ref(0)
+const sublen = ref(0)
+const selected = ref(-1)
+
+
+watch(props, () => {
+   if (props.result) {
+      setInterval(() => {
+         if (props.result && sublen.value >= props.result.length) {
+            clearInterval(timer.value)
+            timer.value = 0
+         }
+         sublen.value++
+      }, 100)
+   }
+})
+
+const onSelectWrapper = (ev: Event, i: number, func: () => void) => {
+   if (selected.value >= 0) return
+   ev.stopPropagation()
+   selected.value = i
+   func()
+}
+
+const skip = () => {
+   if (timer.value && props.result) {
+      sublen.value = props.result.length
+   }
+}
+</script>
+
 <template>
    <div class="overlay" />
    <div class="popup tbd-dialog"
@@ -31,65 +88,6 @@
       </div>
    </div>
 </template>
-
-<script setup lang="ts">
-
-import closeIcon from '@app/assets/common/close.png'
-import { ref, watch } from 'vue'
-
-interface Choice {
-   text: string,
-   disabled?: boolean,
-   danger?: boolean,
-   action: () => void,
-}
-
-const props = withDefaults(defineProps<{
-   title: string,
-   closeable?: boolean,
-   image?: string,
-   text: string,
-   result?: string,
-   choices: Choice[],
-}>(), {
-   closeable: true,
-})
-
-const emit = defineEmits<{
-   (event: 'close'): void
-}>()
-
-const timer = ref(0)
-const sublen = ref(0)
-const selected = ref(-1)
-
-
-watch(props, () => {
-   if (props.result) {
-      timer.value = setInterval(() => {
-         if (props.result && sublen.value >= props.result.length) {
-            clearInterval(timer.value)
-            timer.value = 0
-         }
-         sublen.value++
-      }, 100)
-   }
-})
-
-const onSelectWrapper = (ev: Event, i: number, func: () => void) => {
-   if (selected.value >= 0) return
-   ev.stopPropagation()
-   selected.value = i
-   func()
-}
-
-const skip = () => {
-   if (timer.value && props.result) {
-      sublen.value = props.result.length
-   }
-}
-
-</script>
 
 <style>
 .tbd-dialog {

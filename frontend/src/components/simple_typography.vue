@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const props = defineProps<{ text: string }>()
+</script>
+
 <template>
    <div class="simple-typography">
       <div v-for="(chunk, idx) in props.text.split('\n')"
@@ -8,16 +12,8 @@
    </div>
 </template>
 
-<script setup lang="ts">
-
-const props = defineProps<{ text: string }>()
-
-</script>
-
 <style scoped>
-
 .non-selectable-span {
    user-select: none;
 }
-
 </style>

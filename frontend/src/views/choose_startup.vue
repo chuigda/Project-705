@@ -1,9 +1,34 @@
+<script setup lang="ts">
+import { Ref, onMounted, ref } from 'vue'
+
+import { translate } from '@app/util/translation'
+import StandardButton from '@app/components/standard_button.vue'
+import SimpleTypography from '@app/components/simple_typography.vue'
+import { Startup } from '@app/core/ruleset'
+
+const startups: Ref<Startup[]> = ref([])
+const chosenStartup: Ref<Startup | undefined> = ref(undefined)
+const chosenStartupDesc: Ref<string> = ref('')
+
+function chooseStartup(startup: Startup) {
+   chosenStartup.value = startup
+   chosenStartupDesc.value = translate(startup.description)
+}
+
+async function startGame() {
+   const startupId = chosenStartup.value!.ident
+
+   // TODO
+
+   window.location.replace('/#/gameplay')
+}
+</script>
+
 <template>
    <div class="choose-startup-container">
       <div class="left">
          <div class="startup-button-list">
             <StandardButton v-for="startup in startups"
-                            :key="startup.ident"
                             class="startup-button"
                             :text="translate(startup.name)"
                             :toggled="chosenStartup === startup"
@@ -31,37 +56,6 @@
       </div>
    </div>
 </template>
-
-<script setup lang="ts">
-import { Ref, onMounted, ref } from 'vue'
-
-import { IStartup } from '@protocol/index'
-import {getStartups, startNewGame} from '@app/api'
-import { translate } from '@app/util/translation'
-import StandardButton from '@app/components/standard_button.vue'
-import SimpleTypography from '@app/components/simple_typography.vue'
-
-const startups: Ref<IStartup[]> = ref([])
-const chosenStartup: Ref<IStartup | undefined> = ref(undefined)
-const chosenStartupDesc: Ref<string> = ref('')
-
-function chooseStartup(startup: IStartup) {
-   chosenStartup.value = startup
-   chosenStartupDesc.value = translate(startup.description)
-}
-
-async function startGame() {
-   const startupId = chosenStartup.value!.ident
-   await startNewGame(startupId)
-
-   window.location.replace('/#/gameplay')
-}
-
-onMounted(async () => {
-   startups.value = await getStartups()
-})
-
-</script>
 
 <style scoped>
 .choose-startup-container {

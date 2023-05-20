@@ -1,16 +1,4 @@
-<template>
-   <button class="standard-button"
-           :class="[
-              { disabled: props.disabled },
-              { toggled: props.toggled }
-           ]"
-           @click="onClick">
-      {{ props.text }}
-   </button>
-</template>
-
 <script setup lang="ts">
-
 const props = defineProps<{
    text: string,
    toggled?: boolean,
@@ -24,8 +12,18 @@ function onClick(e: Event) {
       emit('click', e)
    }
 }
-
 </script>
+
+<template>
+   <button class="standard-button"
+           :class="[
+              { disabled: props.disabled },
+              { toggled: props.toggled }
+           ]"
+           @click="onClick">
+      {{ props.text }}
+   </button>
+</template>
 
 <style scoped>
 .standard-button {

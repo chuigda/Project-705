@@ -1,25 +1,21 @@
 <template>
    <div v-if="initialized">
-      <HUDVue :player-status="playerStatus"
+      <HUDVue :player-status="gameState.player"
               @menu="handleMenuClick"
       />
-      <DebugView :display="showDebugView"
-                 @state="handleGameStateUpdate"
-      />
+      <DebugView :display="showDebugView" />
    </div>
 </template>
 
 <script setup lang="ts">
-import { Ref, onMounted, onUnmounted, ref } from 'vue'
+import { Ref, onUnmounted, ref, inject } from 'vue'
 
-import { IGameState, IPlayerStatus } from '@protocol/index'
 import HUDVue from '@app/components/hud/hud.vue'
 import DebugView from '@app/components/debug_view.vue'
-import { getSnapshot } from '@app/api'
-import { patchPlayerStatus } from '@app/state'
+import { GameState } from '@app/core/game_context'
 
 const initialized = ref(false)
-const playerStatus: Ref<IPlayerStatus | undefined> = ref(undefined)
+const gameState: Ref<GameState> = inject<Ref<GameState>>("gameState")!
 
 const showDebugView = ref(false)
 
@@ -34,20 +30,6 @@ function handleGlobalKeypress(event: KeyboardEvent) {
       showDebugView.value = !showDebugView.value
    }
 }
-
-function handleGameStateUpdate(gameState: IGameState) {
-   if (gameState.player) {
-      playerStatus.value = patchPlayerStatus(playerStatus.value!, gameState.player)
-   }
-}
-
-onMounted(async () => {
-   document.addEventListener('keypress', handleGlobalKeypress)
-
-   const snapshot = await getSnapshot()
-   initialized.value = true
-   playerStatus.value = snapshot.player!
-})
 
 onUnmounted(() => {
    document.removeEventListener('keypress', handleGlobalKeypress)

@@ -20,10 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { IPlayerStatus } from '@protocol/index'
-import TriforceIcon from '../icon/triforce_icon.vue'
+import { PlayerStatus } from '@app/core/game_context'
+import TriforceIcon from '@app/components/icon/triforce_icon.vue'
 
-const props = defineProps<{ playerStatus: IPlayerStatus }>()
+const props = defineProps<{ playerStatus: PlayerStatus }>()
 
 </script>
 

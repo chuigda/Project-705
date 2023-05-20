@@ -9,10 +9,6 @@
    </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
-
 <style scoped>
 .skill-panel {
    color: black;
@@ -76,7 +72,6 @@
 .card {
    border: 1px solid var(--color-brown);
    background-color: var(--color-common-bg);
-
    height: 80px;
    width: 100%;
    border-radius: 4px;
