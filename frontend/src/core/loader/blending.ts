@@ -181,7 +181,7 @@ export const compilePassiveRelicItems = buildCompileStoreItemSeries(
 )
 
 export const compileTradableItems = buildCompileStoreItemSeries(
-   'tradable item',
+   '可交易物品',
    'tradableItems',
    'compileTradableItems',
    compileTradableItem
