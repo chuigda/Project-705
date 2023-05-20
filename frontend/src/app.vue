@@ -21,27 +21,26 @@ const loadHint: Ref<string | undefined> = ref(undefined)
 
 async function initialise() {
    loadHint.value = '正在加载核心规则集'
-   const coreRuleset = loadCoreRuleset()
+   ruleSet.value = loadCoreRuleset()
    await sleep(1000)
 
-   loadHint.value = '正在加载翻译'
-   loadProgress.value = 15
-   await initTranslation(coreRuleset.translations)
-
-   ruleSet.value = coreRuleset
-
    loadHint.value = '正在探测服务器功能'
-   loadProgress.value = 25
+   loadProgress.value = 15
    const serverInfo = await probeServer()
    await sleep(500)
 
    if (serverInfo) {
       if (serverInfo.caps.has('module')) {
          loadHint.value = '正在加载模组列表'
-         loadProgress.value = 40
+         loadProgress.value = 20
          await sleep(500)
       }
    }
+
+   loadHint.value = '正在加载翻译'
+   loadProgress.value = 80
+   await initTranslation(ruleSet.value!.translations)
+   await sleep(500)
 
    loadHint.value = '即将就绪'
    loadProgress.value = 100
@@ -64,5 +63,5 @@ onMounted(() => {
 
 <template>
    <loading v-if="!initialised" :hint="loadHint" :progress="loadProgress" />
-   <router-view />
+   <router-view v-else />
 </template>
