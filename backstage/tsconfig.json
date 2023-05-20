@@ -23,7 +23,7 @@
       "src",
       "test",
       "rulesets"
-   ],
+, "../frontend/src/core/base", "../frontend/src/util/defined.ts"   ],
    "exclude": [
       "node_modules",
       "**/*.spec.ts",
