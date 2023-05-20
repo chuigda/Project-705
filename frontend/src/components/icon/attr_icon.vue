@@ -1,3 +1,11 @@
+<script setup lang="ts">
+import attributeIcons from '@app/assets/common/attribute'
+import { PropertyId } from '@app/core/game_context/player'
+
+const props = defineProps<{ type: PropertyId }>()
+const imageUrl = attributeIcons[props.type]
+</script>
+
 <template>
    <div class="attr-icon-container">
       <img :src="imageUrl"
@@ -7,16 +15,6 @@
       >
    </div>
 </template>
-
-<script setup lang="ts">
-
-import attributeIcons from '@app/assets/common/attribute'
-import { IPropertyId } from '@protocol/player'
-
-const props = defineProps<{ type: IPropertyId }>()
-const imageUrl = attributeIcons[props.type]
-
-</script>
 
 <style scoped>
 

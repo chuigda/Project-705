@@ -1,33 +1,26 @@
 import { RuleSet } from '@app/core/ruleset'
 import events from './event'
 import startups from './startup'
-import skillCategories from './skill_categories'
-import activityCategories from './activity_categories'
 import skills from './skill'
 import mapSites from './map_site'
 import translations from './translation'
 import modifiers from './modifier'
 
 const ruleSet: RuleSet = {
-   descriptor: {
-      ident: {
-         author: 'cnpr',
-         moduleName: 'dbg'
-      },
-      skillCategories,
-      activityCategories,
+   ident: {
+      author: 'cnpr',
+      moduleName: 'dbg'
    },
-   content: {
-      name: '$debug_ruleset',
-      description: '$debug_ruleset_desc',
 
-      startups,
-      skills,
-      mapSites,
-      translations,
-      modifiers,
-      events
-   }
+   name: '$debug_ruleset',
+   description: '$debug_ruleset_desc',
+
+   startups,
+   skills,
+   mapSites,
+   translations,
+   modifiers,
+   events
 }
 
 export default ruleSet

@@ -6,18 +6,13 @@ export function randInt(min: number, max: number): number {
    return Math.floor(rand(min, max))
 }
 
-function randChooseDebug<T>(arr: T[]): T {
+export function randChoose<T>(arr: T[]): T {
    if (arr.length === 0) {
       throw new Error('randomly choosing from an empty array could completely fuck the program up')
    }
+
    return arr[randInt(0, arr.length)]
 }
-
-function randChooseRelease<T>(arr: T[]): T {
-   return arr[randInt(0, arr.length)]
-}
-
-export const randChoose = process.env.DEBUG ? randChooseDebug : randChooseRelease
 
 export function randProp(obj: Record<string, any>): string {
    const keys = Object.keys(obj)

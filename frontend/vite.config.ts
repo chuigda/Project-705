@@ -7,6 +7,7 @@ export default defineConfig({
    resolve: {
       alias: {
          '@app': resolve(__dirname, 'src'),
+         '@rulesets': resolve(__dirname, 'rulesets')
       }
    },
    server: {

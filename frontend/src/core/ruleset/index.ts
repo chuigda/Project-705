@@ -40,8 +40,8 @@ export interface RuleSetStoreItems {
 
 /// 规则集
 export interface RuleSet {
-   /// 规则集作用域
-   readonly scope: Scope
+   /// 规则集标识符
+   readonly ident: Scope
 
    /// 规则集名称
    readonly name: MaybeTranslationKey,

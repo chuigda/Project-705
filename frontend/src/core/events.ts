@@ -35,13 +35,13 @@ export function triggerEvent(
       const eventId = mEventId(scope, event)
       const eventContent = gameContext.ruleSet.events[eventId]
       if (!eventContent) {
-         const errMessage = `event '${eventId}' not found`
-         console.error(`[E] [triggerEvent] ${errMessage}`)
          if (unsetCounter) {
             gameContext.eventChainCounter = undefined
          } else {
             gameContext.eventChainCounter! -= 1
          }
+
+         throw new Error(`[E] [triggerEvent] event '${eventId}' not found`)
       }
 
       console.debug(`[D] [triggerEvent] triggered event '${eventId}'`)

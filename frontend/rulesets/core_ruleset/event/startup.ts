@@ -1,9 +1,13 @@
 import { PropertyOp } from '@app/core/ruleset/ops'
 import { Event } from '@app/core/ruleset'
-import { attributeIdList } from '@protocol/player'
 import { initProperty } from '@app/core/property'
+import { attributeIdList } from '@app/core/game_context/player'
 
 const detroitEvents: Event[] = [
+   {
+      ident: 'common_setup',
+      event: () => {}
+   },
    {
       ident: 'normal_init',
       event: cx => {

@@ -1,4 +1,4 @@
-import { IPropertyId } from '@protocol/player'
+import { PropertyId } from '@app/core/game_context/player'
 import charismaIcon from './charisma.png'
 import emotionalIntelligenceIcon from './emotional_intelligence.png'
 import imaginationIcon from './imagination.png'
@@ -7,7 +7,7 @@ import memorizationIcon from './memorization.png'
 import satisfactoryIcon from './satisfactory.png'
 import strengthIcon from './strength.png'
 
-const attributeIcons: Record<IPropertyId, string> = {
+const attributeIcons: Record<PropertyId, string> = {
    'charisma': charismaIcon,
    'emotional_intelligence': emotionalIntelligenceIcon,
    'imagination': imaginationIcon,

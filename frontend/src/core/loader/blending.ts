@@ -244,7 +244,7 @@ export function compileTranslations(
 
 export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
    const {
-      scope,
+      ident: scope,
       skills,
       startups,
       activities,

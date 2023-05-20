@@ -10,8 +10,6 @@ import {
    TradableItem,
    MapSite,
 } from '@app/core/ruleset'
-import { typeAssert } from '@app/util/type_assert'
-import { moduleAssertion, ruleSetContentAssertion } from '@app/core/loader/assertions'
 import { Event, MaybeInlineEvent } from '@app/core/ruleset/items/event'
 import { Skill } from '@app/core/ruleset/items/skill'
 import { AscensionPerk } from '@app/core/ruleset/items/ascension_perk'
@@ -22,16 +20,6 @@ import { compileRuleSet } from '@app/core/loader/blending'
 import coreRuleSet from '@rulesets/core_ruleset'
 import debugRuleSet from '@rulesets/debug_ruleset'
 
-export function loadDynamicMod(modName: string): [RuleSet | null, any] {
-   try {
-      const mod = require(`${process.cwd()}/mods/${modName}`)
-
-      typeAssert(mod, moduleAssertion)
-      return [mod as RuleSet, null]
-   } catch (e) {
-      return [null, e]
-   }
-}
 
 export type Translation = Record<string, string>
 
@@ -62,7 +50,7 @@ export class CompiledRuleSet {
    onRuleSetLoaded: MaybeInlineEvent[] = []
 }
 
-export function load(): CompiledRuleSet {
+export function loadCoreRuleset(): CompiledRuleSet {
    const ret = new CompiledRuleSet()
 
    compileRuleSet(ret, coreRuleSet)
