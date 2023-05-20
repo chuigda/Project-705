@@ -116,7 +116,7 @@ export const compileActivities = buildCompileSeries('活动', 'activities', 'com
 export const compileStartups = buildCompileSeries('起源', 'startups', 'compileStartups', compileStartup)
 
 export const compileAscensionPerks = buildCompileSeries(
-   'ascension perk',
+   '飞升项目',
    'ascensionPerks',
    'compileAscensionPerks',
    compileAscensionPerk
