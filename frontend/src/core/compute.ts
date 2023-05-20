@@ -176,9 +176,14 @@ export function computeSkillCost(
    return Math.floor(cost)
 }
 
-export interface AvailableSkill {
+export class AvailableSkill {
    readonly skill: Skill
    readonly cost: number
+
+   constructor(skill: Skill, cost: number) {
+      this.skill = skill
+      this.cost = cost
+   }
 }
 
 export interface UnavailableSkill {

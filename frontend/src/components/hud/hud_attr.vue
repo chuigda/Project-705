@@ -33,7 +33,7 @@ const itemKeys: [string, string][] = [
    ['魅力', 'charisma']
 ]
 
-const attributeItems = computed(() => {
+const attributeItems: ComputedRef<[string, string, number, number][]> = computed(() => {
    return itemKeys.map(itemKey => {
       const [displayName, propertyId] = itemKey
       return [
@@ -82,11 +82,8 @@ const energyBarWidth = computed(() => {
 
 <template>
    <div class="status-box">
-      <div v-for="(item, idx) in attributeItems"
-           :key="idx"
-           class="status-item">
-         <AttrIcon class="icon"
-                   :type="item[1]" />
+      <div v-for="(item, idx) in attributeItems" class="status-item">
+         <AttrIcon class="icon" :type="item[1]" />
          <span>{{ item[0] }}</span>
          <span class="value">{{ item[2] }}(+{{ item[3] }})</span>
       </div>
