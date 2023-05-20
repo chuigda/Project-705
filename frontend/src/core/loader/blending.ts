@@ -71,7 +71,7 @@ function buildCompileSeries<T extends HasIdent>(
          if (dest[ident]) {
             console.warn(`[W] [${fnName}] 覆写已经存在的 ${itemName} '${ident}'`)
          }
-         console.info(`[I] [${fnName}] 已编译 ${itemName} '${ident}'`)
+         console.info(`[I] [${fnName}] 已编译${itemName} '${ident}'`)
 
          // TODO(chuigda): implement "blending"
          dest[ident] = compiledItem
@@ -101,7 +101,7 @@ function buildCompileSeries2<T extends HasIdent>(
          if (dest[ident]) {
             console.warn(`[W] [${fnName}] 覆写已经存在的 ${itemName} '${ident}'`)
          }
-         console.info(`[I] [${fnName}] 已编译 ${itemName} '${ident}'`)
+         console.info(`[I] [${fnName}] 已编译${itemName} '${ident}'`)
 
          // TODO(chuigda): implement "blending"
          dest[ident] = compiledItem
@@ -109,11 +109,11 @@ function buildCompileSeries2<T extends HasIdent>(
    }
 }
 
-export const compileSkills = buildCompileSeries('skill', 'skills', 'compileSkills', compileSkill)
+export const compileSkills = buildCompileSeries('技能', 'skills', 'compileSkills', compileSkill)
 
-export const compileActivities = buildCompileSeries('activity', 'activities', 'compileActivities', compileActivity)
+export const compileActivities = buildCompileSeries('活动', 'activities', 'compileActivities', compileActivity)
 
-export const compileStartups = buildCompileSeries('startup', 'startups', 'compileStartups', compileStartup)
+export const compileStartups = buildCompileSeries('起源', 'startups', 'compileStartups', compileStartup)
 
 export const compileAscensionPerks = buildCompileSeries(
    'ascension perk',
@@ -122,11 +122,11 @@ export const compileAscensionPerks = buildCompileSeries(
    compileAscensionPerk
 )
 
-export const compileMapSites = buildCompileSeries('map site', 'mapSites', 'compileMapSites', compileMapSite)
+export const compileMapSites = buildCompileSeries('地图节点', 'mapSites', 'compileMapSites', compileMapSite)
 
-export const compileEvents = buildCompileSeries('event', 'events', 'compileEvents', compileEvent)
+export const compileEvents = buildCompileSeries('事件', 'events', 'compileEvents', compileEvent)
 
-export const compileModifiers = buildCompileSeries2('modifier', 'modifiers', 'compileModifiers', compileModifier)
+export const compileModifiers = buildCompileSeries2('修正', 'modifiers', 'compileModifiers', compileModifier)
 
 function buildCompileStoreItemSeries<IKS extends StoreItemKind, T extends StoreItem<IKS>>(
    itemName: string,
@@ -144,7 +144,7 @@ function buildCompileStoreItemSeries<IKS extends StoreItemKind, T extends StoreI
          if (dest[ident]) {
             console.warn(`[W] [${fnName}] 覆写已经存在的 ${itemName} '${ident}'`)
          }
-         console.info(`[I] [${fnName}] 已编译 ${itemName} '${ident}'`)
+         console.info(`[I] [${fnName}] 已编译商店物品 (${itemName}) '${ident}'`)
 
          // TODO(chuigda): implement "blending"
          dest[ident] = item
@@ -153,28 +153,28 @@ function buildCompileStoreItemSeries<IKS extends StoreItemKind, T extends StoreI
 }
 
 export const compileConsumableItems = buildCompileStoreItemSeries(
-   'consumable item',
+   '消耗品',
    'consumableItems',
    'compileConsumableItems',
    compileConsumableItem
 )
 
 export const compileRechargeableItems = buildCompileStoreItemSeries(
-   'rechargeable item',
+   '可充能物品',
    'rechargeableItems',
    'compileRechargeableItems',
    compileRechargeableItem
 )
 
 export const compileActiveRelicItems = buildCompileStoreItemSeries(
-   'active relic item',
+   '具有主动技能的物品',
    'activeRelicItems',
    'compileActiveRelicItems',
    compileActiveRelicItem
 )
 
 export const compilePassiveRelicItems = buildCompileStoreItemSeries(
-   'passive relic item',
+   '被动型物品',
    'passiveRelicItems',
    'compilePassiveRelicItems',
    compilePassiveRelicItem

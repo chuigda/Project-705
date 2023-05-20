@@ -1,6 +1,6 @@
 import { mEventId, Scope } from '@app/core/base/uid'
 import { GameContext } from '@app/core/game_context'
-import { EventFunction, MaybeInlineEvent } from '@app/core/ruleset/items/event'
+import { MaybeInlineEvent } from '@app/core/ruleset/items/event'
 import { ensureScope, popScope, pushScope } from '@app/core/game_context/scope'
 
 export function triggerEvent(
