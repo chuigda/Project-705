@@ -13,7 +13,7 @@ import { dontSink } from '@app/util/emergency'
 
 
 window.onerror = (message, source, lineno, colno, error) => {
-   console.error(`[E] [window.onerror] at file ${source}, line ${source}, col ${colno}: ${message}\n`, error)
+   console.error(`[E] [window.onerror] 在文件 ${source}, 行 ${lineno}, 列 ${colno} 遇到错误: ${message}\n`, error)
    dontSink(`${message}`)
 }
 
@@ -24,10 +24,7 @@ const routes = [
    { path: '/test_page', component: TestPage }
 ]
 
-export const router = createRouter({
-   history: createWebHashHistory(),
-   routes
-   })
+export const router = createRouter({ history: createWebHashHistory(), routes })
 
 createApp(App)
    .use(router)

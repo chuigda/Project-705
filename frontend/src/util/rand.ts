@@ -8,7 +8,7 @@ export function randInt(min: number, max: number): number {
 
 export function randChoose<T>(arr: T[]): T {
    if (arr.length === 0) {
-      throw new Error('randomly choosing from an empty array could completely fuck the program up')
+      throw new Error('从空数组中“随机选取”是严重的逻辑错误，将会导致游戏崩溃')
    }
 
    return arr[randInt(0, arr.length)]

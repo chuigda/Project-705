@@ -25,11 +25,10 @@ function setupCommonProperties(gameContext: GameContext) {
    initPropertySimple(gameContext, '@satisfactory', '@', 50)
 }
 
-export default function initGame(ruleSet: CompiledRuleSet, startupId: string): GameContext | undefined {
+export default function initGame(ruleSet: CompiledRuleSet, startupId: string): GameContext {
    const startup = ruleSet.startups[startupId]
    if (!startup) {
-      console.error(`[E] [initGame] startup '${startupId}' not found`)
-      return undefined
+      throw new Error(`[E] [initGame] 起源 '${startupId}' 不存在`)
    }
 
    const context = new GameContext(ruleSet)

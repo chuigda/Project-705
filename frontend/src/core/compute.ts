@@ -40,7 +40,7 @@ export function computePotential(gameContext: GameContext, potential: PotentialE
       try {
          result = potential.op(gameContext)
       } catch (e: any) {
-         console.error(`[E] [computePotential] error when computing potential expression: ${e}\n${e.stack}`)
+         console.error(`[E] [computePotential] 计算 potential 表达式时遇到错误: ${e}\n${e.stack}`)
          result = false
       }
       return {
@@ -100,12 +100,12 @@ export function computeSkillPotential(gameContext: GameContext, skillPotential: 
       const skillId = <string>skillPotential
       const skill = gameContext.ruleSet.skills[skillId]
       if (!skill) {
-         console.error(`[E] [computeSkillPotential] skill '${skillPotential}' does not exist`)
+         console.error(`[E] [computeSkillPotential] 技能 '${skillPotential}' 不存在`)
          return {
+            skillId,
+            skillName: '@unknown_skill_name',
             result: false,
-            neverAgain: false,
-            skillId: '@unknown_skill',
-            skillName: '@unknown_skill_name'
+            neverAgain: true
          }
       }
 
@@ -143,7 +143,7 @@ export function computeSkillCost(
    }
 
    const { base, properties } = skillCost
-   console.debug(`[D] [computeSkillCost] base cost = ${base}, properties = ${properties}`)
+   console.debug(`[D] [computeSkillCost] 基础消耗 = ${base}, 属性值需求 = ${properties}`)
    let totalDiffRatio = 0.0
    if (properties) {
       for (const propertyId in properties) {
@@ -155,11 +155,11 @@ export function computeSkillCost(
             console.debug(
                `[D] [computeSkillCost] gameContext.player.attributes[${propertyId}] = ${propertyValue}` +
                `, attributes[${propertyId}] = ${expectedPropertyValue}` +
-               `, diff = ${diff}`
+               `, 差值 = ${diff}`
             )
             if (diff < 0) {
                totalDiffRatio += -(diff / expectedPropertyValue)
-               console.debug(`[D] [computeSkillCost] diff contribution = ${-(diff / expectedPropertyValue)}`)
+               console.debug(`[D] [computeSkillCost] 差值贡献 = ${-(diff / expectedPropertyValue)}`)
             }
          }
       }
@@ -220,10 +220,10 @@ export function computePotentialSkills(gameContext: GameContext) {
 
       if (result) {
          const cost = computeSkillCost(gameContext, skill.cost, skill.category)
-         console.debug(`[D] [computePotentialSkills] skill '${ident}' available, it costs: ${cost}`)
+         console.debug(`[D] [computePotentialSkills] 技能 '${ident}' 可用，需要 ${cost} 技能点数`)
          available[identStr] = { skill, cost }
       } else {
-         console.debug(`[D] [computePotentialSkills] skill '${ident}' not available`)
+         console.debug(`[D] [computePotentialSkills] 技能 '${ident}' 不可用`)
          if (neverAgain) {
             delete gameContext.skillPool[identStr]
          } else {
@@ -284,12 +284,12 @@ export function computePotentialAscensionPerks(gameContext: GameContext) {
          popScope(gameContext)
       }
 
-      console.debug(`[D] [computePotentialAscensionPerks] computed ascension perk '${ident}': ${result}`)
+      console.debug(`[D] [computePotentialAscensionPerks] 正在计算飞升项目 '${ident}' 的可用性`)
       if (result) {
-         console.debug(`[D] [computePotentialAscensionPerks] ascension perk '${ident}' available`)
+         console.debug(`[D] [computePotentialAscensionPerks] 飞升项目 '${ident}' 可用`)
          available[identStr] = ascensionPerk
       } else {
-         console.debug(`[D] [computePotentialAscensionPerks] ascension perk '${ident}' not available`)
+         console.debug(`[D] [computePotentialAscensionPerks] 飞升项目 '${ident}' 不可用: ${result}`)
          if (neverAgain) {
             delete gameContext.ascensionPerkPool[identStr]
          } else {
@@ -379,7 +379,7 @@ export function computeModifier(gameContext: GameContext) {
    for (const modifierId of gameContext.state.modifiers) {
       const modifier: Modifier = gameContext.ruleSet.modifiers[modifierId]
       if (!modifier) {
-         console.error(`[E] [computeModifier] modifier '${modifierId}' does not exist`)
+         console.error(`[E] [computeModifier] 修正 '${modifierId}' 不存在`)
          continue
       }
 

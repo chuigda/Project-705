@@ -28,23 +28,23 @@ export function compileSkillCategories(compilation: CompiledRuleSet, skillCatego
       const { ident } = category
       const maybeExistingCategory = compilation.skillCategories.findIndex((category1) => category1.ident === ident)
       if (maybeExistingCategory !== -1) {
-         console.warn(`[W] [compileSkillCategories] skill category '${category}' already exists, overwriting`)
+         console.warn(`[W] [compileSkillCategories] 技能类别 '${category}' 已经存在，覆写`)
          compilation.skillCategories[maybeExistingCategory] = category
       } else {
-         console.info(`[I] [compileSkillCategories] compiled skill category '${ident}'`)
          compilation.skillCategories.push(category)
       }
+      console.info(`[I] [compileSkillCategories] 已编译技能类别 '${ident}'`)
    }
 }
 
 export function compileActivityCategories(compilation: CompiledRuleSet, activityCategories: string[]) {
    for (const category of activityCategories) {
       if (compilation.activityCategories.indexOf(category) !== -1) {
-         console.warn(`[W] [compileActivityCategories] activity category '${category}' already exists, skipping`)
+         console.warn(`[W] [compileActivityCategories] 活动类别 '${category}' 已经存在，覆写`)
       } else {
-         console.info(`[I] [compileActivityCategories] compiled activity category '${category}'`)
          compilation.activityCategories.push(category)
       }
+      console.info(`[I] [compileActivityCategories] 已编译活动类别 '${category}'`)
    }
 }
 
@@ -69,10 +69,9 @@ function buildCompileSeries<T extends HasIdent>(
 
          const dest = <Record<string, T>>(<unknown>compilation[seriesName])
          if (dest[ident]) {
-            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
-         } else {
-            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
+            console.warn(`[W] [${fnName}] 覆写已经存在的 ${itemName} '${ident}'`)
          }
+         console.info(`[I] [${fnName}] 已编译 ${itemName} '${ident}'`)
 
          // TODO(chuigda): implement "blending"
          dest[ident] = compiledItem
@@ -100,10 +99,9 @@ function buildCompileSeries2<T extends HasIdent>(
 
          const dest = <Record<string, T>>(<unknown>compilation[seriesName])
          if (dest[ident]) {
-            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
-         } else {
-            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
+            console.warn(`[W] [${fnName}] 覆写已经存在的 ${itemName} '${ident}'`)
          }
+         console.info(`[I] [${fnName}] 已编译 ${itemName} '${ident}'`)
 
          // TODO(chuigda): implement "blending"
          dest[ident] = compiledItem
@@ -144,10 +142,9 @@ function buildCompileStoreItemSeries<IKS extends StoreItemKind, T extends StoreI
 
          const dest = <Record<string, T>>(<unknown>compilation.storeItems[seriesName])
          if (dest[ident]) {
-            console.warn(`[W] [${fnName}] overwriting existing ${itemName} '${ident}'`)
-         } else {
-            console.info(`[I] [${fnName}] compiled ${itemName} '${ident}'`)
+            console.warn(`[W] [${fnName}] 覆写已经存在的 ${itemName} '${ident}'`)
          }
+         console.info(`[I] [${fnName}] 已编译 ${itemName} '${ident}'`)
 
          // TODO(chuigda): implement "blending"
          dest[ident] = item
@@ -234,7 +231,7 @@ export function compileTranslations(
       } else {
          for (const translationKey in compiledTranslation) {
             if (compilation.translations[language][translationKey]) {
-               console.warn(`[W] [compileTranslations] overwriting existing translation '${translationKey}'`)
+               console.warn(`[W] [compileTranslations] 覆盖已经存在的翻译项目 '${translationKey}'`)
             }
             compilation.translations[language][translationKey] = compiledTranslation[translationKey]
          }

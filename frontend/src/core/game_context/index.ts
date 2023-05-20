@@ -1,5 +1,3 @@
-/* eslint-disable import/no-named-as-default-member */
-
 import { Ident, MaybeTranslationKey, Scope } from '@app/core/base/uid'
 import {
    AscensionPerk,

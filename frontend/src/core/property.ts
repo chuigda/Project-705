@@ -29,7 +29,7 @@ export function initProperty(
    property.name = mTranslationKey(ensureScope(gameContext), property.name)
 
    if (gameContext.state.player.properties[propertyId]) {
-      console.warn(`[W] [setProperty] property ${property} already initialised, will reset it`)
+      console.warn(`[W] [setProperty] 属性 '${propertyId}' 已经被初始化过了，重新初始化将重置它`)
    }
 
    gameContext.state.player.properties[propertyId] = property
@@ -65,7 +65,7 @@ export function updateProperty(
    propertyId = mPropertyId(ensureScope(gameContext), propertyId)
 
    if ((operator === 'add' || operator === 'sub') && !isDefined(value)) {
-      throw new Error(`[E] [updateProperty] cannot use 'add' or 'sub' without a valid value`)
+      throw new Error('[E] [updateProperty] \'add\' 或者 \'sub\' 必须配合数值使用')
    }
    value = value!
 
@@ -79,7 +79,7 @@ export function updateProperty(
 
    const property = getProperty(gameContext, propertyId)
    if (!property) {
-      throw new Error(`[E] [updateProperty] property ${propertyId} does not exist yet`)
+      throw new Error(`[E] [updateProperty] 属性 '${propertyId}' 不存在`)
    }
 
    if (source && (operator === 'add' || operator === 'sub')) {
@@ -143,7 +143,7 @@ export function updateProperty(
          property.increment = (property.increment ?? 0) - opRef.value
          break
       default: {
-         console.warn(`[W] [updatePlayerProperty] invalid operator '${opRef.operator}'`)
+         console.warn(`[W] [updatePlayerProperty] 无效的运算符 '${opRef.operator}'`)
       }
    }
 

@@ -6,10 +6,10 @@ import { ensureScope } from '@app/core/game_context/scope'
 export function addModifier(gameContext: GameContext, modifier: Ident): void {
    const modifierId = mModifierId(ensureScope(gameContext), modifier)
    if (!gameContext.ruleSet.modifiers[modifierId]) {
-      throw new Error(`[E] [addModifier] modifier '${modifierId}' does not exist`)
+      throw new Error(`[E] [addModifier] 修正 '${modifierId}' 不存在`)
    }
 
-   console.info(`[I] [addModifier] adding modifier '${modifierId}'`)
+   console.info(`[I] [addModifier] 添加了修正项目 '${modifierId}'`)
    gameContext.state.modifiers.add(modifierId)
    computeModifier(gameContext)
    recomputeSkillCosts(gameContext)
@@ -18,10 +18,10 @@ export function addModifier(gameContext: GameContext, modifier: Ident): void {
 export function removeModifier(gameContext: GameContext, modifier: Ident): void {
    const modifierId = mModifierId(ensureScope(gameContext), modifier)
    if (!gameContext.ruleSet.modifiers[modifierId]) {
-      throw new Error(`[E] [addModifier] modifier '${modifierId}' does not exist`)
+      throw new Error(`[E] [addModifier] 修正 '${modifierId}' 不存在`)
    }
 
-   console.info(`[I] [addModifier] removing modifier '${modifierId}'`)
+   console.info(`[I] [addModifier] 移除了修正项目 '${modifierId}'`)
    gameContext.state.modifiers.delete(modifierId)
    computeModifier(gameContext)
    recomputeSkillCosts(gameContext)

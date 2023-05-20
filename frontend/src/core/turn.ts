@@ -4,9 +4,7 @@ import { computePotentialAscensionPerks, computePotentialSkills } from '@app/cor
 import { getProperty } from '@app/core/property'
 
 export function nextTurn(gameContext: GameContext): void {
-   console.info('[I] [nextTurn] proceeding to the next turn')
-
-   let warnMessage: string | undefined
+   console.info('[I] [nextTurn] 正推进到下一回合')
 
    triggerEventSeries(gameContext, [...gameContext.state.events.turnOver])
 

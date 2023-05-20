@@ -40,13 +40,13 @@ export function learnSkill(gameContext: GameContext, skill: Ident): void {
    const scope = ensureScope(gameContext)
    const skillId = mSkillId(scope, skill)
    if (!gameContext.state.computedSkills!.available[skillId]) {
-      throw new Error(`[E] [learnSkill] skill '${skillId}' is not available`)
+      throw new Error(`[E] [learnSkill] 技能 '${skillId}' 当前不可用`)
    }
 
-   console.info(`[I] [learnSkill] learning skill '${skillId}'`)
+   console.info(`[I] [learnSkill] 学习了技能 '${skillId}'`)
 
    if (gameContext.state.player.skills[skillId]) {
-      throw new Error(`[W] [learnSkill] skill '${skillId}' has already been learnt, re-learning`)
+      console.warn(`[W] [learnSkill] 技能 '${skillId}' 已经学习，重新学习将会重新执行其事件脚本`)
    }
 
    const { skill: skillContent, cost } = gameContext.state.computedSkills!.available[skillId]
@@ -65,20 +65,20 @@ export function grantSkill(gameContext: GameContext, skill: Ident, force?: boole
    if (force) {
       skillContent = gameContext.ruleSet.skills[skillId]
       if (!skillContent) {
-         throw new Error(`[E] [grantSkill] skill '${skillId}' does not exist`)
+         throw new Error(`[E] [grantSkill] 技能 '${skillId}' 不存在`)
       }
    } else {
       const availableSkill = gameContext.state.computedSkills!.available[skillId]
       if (!availableSkill) {
-         throw new Error(`[E] [grantSkill] skill '${skillId}' not available`)
+         throw new Error(`[E] [grantSkill] 技能 '${skillId}' 当前不可用`)
       }
       skillContent = availableSkill.skill
    }
 
-   console.info(`[I] [grantSkill] granting skill '${skillId}'`)
+   console.info(`[I] [grantSkill] 已取得技能 '${skillId}'`)
 
    if (gameContext.state.player.skills[skillId]) {
-      console.warn(`[W] [grantSkill] skill '${skillId}' has already been learnt or granted, re-granting`)
+      console.warn(`[W] [learnSkill] 技能 '${skillId}' 已经取得，重新取得将会重新执行其事件脚本`)
    }
 
    gameContext.state.player.skills[skillId] = skillContent

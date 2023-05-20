@@ -53,7 +53,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
    const eventId = mEventId(ensureScope(gameContext), event)
 
    if (!(eventId in gameContext.ruleSet.events)) {
-      console.warn(`[W] [connect] event '${event}(${eventId})' not found`)
+      console.warn(`[W] [connect] 事件 '${event}(${eventId})' 不存在`)
       return
    }
 
@@ -85,7 +85,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const propertyId = mPropertyId(ensureScope(gameContext), sig.property)
          const container = gameContext.state.events.propertyUpdated[propertyId]
          if (!container) {
-            console.warn(`[W] [connect] playerPropertyUpdated: property not defined: '${propertyId}'`)
+            console.warn(`[W] [connect] playerPropertyUpdated: 属性 '${propertyId}' 未定义`)
             return
          }
          container.push(eventId)
@@ -96,7 +96,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const propertyId = mPropertyId(ensureScope(gameContext), sig.property)
          const container = gameContext.state.events.propertyOverflow[propertyId]
          if (!container) {
-            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
+            console.warn(`[W] [connect] playerPropertyUnderflow: 属性 '${propertyId}' 未定义`)
             return
          }
          container.push(eventId)
@@ -107,7 +107,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          const propertyId = mPropertyId(ensureScope(gameContext), sig.property)
          const container = gameContext.state.events.propertyUnderflow[propertyId]
          if (!container) {
-            console.warn(`[W] [connect] playerPropertyUnderflow: property not defined: '${propertyId}'`)
+            console.warn(`[W] [connect] playerPropertyUnderflow: 属性 '${propertyId}' 未定义`)
             return
          }
          container.push(eventId)
@@ -141,7 +141,7 @@ export function connect(gameContext: GameContext, signal: Signal, event: Ident) 
          break
       }
       default:
-         console.warn(`[W] [connect] invalid signal '${signal.signalType}'`)
+         console.warn(`[W] [connect] 无效的信号类型 '${signal.signalType}'`)
    }
 }
 
@@ -149,7 +149,7 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
    const eventId = mEventId(ensureScope(gameContext), event)
 
    if (!(eventId in gameContext.ruleSet.events)) {
-      console.warn(`[W] [connect] event '${event}(${eventId})' not found`)
+      console.warn(`[W] [connect] 事件 '${event}(${eventId})' 不存在`)
       return
    }
 
@@ -175,30 +175,18 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
          break
       }
       case 'player': {
-         const sig = <PropertyUpdatedSignal>signal
-         const propertyPath = sig.property.split('.')
-         let container: any = gameContext.state.events.propertyUpdated
-         for (const pathPart of propertyPath) {
-            container = container[pathPart]
-         }
-         if (!(container instanceof Set)) {
-            console.warn(`[W] [disconnect] playerPropertyUpdated: invalid property path: '${sig.property}'`)
-            return
-         }
-         (<Set<string>>container).delete(eventId)
+         // TODO 需要重写
          break
       }
       case 'turns': {
          console.warn(
-            '[W] [disconnect] cannot remove connections with \'turns\' signals,'
-            + 'use \'disconnectAll\' instead'
+            '[W] [disconnect] 无法移除连接到了 \'turns\' 信号的事件，请使用 \'disconnectAll\''
          )
          break
       }
       case 'count_down': {
          console.warn(
-            '[W] [disconnect] cannot remove connections with \'count_down\' signals,'
-            + 'use \'disconnectAll\' instead'
+            '[W] [disconnect] 无法移除连接到了 \'count_down\' 信号的事件，请使用 \'disconnectAll\''
          )
          break
       }
@@ -211,7 +199,7 @@ export function disconnect(gameContext: GameContext, signal: Signal, event: Iden
          break
       }
       default:
-         console.warn(`[W] [disconnect] invalid signal '${signal.signalType}'`)
+         console.warn(`[W] [disconnect] 无效的信号类型 '${signal.signalType}'`)
    }
 }
 

@@ -10,12 +10,11 @@ export function addActivity(gameContext: GameContext, activity: Ident): void {
    const activityId = mActivityId(scope, activity)
    const activityContent = gameContext.ruleSet.activities[activityId]
    if (!activityContent) {
-      throw new Error(`[E] [addActivity] ${activityId} does not exist`)
+      throw new Error(`[E] [addActivity] 活动 '${activityId}' 不存在`)
    }
 
    if (gameContext.state.player.activities[activityId]) {
-      const warnMessage = `activity ${activityId} already exists`
-      console.warn(`[W] [addActivity] ${warnMessage}`)
+      console.warn(`[W] [addActivity] 已经拥有了活动 '${activityId}'`)
    }
 
    gameContext.state.player.activities[activityId] = activityContent
@@ -25,7 +24,7 @@ export function performActivity(gameContext: GameContext, activity: Ident): void
    const scope = ensureScope(gameContext)
    const activityId = mActivityId(scope, activity)
    if (!gameContext.state.player.activities[activityId]) {
-      throw new Error(`[E] [performActivity] activity '${activityId} is not available`)
+      throw new Error(`[E] [performActivity] 活动 '${activityId} 当前不可用`)
    }
    const activityContent = gameContext.state.player.activities[activityId]
 
@@ -39,7 +38,13 @@ export function performActivity(gameContext: GameContext, activity: Ident): void
 
    if (activityContent.output) {
       for (const propertyId in activityContent.output) {
-         updateProperty(gameContext, propertyId, 'add', activityContent.output[propertyId], '@activity')
+         updateProperty(
+            gameContext,
+            propertyId,
+            'add',
+            activityContent.output[propertyId],
+            '@activity'
+         )
       }
 
       recomputeSkillCosts(gameContext)

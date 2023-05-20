@@ -19,7 +19,7 @@ export function triggerEvent(
    }
 
    if (gameContext.eventChainCounter > 512) {
-      console.warn(`[W] [triggerEvent] one single event chain has triggered more than 512 event, killing`)
+      console.warn('[W] [triggerEvent] 事件级联长度超过 512，为避免死循环，已经杀死事件')
       if (unsetCounter) {
          gameContext.eventChainCounter = undefined
       } else {
@@ -27,9 +27,7 @@ export function triggerEvent(
       }
    }
 
-   let warnMessage
    if (event instanceof Function) {
-      console.debug('[D] [triggerEvent] triggered inline event')
       event(gameContext, ...args)
    } else {
       const eventId = mEventId(scope, event)
@@ -41,10 +39,9 @@ export function triggerEvent(
             gameContext.eventChainCounter! -= 1
          }
 
-         throw new Error(`[E] [triggerEvent] event '${eventId}' not found`)
+         throw new Error(`[E] [triggerEvent] 未找到事件 '${eventId}'`)
       }
 
-      console.debug(`[D] [triggerEvent] triggered event '${eventId}'`)
       const hooks = gameContext.state.events.eventTriggered[eventId]
       for (const hook in hooks) {
          triggerEvent(gameContext, hook, event, [event, args])
@@ -72,7 +69,6 @@ export function triggerEventSeries(
       pushScope(gameContext, scope)
    }
 
-   let warnMessage
    if (events) {
       for (const event of events) {
          triggerEvent(gameContext, event, ...args)
