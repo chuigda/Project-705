@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import { IGameState, IResponse } from '@protocol/index'
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import { sendGameState } from '@app/server/mapping'
 
 export default function epSendSnapshot(

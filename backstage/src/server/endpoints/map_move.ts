@@ -1,8 +1,8 @@
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import { Request, Response } from 'express'
 import { IGameState, IResponse } from '@protocol/index'
 import { sendGameState } from '@app/server/mapping'
-import { choosePath } from '@app/executor/map_site'
+import { choosePath } from '@app/core/map_site'
 
 export default function epMapMove(
    req: Request,

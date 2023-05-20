@@ -1,4 +1,4 @@
-import { ItemBase } from '@app/ruleset/items/item_base'
+import { ItemBase } from '@app/core/ruleset/items/item_base'
 import { sendTranslationKey } from '@app/server/mapping/translation'
 
 export function sendItemBase(itemBase: ItemBase): { ident: string, name: string, description: string } {

@@ -1,8 +1,8 @@
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import { Request, Response } from 'express'
 import { IGameState, IResponse } from '@protocol/index'
 import { sendGameState } from '@app/server/mapping'
-import { nextTurn } from '@app/executor/turn'
+import { nextTurn } from '@app/core/turn'
 
 export default function epNextTurn(
    req: Request,

@@ -1,9 +1,9 @@
 import startDebugGame from '@test/base/start_game'
 import { assert } from '@app/util/emergency'
 import { debugScope } from '@test/base/debug_scope'
-import { mPropertyId } from '@app/base/uid'
-import { PropertyOp, ValueSource } from '@app/ruleset'
-import { nextTurn } from '@app/executor/turn'
+import { mPropertyId } from '@app/core/base/uid'
+import { PropertyOp, ValueSource } from '@app/core/ruleset'
+import { nextTurn } from '@app/core/turn'
 
 function testSimple() {
    const cx = startDebugGame()

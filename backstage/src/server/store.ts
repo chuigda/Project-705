@@ -1,4 +1,4 @@
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import ruleSet from '@app/server/ruleset'
 import initGame from '@app/loader/init'
 

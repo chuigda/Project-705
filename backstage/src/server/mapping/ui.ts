@@ -1,4 +1,4 @@
-import { BubbleMessage, DialogBubbleMessage, PromptBubbleMessage, SimpleDialog } from '@app/executor/ui'
+import { BubbleMessage, DialogBubbleMessage, PromptBubbleMessage, SimpleDialog } from '@app/core/ui'
 import { IBubbleMessage, IDialogBubbleMessage, IDialogOption, IPromptBubbleMessage, ISimpleDialog } from '@protocol/ui'
 import { sendTranslatable } from '@app/server/mapping/translation'
 import { unreachable } from '@app/util/emergency'

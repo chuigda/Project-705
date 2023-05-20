@@ -1,9 +1,9 @@
-import { MapBranch, MapSite } from '@app/ruleset'
+import { MapBranch, MapSite } from '@app/core/ruleset'
 import { sendTranslationKey } from '@app/server/mapping/translation'
 import { sendItemBase } from '@app/server/mapping/item_base'
-import { MapStatus } from '@app/executor/game_context'
+import { MapStatus } from '@app/core/game_context'
 import { IGeneratedBranch, IGeneratedSite, IMapBranch, IMapSite, IMapStatus } from '@protocol/map_site'
-import { GeneratedBranch, GeneratedSite } from '@app/executor/map_site'
+import { GeneratedBranch, GeneratedSite } from '@app/core/map_site'
 
 export function sendMapBranch(b?: MapBranch): IMapBranch | undefined {
    if (b === undefined) {

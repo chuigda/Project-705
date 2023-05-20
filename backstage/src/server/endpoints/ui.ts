@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 import { IGameState, IResponse, ISimpleDialog } from '@protocol/index'
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import { sendSimpleDialog } from '@app/server/mapping/ui'
-import { closeBubbleMessage, destroyDialog, useDialogOption } from '@app/executor/ui'
+import { closeBubbleMessage, destroyDialog, useDialogOption } from '@app/core/ui'
 import { sendGameState } from '@app/server/mapping'
 
 export function epGetDialog(

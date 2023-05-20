@@ -14,7 +14,7 @@ import {
    PlayerRechargeableItem,
    PlayerActiveRelicItem,
    PlayerTradableItem, PropertyId, PlayerProperty
-} from '@app/executor/game_context'
+} from '@app/core/game_context'
 import { ITranslationKey } from '@protocol/translation'
 
 import { sendActivity } from './activity'

@@ -1,6 +1,6 @@
 import { CompiledRuleSet, load } from '@app/loader'
 import initGame from '@app/loader/init'
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import { assert, } from '@app/util/emergency'
 
 function startGame(): GameContext {

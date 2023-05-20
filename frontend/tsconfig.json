@@ -16,10 +16,18 @@
     "baseUrl": ".",
     "paths": {
       "@app/*": ["src/*"],
-      "@protocol/*": ["../protocol/src/*"]
+      "@rulesets/*": ["rulesets/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+
+    "rulesets/**/*.ts",
+    "rulesets/**/*.js"
+  ],
   "references": [
     { "path": "./tsconfig.node.json" },
     { "path": "../protocol/tsconfig.json" }

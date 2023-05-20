@@ -1,4 +1,4 @@
-import { Activity } from '@app/ruleset'
+import { Activity } from '@app/core/ruleset'
 import { IActivity } from '@protocol/activity'
 import { sendItemBase } from '@app/server/mapping/item_base'
 

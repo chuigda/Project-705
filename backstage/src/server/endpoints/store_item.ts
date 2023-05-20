@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { IGameState, IResponse } from '@protocol/index'
-import { GameContext } from '@app/executor/game_context'
-import { StoreItemKind } from '@app/ruleset'
+import { GameContext } from '@app/core/game_context'
+import { StoreItemKind } from '@app/core/ruleset'
 import { sendGameState } from '@app/server/mapping'
 import {
    purchaseActiveRelicItem,
@@ -13,7 +13,7 @@ import {
    useActiveRelicItem,
    useConsumableItem,
    useRechargeableItem
-} from '@app/executor/store_item'
+} from '@app/core/store_item'
 
 export function epPurchaseItem(
    req: Request,

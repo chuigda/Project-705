@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { typeAssert } from '@app/util/type_assert'
 import { IResponse } from '@protocol/index'
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import serverStore from '@app/server/store'
 
 const ACCESS_TOKEN_HEADER = 'X-Access-Token'

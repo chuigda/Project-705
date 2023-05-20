@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { IGameState, IResponse } from '@protocol/index'
-import { GameContext } from '@app/executor/game_context'
-import { activateAscensionPerk } from '@app/executor/ascension_perk'
+import { GameContext } from '@app/core/game_context'
+import { activateAscensionPerk } from '@app/core/ascension_perk'
 import { sendGameState } from '@app/server/mapping'
 
 export default function epActivateAscensionPerk(

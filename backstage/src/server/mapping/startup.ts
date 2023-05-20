@@ -1,4 +1,4 @@
-import { Startup } from '@app/ruleset'
+import { Startup } from '@app/core/ruleset'
 import { IStartup } from '@protocol/index'
 import { sendItemBase } from './item_base'
 

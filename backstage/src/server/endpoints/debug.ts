@@ -1,20 +1,20 @@
 import express = require('express')
 import { Response } from 'express'
 import { IGameState, IResponse, IResponseFail } from '@protocol/index'
-import { GameContext } from '@app/executor/game_context'
-import { addActivity } from '@app/executor/activity'
-import { triggerEvent } from '@app/executor/events'
+import { GameContext } from '@app/core/game_context'
+import { addActivity } from '@app/core/activity'
+import { triggerEvent } from '@app/core/events'
 import { sendGameState } from '@app/server/mapping'
-import { activateAscensionPerk } from '@app/executor/ascension_perk'
-import { grantSkill } from '@app/executor/skill'
-import { nextTurn } from '@app/executor/turn'
-import { addModifier, removeModifier } from '@app/executor/modifier'
+import { activateAscensionPerk } from '@app/core/ascension_perk'
+import { grantSkill } from '@app/core/skill'
+import { nextTurn } from '@app/core/turn'
+import { addModifier, removeModifier } from '@app/core/modifier'
 import { abort } from '@app/util/emergency'
 import { validateAccessToken, validateBody, validateGameContext } from '@app/server/middleware'
 
 import serverStore from '@app/server/store'
-import { updateProperty } from '@app/executor/property'
-import { initMap } from '@app/executor/map_site'
+import { updateProperty } from '@app/core/property'
+import { initMap } from '@app/core/map_site'
 
 const debugRouter = express.Router()
 

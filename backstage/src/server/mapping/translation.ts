@@ -1,6 +1,6 @@
-import { MaybeTranslationKey } from '@app/base/uid'
+import { MaybeTranslationKey } from '@app/core/base/uid'
 import { ITranslatable, ITranslationKey } from '@protocol/translation'
-import { MaybeTranslatable } from '@app/base/translation'
+import { MaybeTranslatable } from '@app/core/base/translation'
 
 export function sendTranslationKey(k: MaybeTranslationKey): ITranslationKey {
    return <ITranslationKey>k

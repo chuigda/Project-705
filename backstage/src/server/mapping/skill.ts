@@ -1,4 +1,4 @@
-import { Skill, SkillCost } from '@app/ruleset'
+import { Skill, SkillCost } from '@app/core/ruleset'
 import { ISkill, ISkillCost } from '@protocol/skill'
 import { sendItemBase } from '@app/server/mapping/item_base'
 import { ITranslationKey } from '@protocol/translation'

@@ -1,4 +1,4 @@
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import serverStore from '@app/server/store'
 import { Request, Response } from 'express'
 import { IResponse } from '@protocol/index'

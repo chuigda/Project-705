@@ -5,7 +5,7 @@ import {
    PotentialFunctionResult,
    PotentialLogicOpResult,
    PotentialResult, SkillPotentialResult
-} from '@app/executor/compute'
+} from '@app/core/compute'
 import { IPotentialResult, ISkillPotentialResult } from '@protocol/potential'
 
 import { sendTranslatable, sendTranslationKey } from './translation'

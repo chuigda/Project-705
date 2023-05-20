@@ -1,4 +1,4 @@
-import { GameState, UpdateTracker } from '@app/executor/game_context'
+import { GameState, UpdateTracker } from '@app/core/game_context'
 import { IGameState } from '@protocol/index'
 
 import { sendMap } from '@app/server/mapping/map_site'

@@ -1,7 +1,7 @@
-import { ShopItem, ShopStatus } from '@app/executor/game_context'
+import { ShopItem, ShopStatus } from '@app/core/game_context'
 import { IShopItem, IShopStatus } from '@protocol/shop'
 import { IStoreItemBase, IStoreItemKind } from '@protocol/store_item'
-import { StoreItem } from '@app/ruleset'
+import { StoreItem } from '@app/core/ruleset'
 
 import {
    sendActiveRelicItem,

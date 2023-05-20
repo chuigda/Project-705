@@ -5,7 +5,7 @@ import {
    RechargeableItem,
    StoreItem,
    TradableItem
-} from '@app/ruleset'
+} from '@app/core/ruleset'
 import {
    IActiveRelicItem,
    IConsumableItem, IPassiveRelicItem,

@@ -1,7 +1,7 @@
-import { GameContext } from '@app/executor/game_context'
+import { GameContext } from '@app/core/game_context'
 import { Request, Response } from 'express'
 import { IGameState, IResponse } from '@protocol/index'
-import { learnSkill } from '@app/executor/skill'
+import { learnSkill } from '@app/core/skill'
 import { sendGameState } from '@app/server/mapping'
 
 export default function epLearnSkill(

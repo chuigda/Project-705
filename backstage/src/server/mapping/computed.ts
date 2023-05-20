@@ -4,7 +4,7 @@ import {
    ComputedSkills,
    UnavailableAscensionPerk,
    UnavailableSkill
-} from '@app/executor/compute'
+} from '@app/core/compute'
 import {
    IAvailableSkill,
    IComputedAscensionPerks,
