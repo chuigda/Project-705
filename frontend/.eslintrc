@@ -1,8 +1,6 @@
 {
    "extends": [
       "eslint:recommended",
-      "plugin:vue/essential",
-      "plugin:vue/strongly-recommended",
       "plugin:vue/vue3-recommended",
       "@vue/eslint-config-typescript",
       "@vue/eslint-config-typescript/recommended"
@@ -40,11 +38,13 @@
 
       "@typescript-eslint/indent": ["error", 3],
       "vue/html-indent": ["error", 3],
+      "vue/attributes-order": "off",
       "vue/multi-word-component-names": "off",
       "vue/no-multiple-template-root": "off",
       "vue/first-attribute-linebreak": "off",
       "vue/html-closing-bracket-newline": "off",
       "vue/max-attributes-per-line": "off",
+      "vue/require-v-for-key": "off",
       "@typescript-eslint/no-var-requires": "off",
       "@typescript-eslint/no-inferrable-types": "off",
       "@typescript-eslint/ban-ts-comment": "off",

@@ -55,6 +55,14 @@ const startupTranslation: Record<string, string> = {
       + ' - 拥有独特的飞升路线和结局判定'
 }
 
+const skillTranslation: Record<string, string> = {
+   '$skill_walk': '走路',
+   '$skill_walk_desc': '“如果不会走路，你就只能爪巴（扭曲）（蠕动）（阴暗地爬行）”',
+
+   '$skill_speak': '说话',
+   '$skill_speak_desc': '“如果不会说话，你就只能吱哇乱叫，不过好像挺可爱的”'
+}
+
 const ascensionPerkTranslation: Record<string, string> = {
    '$ap_well_prepared': '未雨绸缪',
    '$ap_well_prepared_desc': '获得 500 技能点数，且你学习初始技能所需的技能点数 -50%',
@@ -205,6 +213,7 @@ export default {
    ...commonPotentialTranslation,
    ...startupTranslation,
    ...modifierTranslation,
+   ...skillTranslation,
    ...ascensionPerkTranslation,
    ...storeItemTranslation
 }

@@ -1,5 +1,6 @@
 import { RuleSet } from '@app/core/ruleset'
 
+import skillCategories from '@rulesets/core_ruleset/skill_categories'
 import skills from '@rulesets/core_ruleset/skill'
 import events from '@rulesets/core_ruleset/event'
 import startups from '@rulesets/core_ruleset/startup'
@@ -17,6 +18,7 @@ const mod: RuleSet = {
    name: '$core_ruleset',
    description: '$core_ruleset_desc',
 
+   skillCategories,
    skills,
    events,
    startups,

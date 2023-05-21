@@ -33,7 +33,7 @@ export class CompiledStoreItems {
 
 export class CompiledRuleSet {
    loadedRuleSets: Scope[] = []
-   skillCategories: SkillCategory[] = []
+   skillCategories: Record<string, SkillCategory> = {}
    activityCategories: string[] = []
 
    events: Record<string, Event> = {}

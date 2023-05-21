@@ -14,6 +14,7 @@ import {
    TradableItem
 } from '@app/core/ruleset/items/store_item'
 import { CompiledRuleSet } from '@app/core/loader'
+import {ActivityCategoryId, SkillCategory} from '@app/core/ruleset/items/category'
 
 export * from '@app/core/base/uid'
 export * from '@app/core/ruleset/ops'
@@ -48,6 +49,12 @@ export interface RuleSet {
 
    /// 规则集描述文本
    readonly description?: MaybeTranslationKey
+
+   /// 技能类别列表
+   readonly skillCategories?: SkillCategory[]
+
+   /// 活动类别列表
+   readonly activityCategories?: ActivityCategoryId[]
 
    /// 可学习技能列表
    readonly skills?: Skill[]

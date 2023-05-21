@@ -26,13 +26,12 @@ import {
 export function compileSkillCategories(compilation: CompiledRuleSet, skillCategories: SkillCategory[]) {
    for (const category of skillCategories) {
       const { ident } = category
-      const maybeExistingCategory = compilation.skillCategories.findIndex((category1) => category1.ident === ident)
-      if (maybeExistingCategory !== -1) {
+      const hasExistingCategory = !!compilation.skillCategories[ident]
+      if (hasExistingCategory) {
          console.warn(`[W] [compileSkillCategories] 技能类别 '${category}' 已经存在，覆写`)
-         compilation.skillCategories[maybeExistingCategory] = category
-      } else {
-         compilation.skillCategories.push(category)
       }
+
+      compilation.skillCategories[ident] = category
       console.info(`[I] [compileSkillCategories] 已编译技能类别 '${ident}'`)
    }
 }
@@ -242,6 +241,9 @@ export function compileTranslations(
 export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
    const {
       ident: scope,
+
+      skillCategories,
+      activityCategories,
       skills,
       startups,
       activities,
@@ -253,6 +255,16 @@ export function compileRuleSet(compilation: CompiledRuleSet, ruleSet: RuleSet) {
       translations,
       onRuleSetLoaded
    } = ruleSet
+
+   console.info(`[I] [compileRuleSet] 正在编译规则集 ${scope.author}:${scope.moduleName}`)
+
+   if (skillCategories) {
+      compileSkillCategories(compilation, skillCategories)
+   }
+
+   if (activityCategories) {
+      compileActivityCategories(compilation, activityCategories)
+   }
 
    if (skills) {
       compileSkills(compilation, scope, skills)

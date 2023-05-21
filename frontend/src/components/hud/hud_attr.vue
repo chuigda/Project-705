@@ -127,11 +127,8 @@ const energyBarWidth = computed(() => {
            :class="['record', {'injured': e}]"
            :style="`left: ${4+30*i}px`"
       />
-      <div class="energy-bg"
-           :data-tooltip="energyBarTitle">
-         <div class="energy-bar"
-              :style="{ width: energyBarWidth }"
-         />
+      <div class="energy-bg" :data-tooltip="energyBarTitle">
+         <div class="energy-bar" :style="{ width: energyBarWidth }" />
       </div>
    </div>
 </template>
